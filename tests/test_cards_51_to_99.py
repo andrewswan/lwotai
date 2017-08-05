@@ -662,19 +662,19 @@ class Card73(LabyrinthTestCase):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.deck["73"].playEvent("Jihadist", app)
         self.assertTrue("Pirates" in app.markers)
-        app.do_turn("")
+        app.end_turn()
         self.assertTrue(app.funding == 4)
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.map["Somalia"].make_islamist_rule()
         app.deck["73"].playEvent("Jihadist", app)
-        app.do_turn("")
+        app.end_turn()
         self.assertTrue(app.funding == 5)
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.map["Yemen"].make_islamist_rule()
         app.deck["73"].playEvent("Jihadist", app)
-        app.do_turn("")
+        app.end_turn()
         self.assertTrue(app.funding == 5)
 
 

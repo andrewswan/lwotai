@@ -7,5 +7,5 @@ class StatusCommandTest(LabyrinthTestCase):
 
     def test_status_of_blank_scenario(self):
         app = Labyrinth(1, 1, LabyrinthTestCase.set_up_blank_test_scenario)
-        status = app.do_status(None)
+        status = app.show_status()
         self.assertEqual(None, status)

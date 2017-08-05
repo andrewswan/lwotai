@@ -7,7 +7,7 @@ class ReassessmentHandlerTest(LabyrinthTestCase):
     def test_reassessment(self):
         app = Labyrinth(1, 1, self.set_up_test_scenario)
         self.assertEqual(app.map["United States"].posture, "Hard")
-        app.handleReassessment()
+        app.toggle_us_posture()
         self.assertEqual(app.map["United States"].posture, "Soft")
-        app.handleReassessment()
+        app.toggle_us_posture()
         self.assertEqual(app.map["United States"].posture, "Hard")

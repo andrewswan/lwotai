@@ -20,7 +20,9 @@ Thanks to Dave Horn for implementing the Save and Undo system.
 Thanks to Peter Shaw for implementing the Adjust system and for a bunch of bug fixes and cleanup.
 """
 
+from cmd import Cmd
 from labyrinth import Labyrinth
+from command import Command
 from saver import Saver
 from utils import Utils
 
@@ -61,8 +63,10 @@ def main():
         app = _create_game()
         saver.save_rollback_file(app, 0)
 
+    command = Command(app, saver)
+
     while True:
-        app.cmdloop()
+        command.cmdloop()
         # The user has quit, or wants to undo or rollback - prevents issues dealing with save/reloading within class instance
         if app.undo:
             print "Undo to last turn"

@@ -4,6 +4,7 @@ from governance import GOOD, POOR, ISLAMIST_RULE
 
 
 class Card:
+    """A card in the game"""
     number = 0
     name = ""
     type = ""
@@ -976,7 +977,7 @@ class Card:
                 app.markers.append("Enhanced Measures")
                 app.outputToHistory("Enhanced Measures in Play.", False)
                 app.outputToHistory("Take a random card from the Jihadist hand.", False)
-                app.do_disrupt("")
+                app.disrupt_cells_or_cadre()
                 app.outputToHistory("", False)
             elif self.number == 35:  # Hajib
                 app.testCountry("Turkey")
@@ -1093,7 +1094,7 @@ class Card:
                 app.outputToHistory("Renditions in Play.", False)
                 app.outputToHistory("Discard a random card from the Jihadist hand.", False)
                 if app.num_disruptable() > 0:
-                    app.do_disrupt("")
+                    app.disrupt_cells_or_cadre()
                 app.outputToHistory("", False)
             elif self.number == 45:  # Safer Now
                 app.changePrestige(3)

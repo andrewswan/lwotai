@@ -44,7 +44,7 @@ class Card02(LabyrinthTestCase):
         self.assertFalse("Biometrics" in app.lapsing)
         app.deck["2"].playEvent("US", app)
         self.assertTrue("Biometrics" in app.lapsing)
-        app.do_turn("")
+        app.end_turn()
         self.assertFalse("Biometrics" in app.lapsing)
 
     def testTravelDestination(self):
@@ -103,12 +103,12 @@ class Card03(LabyrinthTestCase):
     def test_playable(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         self.assertFalse(app.deck["3"].playable("US", app, True))
-        app.do_reassessment("")
+        app.toggle_us_posture()
         self.assertTrue(app.deck["3"].playable("US", app, True))
 
     def test_event(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        app.do_reassessment("")
+        app.toggle_us_posture()
         self.assertFalse("CTR" in app.map["Russia"].markers)
         self.assertFalse("CTR" in app.map["Central Asia"].markers)
         app.map["Central Asia"].make_adversary()
@@ -117,7 +117,7 @@ class Card03(LabyrinthTestCase):
         self.assertFalse("CTR" in app.map["Central Asia"].markers)
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        app.do_reassessment("")
+        app.toggle_us_posture()
         self.assertFalse("CTR" in app.map["Russia"].markers)
         self.assertFalse("CTR" in app.map["Central Asia"].markers)
         app.map["Central Asia"].make_neutral()
@@ -129,7 +129,7 @@ class Card03(LabyrinthTestCase):
         self.assertTrue("Markers: CTR" in app.map["Central Asia"].countryStr())
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        app.do_reassessment("")
+        app.toggle_us_posture()
         self.assertFalse("CTR" in app.map["Russia"].markers)
         self.assertFalse("CTR" in app.map["Central Asia"].markers)
         app.map["Central Asia"].make_ally()
@@ -1047,7 +1047,7 @@ class Card36(LabyrinthTestCase):
         self.assertTrue("Indo-Pakistani Talks" in app.markers)
         self.assertTrue(app.map["India"].posture == "Soft")
         app.map["India"].plots = 1
-        app.do_plot("")
+        app.resolve_plots()
         self.assertFalse("Indo-Pakistani Talks" in app.markers)
 
 
@@ -1198,7 +1198,7 @@ class Card41(LabyrinthTestCase):
 
         app.map["Libya"].regimeChange = 0
         print "Deploy 3 from Libya to track:"
-        app.do_deploy("")
+        app.redeploy_troops()
         self.assertTrue(app.map["Libya"].troops() == 0)
         self.assertTrue("NATO" not in app.map["Libya"].markers)        
 
@@ -1427,7 +1427,7 @@ class Card47(LabyrinthTestCase):
         self.assertTrue("The door of Itjihad was closed" in app.lapsing)
         self.assertFalse(app.deck["66"].playable("Jihadist", app, False))
         self.assertFalse(app.deck["114"].playable("Jihadist", app, False))
-        app.do_turn("")
+        app.end_turn()
         self.assertFalse("The door of Itjihad was closed" in app.lapsing)
         self.assertTrue(app.deck["66"].playable("Jihadist", app, False))
         self.assertTrue(app.deck["114"].playable("Jihadist", app, False))

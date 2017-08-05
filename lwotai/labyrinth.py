@@ -1,19 +1,18 @@
-import cmd
 import random
+
 from card import Card
 from country import Country
 from governance import GOOD, FAIR, POOR
 from governance import governance_with_level
-from saver import Saver
 from randomizer import Randomizer
+from saver import Saver
 from utils import Utils
 
 
-class Labyrinth(cmd.Cmd):
+class Labyrinth:
     """The main game entity"""
 
     def __init__(self, scenario, ideology, setup_function=None, test_user_input=None, **kwargs):
-        cmd.Cmd.__init__(self)
         # Inputs
         self.scenario = scenario
         self.ideology = ideology
@@ -83,43 +82,7 @@ class Labyrinth(cmd.Cmd):
         self.outputToHistory("")
         self.outputToHistory("[[ %d (Turn %s) ]]" % (self.startYear + (self.turn - 1), self.turn), True)
 
-    def postcmd(self, stop, line):
-
-        self.saver.save_suspend_file(self)
-
-        if line == "quit":
-            return True
-
-        if self.undo:
-            return True
-
-        if self.roll_turn >= 0:
-            return True
-
-        # Check cells
-        cellCount = 0
-        for country_name in self.map:
-            country = self.map[country_name]
-            cellCount += country.activeCells + country.sleeperCells
-        cellCount += self.cells
-        assert cellCount == 15, "Expected 15 cells but have %d" % cellCount
-        # Check troops
-        troopCount = 0
-        for country in self.map:
-            troopCount += self.map[country].troops()
-        troopCount += self.troops
-        assert troopCount == 15, "Expected 15 troops but have %d" % troopCount
-        # Check tested countries
-        for country_name in self.map:
-            self.map[country_name].check_is_tested()
-
-    # noinspection SpellCheckingInspection: comes from Cmd superclass
-    def emptyline(self):
-        print "%d (Turn %s)" % (self.startYear + (self.turn - 1), self.turn)
-        print ""
-
-    @staticmethod
-    def debugPrint(str):
+    def debugPrint(self, str):
         return
 
     def outputToHistory(self, output, lineFeed = True):
@@ -689,17 +652,19 @@ class Labyrinth(cmd.Cmd):
         self.validLapsingMarkers.append("GTMO")
         self.validLapsingMarkers.append("Oil Price Spike")
 
-    # 20150131PS End
-
     def my_raw_input(self, prompt):
         """Reads a line from the test input, if any is left, otherwise from standard input"""
-        if len(self.testUserInput) > 0:
-            retVal = self.testUserInput[0]
-            self.testUserInput.remove(retVal)
-            print "TEST: Prompt: %s VAL: %s" % (prompt, retVal)
-            return retVal
-        else:
-            return raw_input(prompt)
+        fake_input = self._next_fake_user_input()
+        if fake_input:
+            print "TEST: Prompt: '%s' Value: '%s'" % (prompt, fake_input)
+            return fake_input
+        return raw_input(prompt)
+
+    def _next_fake_user_input(self):
+        """Returns the next line of fake user input, or None"""
+        if self.testUserInput and len(self.testUserInput) > 0:
+            return self.testUserInput.pop(0)
+        return None
 
     def getCountryFromUser(self, prompt, special, helpFunction, helpParameter = None):
         goodCountry = None
@@ -916,6 +881,25 @@ class Labyrinth(cmd.Cmd):
             self.funding = 9
         self.outputToHistory("Jihadist Funding now %d" % self.funding, lineFeed)
 
+    def validate(self):
+        """Checks that this instance is in a valid state"""
+        # Check cells
+        cellCount = 0
+        for country_name in self.map:
+            country = self.map[country_name]
+            cellCount += country.activeCells + country.sleeperCells
+        cellCount += self.cells
+        assert cellCount == 15, "Expected 15 cells but have %d" % cellCount
+        # Check troops
+        troopCount = 0
+        for country in self.map:
+            troopCount += self.map[country].troops()
+        troopCount += self.troops
+        assert troopCount == 15, "Expected 15 troops but have %d" % troopCount
+        # Check tested countries
+        for country_name in self.map:
+            self.map[country_name].check_is_tested()
+
     def placeCells(self, country, numCells):
         if self.cells == 0:
             self.outputToHistory("No cells are on the Funding Track.", True)
@@ -1060,7 +1044,8 @@ class Labyrinth(cmd.Cmd):
             self.map[country].plots -= 1
             self.outputToHistory("* Alert in %s - %d plot(s) remain." % (country, self.map[country].plots))
 
-    def handleReassessment(self):
+    def toggle_us_posture(self):
+        """Switches the US posture between Hard and Soft"""
         if self.map["United States"].posture == "Hard":
             self.map["United States"].posture = "Soft"
         else:
@@ -1537,8 +1522,7 @@ class Labyrinth(cmd.Cmd):
                     return True
         return False
 
-    @staticmethod
-    def inLists(country, lists):
+    def inLists(self, country, lists):
         for list in lists:
             if country in lists:
                 return True
@@ -2604,26 +2588,11 @@ class Labyrinth(cmd.Cmd):
                     if self.map[country].is_ally():
                         self.map[country].printCountry()
 
-    @staticmethod
-    def do_reserves(na=None):
+    def deploy_reserves(self):
         """Allows the US player to play a card for the Reserves action (6.3.3)"""
         print "Discard this card and add its Ops value to the US Reserves track."
 
-    def do_res(self, na=None):
-        """Alias for the 'reserves' command"""
-        self.do_reserves()
-
-    @staticmethod
-    def help_reserves():
-        """Provides help for the 'reserves' command"""
-        print "The 'Reserves' command adds a card's Ops value to the US Reserves track."
-        print "Remember to set this track to 0 when you use it or at end of turn, whichever comes first."
-
-    def help_res(self):
-        """Alias for the 'help reserves' command"""
-        self.help_reserves()
-
-    def do_status(self, country_name):
+    def show_status(self, country_name=None):
         if country_name:
             goodCountry = False
             possible = []
@@ -2759,10 +2728,10 @@ class Labyrinth(cmd.Cmd):
             print "No Plots"
         print ""
         print "VICTORY"
-        print "Good Resources   : %d" % goodRes
+        print "Good Resources:     %d" % goodRes
         print "Islamist Resources: %d" % islamRes
         print "---"
-        print "Good/Fair Countries   : %d" % goodC
+        print "Good/Fair Countries:     %d" % goodC
         print "Poor/Islamist Countries: %d" % islamC
         print ""
         print "GWOT"
@@ -2802,21 +2771,7 @@ class Labyrinth(cmd.Cmd):
         print "%d (Turn %s)" % (self.startYear + (self.turn - 1), self.turn)
         print ""
 
-    @staticmethod
-    def help_status():
-        print "Display game status.  status [country] will print out status of single country.\n"
-
-    def do_sta(self, rest):
-        """Alias for the 'status' command"""
-        self.do_status(rest)
-
-    def help_sta(self):
-        self.help_status()
-
-    # 20150131PS Start
-
-    def do_summary(self, rest):
-
+    def show_summary(self):
         goodRes = 0
         islamRes = 0
         goodC = 0
@@ -2888,23 +2843,6 @@ class Labyrinth(cmd.Cmd):
         else:
             print "Lapsing: %s" % ", ".join(self.lapsing)
         print ""
-
-    @staticmethod
-    def help_summary():
-        print "Display summary of game status.\n"
-
-    def do_sum(self, rest):
-        self.do_summary(rest)
-
-    def help_sum(self):
-        self.help_summary()
-
-    @staticmethod
-    def help_adjust():
-        print "Adjust game settings - no rule checking applied.\n"
-
-    def help_adj(self):
-        self.help_adjust()
 
     def getAdjustFromUser(self):
         while True:
@@ -3366,7 +3304,7 @@ class Labyrinth(cmd.Cmd):
             else:
                 print "Invalid attribute - ", input
 
-    def do_adjust(self, rest):
+    def adjust_state(self):
         print "Warning! No cross validation of data changes is carried out"
         print "Start adjusting"
         adjustType = self.getAdjustFromUser()
@@ -3387,32 +3325,17 @@ class Labyrinth(cmd.Cmd):
             self.adjustCountry(adjustType)
         print ""
 
-    def do_adj(self, rest):
-        self.do_adjust(rest)
-
-    def do_history(self, rest):
-
-        if rest == 'save':
+    def show_history(self, argument):
+        if argument == 'save':
             f = open('history.txt','w')
-            for str in self.history:
-                f.write(str + "\r\n")
+            for event in self.history:
+                f.write(event + "\r\n")
             f.close()
-
-        for str in self.history:
-            print str
+        for event in self.history:
+            print event
         print ""
 
-    @staticmethod
-    def help_history():
-        print "Display Game History.  Type 'history save' to save history to a file called history.txt.\n"
-
-    def do_his(self, rest):
-        self.do_history(rest)
-
-    def help_his(self):
-        self.help_history()
-
-    def do_deploy(self, rest):
+    def redeploy_troops(self):
         moveFrom = None
         available = 0
         while not moveFrom:
@@ -3481,17 +3404,7 @@ class Labyrinth(cmd.Cmd):
             troopsNow = self.map[moveTo].troops()
         self.outputToHistory("* %d troops deployed from %s (%d) to %s (%d)" % (howMany, moveFrom, troopsLeft, moveTo, troopsNow))
 
-    @staticmethod
-    def help_deploy():
-        print "Move Troops\n"
-
-    def do_dep(self, rest):
-        self.do_deploy(rest)
-
-    def help_dep(self):
-        self.help_deploy()      # 20150131PS - fixed method name
-
-    def do_disrupt(self, rest):
+    def disrupt_cells_or_cadre(self):
         where = None
         sleepers = 0
         actives = 0
@@ -3517,17 +3430,7 @@ class Labyrinth(cmd.Cmd):
                     print ""
         self.handleDisrupt(where)
 
-    @staticmethod
-    def help_disrupt():
-        print "Disrupt Cells or Cadre.\n"
-
-    def do_dis(self, rest):
-        self.do_disrupt(rest)
-
-    def help_dis(self):
-        self.help_disrupt()
-
-    def do_woi(self, rest):
+    def war_of_ideas(self):
         where = None
         while not where:
             input = self.getCountryFromUser("War of Ideas in what country?  (? for list): ", "XXX", self.listWoICountries)
@@ -3563,49 +3466,23 @@ class Labyrinth(cmd.Cmd):
             self.outputToHistory("Modified Roll: %d" % modRoll)
             self.handleMuslimWoI(modRoll, where)
 
-    @staticmethod
-    def help_woi():
-        print "Conduct War of Ideas operation.\n"
-
-    def do_alert(self, rest):
+    def alert_plot(self):
         where = None
+        alert_prompt = "Alert in what country?  (? for list, Enter to abort): "
         while not where:
-            input = self.getCountryFromUser("Alert in what country?  (? for list): ", "XXX", self.listPlotCountries)
+            input = self.getCountryFromUser(alert_prompt, "XXX", self.listPlotCountries)
             if input == "":
                 print ""
                 return
             else:
                 if self.map[input].plots < 1:
-                    print "Country has not plots."
+                    print "Country has no plots."
                     print ""
                 else:
                     where = input
         self.handleAlert(where)
 
-    @staticmethod
-    def help_alert():
-        print "Alert an active Plot.\n"
-
-    def do_alr(self, rest):
-        self.do_alert(rest)
-
-    def help_alr(self):
-        self.help_alert()
-
-    def do_reassessment(self, rest):
-        self.handleReassessment()
-
-    @staticmethod
-    def help_reassessment():
-        print "Reassessment of US Posture.\n"
-
-    def do_rea(self, rest):
-        self.do_reassessment(rest)
-
-    def help_rea(self):
-        self.help_reassessment()
-
-    def do_regime(self, rest):
+    def change_regime(self):
         if self.map["United States"].posture == "Soft":
             print "No Regime Change with US Posture Soft"
             print ""
@@ -3665,17 +3542,7 @@ class Labyrinth(cmd.Cmd):
         preThirdRoll = self.getRollFromUser("Enter third die for Prestige roll or r to have program roll: ")
         self.handleRegimeChange(where, moveFrom, howMany, govRoll, (preFirstRoll, preSecondRoll, preThirdRoll))
 
-    @staticmethod
-    def help_regime():
-        print "Regime Change in Islamist Rule Country.\n"
-
-    def do_reg(self, rest):
-        self.do_regime(rest)
-
-    def help_reg(self):
-        self.help_regime()
-
-    def do_withdraw(self, rest):
+    def withdraw_troops(self):
         if self.map["United States"].posture == "Hard":
             print "No Withdrawal with US Posture Hard"
             print ""
@@ -3721,123 +3588,72 @@ class Labyrinth(cmd.Cmd):
         preThirdRoll = self.getRollFromUser("Enter third die for Prestige roll or r to have program roll: ")
         self.handleWithdraw(moveFrom, moveTo, howMany, (preFirstRoll, preSecondRoll, preThirdRoll))
 
-    @staticmethod
-    def help_withdraw():
-        print "Withdraw Troops from Regime Change Country.\n"
-
-    def do_wit(self, rest):
-        self.do_withdraw(rest)
-
-    def help_wit(self):
-        self.help_withdraw()
-
-    def do_j(self, rest):
-        cardNum = None
-        try:
-            input = int(rest)
-            if input < 1 or input > 120:
-                print "Enter j then the card number e.g. j 24"
-                print ""
-                return
-            else:
-                cardNum = input
-        except:
-            print "Enter j then the card number e.g. j 24"
-            print ""
+    def play_jihadist_card(self, card_num_str):
+        card_num = self._parse_card_number(card_num_str)
+        if not card_num:
             return
         self.SaveUndo()
         self.outputToHistory("", False)
-        self.outputToHistory("== Jihadist plays %s - %d Ops ==" % (self.deck[str(cardNum)].name, self.deck[str(cardNum)].ops), True)
-
-        self.aiFlowChartTop(cardNum)
-
-    ''' test with timing system
-    def do_j(self, rest):
-        if self.phase != "Jihadist Action Phase":
-            print "It is not the Jihadist Action Phase"
-            print ""
-            return
-        if rest == "p" or rest == "pass":
-            self.phase = "US Action Phase"
-            self.outputToHistory("== Jihadist player passes turn. ==", True)
-            return
-        cardNum = None
-        try:
-            input = int(rest)
-            if input < 1 or input > 120:
-                print "Enter j then the card number or pass e.g. j 24 or j pass"
-                print ""
-                return
-            else:
-                cardNum = input
-        except:
-            print "Enter j then the card number or pass e.g. j 24 or j pass"
-            print ""
-            return
-        self.jCard += 1
-        self.outputToHistory("== Jihadist plays %s. ==" % self.deck[str(cardNum)].name, True)
-        self.aiFlowChartTop(cardNum)
-        if self.jCard
-    '''
+        self.outputToHistory("== Jihadist plays %s - %d Ops ==" % (self.deck[str(card_num)].name, self.deck[str(card_num)].ops), True)
+        self.aiFlowChartTop(card_num)
 
     @staticmethod
-    def help_j():
-        print "Enter the number of the Jihadist card when it is their card play.\n"
-
-    def do_u(self, rest):
-        cardNum = None
+    def _parse_card_number(card_num_str):
         try:
-            input = int(rest)
-            if input < 1 or input > 120:
-                print "Enter u then the card number e.g. u 24"
+            card_num = int(card_num_str)
+            if card_num < 1 or card_num > 120:
+                print "Enter a card number from 1 to 120"
                 print ""
-                return
+                return None
             else:
-                cardNum = input
-        except:
-            print "Enter u then the card number e.g. u 24"
+                return card_num
+        except ValueError:
+            print "Enter a card number from 1 to 120"
             print ""
+            return None
+
+    def play_us_card(self, card_num_str):
+        """Plays the given card as the US when it's the US action phase."""
+        card_num = self._parse_card_number(card_num_str)
+        if not card_num:
             return
         self.SaveUndo()
         self.outputToHistory("", False)
-        self.outputToHistory("== US plays %s - %d Ops ==" % (self.deck[str(cardNum)].name, self.deck[str(cardNum)].ops), True)
+        self.outputToHistory("== US plays %s - %d Ops ==" % (self.deck[str(card_num)].name, self.deck[str(card_num)].ops), True)
 
-        if self.deck[str(cardNum)].playable("US", self, True):
-            self.outputToHistory("Playable %s Event" % self.deck[str(cardNum)].type, False)
-            if cardNum != 120:
+        if self.deck[str(card_num)].playable("US", self, True):
+            self.outputToHistory("Playable %s Event" % self.deck[str(card_num)].type, False)
+            if card_num != 120:
                 choice = self.getEventOrOpsFromUser("Play card for Event or Ops (enter e or o): ")
             else:
                 choice = self.getEventOrOpsFromUser("This event must be played, do you want the Event or Ops to happen first (enter e or o): ")
             if choice == "event":
                 self.outputToHistory("Played for Event.", False)
-                self.deck[str(cardNum)].playEvent("US", self)
-                if cardNum == 120:
-                    print "Now, %d Ops available. Use commands: alert, deploy, disrupt, reassessment, regime, withdraw, or woi" % self.deck[str(cardNum)].ops
+                self.deck[str(card_num)].playEvent("US", self)
+                if card_num == 120:
+                    print "Now, %d Ops available. Use commands: alert, deploy, disrupt, reassessment, regime, withdraw, or woi" % self.deck[str(card_num)].ops
             elif choice == "ops":
                 self.outputToHistory("Played for Ops.", False)
-                if cardNum == 120:
+                if card_num == 120:
                     print "When finished with Ops enter u 120 again to play the event."
-                print "%d Ops available. Use commands: alert, deploy, disrupt, reassessment, regime, withdraw, or woi" % self.deck[str(cardNum)].ops
+                print "%d Ops available. Use commands: alert, deploy, disrupt, reassessment, regime, withdraw, or woi" % self.deck[str(card_num)].ops
         else:
-            if self.deck[str(cardNum)].type == "Jihadist":
-                if self.deck[str(cardNum)].playable("Jihadist", self, True):
+            if self.deck[str(card_num)].type == "Jihadist":
+                if self.deck[str(card_num)].playable("Jihadist", self, True):
                     self.outputToHistory("Jihadist Event is playable.", False)
                     playEventFirst = self.getYesNoFromUser("Do you want to play the Jihadist event before using the Ops? (y/n): ")
                     if playEventFirst:
-                        self.deck[str(cardNum)].playEvent("Jihadist", self)
+                        self.deck[str(card_num)].playEvent("Jihadist", self)
                     else:
                         print "Use the Ops now then enter u <card #> again to play the event"
-                    print "%d Ops available. Use commands: alert, deploy, disrupt, reassessment, regime, withdraw, or woi" % self.deck[str(cardNum)].ops
+                    print "%d Ops available. Use commands: alert, deploy, disrupt, reassessment, regime, withdraw, or woi" % self.deck[str(card_num)].ops
                     return
                     # Here if it's unplayable by either side.
-            self.outputToHistory("Unplayable %s Event" % self.deck[str(cardNum)].type, False)
-            print "%d Ops available. Use commands: alert, deploy, disrupt, reassessment, regime, withdraw, or woi" % self.deck[str(cardNum)].ops
+            self.outputToHistory("Unplayable %s Event" % self.deck[str(card_num)].type, False)
+            print "%d Ops available. Use commands: alert, deploy, disrupt, reassessment, regime, withdraw, or woi" % self.deck[str(card_num)].ops
 
-    @staticmethod
-    def help_u():
-        print "Enter the number of the US card when it is your card play.\n"
-
-    def do_plot(self, rest):
+    def resolve_plots(self):
+        """Resolves any active plots at the end of the US action phase."""
         foundPlot = False
         for country in self.map:
             while self.map[country].plots > 0:
@@ -3890,11 +3706,8 @@ class Labyrinth(cmd.Cmd):
             self.outputToHistory("[[ No unblocked plots to resolve ]]", True)
         self.backlashInPlay = False
 
-    @staticmethod
-    def help_plot():
-        print "Use this command after the US Action Phase to resolve any unblocked plots.\n"
-
-    def do_turn(self, rest):
+    def end_turn(self):
+        """Performs end-of-turn activities."""
         self.saver.save_turn_file(self)
 
         self.outputToHistory("* End of Turn.", False)
@@ -3974,41 +3787,24 @@ class Labyrinth(cmd.Cmd):
         self.outputToHistory("", False)
         self.outputToHistory("[[ %d (Turn %s) ]]" % (self.startYear + (self.turn - 1), self.turn), False)
 
-    @staticmethod
-    def help_turn():
-        print "Use this command at the end of the turn.\n"
-
-    @staticmethod
-    def help_undo():
-        print "Rolls back to the last card played.\n"
-
-    def do_undo(self, args):
+    def undo_last_turn(self):
         self.undo = self.getYesNoFromUser("Undo to last card played? (y/n): ")
 
-    @staticmethod
-    def help_quit():
-        print "Quits game and prompt to save.\n"
-
-    def do_quit(self, args):
+    def quit(self):
         if self.getYesNoFromUser("Save? (y/n): "):
             print "Saving suspend file."
             self.saver.save_suspend_file(self)
         print "Exiting."
 
+    def print_turn_number(self):
+        print "%d (Turn %s)" % (self.startYear + (self.turn - 1), self.turn)
+        print ""
+
     def SaveUndo(self):
+        """Saves the undo file for this game"""
         self.saver.save_undo_file(self)
 
-    def do_roll(self, args):
-        self.do_rollback(args)
-
-    def help_roll(self):
-        self.help_rollback()
-
-    @staticmethod
-    def help_rollback():
-        print "Roll back to any previous turn in the game.\n"
-
-    def do_rollback(self, args):
+    def roll_back(self):
         self.roll_turn = -1
         needTurn = True
         while needTurn:
