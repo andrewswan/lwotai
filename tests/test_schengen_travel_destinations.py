@@ -1,5 +1,6 @@
 from labyrinth_test_case import LabyrinthTestCase
-from lwotai import Labyrinth, Randomizer
+from lwotai.labyrinth import Labyrinth
+from lwotai.randomizer import Randomizer
 from mockito import when, mock
 
 

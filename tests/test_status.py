@@ -1,4 +1,4 @@
-from lwotai import Labyrinth
+from lwotai.labyrinth import Labyrinth
 from labyrinth_test_case import LabyrinthTestCase
 
 

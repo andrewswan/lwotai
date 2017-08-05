@@ -1,4 +1,4 @@
-from lwotai import Randomizer
+from lwotai.randomizer import Randomizer
 from unittest import TestCase
 
 

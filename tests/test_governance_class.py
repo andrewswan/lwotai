@@ -1,21 +1,21 @@
 from labyrinth_test_case import LabyrinthTestCase
-from lwotai import FAIR
-from lwotai import Governance
-from lwotai import Governances
+from lwotai.governance import FAIR
+from lwotai.governance import Governance
+from lwotai.governance import governance_with_level
 
 
 class GovernanceClassTest(LabyrinthTestCase):
 
     def test_with_good_index(self):
-        gov = Governances.with_index(2)
+        gov = governance_with_level(2)
         self.assertEquals(FAIR, gov)
 
     def test_with_too_high_index(self):
         try:
-            Governances.with_index(5)
+            governance_with_level(5)
             self.fail("Should have raised a ValueError")
         except ValueError as e:
-            self.assertEquals("Invalid governance value - 5", e.message)
+            self.assertEquals('No such governance level "5"', e.message)
 
     def test_str(self):
         gov = Governance("Anarchy", 5, -2)

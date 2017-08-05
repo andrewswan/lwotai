@@ -1,6 +1,6 @@
 from labyrinth_test_case import LabyrinthTestCase
-from lwotai import Country
-from lwotai import FAIR
+from lwotai.country import Country
+from lwotai.governance import FAIR
 
 
 class CountryImprovementTest(LabyrinthTestCase):

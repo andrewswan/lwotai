@@ -1,5 +1,5 @@
 from labyrinth_test_case import LabyrinthTestCase
-from lwotai import Labyrinth
+from lwotai.labyrinth import Labyrinth
 
 
 class WOIRollModifiers(LabyrinthTestCase):

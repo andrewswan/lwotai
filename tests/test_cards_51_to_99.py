@@ -1,7 +1,7 @@
 import unittest
 
 from labyrinth_test_case import LabyrinthTestCase
-from lwotai import Labyrinth
+from lwotai.labyrinth import Labyrinth
 
 
 class Card51(LabyrinthTestCase):

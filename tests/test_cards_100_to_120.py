@@ -1,8 +1,8 @@
 import unittest
 
 from labyrinth_test_case import LabyrinthTestCase
-from lwotai import GOOD
-from lwotai import Labyrinth
+from lwotai.governance import GOOD
+from lwotai.labyrinth import Labyrinth
 
 
 class Card100(LabyrinthTestCase):

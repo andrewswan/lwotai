@@ -16,3 +16,34 @@ Add: new Jihadist Ideology (9.7) Coherent. This was added to the rules after the
 Fix: card #75 now displays 'Remove card from game' when it is played for the event.
 Fix: numerous typos
 Fix: remove all "Jihadist Activity Phase finished, enter plot command." as this is incorrect. It should always be done after the 2nd US Activity Phase.
+
+
+Version 1.06162015.1 (see comments with 20150616PS)
+1. Made use of CTR consistent - was adding CRT but testing for CTR (reported by Morten Kristensen)
+
+
+Version 1.20150312.1 (see comments with 20150312PS)
+1. Fixed missing line for card 102 (reported by Thomas Chipman)
+
+
+Version 1.20150303.1 (see comments with 20150303PS)
+1. Prevent double processing when major jihad failure sets besieged status (reported by Magnus Kvevlander)
+
+
+Version 1.20150131.1 (see comments with 20150131PS)
+1. Fixed spelling of besieged in Country class
+2. Added untested countries with data to 'status' command so that 'status' can be used to reconstruct the board
+3. Fixed 'help dep'
+4. Added valid global markers, country markers and lapsing markers for use by 'adjust' command
+5. Added 'adjust' command for ideology, prestige, funding, event markers, lapsing markers and country data
+6. Additional changes for multiple aid markers when adding or removing
+7. In plot resolution, remove one aid for each successful roll
+8. In WOI roll adjustment, add 1 to modifiers for each aid marker
+9. Ignore "The door of Itjihad is closed" when checking playable if playing as US (reported by Dave Horn)
+10. Changed removeCell to remove sleeper then Sadr then active if playing as US; but active then sleeper then Sadr if Jihadist
+11. Fixed test for infectious ideology when setting difficulty
+12. Added 'summary' command to display state of each track
+13. Changed message if no Islamist Rule countries at 'turn'
+14. Changed message when card 1 event activated
+
+See GitHub for changes submitted via pull request, e.g. by andrewswan.

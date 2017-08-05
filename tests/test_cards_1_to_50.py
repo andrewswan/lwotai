@@ -3,8 +3,9 @@ import unittest
 from mockito import when, mock
 
 from labyrinth_test_case import LabyrinthTestCase
-from lwotai import Labyrinth, Randomizer
-from lwotai import POOR
+from lwotai.labyrinth import Labyrinth
+from lwotai.randomizer import Randomizer
+from lwotai.governance import POOR
 
 
 class Card01(LabyrinthTestCase):
