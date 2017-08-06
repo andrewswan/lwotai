@@ -1,4 +1,4 @@
-class Ideology:
+class Ideology(object):
     """One of the ideologies that the Jihadist AI can have."""
 
     def __init__(self, name):

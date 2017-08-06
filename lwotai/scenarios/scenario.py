@@ -1,4 +1,4 @@
-class Scenario:
+class Scenario(object):
     """A scenario for the game of Labyrinth."""
 
     def __init__(self, name):
