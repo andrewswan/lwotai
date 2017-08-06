@@ -312,53 +312,6 @@ class Labyrinth:
         print "US Prestige: %d" % self.prestige
         print ""
 
-    def testScenarioSetup(self):
-        if self.scenario == 1 or self.scenario == 2:  # Let's Roll
-            self.startYear = 2001
-            self.turn = 1
-            self.prestige = 7
-            self.troops = 11
-            self.funding = 9
-            self.cells = 11
-            self.phase = "Jihadist Action Phase"
-            self.map["France"].posture = "Hard"
-            self.map["France"].cadre = 1
-            self.map["Spain"].posture = "Soft"
-            self.map["Spain"].sleeperCells = 1
-            self.map["Germany"].posture = "Hard"
-            self.map["Germany"].activeCells = 1
-            self.map["Germany"].sleeperCells = 1
-            self.map["United States"].plots = 1
-            self.map["Libya"].make_poor()
-            self.map["Libya"].make_adversary()
-            self.map["Syria"].make_fair()
-            self.map["Syria"].make_adversary()
-            self.map["Iraq"].make_poor()
-            self.map["Iraq"].make_adversary()
-            self.map["Iraq"].plots = 2
-            self.map["Saudi Arabia"].make_poor()
-            self.map["Saudi Arabia"].make_ally()
-            self.map["Saudi Arabia"].troopCubes = 2
-            self.map["Pakistan"].make_poor()
-            self.map["Pakistan"].make_ally()
-            self.map["Pakistan"].troopCubes = 2
-            self.map["Pakistan"].activeCells = 4
-            self.map["Gulf States"].make_poor()
-            self.map["Gulf States"].make_ally()
-            self.map["Gulf States"].troopCubes = 2
-            self.map["Gulf States"].sleeperCells = 10
-            self.map["Gulf States"].activeCells = 4
-            self.map["Pakistan"].make_fair()
-            self.map["Pakistan"].make_neutral()
-            self.map["Afghanistan"].make_islamist_rule()
-            self.map["Afghanistan"].make_adversary()
-            self.map["Afghanistan"].sleeperCells = 4
-            self.map["Somalia"].besieged = 1
-            if self.scenario == 1:
-                self.map["United States"].posture = "Hard"
-            else:
-                self.map["United States"].posture = "Soft"
-
     def deckSetup(self):
         self.deck["1"] = Card(1,"US","Backlash", 1, False, False, False)
         self.deck["2"] = Card(2,"US","Biometrics", 1, False, False, True)
