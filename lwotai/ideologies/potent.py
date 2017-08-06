@@ -1,11 +1,10 @@
 from lwotai.ideologies.attractive import Attractive
-from lwotai.ideologies.ideology import Ideology
 
 
 class Potent(Attractive):
 
-    def __init__(self):
-        Ideology.__init__(self, "Potent")
+    def name(self):
+        return "Potent"
 
     def difference(self):
         return "The above, plus just three more cells than troops allows Major Jihad (modifies 8.4.2)."

@@ -55,10 +55,9 @@ class Scenario4(Scenario):
         game.markers.append("Patriot Act")
         game.markers.append("Renditions")
         game.markers.append("Wiretapping")
-        possibles = []
-        for country in game.map:
-            if game.map[country].schengen:
-                game.testCountry(country)
+        for country in game.map.values():
+            if country.schengen:
+                game.testCountry(country.name)
         print ""
         print "Remove the cards Patriot Act, Tora Bora, NEST, Abu Sayyaf, KSM and Iraqi WMD from the game."
         print ""

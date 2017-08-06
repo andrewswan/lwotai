@@ -1,11 +1,10 @@
-from lwotai.ideologies.ideology import Ideology
 from lwotai.ideologies.potent import Potent
 
 
 class Infectious(Potent):
 
-    def __init__(self):
-        Ideology.__init__(self, "Infectious")
+    def name(self):
+        return "Infectious"
 
     def difference(self):
         return "The above, plus the US must play all its cards (modifies 5.2.4)."

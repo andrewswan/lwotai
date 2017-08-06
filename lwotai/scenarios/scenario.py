@@ -6,4 +6,4 @@ class Scenario(object):
 
     def set_up(self, game):
         """Sets up the given game for this scenario"""
-        raise
+        pass

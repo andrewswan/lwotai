@@ -6,4 +6,4 @@ class IdeologiesTest(TestCase):
 
     def test_normal(self):
         normal = Normal()
-        self.assertEqual("Normal", normal.name)
+        self.assertEqual("Normal", normal.name())

@@ -3,8 +3,8 @@ from lwotai.ideologies.ideology import Ideology
 
 class Normal(Ideology):
 
-    def __init__(self):
-        Ideology.__init__(self, "Normal")
+    def name(self):
+        return "Normal"
 
     def difference(self):
         """Returns a description of the difference between this and the previous ideology, if any"""

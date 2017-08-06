@@ -19,5 +19,5 @@ class Randomizer:
     def roll_d6(self, times):
         """Returns the result of rolling a six-sided die the given number of
         times (returns a list of that size containing numbers from 1 to 6)"""
-        return [self.pick_one(range(1, 7)) for index in range(times)]
+        return [self.pick_one(range(1, 7)) for ignored in range(times)]
 

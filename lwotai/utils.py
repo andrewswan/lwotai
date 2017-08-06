@@ -42,19 +42,14 @@ class Utils:
 
     @staticmethod
     def getUserYesNoResponse(prompt):
-        """Prompts the user for a yes/no ansewr (returns true or false)"""
-        good = None
-        while not good:
-            try:
-                input = raw_input(prompt)
-                if input.lower() == "y" or input.lower() == "yes":
-                    return True
-                elif input.lower() == "n" or input.lower() == "no":
-                    return False
-                else:
-                    print "Enter y or n."
-                    print ""
-            except:
+        """Prompts the user for a yes/no answer (returns true or false)"""
+        while True:
+            user_input = raw_input(prompt)
+            if "yes".startswith(user_input.lower()):
+                return True
+            elif "no".startswith(user_input.lower()):
+                return False
+            else:
                 print "Enter y or n."
                 print ""
 

@@ -66,7 +66,8 @@ def main():
 
     while True:
         command.cmdloop()
-        # The user has quit, or wants to undo or rollback - prevents issues dealing with save/reloading within class instance
+        # The user has quit, or wants to undo or rollback; prevents
+        # issues dealing with save/reloading within class instance.
         if app.undo:
             print "Undo to last turn"
             app = saver.load_undo_file()

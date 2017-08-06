@@ -1,14 +1,14 @@
 import random
 
-from card import Card
-from country import Country
-from governance import GOOD, FAIR, POOR
-from governance import governance_with_level
-from randomizer import Randomizer
-from saver import Saver
-from ideologies.ideologies import get_ideology, IDEOLOGIES
-from scenarios.scenarios import get_scenario
-from utils import Utils
+from lwotai.card import Card
+from lwotai.country import Country
+from lwotai.governance import GOOD, FAIR, POOR
+from lwotai.governance import governance_with_level
+from lwotai.randomizer import Randomizer
+from lwotai.saver import Saver
+from lwotai.ideologies.ideologies import get_ideology, IDEOLOGIES
+from lwotai.scenarios.scenarios import get_scenario
+from lwotai.utils import Utils
 
 
 class Labyrinth:
@@ -58,7 +58,7 @@ class Labyrinth:
 
     def _print_game_start_messages(self):
         self.outputToHistory(self.scenario.name, False)
-        self.outputToHistory("Jihadist Ideology: " + self.ideology.name, False)
+        self.outputToHistory("Jihadist Ideology: " + self.ideology.name(), False)
         print ""
         self.outputToHistory("Game Start")
         self.outputToHistory("")
@@ -549,20 +549,20 @@ class Labyrinth:
                 print ""
 
     def getRollFromUser(self, prompt):
-        goodNum = None
-        while not goodNum:
+        """Prompts the user to enter a d6 roll or type "roll" to have this program roll a d6 (returns int)"""
+        while True:
             try:
-                input = self.my_raw_input(prompt)
-                if input == "r":
+                user_input = self.my_raw_input(prompt)
+                if "roll".startswith(user_input.lower()):
                     roll = random.randint(1, 6)
                     print "Roll: %d" % roll
                     return roll
-                input = int(input)
-                if 1 <= input <= 6:
-                    return input
+                roll_num = int(user_input)
+                if 1 <= roll_num <= 6:
+                    return roll_num
                 else:
-                    raise
-            except:
+                    raise ValueError("Roll should be from 1 to 6")
+            except ValueError:
                 print "Entry error"
                 print ""
 
@@ -1865,11 +1865,9 @@ class Labyrinth:
                 return 0
         return len(plotRolls) - rollPosition
 
-    def handlePlot(self, ops, isOps):
-        plotRolls = []
-        for i in range(ops):
-            plotRolls.append(random.randint(1, 6))
-        return self.executePlot(ops, isOps, plotRolls)
+    def handle_ai_plot_action(self, ops, is_ops):
+        plot_rolls = [random.randint(1, 6) for ignored in range(ops)]
+        return self.executePlot(ops, is_ops, plot_rolls)
 
     def place_cell(self, country_name):
         """Places a cell from the funding track into the given country"""
@@ -2070,7 +2068,7 @@ class Labyrinth:
                 self.debugPrint("DEBUG: YES")
                 self.debugPrint("DEBUG: Plot Here [5]")
                 self.outputToHistory("Playable US Event.", False)
-                unusedOps = self.handlePlot(self.deck[str(cardNum)].ops, True)
+                unusedOps = self.handle_ai_plot_action(self.deck[str(cardNum)].ops, True)
                 if unusedOps > 0:
                     self.debugPrint("DEBUG: Radicalization with remaining %d ops" % unusedOps)
                     self.handleRadicalization(unusedOps)
