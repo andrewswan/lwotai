@@ -50,18 +50,12 @@ class Labyrinth:
         if setup_function:
             setup_function(self)
         else:
-            self.scenarioSetup()
-        self._print_initial_game_state()
+            self.scenario.set_up(self)
+            self._print_initial_state()
+        self._print_game_start_messages()
 
-    def _print_initial_game_state(self):
-        if self.scenario == 1:
-            self.outputToHistory("Scenario: Let's Roll!", False)
-        elif self.scenario == 2:
-            self.outputToHistory("Scenario: You Can Call Me Al", False)
-        elif self.scenario == 3:
-            self.outputToHistory("Scenario: Anaconda", False)
-        elif self.scenario == 4:
-            self.outputToHistory("Scenario: Mission Accomplished?", False)
+    def _print_game_start_messages(self):
+        self.outputToHistory(self.scenario.name, False)
 
         if self.ideology == 1:
             self.outputToHistory("Jihadist Ideology: Normal", False)
@@ -276,137 +270,8 @@ class Labyrinth:
         self.map["Iran"].links.append(self.map["Turkey"])
         self.map["Iran"].links.append(self.map["Caucasus"])
 
-    def scenarioSetup(self):
-        if self.scenario == 1 or self.scenario == 2:  # Let's Roll
-            self.startYear = 2001
-            self.turn = 1
-            self.prestige = 7
-            self.troops = 11
-            self.funding = 9
-            self.cells = 11
-            self.phase = "Jihadist Action Phase"
-            self.map["Libya"].make_poor()
-            self.map["Libya"].make_adversary()
-            self.map["Syria"].make_fair()
-            self.map["Syria"].make_adversary()
-            self.map["Iraq"].make_poor()
-            self.map["Iraq"].make_adversary()
-            self.map["Saudi Arabia"].make_poor()
-            self.map["Saudi Arabia"].make_ally()
-            self.map["Saudi Arabia"].troopCubes = 2
-            self.map["Gulf States"].make_fair()
-            self.map["Gulf States"].make_ally()
-            self.map["Gulf States"].troopCubes = 2
-            self.map["Pakistan"].make_fair()
-            self.map["Pakistan"].make_neutral()
-            self.map["Afghanistan"].make_islamist_rule()
-            self.map["Afghanistan"].make_adversary()
-            self.map["Afghanistan"].sleeperCells = 4
-            self.map["Somalia"].besieged = 1
-            if self.scenario == 1:
-                self.map["United States"].posture = "Hard"
-            else:
-                self.map["United States"].posture = "Soft"
-                print "Remove the card Axis of Evil from the game."
-                print ""
-        elif self.scenario == 3:
-            self.startYear = 2002
-            self.turn = 1
-            self.prestige = 8
-            self.troops = 5
-            self.funding = 6
-            self.cells = 13
-            self.map["Libya"].make_poor()
-            self.map["Libya"].make_adversary()
-            self.map["Syria"].make_fair()
-            self.map["Syria"].make_adversary()
-            self.map["Iraq"].make_poor()
-            self.map["Iraq"].make_adversary()
-            self.map["Saudi Arabia"].make_poor()
-            self.map["Saudi Arabia"].make_ally()
-            self.map["Saudi Arabia"].troopCubes = 2
-            self.map["Gulf States"].make_fair()
-            self.map["Gulf States"].make_ally()
-            self.map["Gulf States"].troopCubes = 2
-            self.map["Pakistan"].make_poor()
-            self.map["Pakistan"].make_ally()
-            self.map["Pakistan"].sleeperCells = 1
-            self.map["Pakistan"].markers.append("FATA")
-            self.map["Afghanistan"].make_poor()
-            self.map["Afghanistan"].make_ally()
-            self.map["Afghanistan"].sleeperCells = 1
-            self.map["Afghanistan"].troopCubes = 6
-            self.map["Afghanistan"].regimeChange = 1
-            self.map["Somalia"].besieged = 1
-            self.map["Central Asia"].make_poor()
-            self.map["Central Asia"].make_ally()
-            self.markers.append("Patriot Act")
-            possibles = []
-            for country in self.map:
-                if country != "United States":
-                    possibles.append(country)
-            random.shuffle(possibles)
-            for i in range(3):
-                self.testCountry(possibles[i])
-                self.placeCells(possibles[i], 1)
-            print "Remove the cards Patriot Act and Tora Bora from the game."
-            print ""
-        elif self.scenario == 4:
-            self.startYear = 2003
-            self.turn = 1
-            self.prestige = 3
-            self.troops = 0
-            self.funding = 5
-            self.cells = 5
-            self.map["Libya"].make_poor()
-            self.map["Libya"].make_adversary()
-            self.map["Syria"].make_fair()
-            self.map["Syria"].make_adversary()
-            self.map["Syria"].sleeperCells = 1
-            self.map["Iraq"].make_poor()
-            self.map["Iraq"].make_ally()
-            self.map["Iraq"].troopCubes = 6
-            self.map["Iraq"].sleeperCells = 3
-            self.map["Iraq"].regimeChange = 1
-            self.map["Iran"].sleeperCells = 1
-            self.map["Saudi Arabia"].make_poor()
-            self.map["Saudi Arabia"].make_ally()
-            self.map["Saudi Arabia"].sleeperCells = 1
-            self.map["Gulf States"].make_fair()
-            self.map["Gulf States"].make_ally()
-            self.map["Gulf States"].troopCubes = 2
-            self.map["Pakistan"].make_fair()
-            self.map["Pakistan"].make_ally()
-            self.map["Pakistan"].sleeperCells = 1
-            self.map["Pakistan"].markers.append("FATA")
-            self.map["Afghanistan"].make_poor()
-            self.map["Afghanistan"].make_ally()
-            self.map["Afghanistan"].sleeperCells = 1
-            self.map["Afghanistan"].troopCubes = 5
-            self.map["Afghanistan"].regimeChange = 1
-            self.map["Somalia"].besieged = 1
-            self.map["Central Asia"].make_fair()
-            self.map["Central Asia"].make_neutral()
-            self.map["Indonesia/Malaysia"].make_fair()
-            self.map["Indonesia/Malaysia"].make_neutral()
-            self.map["Indonesia/Malaysia"].sleeperCells = 1
-            self.map["Philippines"].posture = "Soft"
-            self.map["Philippines"].troopCubes = 2
-            self.map["Philippines"].sleeperCells = 1
-            self.map["United Kingdom"].posture = "Hard"
-            self.markers.append("Abu Sayyaf")
-            self.markers.append("Patriot Act")
-            self.markers.append("NEST")
-            self.markers.append("Enhanced Measures")
-            self.markers.append("Renditions")
-            self.markers.append("Wiretapping")
-            possibles = []
-            for country in self.map:
-                if self.map[country].schengen:
-                    self.testCountry(country)
-            print ""
-            print "Remove the cards Patriot Act, Tora Bora, NEST, Abu Sayyaf, KSM and Iraqi WMD from the game."
-            print ""
+    def _print_initial_state(self):
+        """Performs any setup necessary after the scenario-specific setup"""
         goodRes = 0
         islamRes = 0
         goodC = 0
@@ -446,7 +311,6 @@ class Labyrinth:
         print "World Posture: %s %d" % (worldPosStr, abs(worldPos))
         print "US Prestige: %d" % self.prestige
         print ""
-
 
     def testScenarioSetup(self):
         if self.scenario == 1 or self.scenario == 2:  # Let's Roll

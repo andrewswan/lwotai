@@ -20,9 +20,9 @@ Thanks to Dave Horn for implementing the Save and Undo system.
 Thanks to Peter Shaw for implementing the Adjust system and for a bunch of bug fixes and cleanup.
 """
 
-from cmd import Cmd
-from labyrinth import Labyrinth
 from command import Command
+from labyrinth import Labyrinth
+from scenario.scenario import scenario_names
 from saver import Saver
 from utils import Utils
 
@@ -33,8 +33,7 @@ RELEASE = "2.0.0"
 def _create_game():
     """Factory function for a new game"""
     print ""
-    scenario_number = Utils.choose_option("Choose Scenario",
-                                   ["Let's Roll!", "You Can Call Me Al", "Anaconda", "Mission Accomplished?"])
+    scenario_number = Utils.choose_option("Choose Scenario", scenario_names())
     print ""
     ideology_number = Utils.choose_option("Choose Jihadist Ideology",
                                    ["Normal",
