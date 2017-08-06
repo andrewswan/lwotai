@@ -1198,7 +1198,7 @@ class Card41(LabyrinthTestCase):
 
         app.map["Libya"].regimeChange = 0
         print "Deploy 3 from Libya to track:"
-        app.redeploy_troops()
+        app.deploy_troops()
         self.assertTrue(app.map["Libya"].troops() == 0)
         self.assertTrue("NATO" not in app.map["Libya"].markers)        
 
