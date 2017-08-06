@@ -1,5 +1,5 @@
-from lwotai.ideologies.ideology import Ideology
-from lwotai.ideologies.normal import Normal
+from ideology import Ideology
+from normal import Normal
 
 
 class Coherent(Normal):

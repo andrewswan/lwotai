@@ -1,5 +1,5 @@
-from lwotai.ideologies.coherent import Coherent
-from lwotai.ideologies.ideology import Ideology
+from coherent import Coherent
+from ideology import Ideology
 
 
 class Attractive(Coherent):

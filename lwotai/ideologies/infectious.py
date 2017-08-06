@@ -1,5 +1,5 @@
-from lwotai.ideologies.ideology import Ideology
-from lwotai.ideologies.potent import Potent
+from ideology import Ideology
+from potent import Potent
 
 
 class Infectious(Potent):

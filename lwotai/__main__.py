@@ -22,7 +22,7 @@ Thanks to Peter Shaw for implementing the Adjust system and for a bunch of bug f
 
 from command import Command
 from labyrinth import Labyrinth
-from scenarios.scenario import scenario_names
+from scenarios.scenarios import scenario_names
 from saver import Saver
 from utils import Utils
 

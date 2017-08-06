@@ -31,7 +31,8 @@ make it easy for experienced Python developers to understand the code.
 fear of breaking it.
 * Where code seems untestable (e.g. it selects a country at random), refactor that code to remove the randomness, e.g.
 change the method to accept a mock randomizer whose behaviour you can control.
-* Use [Mockito](https://github.com/kaste/mockito-python) as the mocking library.
+* Use [Mockito](https://github.com/kaste/mockito-python) as the mocking library. This should be on your machine if you've
+done a `pip install` as described above.
 
 # Submitting changes
 

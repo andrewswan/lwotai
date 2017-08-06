@@ -6,8 +6,8 @@ from governance import GOOD, FAIR, POOR
 from governance import governance_with_level
 from randomizer import Randomizer
 from saver import Saver
-from ideologies.ideology import get_ideology, IDEOLOGIES
-from scenarios.scenario import get_scenario
+from ideologies.ideologies import get_ideology, IDEOLOGIES
+from scenarios.scenarios import get_scenario
 from utils import Utils
 
 

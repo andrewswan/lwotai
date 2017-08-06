@@ -56,7 +56,7 @@ class ResolvePlotTest(LabyrinthTestCase):
         self.assertEqual(app.prestige, 7)
         self.assertEqual(app.map["Russia"].plots, 0)
 
-        app = Labyrinth(1, "WMD", self.set_up_blank_test_scenario)
+        app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.map["Germany"].plots = 1
         app.resolvePlot("Germany", 1, 4, [], ["Spain", "Scandinavia"], [5, 4], [])
         self.assertEqual(app.funding, 7)
@@ -66,7 +66,7 @@ class ResolvePlotTest(LabyrinthTestCase):
         self.assertEqual(app.prestige, 7)
         self.assertEqual(app.map["Germany"].plots, 0)
 
-        app = Labyrinth(1, "WMD", self.set_up_blank_test_scenario)
+        app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.funding = 1
         app.map["Germany"].plots = 1
         app.resolvePlot("Germany", 3, 4, [], ["Spain", "Scandinavia"], [5, 4], [])
