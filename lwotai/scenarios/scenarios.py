@@ -1,7 +1,7 @@
-from scenario1 import Scenario1
-from scenario2 import Scenario2
-from scenario3 import Scenario3
-from scenario4 import Scenario4
+from lwotai.scenarios.scenario1 import Scenario1
+from lwotai.scenarios.scenario2 import Scenario2
+from lwotai.scenarios.scenario3 import Scenario3
+from lwotai.scenarios.scenario4 import Scenario4
 
 
 # To create a new scenario, base it off one of the classes below and append it to this list

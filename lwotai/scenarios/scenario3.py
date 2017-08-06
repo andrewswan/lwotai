@@ -1,6 +1,6 @@
 import random
 
-from scenario import Scenario
+from lwotai.scenarios.scenario import Scenario
 
 
 class Scenario3(Scenario):

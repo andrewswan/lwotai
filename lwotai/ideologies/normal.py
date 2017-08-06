@@ -1,4 +1,4 @@
-from ideology import Ideology
+from lwotai.ideologies.ideology import Ideology
 
 
 class Normal(Ideology):

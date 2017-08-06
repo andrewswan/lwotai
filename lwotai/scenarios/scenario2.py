@@ -1,5 +1,5 @@
-from scenario import Scenario
-from scenario1 import Scenario1
+from lwotai.scenarios.scenario import Scenario
+from lwotai.scenarios.scenario1 import Scenario1
 
 
 class Scenario2(Scenario):

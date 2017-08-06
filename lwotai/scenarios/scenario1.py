@@ -1,4 +1,4 @@
-from scenario import Scenario
+from lwotai.scenarios.scenario import Scenario
 
 
 class Scenario1(Scenario):

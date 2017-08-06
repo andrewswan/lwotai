@@ -1,5 +1,5 @@
-from ideology import Ideology
-from infectious import Infectious
+from lwotai.ideologies.ideology import Ideology
+from lwotai.ideologies.infectious import Infectious
 
 
 class Virulent(Infectious):

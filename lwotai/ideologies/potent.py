@@ -1,5 +1,5 @@
-from attractive import Attractive
-from ideology import Ideology
+from lwotai.ideologies.attractive import Attractive
+from lwotai.ideologies.ideology import Ideology
 
 
 class Potent(Attractive):
