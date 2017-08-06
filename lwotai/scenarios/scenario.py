@@ -1,7 +1,7 @@
-from lwotai.scenario.scenario1 import Scenario1
-from lwotai.scenario.scenario2 import Scenario2
-from lwotai.scenario.scenario3 import Scenario3
-from lwotai.scenario.scenario4 import Scenario4
+from lwotai.scenarios.scenario1 import Scenario1
+from lwotai.scenarios.scenario2 import Scenario2
+from lwotai.scenarios.scenario3 import Scenario3
+from lwotai.scenarios.scenario4 import Scenario4
 
 
 class Scenario:
@@ -21,6 +21,11 @@ SCENARIOS = [
     Scenario3(),
     Scenario4()
 ]
+
+
+def get_scenario(number):
+    """Returns the scenario with the given number (starting at 1)"""
+    return SCENARIOS[number - 1]
 
 
 def scenario_names():

@@ -1,5 +1,6 @@
 import unittest
 
+
 class LabyrinthTestCase(unittest.TestCase):
     """Assertions, setup functions, etc. for reuse by subclasses"""
 

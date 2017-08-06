@@ -6,16 +6,18 @@ from governance import GOOD, FAIR, POOR
 from governance import governance_with_level
 from randomizer import Randomizer
 from saver import Saver
+from ideologies.ideology import get_ideology
+from scenarios.scenario import get_scenario
 from utils import Utils
 
 
 class Labyrinth:
     """The main game entity"""
 
-    def __init__(self, scenario, ideology, setup_function=None, test_user_input=None, **kwargs):
+    def __init__(self, scenario_num, ideology_num, setup_function=None, test_user_input=None, **kwargs):
         # Inputs
-        self.scenario = scenario
-        self.ideology = ideology
+        self.scenario = get_scenario(scenario_num)
+        self.ideology = get_ideology(ideology_num)
         self.testUserInput = test_user_input
         self.randomizer = kwargs.get('randomizer', Randomizer())
         self.saver = kwargs.get('saver', Saver())
@@ -56,20 +58,7 @@ class Labyrinth:
 
     def _print_game_start_messages(self):
         self.outputToHistory(self.scenario.name, False)
-
-        if self.ideology == 1:
-            self.outputToHistory("Jihadist Ideology: Normal", False)
-        elif self.ideology == 2:
-            self.outputToHistory("Jihadist Ideology: Coherent", False)
-        elif self.ideology == 3:
-            self.outputToHistory("Jihadist Ideology: Attractive", False)
-        elif self.ideology == 4:
-            self.outputToHistory("Jihadist Ideology: Potent", False)
-        elif self.ideology == 5:
-            self.outputToHistory("Jihadist Ideology: Infectious", False)
-        elif self.ideology == 6:
-            self.outputToHistory("Jihadist Ideology: Virulent", False)
-
+        self.outputToHistory("Jihadist Ideology: " + self.ideology.name, False)
         print ""
         self.outputToHistory("Game Start")
         self.outputToHistory("")
@@ -78,7 +67,7 @@ class Labyrinth:
     def debugPrint(self, str):
         return
 
-    def outputToHistory(self, output, lineFeed = True):
+    def outputToHistory(self, output, lineFeed=True):
         print output
         self.history.append(output)
         if lineFeed:
