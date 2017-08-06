@@ -36,6 +36,11 @@ class Utils:
         return sum(1 for item in iterable if predicate(item))
 
     @staticmethod
+    def find(iterable, predicate):
+        """Returns the elements of the given iterable that match the given predicate"""
+        return [item for item in iterable if predicate(item)]
+
+    @staticmethod
     def getUserYesNoResponse(prompt):
         """Prompts the user for a yes/no ansewr (returns true or false)"""
         good = None

@@ -1009,7 +1009,7 @@ class Labyrinth:
 
     def num_disruptable(self):
         """Returns the number of countries in which the US player can Disrupt"""
-        return Utils.count(self.map.values(), Country.is_disruptable)
+        return Utils.count(self.map.values(), Country.can_disrupt)
 
     def countryResources(self, country):
         res = self.map[country].resources
@@ -2386,18 +2386,18 @@ class Labyrinth:
         else:
             self.changePrestige(-1)
 
-    def listCountriesInParam(self, needed = None):
+    def listCountriesInParam(self, needed=None):
         print ""
-        print "Contries"
-        print "--------"
+        print "Countries"
+        print "---------"
         for country in needed:
             self.map[country].printCountry()
         print ""
 
-    def listCountriesWithTroops(self, needed = None):
+    def listCountriesWithTroops(self, needed=None):
         print ""
-        print "Contries with Troops"
-        print "--------------------"
+        print "Countries with Troops"
+        print "---------------------"
         if needed is None:
             needed = 0
         if self.troops > needed:
@@ -2407,12 +2407,16 @@ class Labyrinth:
                 print "%s: %d" % (country, self.map[country].troops())
         print ""
 
-    def listDeployOptions(self, na = None):
+    def _can_deploy_to(self, country_name):
+        """Indicates whether the US player can peacefully deploy troops to the named country"""
+        return self.map[country_name].is_ally() or ("Abu Sayyaf" in self.markers and country_name == "Philippines")
+
+    def listDeployOptions(self, na=None):
         print ""
         print "Deploy Options"
         print "--------------"
         for country in self.map:
-            if self.map[country].is_ally() or ("Abu Sayyaf" in self.markers and country == "Philippines"):
+            if self._can_deploy_to(country):
                 print "%s: %d troops" % (country, self.map[country].troops())
         print ""
 
@@ -2421,7 +2425,7 @@ class Labyrinth:
         print "Disruptable Countries"
         print "--------------------"
         for country in self.map:
-            if self.map[country].is_disruptable():
+            if self.map[country].can_disrupt():
                 print self.map[country].get_disrupt_summary()
         print ""
 
@@ -2444,8 +2448,8 @@ class Labyrinth:
 
     def listPlotCountries(self, na=None):
         print ""
-        print "Contries with Active Plots"
-        print "--------------------------"
+        print "Countries with Active Plots"
+        print "---------------------------"
         for country in self.map:
             if self.map[country].plots > 0:
                 self.map[country].printCountry()
@@ -2454,7 +2458,7 @@ class Labyrinth:
     def listIslamistCountries(self, na=None):
         print ""
         print "Islamist Rule Countries"
-        print "----------------------"
+        print "-----------------------"
         for country in self.map:
             if self.map[country].is_islamist_rule():
                 self.map[country].printCountry()
@@ -2472,7 +2476,7 @@ class Labyrinth:
     def listRegimeChangeWithTwoCells(self, na=None):
         print ""
         print "Regime Change Countries with Two Cells"
-        print "---------------------------------------"
+        print "--------------------------------------"
         for country in self.map:
             if self.map[country].regimeChange > 0:
                 if self.map[country].totalCells() >= 2:
@@ -2589,10 +2593,11 @@ class Labyrinth:
                         self.map[country].printCountry()
 
     def deploy_reserves(self):
-        """Allows the US player to play a card for the Reserves action (6.3.3)"""
+        """Allows the US player to play a card for the Reserves action (6.3.3)."""
         print "Discard this card and add its Ops value to the US Reserves track."
 
     def show_status(self, country_name=None):
+        """Shows the status of the given country, if any, otherwise the whole game."""
         if country_name:
             goodCountry = False
             possible = []
@@ -2834,30 +2839,34 @@ class Labyrinth:
         print "Funding: %d    Cells Available: %d" % (self.funding, self.cells)
         print ""
         print "EVENTS"
-        if len(self.markers) == 0:
+        if not self.markers:
             print "Markers: None"
         else:
             print "Markers: %s" % ", ".join(self.markers)
-        if len(self.lapsing) == 0:
+        if not self.lapsing:
             print "Lapsing: None"
         else:
             print "Lapsing: %s" % ", ".join(self.lapsing)
         print ""
+
+    def _find_countries(self, predicate):
+        """Returns a list of countries matching the given predicate"""
+        return Utils.find(self.map.values(), predicate)
 
     def getAdjustFromUser(self):
         while True:
             input_str = self.my_raw_input("Enter 'ideology', 'prestige', 'funding', 'lapsing', 'marker' or country ?: ")
             if input_str == "":
                 return ""
-            if input_str.lower() == "ideology" or input_str.lower() == "ide" :
+            if input_str.lower() == "ideology" or input_str.lower() == "ide":
                 return "ideology"
-            if input_str.lower() == "prestige" or input_str.lower() == "pre" :
+            if input_str.lower() == "prestige" or input_str.lower() == "pre":
                 return "prestige"
-            if input_str.lower() == "funding" or input_str.lower() == "fun" :
+            if input_str.lower() == "funding" or input_str.lower() == "fun":
                 return "funding"
-            if input_str.lower() == "lapsing" or input_str.lower() == "lap" :
+            if input_str.lower() == "lapsing" or input_str.lower() == "lap":
                 return "lapsing"
-            if input_str.lower() == "marker" or input_str.lower() == "mar" :
+            if input_str.lower() == "marker" or input_str.lower() == "mar":
                 return "marker"
             possible = []
             for country in self.map:
@@ -3216,7 +3225,7 @@ class Labyrinth:
                 if input < 0 or input > 9:
                     print "Invalid plot value - ", input
                 else:
-                    print "Changing plot count to ", input
+                    print "Changing plot count to", input
                     self.map[country].plots = input
                     return True
             except:
@@ -3268,7 +3277,7 @@ class Labyrinth:
         goodAdjustAttr = None
         while not goodAdjustAttr:
             print "Changeable attributes are: %s" % ", ".join(adjustAttrList)
-            input = self.my_raw_input("Enter attribute to be changed: ")
+            input = self.my_raw_input("Enter attribute to be changed (press Enter to quit): ")
             if input == "":
                 return ""
             if input in adjustAttrList:
@@ -3335,7 +3344,11 @@ class Labyrinth:
             print event
         print ""
 
-    def redeploy_troops(self):
+    def deploy_troops(self):
+        """Deploys troops to a Muslim Ally; does not perform Regime Change"""
+        if not self._find_countries(lambda c: self._can_deploy_to(c.name)):
+            print "There are no Muslim Allies to deploy to."
+            return
         moveFrom = None
         available = 0
         while not moveFrom:
@@ -3365,16 +3378,17 @@ class Labyrinth:
                     moveFrom = input
         moveTo = None
         while not moveTo:
-            input = self.getCountryFromUser("To what country (track for Troop Track)  (? for list)?: ",  "track", self.listDeployOptions)
+            input = self.getCountryFromUser(
+                "To what country ('track' for Troop Track, ? for list): ", "track", self.listDeployOptions)
             if input == "":
                 print ""
                 return
             elif input == "track":
-                print "Deploy troops from %s to Troop Track" % moveFrom
+                print "Deploying troops from %s to Troop Track" % moveFrom
                 print ""
                 moveTo = input
             else:
-                print "Deploy troops from %s to %s" % (moveFrom, input)
+                print "Deploying troops from %s to %s" % (moveFrom, input)
                 print ""
                 moveTo = input
         howMany = 0
@@ -3402,9 +3416,14 @@ class Labyrinth:
         else:
             self.map[moveTo].changeTroops(howMany)
             troopsNow = self.map[moveTo].troops()
-        self.outputToHistory("* %d troops deployed from %s (%d) to %s (%d)" % (howMany, moveFrom, troopsLeft, moveTo, troopsNow))
+        self.outputToHistory(
+            "* %d troops deployed from %s (%d) to %s (%d)" % (howMany, moveFrom, troopsLeft, moveTo, troopsNow))
 
     def disrupt_cells_or_cadre(self):
+        """Performs a Disrupt operation for the US player."""
+        if not self._find_countries(lambda c: c.can_disrupt()):
+            print "No countries can be disrupted."
+            return
         where = None
         sleepers = 0
         actives = 0
@@ -3467,6 +3486,9 @@ class Labyrinth:
             self.handleMuslimWoI(modRoll, where)
 
     def alert_plot(self):
+        if not self._find_countries(lambda c: c.plots > 0):
+            print "No countries contain plots."
+            return
         where = None
         alert_prompt = "Alert in what country?  (? for list, Enter to abort): "
         while not where:
@@ -3810,8 +3832,8 @@ class Labyrinth:
         while needTurn:
             try:
                 last_turn = self.turn - 1
-                turn_str = raw_input("Roll back to which turn? Valid turns are 0 through " + str(last_turn) + "? Q to cancel rollback: " )
-                if turn_str == "Q":
+                turn_str = raw_input("Roll back to which turn? (0 to %d, or Q to cancel): " % last_turn)
+                if turn_str.upper() == "Q":
                     print "Rollback cancelled"
                     break
                 else:

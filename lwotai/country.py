@@ -195,7 +195,8 @@ class Country:
     def is_regime_change(self):
         return self.regimeChange > 0
 
-    def is_disruptable(self):
+    def can_disrupt(self):
+        """Indicates whether the US can conduct a Disrupt operation in this country"""
         return (
             (self.totalCells() > 0 or self.has_cadre()) and
             (self.is_ally() or self.troops() >= 2 or self.type == "Non-Muslim")

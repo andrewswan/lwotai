@@ -7,6 +7,7 @@ class Command(Cmd):
     def __init__(self, app, saver=Saver(), completekey='tab', stdin=None, stdout=None):
         Cmd.__init__(self, completekey, stdin, stdout)
         self.app = app
+        self.prompt = "Enter command (? for help): "
         self.saver = saver
 
     # noinspection SpellCheckingInspection: comes from Cmd superclass
@@ -37,8 +38,11 @@ class Command(Cmd):
         self.app.alert_plot()
 
     def do_deploy(self, ignored):
-        """Move troops from the troop track or a country to another country."""
-        self.app.redeploy_troops()
+        """
+        Move troops from the troop track or a country to a Muslim Ally.
+        Use the "regime_change" command to deploy to an Islamist Rule country.
+        """
+        self.app.deploy_troops()
 
     def do_disrupt(self, ignored):
         """Disrupts cells or cadre in a country."""
@@ -80,7 +84,7 @@ class Command(Cmd):
         self.app.roll_back()
 
     def do_status(self, country_name):
-        """Displays the game status. 'status [country]' will print the status of that country."""
+        """Displays the game status, or 'status [country]' displays the status of that country."""
         self.app.show_status(country_name)
 
     def do_summary(self, ignored):

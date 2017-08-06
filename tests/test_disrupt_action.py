@@ -14,7 +14,7 @@ class DisruptTest(LabyrinthTestCase):
         country.troopCubes = 0
 
         # Invoke & assert
-        self.assertFalse(country.is_disruptable())
+        self.assertFalse(country.can_disrupt())
 
     def test_cannot_disrupt_in_neutral_muslim_country_with_one_troop(self):
         # Set up
@@ -24,7 +24,7 @@ class DisruptTest(LabyrinthTestCase):
         country.troopCubes = 1
 
         # Invoke & assert
-        self.assertFalse(country.is_disruptable())
+        self.assertFalse(country.can_disrupt())
 
     def test_can_disrupt_in_neutral_muslim_country_with_two_troops(self):
         # Set up
@@ -34,7 +34,7 @@ class DisruptTest(LabyrinthTestCase):
         country.troopCubes = 2
 
         # Invoke & assert
-        self.assertTrue(country.is_disruptable())
+        self.assertTrue(country.can_disrupt())
 
     def test_can_disrupt_in_allied_muslim_country_with_no_troops(self):
         # Set up
@@ -44,7 +44,7 @@ class DisruptTest(LabyrinthTestCase):
         country.troopCubes = 0
 
         # Invoke & assert
-        self.assertTrue(country.is_disruptable())
+        self.assertTrue(country.can_disrupt())
 
     def test_can_disrupt_in_non_muslim_country_with_no_troops(self):
         # Set up
@@ -53,7 +53,7 @@ class DisruptTest(LabyrinthTestCase):
         country.troopCubes = 0
 
         # Invoke & assert
-        self.assertTrue(country.is_disruptable())
+        self.assertTrue(country.can_disrupt())
 
     def test_num_disruptable(self):
         # Set up
