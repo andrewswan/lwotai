@@ -26,7 +26,6 @@ class Labyrinth:
         self.funding = 0
         self.gameOver = False
         self.history = []
-        self.jCard = 1
         self.lapsing = []
         self.map = {}
         self.markers = []
