@@ -430,10 +430,10 @@ class Labyrinth:
                     worldPos += 1
                 elif self.map[country].posture == "Soft":
                     worldPos -= 1
-        print "Good Resources   : %d" % goodRes
+        print "Good Resources:     %d" % goodRes
         print "Islamist Resources: %d" % islamRes
         print "---"
-        print "Good/Fair Countries   : %d" % goodC
+        print "Good/Fair Countries:     %d" % goodC
         print "Poor/Islamist Countries: %d" % islamC
         print ""
         print "GWOT"
@@ -2814,7 +2814,7 @@ class Labyrinth:
             print "Jihadist Ideology: Virulent"
         print ""
         print "VICTORY"
-        print "Good Resources: %d    Islamist Resources: %d" % (goodRes, islamRes)
+        print "Good Resources: %d        Islamist Resources: %d" % (goodRes, islamRes)
         print "Good/Fair Countries: %d   Poor/Islamist Countries: %d" % (goodC, islamC)
         print ""
         if worldPos > 0:
@@ -3781,10 +3781,10 @@ class Labyrinth:
                     islamC += 1
                     islamRes += self.countryResources(country)
         self.outputToHistory("---", False)
-        self.outputToHistory("Good Resources   : %d" % goodRes, False)
+        self.outputToHistory("Good Resources:     %d" % goodRes, False)
         self.outputToHistory("Islamist Resources: %d" % islamRes, False)
         self.outputToHistory("---", False)
-        self.outputToHistory("Good/Fair Countries   : %d" % goodC, False)
+        self.outputToHistory("Good/Fair Countries:     %d" % goodC, False)
         self.outputToHistory("Poor/Islamist Countries: %d" % islamC, False)
         self.turn += 1
         self.outputToHistory("---", False)
