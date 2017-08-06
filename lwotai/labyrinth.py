@@ -6,7 +6,7 @@ from governance import GOOD, FAIR, POOR
 from governance import governance_with_level
 from randomizer import Randomizer
 from saver import Saver
-from ideologies.ideology import get_ideology
+from ideologies.ideology import get_ideology, IDEOLOGIES
 from scenarios.scenario import get_scenario
 from utils import Utils
 
@@ -1063,7 +1063,7 @@ class Labyrinth:
             if target_country.troops() > 0:
                 self.prestige = 1
                 self.outputToHistory("Troops present so US Prestige now 1", False)
-        if self.ideology <= 5:
+        if self.ideology.failed_jihad_rolls_remove_cells():
             for i in range(failures):
                 if target_country.numActiveCells() > 0:
                     target_country.removeActiveCell()
@@ -1091,9 +1091,7 @@ class Labyrinth:
         return opsRemaining
 
     def excessCellsNeededForMajorJihad(self):
-        if self.ideology >= 4:
-            return 3
-        return 5
+        return self.ideology.excess_cells_for_major_jihad()
 
     def bhutto_in_play(self):
         return "Benazir Bhutto" in self.markers
@@ -1220,12 +1218,8 @@ class Labyrinth:
 
     def executeRecruit(self, country, ops, rolls, recruitOverride=None, isJihadistVideos=False, isMadrassas=False):
         self.outputToHistory("* Recruit to %s" % country)
-        cellsRequested = ops
-        if self.ideology >= 3:
-            cellsRequested = ops * 2
-
+        cellsRequested = ops * self.ideology.recruits_per_success()
         cells = self.numCellsAvailable(isMadrassas or isJihadistVideos)
-
         cellsToRecruit = min(cellsRequested, cells)
         if self.map[country].regimeChange or self.map[country].is_islamist_rule():
             if self.map[country].regimeChange:
@@ -1245,10 +1239,7 @@ class Labyrinth:
 
             self.outputToHistory("%d sleeper cells recruited to %s." % (cellsToRecruit, country), False)
             self.outputToHistory(self.map[country].countryStr(), True)
-            if self.ideology >= 3:
-                return ops - ((cellsToRecruit / 2) + (cellsToRecruit % 2))
-            else:
-                return ops - cellsToRecruit
+            return ops - self.ideology.ops_to_recruit(cellsToRecruit)
         else:
             opsRemaining = ops
             i = 0
@@ -1261,10 +1252,8 @@ class Labyrinth:
             else:
                 while self.numCellsAvailable(isMadrassas or isJihadistVideos) > 0 and opsRemaining > 0:
                     if self.map[country].is_recruit_success(rolls[i], recruitOverride):
-                        if self.ideology >= 3:
-                            cellsMoving = min(self.numCellsAvailable(isMadrassas or isJihadistVideos), 2)
-                        else:
-                            cellsMoving = min(self.numCellsAvailable(isMadrassas or isJihadistVideos), 1)
+                        cellsMoving = min(self.numCellsAvailable(isMadrassas or isJihadistVideos),
+                                          self.ideology.recruits_per_success())
                         self.cells -= cellsMoving
                         self.map[country].sleeperCells += cellsMoving
                         self.map[country].cadre = 0
@@ -1767,12 +1756,9 @@ class Labyrinth:
                     self.outputToHistory("Cell goes Active", False)
                     self.map[country].sleeperCells -= 1
                     self.map[country].activeCells += 1
-                if self.ideology == 1:
-                    self.map[country].plots += successes
-                    self.outputToHistory("%d Plot(s) placed in %s." % (successes, country), False)
-                if self.ideology >= 2:
-                    self.map[country].plots += successes * 2
-                    self.outputToHistory("%d Plot(s) placed in %s." % (successes * 2, country), False)
+                plots_placed = successes * self.ideology.plots_per_success()
+                self.map[country].plots += plots_placed
+                self.outputToHistory("%d Plot(s) placed in %s." % (plots_placed, country), False)
                 if "Abu Sayyaf" in self.markers and country == "Philippines" and self.map[country].troops() <= self.map[country].totalCells() and successes > 0:
                     self.outputToHistory("Prestige loss due to Abu Sayyaf.", False)
                     self.changePrestige(-successes)
@@ -2605,18 +2591,7 @@ class Labyrinth:
                 elif self.map[country].posture == "Soft":
                     worldPos -= 1
         print ""
-        if self.ideology == 1:
-            print "Jihadist Ideology: Normal"
-        elif self.ideology == 2:
-            print "Jihadist Ideology: Coherent"
-        elif self.ideology == 3:
-            print "Jihadist Ideology: Attractive"
-        elif self.ideology == 4:
-            print "Jihadist Ideology: Potent"
-        elif self.ideology == 5:
-            print "Jihadist Ideology: Infectious"
-        elif self.ideology == 6:
-            print "Jihadist Ideology: Virulent"
+        print "Jihadist Ideology:", self.ideology.name
         print ""
         print "VICTORY"
         print "Good Resources: %d        Islamist Resources: %d" % (goodRes, islamRes)
@@ -2663,15 +2638,15 @@ class Labyrinth:
             input_str = self.my_raw_input("Enter 'ideology', 'prestige', 'funding', 'lapsing', 'marker' or country ?: ")
             if input_str == "":
                 return ""
-            if input_str.lower() == "ideology" or input_str.lower() == "ide":
+            if "ideology".startswith(input_str.lower()):
                 return "ideology"
-            if input_str.lower() == "prestige" or input_str.lower() == "pre":
+            if "prestige".startswith(input_str.lower()):
                 return "prestige"
-            if input_str.lower() == "funding" or input_str.lower() == "fun":
+            if "funding".startswith(input_str.lower()):
                 return "funding"
-            if input_str.lower() == "lapsing" or input_str.lower() == "lap":
+            if "lapsing".startswith(input_str.lower()):
                 return "lapsing"
-            if input_str.lower() == "marker" or input_str.lower() == "mar":
+            if "marker".startswith(input_str.lower()):
                 return "marker"
             possible = []
             for country in self.map:
@@ -2691,32 +2666,28 @@ class Labyrinth:
 
     def getAdjustIdeology(self):
         while True:
-            print "Ideologies are:"
-            print "(1) Normal"
-            print "(2) Coherent:   Plot success places 2 Plots"
-            print "(3) Attractive: ...and Recruit success places 2 cells"
-            print "(4) Potent:     ...and Major Jihad if 3 or more cells than troops"
-            print "(5) Infectious: ...and US plays all its cards (not enforced by program)"
-            print "(6) Virulent:   ...and Jihad failure does not remove cells"
-            input_str = self.my_raw_input("Enter new ideology (1-6): ")
+            print "Possible ideologies are:"
+            for (index, ideology) in enumerate(IDEOLOGIES):
+                print "(%d) %s (%s)" % (index, ideology.name, ideology.difference())
+            input_str = self.my_raw_input("Enter new ideology (1-%d): " % len(IDEOLOGIES))
             if input_str == "":
                 return ""
             try:
                 input_int = int(input_str)
-                if input_int < 1 or input_int > 6:
-                    print "Invalid prestige value - ", input_int
+                if input_int < 1 or input_int > len(IDEOLOGIES):
+                    print "Invalid ideology number '%d'" % input_int
                 else:
                     return input_int
-            except:
-                print "Invalid ideology value - ", input_str
+            except ValueError:
+                print "Invalid ideology number '%s'" % input_str
 
     def adjustIdeology(self):
         print "Adjusting ideology"
-        adjustIdeologyResp = self.getAdjustIdeology()
-        if adjustIdeologyResp:
-            self.ideology = adjustIdeologyResp
+        new_ideology_number = self.getAdjustIdeology()
+        if new_ideology_number:
+            self.ideology = get_ideology(new_ideology_number)
         else:
-            print "Prestige unchanged"
+            print "Ideology unchanged"
 
     def getAdjustPrestige(self):
         while True:
