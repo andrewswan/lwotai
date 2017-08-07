@@ -2,6 +2,10 @@ from lwotai.ideologies.coherent import Coherent
 
 
 class Attractive(Coherent):
+    """
+    Contrary to what the 2011 rulebook says, this ideology does indeed extend
+    the Coherent one, see https://boardgamegeek.com/article/7952594#7952594.
+    """
 
     def name(self):
         return "Attractive"
