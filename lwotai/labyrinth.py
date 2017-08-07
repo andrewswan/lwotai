@@ -1312,8 +1312,8 @@ class Labyrinth(object):
         return False
 
     def inLists(self, country, lists):
-        for list in lists:
-            if country in lists:
+        for inner_list in lists:
+            if country in inner_list:
                 return True
         return False
 
