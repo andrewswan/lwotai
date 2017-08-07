@@ -591,18 +591,20 @@ class Card(object):
                     return False
             elif self.number == 8 or self.number == 9 or self.number == 10:  # Special Forces
                 while True:
-                    input = app.getCountryFromUser("Remove a cell from what country that has troops or is adjacent to a country with troops (? for list)?: ",  "XXX", app.listCountriesWithCellAndAdjacentTroops)
-                    if input == "":
+                    country_name = app.getCountryFromUser("Remove a cell from which country that has troops or is adjacent" +
+                                                   " to a country with troops (? for list)?: ",  "XXX",
+                                                   app.listCountriesWithCellAndAdjacentTroops)
+                    if country_name == "":
                         print ""
                         return
                     else:
-                        if app.map[input].totalCells(True) <= 0:
-                            print "There are no cells in %s" % input
+                        if app.map[country_name].totalCells(True) <= 0:
+                            print "There are no cells in %s" % country_name
                             print ""
                         else:
                             foundTroops = False
                             for country in app.map:
-                                if country == input or app.isAdjacent(input, country):
+                                if country == country_name or app.isAdjacent(country_name, country):
                                     if app.map[country].troops() > 0:
                                         foundTroops = True
                                         break
@@ -610,8 +612,8 @@ class Card(object):
                                 print "Neither this or any adjacent country have troops."
                                 print ""
                             else:
-                                app.removeCell(input, side)    # 20150131PS added side
-                                app.outputToHistory(app.map[input].countryStr(), True)
+                                app.removeCell(country_name, side)    # 20150131PS added side
+                                app.outputToHistory(app.map[country_name].countryStr(), True)
                                 break
             elif self.number == 11:  # Abbas
                 numIRIsrael = 0
@@ -768,7 +770,8 @@ class Card(object):
                             print ""
                         else:
                             while True:
-                                postureCountry = app.getCountryFromUser("Now choose a non-US country to set its Posture: ", "XXX", None)
+                                postureCountry = app.getCountryFromUser(
+                                    "Now choose a non-US country to set its Posture: ", "XXX", None)
                                 if postureCountry == "":
                                     print ""
                                     return
@@ -777,7 +780,8 @@ class Card(object):
                                         print "Choose a non-US country."
                                         print ""
                                     else:
-                                        postureStr = app.getPostureFromUser("What Posture should %s have (h or s)? " % postureCountry)
+                                        postureStr = app.getPostureFromUser(
+                                            "What Posture should %s have (h or s)? " % postureCountry)
                                         app.executeCardLetsRoll(plotCountry, postureCountry, postureStr)
                                         return
             elif self.number == 22:  # Mossad and Shin Bet
@@ -787,23 +791,25 @@ class Card(object):
                 app.outputToHistory("", False)
             elif self.number == 23 or self.number == 24 or self.number == 25:  # Predator
                 while True:
-                    input = app.getCountryFromUser("Choose non-Iran Muslim Country to remove a cell from (? for list): ", "XXX", app.listMuslimCountriesWithCells)
-                    if input == "":
+                    country_name = app.getCountryFromUser(
+                        "Choose non-Iran Muslim Country to remove a cell from (? for list): ", "XXX",
+                        app.listMuslimCountriesWithCells)
+                    if country_name == "":
                         print ""
                         return
                     else:
-                        if app.map[input].totalCells(True) == 0:
-                            print "%s has no cells." % input
+                        if app.map[country_name].totalCells(True) == 0:
+                            print "%s has no cells." % country_name
                             print ""
-                        elif app.map[input].type == "Iran":
+                        elif app.map[country_name].type == "Iran":
                             print "Iran is not allowed."
                             print ""
-                        elif app.map[input].type == "Non-Muslim":
+                        elif app.map[country_name].type == "Non-Muslim":
                             print "Choose a Muslim country."
                             print ""
                         else:
-                            app.removeCell(input, side)    # 20150131PS added side
-                            app.outputToHistory(app.map[input].countryStr(), True)
+                            app.removeCell(country_name, side)    # 20150131PS added side
+                            app.outputToHistory(app.map[country_name].countryStr(), True)
                             break
             elif self.number == 26:  # Quartet
                 if not "Abbas" in app.markers:
@@ -837,16 +843,16 @@ class Card(object):
                             break
                 else:
                     while True:
-                        input = app.getCountryFromUser("Choose a country with a Besieged Regime marker to remove (? for list): ",  "XXX", app.listBesiegedCountries)
-                        if input == "":
+                        country_name = app.getCountryFromUser("Choose a country with a Besieged Regime marker to remove (? for list): ",  "XXX", app.listBesiegedCountries)
+                        if country_name == "":
                             print ""
                             return
                         else:
-                            if app.map[input].besieged <= 0:
-                                print "%s is not a Besieged Regime." % input
+                            if app.map[country_name].besieged <= 0:
+                                print "%s is not a Besieged Regime." % country_name
                                 print ""
                             else:
-                                target = input
+                                target = country_name
                                 break
                 app.map[target].besieged = 0
                 app.outputToHistory("%s is no longer a Besieged Regime." % target, False)
@@ -859,20 +865,20 @@ class Card(object):
                     target = ""
                     finishedPicking = False
                     while not target:
-                        input = app.getCountryFromUser("Choose Schengen country to make a WOI roll (done to stop rolling) (? for list)?: ",  "done", app.listSchengenCountries)
-                        if input == "":
+                        country_name = app.getCountryFromUser("Choose Schengen country to make a WOI roll (done to stop rolling) (? for list)?: ",  "done", app.listSchengenCountries)
+                        if country_name == "":
                             print ""
                             return
-                        elif input == "done":
+                        elif country_name == "done":
                             finishedPicking = True
                             break
                         else:
-                            if not app.map[input].schengen:
-                                print "%s is not a Schengen country." % input
+                            if not app.map[country_name].schengen:
+                                print "%s is not a Schengen country." % country_name
                                 print ""
                                 return
                             else:
-                                target = input
+                                target = country_name
                                 postureRoll = app.getRollFromUser("Enter Posture Roll or r to have program roll: ")
                                 app.executeNonMuslimWOI(target, postureRoll)
                     if finishedPicking:
@@ -890,16 +896,16 @@ class Card(object):
                             break
                 else:
                     while True:
-                        input = app.getCountryFromUser("Choose a Regime Change country (? for list): ",  "XXX", app.listRegimeChangeCountries)
-                        if input == "":
+                        country_name = app.getCountryFromUser("Choose a Regime Change country (? for list): ",  "XXX", app.listRegimeChangeCountries)
+                        if country_name == "":
                             print ""
                             return
                         else:
-                            if app.map[input].regimeChange <= 0:
-                                print "%s is not a Regime Change country." % input
+                            if app.map[country_name].regimeChange <= 0:
+                                print "%s is not a Regime Change country." % country_name
                                 print ""
                             else:
-                                target = input
+                                target = country_name
                                 break
                 app.map[target].aid += 1
                 app.outputToHistory("Aid added to %s." % target, False)
@@ -942,20 +948,20 @@ class Card(object):
                     return False
                 if app.getYesNoFromUser("Do you want to discard a card with a value that exactly matches an Adversary's Resources? (y/n): "):
                     while True:
-                        input = app.getCountryFromUser("Choose an Adversary country (? for list): ",  "XXX", app.listAdversaryCountries)
-                        if input == "":
+                        country_name = app.getCountryFromUser("Choose an Adversary country (? for list): ",  "XXX", app.listAdversaryCountries)
+                        if country_name == "":
                             print ""
                             return False
                         else:
-                            if not app.map[input].is_adversary():
-                                print "%s is not a Adversary country." % input
+                            if not app.map[country_name].is_adversary():
+                                print "%s is not a Adversary country." % country_name
                                 print ""
                             else:
-                                app.map[input].make_neutral()
-                                app.outputToHistory("%s now Neutral" % input, False)
-                                app.map[input].aid += 1
-                                app.outputToHistory("Aid added to %s." % input, False)
-                                app.outputToHistory(app.map[input].countryStr(), True)
+                                app.map[country_name].make_neutral()
+                                app.outputToHistory("%s now Neutral" % country_name, False)
+                                app.map[country_name].aid += 1
+                                app.outputToHistory("Aid added to %s." % country_name, False)
+                                app.outputToHistory(app.map[country_name].countryStr(), True)
                                 break
             elif self.number == 33:  # Benazir Bhutto
                 app.markers.append("Benazir Bhutto")
@@ -1003,16 +1009,16 @@ class Card(object):
                 for i in range(2):
                     target = ""
                     while not target:
-                        input = app.getCountryFromUser("Choose Schengen country (? for list)?: ", "XXX", app.listSchengenCountries)
-                        if input == "":
+                        country_name = app.getCountryFromUser("Choose Schengen country (? for list)?: ", "XXX", app.listSchengenCountries)
+                        if country_name == "":
                             print ""
                         else:
-                            if not app.map[input].schengen:
-                                print "%s is not a Schengen country." % input
+                            if not app.map[country_name].schengen:
+                                print "%s is not a Schengen country." % country_name
                                 print ""
                                 return
                             else:
-                                target = input
+                                target = country_name
                                 posture = app.getPostureFromUser("Select %s's Posture (hard or soft): " % target)
                                 app.map[target].posture = posture
                                 app.outputToHistory(app.map[target].countryStr(), False)
@@ -1033,16 +1039,16 @@ class Card(object):
                             break
                 else:
                     while True:
-                        input = app.getCountryFromUser("Choose a Regime Change Country to improve governance (? for list): ",  "XXX", app.listRegimeChangeCountries)
-                        if input == "":
+                        country_name = app.getCountryFromUser("Choose a Regime Change Country to improve governance (? for list): ",  "XXX", app.listRegimeChangeCountries)
+                        if country_name == "":
                             print ""
                             return
                         else:
-                            if app.map[input].regimeChange <= 0:
-                                print "%s is not a Regime Change country." % input
+                            if app.map[country_name].regimeChange <= 0:
+                                print "%s is not a Regime Change country." % country_name
                                 print ""
                             else:
-                                target = input
+                                target = country_name
                                 break
                 app.improveGovernance(target)
                 app.outputToHistory("%s Governance improved." % target, False)
@@ -1059,16 +1065,16 @@ class Card(object):
                             break
                 else:
                     while True:
-                        input = app.getCountryFromUser("Choose a Regime Change Country to land NATO troops (? for list): ",  "XXX", app.listRegimeChangeCountries)
-                        if input == "":
+                        country_name = app.getCountryFromUser("Choose a Regime Change Country to land NATO troops (? for list): ",  "XXX", app.listRegimeChangeCountries)
+                        if country_name == "":
                             print ""
                             return
                         else:
-                            if app.map[input].regimeChange <= 0:
-                                print "%s is not a Regime Change country." % input
+                            if app.map[country_name].regimeChange <= 0:
+                                print "%s is not a Regime Change country." % country_name
                                 print ""
                             else:
-                                target = input
+                                target = country_name
                                 break
                 app.map[target].markers.append("NATO")
                 app.outputToHistory("NATO added in %s" % target, False)
@@ -1124,15 +1130,15 @@ class Card(object):
                 else:
                     target = None
                 while not target:
-                    input = app.getCountryFromUser("Choose a Shia-Mix Regime Change Country with a cell to improve governance (? for list): ",  "XXX", app.listShiaMixRegimeChangeCountriesWithCells)
-                    if input == "":
+                    country_name = app.getCountryFromUser("Choose a Shia-Mix Regime Change Country with a cell to improve governance (? for list): ",  "XXX", app.listShiaMixRegimeChangeCountriesWithCells)
+                    if country_name == "":
                         print ""
                     else:
-                        if input not in targetCountries:
-                            print "%s is not a Shi-Mix Regime Change Country with a cell." % input
+                        if country_name not in targetCountries:
+                            print "%s is not a Shi-Mix Regime Change Country with a cell." % country_name
                             print ""
                         else:
-                            target = input
+                            target = country_name
                             break
                 app.improveGovernance(target)
                 app.outputToHistory("%s Governance improved." % target, False)
@@ -1209,12 +1215,12 @@ class Card(object):
                 if app.cells > 0:
                     target = None
                     while not target:
-                        input = app.getCountryFromUser("Choose a country where Disrupt occured this or last Action Phase: ",  "XXX", None)
-                        if input == "":
+                        country_name = app.getCountryFromUser("Choose a country where Disrupt occured this or last Action Phase: ",  "XXX", None)
+                        if country_name == "":
                             print ""
                             return
                         else:
-                            target = input
+                            target = country_name
                             break
                     app.place_cell(target)
                 app.outputToHistory("Draw a card for the Jihadist and put it on the top of their hand.", True)
@@ -1565,18 +1571,18 @@ class Card(object):
                     else:
                         target = None
                         while not target:
-                            input = app.getCountryFromUser("Remove a cell from what Shia-Mix country within 3 countries of Lebanon (? for list)?: ",  "XXX", app.listCountriesInParam, possibles)
-                            if input == "":
+                            country_name = app.getCountryFromUser("Remove a cell from what Shia-Mix country within 3 countries of Lebanon (? for list)?: ",  "XXX", app.listCountriesInParam, possibles)
+                            if country_name == "":
                                 print ""
                             else:
-                                if app.map[input].totalCells(True) <= 0:
-                                    print "There are no cells in %s" % input
+                                if app.map[country_name].totalCells(True) <= 0:
+                                    print "There are no cells in %s" % country_name
                                     print ""
-                                elif input not in possibles:
-                                    print "%s not a Shia-Mix country within 3 countries of Lebanon." % input
+                                elif country_name not in possibles:
+                                    print "%s not a Shia-Mix country within 3 countries of Lebanon." % country_name
                                     print ""
                                 else:
-                                    target = input
+                                    target = country_name
                     if target:
                         app.removeCell(target, side)    # 20150131PS added side
                         app.outputToHistory(app.map[target].countryStr(), True)
@@ -1590,29 +1596,29 @@ class Card(object):
                 if side == "US":
                     target = None
                     while not target:
-                        input = app.getCountryFromUser("Choose a Shia-Mix country to test. You can then remove a cell from there or Iran (? for list)?: ",  "XXX", app.listShiaMixCountries)
-                        if input == "":
+                        country_name = app.getCountryFromUser("Choose a Shia-Mix country to test. You can then remove a cell from there or Iran (? for list)?: ",  "XXX", app.listShiaMixCountries)
+                        if country_name == "":
                             print ""
                         else:
-                            if app.map[input].type != "Shia-Mix":
-                                print "%s is not a Shia-Mix country." % input
+                            if app.map[country_name].type != "Shia-Mix":
+                                print "%s is not a Shia-Mix country." % country_name
                                 print ""
                             else:
-                                target = input
+                                target = country_name
                     picked = target
                     app.testCountry(picked)
                     if app.map["Iran"].totalCells(True) > 0:
                         target = None
                         while not target:
-                            input = app.getCountryFromUser("Remove a cell from %s or %s: " % (picked, "Iran"),  "XXX", None)
-                            if input == "":
+                            country_name = app.getCountryFromUser("Remove a cell from %s or %s: " % (picked, "Iran"),  "XXX", None)
+                            if country_name == "":
                                 print ""
                             else:
-                                if input != picked and input != "Iran":
+                                if country_name != picked and country_name != "Iran":
                                     print "Remove a cell from %s or %s: " % (picked, "Iran")
                                     print ""
                                 else:
-                                    target = input
+                                    target = country_name
                     else:
                         target = picked
                     app.removeCell(target, side)    # 20150131PS added side
@@ -1679,15 +1685,15 @@ class Card(object):
                     if len(possibles) == 1:
                         target = possibles[0]
                     while not target:
-                        input = app.getCountryFromUser("Choose a Shia-Mix country with cells and troops (? for list)?: ",  "XXX", app.listShiaMixCountriesWithCellsTroops)
-                        if input == "":
+                        country_name = app.getCountryFromUser("Choose a Shia-Mix country with cells and troops (? for list)?: ",  "XXX", app.listShiaMixCountriesWithCellsTroops)
+                        if country_name == "":
                             print ""
                         else:
-                            if input not in possibles:
-                                print "%s is not a Shia-Mix country with cells and troops." % input
+                            if country_name not in possibles:
+                                print "%s is not a Shia-Mix country with cells and troops." % country_name
                                 print ""
                             else:
-                                target = input
+                                target = country_name
                     app.removeCell(target, side)    # 20150131PS added side
                     app.removeCell(target, side)    # 20150131PS added side
                     app.outputToHistory(app.map[target].countryStr(), True)
@@ -1793,15 +1799,15 @@ class Card(object):
                     if side == "US":
                         app.outputToHistory("US draws one card.", False)
                         while not target:
-                            input = app.getCountryFromUser("Choose a Regime Change country with at least 2 troops. (? for list)?: ",  "XXX", app.listRegimeChangeWithTwoCells)
-                            if input == "":
+                            country_name = app.getCountryFromUser("Choose a Regime Change country with at least 2 troops. (? for list)?: ",  "XXX", app.listRegimeChangeWithTwoCells)
+                            if country_name == "":
                                 print ""
                             else:
-                                if input not in possibles:
-                                    print "%s is not a Regime Change country with at least 2 troops." % input
+                                if country_name not in possibles:
+                                    print "%s is not a Regime Change country with at least 2 troops." % country_name
                                     print ""
                                 else:
-                                    target = input
+                                    target = country_name
                     else:
                         app.outputToHistory("Jihadist draws one card.", False)
                         target = random.choice(possibles)
@@ -1896,15 +1902,15 @@ class Card(object):
                         target = targets[0]
                     else:
                         while not target:
-                            input = app.getCountryFromUser("Choose Indonesia or an adjacent country that has a cell and is Ally or Hard. (? for list)?: ",  "XXX", app.listHambali)
-                            if input == "":
+                            country_name = app.getCountryFromUser("Choose Indonesia or an adjacent country that has a cell and is Ally or Hard. (? for list)?: ",  "XXX", app.listHambali)
+                            if country_name == "":
                                 print ""
                             else:
-                                if input not in targets:
-                                    print "%s is not Indonesia or an adjacent country that has a cell and is Ally or Hard." % input
+                                if country_name not in targets:
+                                    print "%s is not Indonesia or an adjacent country that has a cell and is Ally or Hard." % country_name
                                     print ""
                                 else:
-                                    target = input
+                                    target = country_name
                     app.removeCell(target, side)    # 20150131PS added side
                     app.outputToHistory("US draw 2 cards.", False)
                 else:
