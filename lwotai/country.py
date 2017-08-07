@@ -9,13 +9,13 @@ class Country(object):
 
     def __init__(self, app, name, country_type, posture, governance, schengen, recruit, oil, resources):
         self.__alignment = None
+        self.__governance = governance
         self.activeCells = 0
         self.aid = 0
         self.app = app
         self.besieged = 0
         self.cadre = 0
         self.links = []
-        self.make_governance(governance)
         self.markers = []
         self.name = name
         self.oil = oil
