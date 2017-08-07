@@ -1902,7 +1902,9 @@ class Card(object):
                         target = targets[0]
                     else:
                         while not target:
-                            country_name = app.getCountryFromUser("Choose Indonesia or an adjacent country that has a cell and is Ally or Hard. (? for list)?: ",  "XXX", app.listHambali)
+                            country_name = app.getCountryFromUser("Choose Indonesia or an adjacent country that has" +
+                                                                  " a cell and is Ally or Hard. (? for list)?: ", "XXX",
+                                                                  app.listHambali)
                             if country_name == "":
                                 print ""
                             else:

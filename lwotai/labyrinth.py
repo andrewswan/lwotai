@@ -3504,7 +3504,8 @@ class Labyrinth(object):
                             schCountries[1] = random.choice(schChoices)
                         for i in range(2):
                             schPostureRolls.append(random.randint(1, 6))
-                self.resolvePlot(country, plotType, postureRoll, usPrestigeRolls, schCountries, schPostureRolls, govRolls, isBacklash)
+                self.resolvePlot(country, plotType, posture_roll, usPrestigeRolls, schCountries, schPostureRolls,
+                                 govRolls, isBacklash)
         if not foundPlot:
             self.outputToHistory("", False)
             self.outputToHistory("[[ No unblocked plots to resolve ]]", True)
