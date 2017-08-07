@@ -7,7 +7,7 @@ class CountryImprovementTest(LabyrinthTestCase):
 
     def test_improve_country_from_fair_to_good(self):
         # Set up
-        country = Country(None, "Somewhere", "Sunni", None, FAIR, False, 0, 0, 0, 0, False, 2)
+        country = Country(None, "Somewhere", "Sunni", None, FAIR, False, 0, False, 2)
         country.aid = 4
         country.besieged = 1
         country.regimeChange = 1

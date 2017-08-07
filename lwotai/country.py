@@ -7,7 +7,7 @@ from lwotai.utils import Utils
 class Country(object):
     """A country on the map"""
 
-    def __init__(self, app, name, country_type, posture, governance, schengen, recruit, no1, no2, no3, oil, resources):
+    def __init__(self, app, name, country_type, posture, governance, schengen, recruit, oil, resources):
         self.__alignment = None
         self.activeCells = 0
         self.aid = 0
