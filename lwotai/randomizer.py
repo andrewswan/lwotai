@@ -6,7 +6,8 @@ class Randomizer(object):
     def __init__(self):
         pass
 
-    def pick(self, quantity, candidates):
+    @staticmethod
+    def pick(quantity, candidates):
         """Picks the given quantity of items from the given list of candidates (returns a list)"""
         assert quantity <= len(candidates)
         new_list = list(candidates)
