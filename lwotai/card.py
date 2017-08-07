@@ -414,7 +414,7 @@ class Card(object):
                 return True
             return False
 
-    def putsCell(self, app):
+    def putsCell(self):
         if self.number == 48:  # Adam Gadahn
             return True
         elif self.number == 49:  # Al-Ittihad al-Islami

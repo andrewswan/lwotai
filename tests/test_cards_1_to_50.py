@@ -1448,7 +1448,7 @@ class Card48(LabyrinthTestCase):
 
     def test_puts_cell(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertTrue(app.deck["48"].putsCell(app))            
+        self.assertTrue(app.deck["48"].putsCell())
 
     def test_event(self):
         # Set up
@@ -1478,7 +1478,7 @@ class Card49(LabyrinthTestCase):
 
     def test_puts_cell(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertTrue(app.deck["49"].putsCell(app))            
+        self.assertTrue(app.deck["49"].putsCell())
 
     def test_event(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
@@ -1503,7 +1503,7 @@ class Card50(LabyrinthTestCase):
 
     def test_puts_cell(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertTrue(app.deck["50"].putsCell(app))            
+        self.assertTrue(app.deck["50"].putsCell())
 
     def test_event(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)

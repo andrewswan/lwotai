@@ -2033,7 +2033,7 @@ class Labyrinth(object):
             self.outputToHistory("US Posture now %s" % self.map["United States"].posture, True)
 
     def eventPutsCell(self, cardNum):
-        return self.deck[str(cardNum)].putsCell(self)
+        return self.deck[str(cardNum)].putsCell()
 
     def playableNonUSEvent(self, cardNum):
         return self.deck[str(cardNum)].type != "US" and  self.deck[str(cardNum)].playable("Jihadist", self, False)
