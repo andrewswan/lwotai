@@ -1061,7 +1061,7 @@ class Labyrinth(object):
                 self.prestige = 1
                 self.outputToHistory("Troops present so US Prestige now 1", False)
         if self.ideology.failed_jihad_rolls_remove_cells():
-            for i in range(failures):
+            for _ in range(failures):
                 if target_country.numActiveCells() > 0:
                     target_country.removeActiveCell()
                 else:
@@ -1282,9 +1282,7 @@ class Labyrinth(object):
                 self.outputToHistory("* No cells available to Recruit.", True)
                 return ops
             else:
-                rolls = []
-                for i in range(ops):
-                    rolls.append(random.randint(1, 6))
+                rolls = [random.randint(1, 6) for _ in range(ops)]
                 return self.executeRecruit(country, ops, rolls, None, False, isMadrassas)
 
     def isAdjacent(self, here, there):
