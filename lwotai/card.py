@@ -5,13 +5,6 @@ from lwotai.governance import GOOD, POOR, ISLAMIST_RULE
 
 class Card(object):
     """A card in the game"""
-    number = 0
-    name = ""
-    type = ""
-    ops = 0
-    remove = False
-    mark = False
-    lapsing = False
 
     def __init__(self, number, card_type, name, ops, remove, mark, lapsing):
         self.number = number
@@ -22,7 +15,7 @@ class Card(object):
         self.mark = mark
         self.lapsing = lapsing
 
-    def playable(self, side, app, ignoreItjihad):
+    def playable(self, side, app, ignore_itjihad):
         if self.type == "US" and side == "Jihadist":
             return False
         elif self.type == "Jihadist" and side == "US":
@@ -193,7 +186,7 @@ class Card(object):
             else:
                 return False
         elif self.type == "Jihadist" and side == "Jihadist":
-            if "The door of Itjihad was closed" in app.lapsing and not ignoreItjihad:
+            if "The door of Itjihad was closed" in app.lapsing and not ignore_itjihad:
                 return False
             if self.number == 48:  # Adam Gadahn
                 if app.numCellsAvailable() <= 0:
@@ -330,7 +323,7 @@ class Card(object):
             elif self.number == 95:  # Wahhabism
                 return True
         else:  # Unassociated Events
-            if side == "Jihadist" and "The door of Itjihad was closed" in app.lapsing and not ignoreItjihad:
+            if side == "Jihadist" and "The door of Itjihad was closed" in app.lapsing and not ignore_itjihad:
                 return False
             if self.number == 96:  # Danish Cartoons
                 return True
@@ -662,31 +655,30 @@ class Card(object):
                 else:
                     return False
             elif self.number == 14:  # Covert Action
-                targetCountry = ""
-                numAdv = 0
-                for country in app.map:
-                    if app.map[country].is_adversary():
-                        targetCountry = country
-                        numAdv += 1
-                if numAdv == 0:
+                adversary_names = [country.name for country in app.map.values() if country.is_adversary()]
+                target_country = None
+                if not adversary_names:
                     return False
-                elif numAdv > 1:
-                    while True:
-                        input = app.getCountryFromUser("Choose an Adversary country to attempt Covert Action (? for list): ",  "XXX", app.listAdversaryCountries)
-                        if input == "":
+                elif len(adversary_names) == 1:
+                    target_country = adversary_names[0]
+                else:
+                    while not target_country:
+                        country_name = app.getCountryFromUser(
+                            "Choose an Adversary country to attempt Covert Action (? for list): ", "XXX",
+                            app.listAdversaryCountries)
+                        if country_name == "":
                             print ""
                             return
-                        elif app.map[input].is_adversary():
-                            targetCountry = input
-                            break
+                        elif app.map[country_name].is_adversary():
+                            target_country = country_name
                         else:
-                            print "%s is not an Adversary." % input
+                            print "%s is not an Adversary." % country_name
                             print ""
-                actionRoll = app.getRollFromUser("Enter Covert Action roll or r to have program roll: ")
-                if actionRoll >= 4:
-                    app.map[targetCountry].make_neutral()
-                    app.outputToHistory("Covert Action successful, %s now Neutral." % targetCountry, False)
-                    app.outputToHistory(app.map[input].countryStr(), True)
+                action_roll = app.getRollFromUser("Enter Covert Action roll or r to have program roll: ")
+                if action_roll >= 4:
+                    app.map[target_country].make_neutral()
+                    app.outputToHistory("Covert Action successful, %s now Neutral." % target_country, False)
+                    app.outputToHistory(app.map[target_country].countryStr(), True)
                 else:
                     app.outputToHistory("Covert Action fails.", True)
             elif self.number == 15:  # Ethiopia Strikes
@@ -717,8 +709,8 @@ class Card(object):
                 else:
                     return False
             elif self.number == 16:  # Euro-Islam
-                posStr = app.getPostureFromUser("Select Benelux's Posture (hard or soft): ")
-                app.executeCardEuroIslam(posStr)
+                posture = app.getPostureFromUser("Select Benelux's Posture (hard or soft): ")
+                app.executeCardEuroIslam(posture)
             elif self.number == 17:  # FSB
                 app.outputToHistory("Examine Jihadist hand for Loose Nukes, HEU, or Kazakh Strain.", False)
                 hasThem = app.getYesNoFromUser("Does the Jihadist hand have Loose Nukes, HEU, or Kazakh Strain? (y/n): ")
@@ -945,8 +937,8 @@ class Card(object):
             elif self.number == 32:  # Back Channel
                 if app.map["United States"].posture == "Hard":
                     return False
-                numAdv = app.numAdversary()
-                if numAdv <= 0:
+                num_adversaries = app.numAdversary()
+                if num_adversaries <= 0:
                     return False
                 if app.getYesNoFromUser("Do you want to discard a card with a value that exactly matches an Adversary's Resources? (y/n): "):
                     while True:
@@ -984,8 +976,8 @@ class Card(object):
                 app.map["Turkey"].improve_governance()
                 app.outputToHistory("Turkey Governance now %s." % app.map["Turkey"].govStr(), False)
                 app.changeFunding(-2)
-                posStr = app.getPostureFromUser("Select Frances's Posture (hard or soft): ")
-                app.map["France"].posture = posStr
+                posture = app.getPostureFromUser("Select Frances's Posture (hard or soft): ")
+                app.map["France"].posture = posture
                 app.outputToHistory(app.map["Turkey"].countryStr(), False)
                 app.outputToHistory(app.map["France"].countryStr(), True)
             elif self.number == 36:  # Indo-Pakistani Talks
@@ -993,8 +985,8 @@ class Card(object):
                 app.outputToHistory("Indo-Pakistani Talks in Play.", False)
                 app.map['Pakistan'].make_ally()
                 app.outputToHistory("Pakistan now Ally", False)
-                posStr = app.getPostureFromUser("Select India's Posture (hard or soft): ")
-                app.map["India"].posture = posStr
+                posture = app.getPostureFromUser("Select India's Posture (hard or soft): ")
+                app.map["India"].posture = posture
                 app.outputToHistory(app.map["Pakistan"].countryStr(), False)
                 app.outputToHistory(app.map["India"].countryStr(), True)
             elif self.number == 37:  # Iraqi WMD
@@ -1021,8 +1013,8 @@ class Card(object):
                                 return
                             else:
                                 target = input
-                                posStr = app.getPostureFromUser("Select %s's Posture (hard or soft): " % target)
-                                app.map[target].posture = posStr
+                                posture = app.getPostureFromUser("Select %s's Posture (hard or soft): " % target)
+                                app.map[target].posture = posture
                                 app.outputToHistory(app.map[target].countryStr(), False)
                 app.outputToHistory("", False)
             elif self.number == 39:  # Libyan WMD
@@ -1490,9 +1482,9 @@ class Card(object):
                     app.changeFunding(app.map["Saudi Arabia"].governance_as_funding())
         else:
             if self.number == 96:  # Danish Cartoons
-                posStr = app.getPostureFromUser("Select Scandinavia's Posture (hard or soft): ")
-                app.map["Scandinavia"].posture = posStr
-                app.outputToHistory("Scandinavia posture now %s." % posStr, False)
+                posture = app.getPostureFromUser("Select Scandinavia's Posture (hard or soft): ")
+                app.map["Scandinavia"].posture = posture
+                app.outputToHistory("Scandinavia posture now %s." % posture, False)
                 possibles = []
                 for country in app.map:
                     if app.map[country].is_muslim() and not app.map[country].is_islamist_rule():
