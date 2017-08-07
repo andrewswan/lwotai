@@ -1038,7 +1038,7 @@ class Labyrinth(object):
                 self.outputToHistory("Alignment %s" % target_country.alignment(), False)
         else:  # a cell is active for each roll
             self.outputToHistory("* Minor Jihad attempt in %s" % country, False)
-            for i in range(len(rollList) - target_country.numActiveCells()):
+            for _ in range(len(rollList) - target_country.numActiveCells()):
                 self.outputToHistory("Cell goes Active", False)
                 target_country.sleeperCells -= 1
                 target_country.activeCells += 1
@@ -2200,7 +2200,7 @@ class Labyrinth(object):
         """Indicates whether the US player can peacefully deploy troops to the named country"""
         return self.map[country_name].is_ally() or ("Abu Sayyaf" in self.markers and country_name == "Philippines")
 
-    def listDeployOptions(self, na=None):
+    def listDeployOptions(self, _=None):
         print ""
         print "Deploy Options"
         print "--------------"
@@ -2209,7 +2209,7 @@ class Labyrinth(object):
                 print "%s: %d troops" % (country, self.map[country].troops())
         print ""
 
-    def listDisruptableCountries(self, na=None):
+    def listDisruptableCountries(self, _=None):
         print ""
         print "Disruptable Countries"
         print "---------------------"
@@ -2218,7 +2218,7 @@ class Labyrinth(object):
                 print self.map[country].get_disrupt_summary()
         print ""
 
-    def list_woi_countries(self, na=None):
+    def list_woi_countries(self, _=None):
         print ""
         print "War of Ideas Eligible Countries"
         print "-------------------------------"
@@ -2241,7 +2241,7 @@ class Labyrinth(object):
             if country.type == "Non-Muslim" and country_name != "United States" and country.posture == "":
                 print "%s, Untested" % country_name
 
-    def listPlotCountries(self, na=None):
+    def listPlotCountries(self, _=None):
         print ""
         print "Countries with Active Plots"
         print "---------------------------"
@@ -2250,7 +2250,7 @@ class Labyrinth(object):
                 self.map[country].printCountry()
         print ""
 
-    def listIslamistCountries(self, na=None):
+    def listIslamistCountries(self, _=None):
         print ""
         print "Islamist Rule Countries"
         print "-----------------------"
@@ -2259,7 +2259,7 @@ class Labyrinth(object):
                 self.map[country].printCountry()
         print ""
 
-    def listRegimeChangeCountries(self, na=None):
+    def listRegimeChangeCountries(self, _=None):
         print ""
         print "Regime Change Countries"
         print "-----------------------"
@@ -2268,7 +2268,7 @@ class Labyrinth(object):
                 self.map[country].printCountry()
         print ""
 
-    def listRegimeChangeWithTwoCells(self, na=None):
+    def listRegimeChangeWithTwoCells(self, _=None):
         print ""
         print "Regime Change Countries with Two Cells"
         print "--------------------------------------"
@@ -2278,7 +2278,7 @@ class Labyrinth(object):
                     self.map[country].printCountry()
         print ""
 
-    def listCountriesWithCellAndAdjacentTroops(self, na=None):
+    def listCountriesWithCellAndAdjacentTroops(self, _=None):
         print ""
         print "Countries with Cells and with Troops or adjacent to Troops"
         print "----------------------------------------------------------"
@@ -2294,7 +2294,7 @@ class Labyrinth(object):
                                 break
         print ""
 
-    def listAdversaryCountries(self, na=None):
+    def listAdversaryCountries(self, _=None):
         print ""
         print "Adversary Countries"
         print "-------------------"
@@ -2303,7 +2303,7 @@ class Labyrinth(object):
                 self.map[country].printCountry()
         print ""
 
-    def listGoodAllyPlotCountries(self, na=None):
+    def listGoodAllyPlotCountries(self, _=None):
         print ""
         print "Ally or Good Countries with Plots"
         print "---------------------------------"
@@ -2313,7 +2313,7 @@ class Labyrinth(object):
                     self.map[country].printCountry()
         print ""
 
-    def listMuslimCountriesWithCells(self, na=None):
+    def listMuslimCountriesWithCells(self, _=None):
         print ""
         print "Muslim Countries with Cells"
         print "---------------------------"
@@ -2323,7 +2323,7 @@ class Labyrinth(object):
                     self.map[country].printCountry()
         print ""
 
-    def listBesiegedCountries(self, na=None):
+    def listBesiegedCountries(self, _=None):
         print ""
         print "Besieged Regimes"
         print "----------------"
@@ -2332,7 +2332,7 @@ class Labyrinth(object):
                 self.map[country].printCountry()
         print ""
 
-    def listShiaMixRegimeChangeCountriesWithCells(self, na=None):
+    def listShiaMixRegimeChangeCountriesWithCells(self, _=None):
         print ""
         print "Shia-Mix Regime Change Countries with Cells"
         print "-------------------------------------------"
@@ -2343,7 +2343,7 @@ class Labyrinth(object):
                         self.map[country].printCountry()
         print ""
 
-    def listShiaMixCountries(self, na=None):
+    def listShiaMixCountries(self, _=None):
         print ""
         print "Shia-Mix Countries"
         print "------------------"
@@ -2352,7 +2352,7 @@ class Labyrinth(object):
                 self.map[country].printCountry()
         print ""
 
-    def listShiaMixCountriesWithCellsTroops(self, na=None):
+    def listShiaMixCountriesWithCellsTroops(self, _=None):
         print ""
         print "Shia-Mix Countries with Cells and Troops"
         print "----------------------------------------"
@@ -2362,7 +2362,7 @@ class Labyrinth(object):
                     self.map[country].printCountry()
         print ""
 
-    def listSchengenCountries(self, na=None):
+    def listSchengenCountries(self, _=None):
         print ""
         print "Schengen Countries"
         print "------------------"
@@ -2371,7 +2371,7 @@ class Labyrinth(object):
                 self.map[country].printCountry()
         print ""
 
-    def listHambali(self, na=None):
+    def listHambali(self, _=None):
         print ""
         print "Indonesia or adjacent country with cell and Ally or Hard"
         print "--------------------------------------------------------"
@@ -3489,7 +3489,7 @@ class Labyrinth(object):
                             numRolls = 3
                         else:
                             numRolls = plotType
-                        for i in range(numRolls):
+                        for _ in range(numRolls):
                             govRolls.append(random.randint(1, 6))
                 elif self.map[country].type == "Non-Muslim":
                     postureRoll = random.randint(1, 6)
