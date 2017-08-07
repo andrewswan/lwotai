@@ -2209,31 +2209,37 @@ class Labyrinth(object):
                 print "%s: %d troops" % (country, self.map[country].troops())
         print ""
 
-    def listDisruptableCountries(self, na = None):
+    def listDisruptableCountries(self, na=None):
         print ""
         print "Disruptable Countries"
-        print "--------------------"
+        print "---------------------"
         for country in self.map:
             if self.map[country].can_disrupt():
                 print self.map[country].get_disrupt_summary()
         print ""
 
-    def listWoICountries(self, na=None):
+    def list_woi_countries(self, na=None):
         print ""
         print "War of Ideas Eligible Countries"
         print "-------------------------------"
-        for country in self.map:
-            if self.map[country].is_neutral() or self.map[country].is_ally() or self.map[country].is_ungoverned():
-                print "%s, %s %s - %d Active Cells, %d Sleeper Cells, %d Cadre, %d troops" % (country, self.map[country].govStr(), self.map[country].__alignment, self.map[country].activeCells, self.map[country].sleeperCells, self.map[country].cadre, self.map[country].troops())
-        for country in self.map:
-            if self.map[country].type == "Non-Muslim" and country != "United States" and self.map[country].posture == "Hard":
-                print "%s, Posture %s" % (country, self.map[country].posture)
-        for country in self.map:
-            if self.map[country].type == "Non-Muslim" and country != "United States" and self.map[country].posture == "Soft":
-                print "%s, Posture %s" % (country, self.map[country].posture)
-        for country in self.map:
-            if self.map[country].type == "Non-Muslim" and country != "United States" and self.map[country].posture == "":
-                print "%s, Untested" % country
+        for country_name in self.map:
+            country = self.map[country_name]
+            if country.is_neutral() or country.is_ally() or country.is_ungoverned():
+                print "%s, %s %s - %d Active Cells, %d Sleeper Cells, %d Cadre, %d troops" %\
+                      (country_name, country.govStr(), country.alignment(), country.activeCells, country.sleeperCells,
+                       country.cadre, country.troops())
+        for country_name in self.map:
+            country = self.map[country_name]
+            if country.type == "Non-Muslim" and country_name != "United States" and country.posture == "Hard":
+                print "%s, Posture %s" % (country_name, country.posture)
+        for country_name in self.map:
+            country = self.map[country_name]
+            if country.type == "Non-Muslim" and country_name != "United States" and country.posture == "Soft":
+                print "%s, Posture %s" % (country_name, country.posture)
+        for country_name in self.map:
+            country = self.map[country_name]
+            if country.type == "Non-Muslim" and country_name != "United States" and country.posture == "":
+                print "%s, Untested" % country_name
 
     def listPlotCountries(self, na=None):
         print ""
@@ -3199,48 +3205,50 @@ class Labyrinth(object):
             print "No countries can be disrupted."
             return
         where = None
-        sleepers = 0
-        actives = 0
         while not where:
-            input = self.getCountryFromUser("Disrupt what country?  (? for list): ",  "XXX", self.listDisruptableCountries)
-            if input == "":
+            country_name = self.getCountryFromUser("Disrupt what country?  (? for list): ",  "XXX",
+                                                   self.listDisruptableCountries)
+            if country_name == "":
                 print ""
                 return
             else:
-                if self.map[input].sleeperCells + self.map[input].activeCells <= 0 and self.map[input].cadre <= 0:
-                    print "There are no cells or cadre in %s." % input
+                country = self.map[country_name]
+                if country.sleeperCells + country.activeCells <= 0 and country.cadre <= 0:
+                    print "There are no cells or cadre in %s." % country_name
                     print ""
-                elif "FATA" in self.map[input].markers and self.map[input].regimeChange == 0:
+                elif "FATA" in country.markers and country.regimeChange == 0:
                     print "No disrupt allowed due to FATA."
                     print ""
-                elif self.map[input].troops() > 0 or self.map[input].type == "Non-Muslim" or self.map[input].is_ally():
+                elif country.troops() > 0 or country.type == "Non-Muslim" or country.is_ally():
                     print ""
-                    where = input
-                    sleepers = self.map[input].sleeperCells
-                    actives = self.map[input].activeCells
+                    where = country_name
                 else:
                     print "You can't disrupt there."
                     print ""
         self.handleDisrupt(where)
 
     def war_of_ideas(self):
+        """Conducts a 'War of Ideas' operation for the US player"""
         where = None
+        country_name = None
         while not where:
-            input = self.getCountryFromUser("War of Ideas in what country?  (? for list): ", "XXX", self.listWoICountries)
-            if input == "":
+            country_name = self.getCountryFromUser("War of Ideas in what country?  (? for list): ", "XXX",
+                                                   self.list_woi_countries)
+            if country_name == "":
                 print ""
                 return
             else:
-                if self.map[input].type == "Non-Muslim" and input != "United States":
-                    where = input
-                elif self.map[input].is_ally() or self.map[input].is_neutral() or self.map[input].is_ungoverned():
-                    where = input
+                country = self.map[country_name]
+                if country.type == "Non-Muslim" and country_name != "United States":
+                    where = country_name
+                elif country.is_ally() or country.is_neutral() or country.is_ungoverned():
+                    where = country_name
                 else:
                     print "Country not eligible for War of Ideas."
                     print ""
-        if self.map[where].type == "Non-Muslim" and input != "United States":  # Non-Muslim
-            postureRoll = self.getRollFromUser("Enter Posture Roll or r to have program roll: ")
-            if postureRoll > 4:
+        if self.map[where].type == "Non-Muslim" and country_name != "United States":  # Non-Muslim
+            posture_roll = self.getRollFromUser("Enter Posture Roll or r to have program roll: ")
+            if posture_roll > 4:
                 self.map[where].posture = "Hard"
                 self.outputToHistory("* War of Ideas in %s - Posture Hard" % where)
                 if self.map["United States"].posture == "Hard":
@@ -3254,10 +3262,10 @@ class Labyrinth(object):
                     self.outputToHistory("US Prestige now %d" % self.prestige)
         else:  # Muslim
             self.testCountry(where)
-            woiRoll = self.getRollFromUser("Enter WoI roll or r to have program roll: ")
-            modRoll = self.modifiedWoIRoll(woiRoll, where)
-            self.outputToHistory("Modified Roll: %d" % modRoll)
-            self.handleMuslimWoI(modRoll, where)
+            woi_roll = self.getRollFromUser("Enter WoI roll or r to have program roll: ")
+            modified_roll = self.modifiedWoIRoll(woi_roll, where)
+            self.outputToHistory("Modified Roll: %d" % modified_roll)
+            self.handleMuslimWoI(modified_roll, where)
 
     def alert_plot(self):
         if not self._find_countries(lambda c: c.plots > 0):

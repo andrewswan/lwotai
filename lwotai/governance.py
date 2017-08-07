@@ -11,7 +11,7 @@ class Governance(object):
         self.__next_worse = None
 
     def __eq__(self, other):
-        return isinstance(other, self.__class__) and other.__name == self.__name
+        return isinstance(other, self.__class__) and other.name() == self.__name
 
     def __ne__(self, other):
         return not self.__eq__(other)
@@ -24,6 +24,9 @@ class Governance(object):
 
     def max_success_roll(self):
         return self.__max_success_roll
+
+    def name(self):
+        return self.__name
 
     def __hash__(self):
         return self.max_success_roll()
@@ -46,10 +49,10 @@ class Governance(object):
         return self.__next_worse
 
     def is_better_than(self, other):
-        return self.__max_success_roll < other.__max_success_roll
+        return self.__max_success_roll < other.max_success_roll()
 
     def is_worse_than(self, other):
-        return self.__max_success_roll > other.__max_success_roll
+        return self.__max_success_roll > other.max_success_roll()
 
     def levels_above_poor(self):
         return self.__levels_above_poor
