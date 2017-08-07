@@ -1,6 +1,7 @@
-from utils import Utils
+from lwotai.utils import Utils
 
-class Governance:
+
+class Governance(object):
     """The governance level of a country"""
     def __init__(self, name, max_success_roll, levels_above_poor):
         self.__levels_above_poor = levels_above_poor

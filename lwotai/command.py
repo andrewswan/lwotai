@@ -1,5 +1,6 @@
 from cmd import Cmd
-from saver import Saver
+from lwotai.saver import Saver
+
 
 class Command(Cmd):
     """The command-line processor for this application"""

@@ -1,6 +1,7 @@
-from utils import Utils
+from lwotai.utils import Utils
 
-class Alignment:
+
+class Alignment(object):
     """
     The alignment of a country relative to the US.
     :param name the display name of this alignment

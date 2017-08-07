@@ -20,11 +20,11 @@ Thanks to Dave Horn for implementing the Save and Undo system.
 Thanks to Peter Shaw for implementing the Adjust system and for a bunch of bug fixes and cleanup.
 """
 
-from command import Command
-from labyrinth import Labyrinth
-from scenarios.scenarios import scenario_names
-from saver import Saver
-from utils import Utils
+from lwotai.command import Command
+from lwotai.labyrinth import Labyrinth
+from lwotai.scenarios.scenarios import scenario_names
+from lwotai.saver import Saver
+from lwotai.utils import Utils
 
 # Please observe semantic versioning (see http://semver.org) when changing this version number.
 RELEASE = "2.0.0"

@@ -24,7 +24,7 @@ except ImportError:
     import pickle
 
 
-class Saver:
+class Saver(object):
     """Saves and loads the game"""
 
     SUSPEND_FILE = "suspend.lwot"

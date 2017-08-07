@@ -1,4 +1,4 @@
-class Utils:
+class Utils(object):
     """Static utility methods"""
     def __init__(self):
         pass

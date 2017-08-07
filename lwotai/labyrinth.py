@@ -11,7 +11,7 @@ from lwotai.scenarios.scenarios import get_scenario
 from lwotai.utils import Utils
 
 
-class Labyrinth:
+class Labyrinth(object):
     """The main game entity"""
 
     def __init__(self, scenario_num, ideology_num, setup_function=None, test_user_input=None, **kwargs):

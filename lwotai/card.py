@@ -1,9 +1,9 @@
 import random
 
-from governance import GOOD, POOR, ISLAMIST_RULE
+from lwotai.governance import GOOD, POOR, ISLAMIST_RULE
 
 
-class Card:
+class Card(object):
     """A card in the game"""
     number = 0
     name = ""

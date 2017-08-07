@@ -1,10 +1,10 @@
-from alignment import ALLY, NEUTRAL, ADVERSARY
-from governance import GOOD, FAIR, POOR, ISLAMIST_RULE
-from governance import Governance
-from utils import Utils
+from lwotai.alignment import ALLY, NEUTRAL, ADVERSARY
+from lwotai.governance import GOOD, FAIR, POOR, ISLAMIST_RULE
+from lwotai.governance import Governance
+from lwotai.utils import Utils
 
 
-class Country:
+class Country(object):
     """A country on the map"""
     __alignment = None
     __governance = None

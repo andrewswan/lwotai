@@ -1,6 +1,7 @@
 import random
 
-class Randomizer:
+
+class Randomizer(object):
     """Picks things at random. To make tests repeatable, mock this out."""
     def __init__(self):
         pass
