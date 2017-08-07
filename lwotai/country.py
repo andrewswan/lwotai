@@ -6,49 +6,29 @@ from lwotai.utils import Utils
 
 class Country(object):
     """A country on the map"""
-    __alignment = None
-    __governance = None
-    app = None
-    name = ""
-    type = ""
-    posture = ""
-    schengen = False
-    recruit = 0
-    troopCubes = 0
-    activeCells = 0
-    sleeperCells = 0
-    oil = False
-    resources = 0
-    links = []
-    markers = []
-    schengenLink = False
-    aid = 0
-    besieged = 0    #20150131PS - fixed spelling
-    regimeChange = 0
-    cadre = 0
-    plots = 0
 
-    def __init__(self, theApp, theName, theType, thePosture, theGovernance, theSchengen, theRecruit, no1, no2, no3, theOil, theResources):
-        self.app = theApp
-        self.name = theName
-        self.type = theType
-        self.posture = thePosture
-        self.make_governance(theGovernance)
-        self.schengen = theSchengen
-        self.recruit = theRecruit
-        self.troopCubes = 0
+    def __init__(self, app, name, country_type, posture, governance, schengen, recruit, no1, no2, no3, oil, resources):
+        self.__alignment = None
         self.activeCells = 0
-        self.sleeperCells = 0
-        self.oil = theOil
-        self.resources = theResources
         self.aid = 0
+        self.app = app
         self.besieged = 0
-        self.regimeChange = 0
         self.cadre = 0
-        self.plots = 0
         self.links = []
+        self.make_governance(governance)
         self.markers = []
+        self.name = name
+        self.oil = oil
+        self.plots = 0
+        self.posture = posture
+        self.recruit = recruit
+        self.regimeChange = 0
+        self.resources = resources
+        self.schengen = schengen
         self.schengenLink = False
+        self.sleeperCells = 0
+        self.troopCubes = 0
+        self.type = country_type
 
     def alignment(self):
         return self.__alignment
