@@ -1451,28 +1451,27 @@ class Labyrinth(object):
         schengens = self.names_of_countries(lambda c: c.schengen)
         return self.randomizer.pick(2, schengens)
 
-    def travelSourceChooseBasedOnPriority(self, countryList, i, destinations):
-        subPossibles = []
-        for country in countryList:
+    def travelSourceChooseBasedOnPriority(self, country_list, i, destinations):
+        sub_possibles = []
+        for country in country_list:
             if self.map[country].activeCells > 0:
-                subPossibles.append(country)
-        if len(subPossibles) == 1:
-            return subPossibles[0]
-        elif len(subPossibles) > 1:
-            return random.choice(subPossibles)
+                sub_possibles.append(country)
+        if len(sub_possibles) == 1:
+            return sub_possibles[0]
+        elif len(sub_possibles) > 1:
+            return random.choice(sub_possibles)
         else:
-            subPossibles = []
-            for country in countryList:
-                notAnotherDest = True
+            sub_possibles = []
+            for country in country_list:
                 for j in range(len(destinations)):
                     if (i != j) and (country == destinations[j]):
-                        subPossibles.append(country)
-        if len(subPossibles) == 1:
-            return subPossibles[0]
-        elif len(subPossibles) > 1:
-            return random.choice(subPossibles)
+                        sub_possibles.append(country)
+        if len(sub_possibles) == 1:
+            return sub_possibles[0]
+        elif len(sub_possibles) > 1:
+            return random.choice(sub_possibles)
         else:
-            return random.choice(countryList)
+            return random.choice(country_list)
 
     def travelSourceBoxOne(self, i, destinations, sources, ops, isRadicalization=False):
         possibles = []
@@ -1859,7 +1858,7 @@ class Labyrinth(object):
         return len(plotRolls) - rollPosition
 
     def handle_ai_plot_action(self, ops, is_ops):
-        plot_rolls = [random.randint(1, 6) for ignored in range(ops)]
+        plot_rolls = [random.randint(1, 6) for _ in range(ops)]
         return self.executePlot(ops, is_ops, plot_rolls)
 
     def place_cell(self, country_name):
