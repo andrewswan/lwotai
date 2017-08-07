@@ -474,20 +474,20 @@ class Labyrinth(object):
     def getCountryFromUser(self, prompt, special, helpFunction, helpParameter = None):
         goodCountry = None
         while not goodCountry:
-            input = self.my_raw_input(prompt)
-            if input == "":
+            country_name = self.my_raw_input(prompt)
+            if country_name == "":
                 return ""
-            elif input == "?" and helpFunction:
+            elif country_name == "?" and helpFunction:
                 helpFunction(helpParameter)
                 continue
-            elif input == special:
+            elif country_name == special:
                 return special
             possible = []
             for country in self.map:
-                if input.lower() == country.lower():
+                if country_name.lower() == country.lower():
                     possible = [country]
                     break
-                elif input.lower() in country.lower():
+                elif country_name.lower() in country.lower():
                     possible.append(country)
             if len(possible) == 0:
                 print "Unrecognized country."
@@ -499,35 +499,32 @@ class Labyrinth(object):
                 goodCountry = possible[0]
         return goodCountry
 
-    def getNumTroopsFromUser(self, prompt, max):
-        goodNum = None
-        while not goodNum:
+    def getNumTroopsFromUser(self, prompt, maximum):
+        while True:
             try:
-                input = self.my_raw_input(prompt)
-                input = int(input)
-                if input <= max:
-                    return input
+                troops = int(self.my_raw_input(prompt))
+                if 0 <= troops <= maximum:
+                    return troops
                 else:
-                    print "Not enough troops."
+                    print "Not enough troops (max %d)." % maximum
                     print ""
-            except:
+            except ValueError:
                 print "Entry error"
                 print ""
 
     def getCardNumFromUser(self, prompt):
-        goodNum = None
-        while not goodNum:
+        while True:
             try:
-                input = self.my_raw_input(prompt)
-                if input.lower() == "none":
+                card_num_str = self.my_raw_input(prompt)
+                if card_num_str.lower() == "none":
                     return "none"
-                input = int(input)
-                if input <= 120:
-                    return input
+                card_num = int(card_num_str)
+                if card_num <= 120:
+                    return card_num
                 else:
                     print "Enter a card number."
                     print ""
-            except:
+            except ValueError:
                 print "Enter a card number."
                 print ""
 
@@ -544,7 +541,7 @@ class Labyrinth(object):
                 else:
                     print "Enter 1, 2, 3 or W for WMD."
                     print ""
-            except:
+            except ValueError:
                 print "Enter 1, 2, 3 or W for WMD."
                 print ""
 
@@ -3272,16 +3269,16 @@ class Labyrinth(object):
         where = None
         alert_prompt = "Alert in what country?  (? for list, Enter to abort): "
         while not where:
-            input = self.getCountryFromUser(alert_prompt, "XXX", self.listPlotCountries)
-            if input == "":
+            country_name = self.getCountryFromUser(alert_prompt, "XXX", self.listPlotCountries)
+            if country_name == "":
                 print ""
                 return
             else:
-                if self.map[input].plots < 1:
+                if self.map[country_name].plots < 1:
                     print "Country has no plots."
                     print ""
                 else:
-                    where = input
+                    where = country_name
         self.handleAlert(where)
 
     def change_regime(self):
@@ -3291,24 +3288,24 @@ class Labyrinth(object):
             return
         where = None
         while not where:
-            input = self.getCountryFromUser("Regime Change in what country?  (? for list): ", "XXX", self.listIslamistCountries)
-            if input == "":
+            country_name = self.getCountryFromUser("Regime Change in what country?  (? for list): ", "XXX", self.listIslamistCountries)
+            if country_name == "":
                 print ""
                 return
             else:
-                if (self.map[input].is_islamist_rule()) or (input == "Iraq" and "Iraqi WMD" in self.markers) or (input == "Libya" and "Libyan WMD" in self.markers):
-                    where = input
+                if (self.map[country_name].is_islamist_rule()) or (country_name == "Iraq" and "Iraqi WMD" in self.markers) or (country_name == "Libya" and "Libyan WMD" in self.markers):
+                    where = country_name
                 else:
                     print "Country not Islamist Rule."
                     print ""
         moveFrom = None
         available = 0
         while not moveFrom:
-            input = self.getCountryFromUser("Deploy 6+ troops from what country (track for Troop Track) (? for list)?: ",  "track", self.listCountriesWithTroops, 6)
-            if input == "":
+            country_name = self.getCountryFromUser("Deploy 6+ troops from what country (track for Troop Track) (? for list)?: ",  "track", self.listCountriesWithTroops, 6)
+            if country_name == "":
                 print ""
                 return
-            elif input == "track":
+            elif country_name == "track":
                 if self.troops <= 6:
                     print "There are not enough troops on the Troop Track."
                     print ""
@@ -3317,27 +3314,27 @@ class Labyrinth(object):
                     print "Deploy from Troop Track - %d available" % self.troops
                     print ""
                     available = self.troops
-                    moveFrom = input
+                    moveFrom = country_name
             else:
-                if self.map[input].troops() <= 6:
-                    print "There are not enough troops in %s." % input
+                if self.map[country_name].troops() <= 6:
+                    print "There are not enough troops in %s." % country_name
                     print ""
                     return
                 else:
-                    print "Deploy from %s = %d available" % (input, self.map[input].troops())
+                    print "Deploy from %s = %d available" % (country_name, self.map[country_name].troops())
                     print ""
-                    available = self.map[input].troops()
-                    moveFrom = input
+                    available = self.map[country_name].troops()
+                    moveFrom = country_name
         howMany = 0
         while not howMany:
-            input = self.getNumTroopsFromUser("Deploy how many troops (%d available)? " % available, available)
-            if input == "":
+            troops = self.getNumTroopsFromUser("Deploy how many troops (%d available)? " % available, available)
+            if troops == 0:
                 print ""
                 return
-            elif input < 6:
+            elif troops < 6:
                 print "At least 6 troops needed for Regime Change"
             else:
-                howMany = input
+                howMany = troops
         govRoll = self.getRollFromUser("Enter Governance roll or r to have program roll: ")
         preFirstRoll = self.getRollFromUser("Enter first die (Raise/Drop) for Prestige roll or r to have program roll: ")
         preSecondRoll = self.getRollFromUser("Enter second die for Prestige roll or r to have program roll: ")
@@ -3352,39 +3349,39 @@ class Labyrinth(object):
         moveFrom = None
         available = 0
         while not moveFrom:
-            input = self.getCountryFromUser("Withdrawal in what country?  (? for list): ", "XXX", self.listRegimeChangeCountries)
-            if input == "":
+            country_name = self.getCountryFromUser("Withdrawal in what country?  (? for list): ", "XXX", self.listRegimeChangeCountries)
+            if country_name == "":
                 print ""
                 return
             else:
-                if self.map[input].regimeChange > 0:
-                    moveFrom = input
-                    available = self.map[input].troops()
+                if self.map[country_name].regimeChange > 0:
+                    moveFrom = country_name
+                    available = self.map[country_name].troops()
                 else:
                     print "Country not Regime Change."
                     print ""
         moveTo = None
         while not moveTo:
-            input = self.getCountryFromUser("To what country (track for Troop Track)  (? for list)?: ",  "track", self.listDeployOptions)
-            if input == "":
+            country_name = self.getCountryFromUser("To what country (track for Troop Track)  (? for list)?: ",  "track", self.listDeployOptions)
+            if country_name == "":
                 print ""
                 return
-            elif input == "track":
+            elif country_name == "track":
                 print "Withdraw troops from %s to Troop Track" % moveFrom
                 print ""
-                moveTo = input
+                moveTo = country_name
             else:
-                print "Withdraw troops from %s to %s" % (moveFrom, input)
+                print "Withdraw troops from %s to %s" % (moveFrom, country_name)
                 print ""
-                moveTo = input
+                moveTo = country_name
         howMany = 0
         while not howMany:
-            input = self.getNumTroopsFromUser("Withdraw how many troops (%d available)? " % available, available)
-            if input == "":
+            troops = self.getNumTroopsFromUser("Withdraw how many troops (%d available)? " % available, available)
+            if troops == "":
                 print ""
                 return
             else:
-                howMany = input
+                howMany = troops
         preFirstRoll = self.getRollFromUser("Enter first die (Raise/Drop) for Prestige roll or r to have program roll: ")
         preSecondRoll = self.getRollFromUser("Enter second die for Prestige roll or r to have program roll: ")
         preThirdRoll = self.getRollFromUser("Enter third die for Prestige roll or r to have program roll: ")
