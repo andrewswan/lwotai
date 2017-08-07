@@ -64,13 +64,13 @@ class Labyrinth(object):
         self.outputToHistory("")
         self.outputToHistory("[[ %d (Turn %s) ]]" % (self.startYear + (self.turn - 1), self.turn), True)
 
-    def debugPrint(self, str):
+    def debugPrint(self, _):
         return
 
-    def outputToHistory(self, output, lineFeed=True):
+    def outputToHistory(self, output, line_feed=True):
         print output
         self.history.append(output)
-        if lineFeed:
+        if line_feed:
             print ""
 
     def mapSetup(self):
@@ -1077,11 +1077,9 @@ class Labyrinth(object):
     def handleJihad(self, country, ops):
         """Returns number of unused Ops"""
         cells = self.map[country].totalCells(True)
-        rollList = []
-        for i in range(min(cells, ops)):
-            rollList.append(random.randint(1, 6))
-        self.executeJihad(country, rollList)
-        return ops - len(rollList)
+        roll_list = [random.randint(1, 6) for _ in range(min(cells, ops))]
+        self.executeJihad(country, roll_list)
+        return ops - len(roll_list)
 
     def handleMinorJihad(self, countryList, ops):
         opsRemaining = ops
@@ -3471,14 +3469,14 @@ class Labyrinth(object):
                 isBacklash = False
                 if self.backlashInPlay and (self.map[country].type != 'Non-Muslim'):
                     isBacklash = self.getYesNoFromUser("Was this plot selected with backlash (y/n): ")
-                postureRoll = 0
+                posture_roll = 0
                 usPrestigeRolls = []
                 schCountries = []
                 schPostureRolls = []
                 govRolls = []
                 if country == "United States":
                     if plotType != "WMD":
-                        postureRoll = random.randint(1, 6)
+                        posture_roll = random.randint(1, 6)
                         usPrestigeRolls.append(random.randint(1, 6))
                         usPrestigeRolls.append(random.randint(1, 6))
                         usPrestigeRolls.append(random.randint(1, 6))
@@ -3492,17 +3490,14 @@ class Labyrinth(object):
                         for _ in range(numRolls):
                             govRolls.append(random.randint(1, 6))
                 elif self.map[country].type == "Non-Muslim":
-                    postureRoll = random.randint(1, 6)
+                    posture_roll = random.randint(1, 6)
                     if self.map[country].schengen:
-                        schChoices = []
-                        for cou in self.map:
-                            if cou != country and self.map[cou].schengen:
-                                schChoices.append(cou)
-                        schCountries.append(random.choice(schChoices))
+                        schengen_choices = [c.name for c in self.map.values() if c.name != country and c.schengen]
+                        schCountries.append(random.choice(schengen_choices))
                         schCountries.append(schCountries[0])
                         while schCountries[0] == schCountries[1]:
-                            schCountries[1] = random.choice(schChoices)
-                        for i in range(2):
+                            schCountries[1] = random.choice(schengen_choices)
+                        for _ in range(2):
                             schPostureRolls.append(random.randint(1, 6))
                 self.resolvePlot(country, plotType, posture_roll, usPrestigeRolls, schCountries, schPostureRolls,
                                  govRolls, isBacklash)
