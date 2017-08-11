@@ -457,6 +457,11 @@ class Labyrinth(object):
         self.validLapsingMarkers.append("GTMO")
         self.validLapsingMarkers.append("Oil Price Spike")
 
+    @staticmethod
+    def _matches(input_text, full_string):
+        """Indicates whether the given text starts with the given prefix, case-insensitively"""
+        return input_text and full_string.lower().startswith(input_text.lower())
+
     def my_raw_input(self, prompt):
         """Reads a line from the test input, if any is left, otherwise from standard input"""
         fake_input = self._next_fake_user_input()
@@ -532,7 +537,7 @@ class Labyrinth(object):
         while True:
             try:
                 plot_type = self.my_raw_input(prompt)
-                if "wmd".startswith(plot_type.lower()):
+                if self._matches(plot_type, "WMD"):
                     return "WMD"
                 plot_type_num = int(plot_type)
                 if 1 <= plot_type_num <= 3:
@@ -549,7 +554,7 @@ class Labyrinth(object):
         while True:
             try:
                 user_input = self.my_raw_input(prompt)
-                if "roll".startswith(user_input.lower()):
+                if self._matches(user_input, "roll"):
                     roll = random.randint(1, 6)
                     print "Roll: %d" % roll
                     return roll
@@ -564,25 +569,21 @@ class Labyrinth(object):
 
     def getYesNoFromUser(self, prompt):
         while True:
-            try:
-                answer = self.my_raw_input(prompt)
-                if "yes".startswith(answer.lower()):
-                    return True
-                elif "no".startswith(answer.lower()):
-                    return False
-                else:
-                    print "Enter y or n."
-                    print ""
-            except:
+            answer = self.my_raw_input(prompt)
+            if self._matches(answer, "yes"):
+                return True
+            elif self._matches(answer, "no"):
+                return False
+            else:
                 print "Enter y or n."
                 print ""
 
     def getPostureFromUser(self, prompt):
         while True:
             posture = self.my_raw_input(prompt)
-            if "hard".startswith(posture.lower()):
+            if self._matches(posture, "hard"):
                 return "Hard"
-            elif "soft".startswith(posture.lower()):
+            elif self._matches(posture, "soft"):
                 return "Soft"
             else:
                 print "Enter h or s."
@@ -591,9 +592,9 @@ class Labyrinth(object):
     def getEventOrOpsFromUser(self, prompt):
         while True:
             choice = self.my_raw_input(prompt)
-            if "event".startswith(choice.lower()):
+            if self._matches(choice, "event"):
                 return "event"
-            elif "ops".startswith(choice.lower()):
+            elif self._matches(choice, "ops"):
                 return "ops"
             else:
                 print "Enter e or o."
@@ -2624,15 +2625,15 @@ class Labyrinth(object):
             input_str = self.my_raw_input("Enter 'ideology', 'prestige', 'funding', 'lapsing', 'marker' or country ?: ")
             if input_str == "":
                 return ""
-            if "ideology".startswith(input_str.lower()):
+            if self._matches(input_str, "ideology"):
                 return "ideology"
-            if "prestige".startswith(input_str.lower()):
+            if self._matches(input_str, "prestige"):
                 return "prestige"
-            if "funding".startswith(input_str.lower()):
+            if self._matches(input_str, "funding"):
                 return "funding"
-            if "lapsing".startswith(input_str.lower()):
+            if self._matches(input_str, "lapsing"):
                 return "lapsing"
-            if "marker".startswith(input_str.lower()):
+            if self._matches(input_str, "marker"):
                 return "marker"
             possible = []
             for country in self.map:
