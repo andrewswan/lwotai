@@ -2939,7 +2939,7 @@ class Labyrinth(object):
                     print "Changing aid count to", aid
                     self.map[country].aid = aid
                     return True
-            except:
+            except ValueError:
                 print "Invalid aid value -", aid_str
 
     def adjustCountryBesieged(self, country):
@@ -2990,7 +2990,7 @@ class Labyrinth(object):
                     print "Changing plot count to", plots
                     self.map[country].plots = plots
                     return True
-            except:
+            except ValueError:
                 print "Invalid plot value - ", plots_str
 
     def adjustCountryMarker(self, country):
