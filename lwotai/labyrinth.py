@@ -529,15 +529,14 @@ class Labyrinth(object):
                 print ""
 
     def getPlotTypeFromUser(self, prompt):
-        goodNum = None
-        while not goodNum:
+        while True:
             try:
-                input = self.my_raw_input(prompt)
-                if input.lower() == "w" or input.lower() == "wmd":
+                plot_type = self.my_raw_input(prompt)
+                if "wmd".startswith(plot_type.lower()):
                     return "WMD"
-                input = int(input)
-                if 1 <= input <= 3:
-                    return input
+                plot_type_num = int(plot_type)
+                if 1 <= plot_type_num <= 3:
+                    return plot_type_num
                 else:
                     print "Enter 1, 2, 3 or W for WMD."
                     print ""
@@ -564,13 +563,12 @@ class Labyrinth(object):
                 print ""
 
     def getYesNoFromUser(self, prompt):
-        good = None
-        while not good:
+        while True:
             try:
-                input = self.my_raw_input(prompt)
-                if input.lower() == "y" or input.lower() == "yes":
+                answer = self.my_raw_input(prompt)
+                if "yes".startswith(answer.lower()):
                     return True
-                elif input.lower() == "n" or input.lower() == "no":
+                elif "no".startswith(answer.lower()):
                     return False
                 else:
                     print "Enter y or n."
@@ -580,34 +578,24 @@ class Labyrinth(object):
                 print ""
 
     def getPostureFromUser(self, prompt):
-        good = None
-        while not good:
-            try:
-                input = self.my_raw_input(prompt)
-                if input.lower() == "h" or input.lower() == "hard":
-                    return "Hard"
-                elif input.lower() == "s" or input.lower() == "soft":
-                    return "Soft"
-                else:
-                    print "Enter h or s."
-                    print ""
-            except:
+        while True:
+            posture = self.my_raw_input(prompt)
+            if "hard".startswith(posture.lower()):
+                return "Hard"
+            elif "soft".startswith(posture.lower()):
+                return "Soft"
+            else:
                 print "Enter h or s."
                 print ""
 
     def getEventOrOpsFromUser(self, prompt):
-        good = None
-        while not good:
-            try:
-                input = self.my_raw_input(prompt)
-                if input.lower() == "e" or input.lower() == "event":
-                    return "event"
-                elif input.lower() == "o" or input.lower() == "ops":
-                    return "ops"
-                else:
-                    print "Enter e or o."
-                    print ""
-            except:
+        while True:
+            choice = self.my_raw_input(prompt)
+            if "event".startswith(choice.lower()):
+                return "event"
+            elif "ops".startswith(choice.lower()):
+                return "ops"
+            else:
                 print "Enter e or o."
                 print ""
 
@@ -956,17 +944,13 @@ class Labyrinth(object):
                     self.map[where].cadre = 1
             else:
                 if numToDisrupt == 1:
-                    disStr = None
-                    while not disStr:
-                        input = self.my_raw_input("You can disrupt one cell. Enter a or s for either an active or sleeper cell: ")
-                        input = input.lower()
-                        if input == "a" or input == "s":
-                            disStr = input
-                    if disStr == "a":
+                    cell_type = self._get_cell_type(
+                        "You can disrupt one cell. Enter a or s for either an active or sleeper cell: ")
+                    if cell_type == "a":
                         self.map[where].activeCells -= numToDisrupt
                         self.cells += numToDisrupt
                         self.outputToHistory("* %d cell(s) disrupted in %s." % (numToDisrupt, where))
-                    else:
+                    else:  # sleeper
                         self.map[where].sleeperCells -= numToDisrupt
                         self.map[where].activeCells += numToDisrupt
                         self.outputToHistory("* %d cell(s) disrupted in %s." % (numToDisrupt, where))
@@ -974,25 +958,25 @@ class Labyrinth(object):
                     disStr = None
                     while not disStr:
                         if self.map[where].sleeperCells >= 2 and self.map[where].activeCells >= 2:
-                            input = self.my_raw_input("You can disrupt two cells. Enter aa, as, or ss for active or sleeper cells: ")
-                            input = input.lower()
-                            if input == "aa" or input == "as" or input == "sa" or input == "ss":
-                                disStr = input
+                            cell_type = self.my_raw_input("You can disrupt two cells. Enter aa, as, or ss for active or sleeper cells: ")
+                            cell_type = cell_type.lower()
+                            if cell_type == "aa" or cell_type == "as" or cell_type == "sa" or cell_type == "ss":
+                                disStr = cell_type
                         elif self.map[where].sleeperCells >= 2:
-                            input = self.my_raw_input("You can disrupt two cells. Enter as, or ss for active or sleeper cells: ")
-                            input = input.lower()
-                            if input == "as" or input == "sa" or input == "ss":
-                                disStr = input
+                            cell_type = self.my_raw_input("You can disrupt two cells. Enter as, or ss for active or sleeper cells: ")
+                            cell_type = cell_type.lower()
+                            if cell_type == "as" or cell_type == "sa" or cell_type == "ss":
+                                disStr = cell_type
                         elif self.map[where].activeCells >= 2:
-                            input = self.my_raw_input("You can disrupt two cells. Enter aa, or as for active or sleeper cells: ")
-                            input = input.lower()
-                            if input == "as" or input == "sa" or input == "aa":
-                                disStr = input
-                    if input == "aa":
+                            cell_type = self.my_raw_input("You can disrupt two cells. Enter aa, or as for active or sleeper cells: ")
+                            cell_type = cell_type.lower()
+                            if cell_type == "as" or cell_type == "sa" or cell_type == "aa":
+                                disStr = cell_type
+                    if cell_type == "aa":
                         self.map[where].activeCells -= 2
                         self.cells += 2
                         self.outputToHistory("* %d cell(s) disrupted in %s." % (numToDisrupt, where))
-                    elif input == "as" or input == "sa":
+                    elif cell_type == "as" or cell_type == "sa":
                         self.map[where].sleeperCells -= 1
                         self.cells += 1
                         self.outputToHistory("* %d cell(s) disrupted in %s." % (numToDisrupt, where))
@@ -1004,6 +988,13 @@ class Labyrinth(object):
                 self._increase_prestige(1)
                 self.outputToHistory("US Prestige now %d." % self.prestige, False)
             self.outputToHistory(self.map[where].countryStr(), True)
+
+    def _get_cell_type(self, prompt):
+        """Prompts the user to choose a cell type; 'a' or 's', case-insensitive"""
+        while True:
+            cell_type = self.my_raw_input(prompt)
+            if cell_type.lower() in ["a", "s"]:
+                return cell_type.lower()
 
     def executeJihad(self, country, rollList):
         successes = 0
@@ -1318,21 +1309,20 @@ class Labyrinth(object):
     def countryDistance(self, start, end):
         if start == end:
             return 0
-        distanceGroups = []
-        distanceGroups.append([start])
+        distance_groups = [[start]]
         distance = 1
-        while not self.inLists(end, distanceGroups):
-            list = distanceGroups[distance - 1]
-            nextWave = []
-            for country in list:
+        while not self.inLists(end, distance_groups):
+            distance_group = distance_groups[distance - 1]
+            next_wave = []
+            for country in distance_group:
                 for subCountry in self.map:
-                    if not self.inLists(subCountry, distanceGroups):
+                    if not self.inLists(subCountry, distance_groups):
                         if self.isAdjacent(subCountry, country):
                             if subCountry == end:
                                 return distance
-                            if subCountry not in nextWave:
-                                nextWave.append(subCountry)
-            distanceGroups.append(nextWave)
+                            if subCountry not in next_wave:
+                                next_wave.append(subCountry)
+            distance_groups.append(next_wave)
             distance += 1
 
     def travelDestinationChooseBasedOnPriority(self, countryList):
@@ -2955,83 +2945,83 @@ class Labyrinth(object):
     def adjustCountryBesieged(self, country):
         print "Adjusting besieged for - ", country
         while True:
-            input = self.my_raw_input("Enter new besieged count (0-1): ")
-            if input == "":
+            user_input = self.my_raw_input("Enter new besieged count (0-1): ")
+            if user_input == "":
                 return False
             try:
-                input = int(input)
-                if input < 0 or input > 1:
-                    print "Invalid besieged value - ", input
+                besieged_count = int(user_input)
+                if besieged_count < 0 or besieged_count > 1:
+                    print "Invalid besieged value - ", besieged_count
                 else:
-                    print "Changing besieged count to ", input
-                    self.map[country].besieged = input
+                    print "Changing besieged count to ", besieged_count
+                    self.map[country].besieged = besieged_count
                     return True
-            except:
-                print "Invalid besieged value - ", input
+            except ValueError:
+                print "Invalid besieged value - ", user_input
 
     def adjustCountryRegime(self, country):
         print "Adjusting regime change for - ", country
         while True:
-            input = self.my_raw_input("Enter new regime change count (0-1): ")
-            if input == "":
+            user_input = self.my_raw_input("Enter new regime change count (0-1): ")
+            if user_input == "":
                 return False
             try:
-                input = int(input)
-                if input < 0 or input > 1:
-                    print "Invalid regime change value - ", input
+                regime_change_count = int(user_input)
+                if regime_change_count < 0 or regime_change_count > 1:
+                    print "Invalid regime change value - ", regime_change_count
                 else:
-                    print "Changing regime change count to ", input
-                    self.map[country].regimeChange = input
+                    print "Changing regime change count to ", regime_change_count
+                    self.map[country].regimeChange = regime_change_count
                     return True
-            except:
-                print "Invalid regime change value - ", input
+            except ValueError:
+                print "Invalid regime change value - ", user_input
 
     def adjustCountryPlots(self, country):
         print "Adjusting plots for - ", country
         while True:
-            input = self.my_raw_input("Enter new plot count (0-9): ")
-            if input == "":
+            plots_str = self.my_raw_input("Enter new plot count (0-9): ")
+            if plots_str == "":
                 return False
             try:
-                input = int(input)
-                if input < 0 or input > 9:
-                    print "Invalid plot value - ", input
+                plots = int(plots_str)
+                if plots < 0 or plots > 9:
+                    print "Invalid plot value - ", plots
                 else:
-                    print "Changing plot count to", input
-                    self.map[country].plots = input
+                    print "Changing plot count to", plots
+                    self.map[country].plots = plots
                     return True
             except:
-                print "Invalid plot value - ", input
+                print "Invalid plot value - ", plots_str
 
     def adjustCountryMarker(self, country):
         print "Adjusting event markers for - ", country
         if len(self.map[country].markers) == 0:
             print "There are no event markers in play"
         else:
-            print "Current events in play: %s" % ", ".join(self.map[country].markers)
+            print "Current markers in play: %s" % ", ".join(self.map[country].markers)
         print ""
         print "Available country events are:"
         for validEvent in self.validCountryMarkers:
             print validEvent
-        print "Enter a new event to add it to the list or enter an existing event to remove it"
+        print "Enter a new marker to add it to the list, or enter an existing marker to remove it"
         while True:
-            input = self.my_raw_input("Enter event to be added or removed: ")
-            if input == "":
+            marker = self.my_raw_input("Enter marker to be added or removed: ")
+            if marker == "":
                 return ""
-            if input in self.map[country].markers:
-                self.map[country].markers.remove(input)
-                print "Removed event - ", input
+            if marker in self.map[country].markers:
+                self.map[country].markers.remove(marker)
+                print "Removed marker - ", marker
                 break
-            elif input in self.validCountryMarkers:
-                self.map[country].markers.append(input)
-                print "Added event - ", input
+            elif marker in self.validCountryMarkers:
+                self.map[country].markers.append(marker)
+                print "Added marker - ", marker
                 break
             else:
-                print "Not a valid event"
-        if len(self.map[country].markers) == 0:
-            print "There are now no events in play"
-        else:
+                print "'%s' is not a valid marker" % marker
+        if self.map[country].markers:
             print "Current events in play: %s" % ", ".join(self.map[country].markers)
+        else:
+            print "There are now no events in play"
         print ""
         return True
 
@@ -3039,71 +3029,71 @@ class Labyrinth(object):
         print "Adjusting country - ", country
         self.map[country].printCountry()
         if self.map[country].type == "Shia-Mix" or self.map[country].type == "Suni":
-            adjustAttrList = "governance", "alignment", "troops", "active", "sleeper", "cadre", "aid", "besieged", "regime", "plots", "marker"
+            attributes = "governance", "alignment", "troops", "active", "sleeper", "cadre", "aid", "besieged",\
+                             "regime", "plots", "marker"
         elif self.map[country].name == "Philippines":
-            adjustAttrList = "posture", "troops", "active", "sleeper", "cadre", "plots", "marker"
+            attributes = "posture", "troops", "active", "sleeper", "cadre", "plots", "marker"
         elif self.map[country].type == "Non-Muslim":
-            adjustAttrList = "posture", "active", "sleeper", "cadre", "plots", "marker"
+            attributes = "posture", "active", "sleeper", "cadre", "plots", "marker"
         elif self.map[country].type == "Iran":
-            adjustAttrList =  "active", "sleeper", "cadre", "plots", "marker"
-        goodAdjustAttr = None
-        while not goodAdjustAttr:
-            print "Changeable attributes are: %s" % ", ".join(adjustAttrList)
-            input = self.my_raw_input("Enter attribute to be changed (press Enter to quit): ")
-            if input == "":
+            attributes = "active", "sleeper", "cadre", "plots", "marker"
+        while True:
+            print "Changeable attributes are: %s" % ", ".join(attributes)
+            attribute = self.my_raw_input("Enter attribute to be changed (press Enter to quit): ")
+            if attribute == "":
                 return ""
-            if input in adjustAttrList:
-                adjustSuccess = False
-                if input == "governance":
-                    adjustSuccess = self.adjustCountryGovernance(country)
-                elif input == "alignment":
-                    adjustSuccess = self.adjustCountryAlignment(country)
-                elif input == "posture":
-                    adjustSuccess = self.adjustCountryPosture(country)
-                elif input == "troops":
-                    adjustSuccess = self.adjustCountryTroops(country)
-                elif input == "active":
-                    adjustSuccess = self.adjustCountryActive(country)
-                elif input == "sleeper":
-                    adjustSuccess = self.adjustCountrySleeper(country)
-                elif input == "cadre":
-                    adjustSuccess = self.adjustCountryCadre(country)
-                elif input == "aid":
-                    adjustSuccess = self.adjustCountryAid(country)
-                elif input == "besieged":
-                    adjustSuccess = self.adjustCountryBesieged(country)
-                elif input == "regime":
-                    adjustSuccess = self.adjustCountryRegime(country)
-                elif input == "plots":
-                    adjustSuccess = self.adjustCountryPlots(country)
-                elif input == "marker":
-                    adjustSuccess = self.adjustCountryMarker(country)
-                if adjustSuccess:
+            if attribute in attributes:
+                adjust_success = False
+                if attribute == "governance":
+                    adjust_success = self.adjustCountryGovernance(country)
+                elif attribute == "alignment":
+                    adjust_success = self.adjustCountryAlignment(country)
+                elif attribute == "posture":
+                    adjust_success = self.adjustCountryPosture(country)
+                elif attribute == "troops":
+                    adjust_success = self.adjustCountryTroops(country)
+                elif attribute == "active":
+                    adjust_success = self.adjustCountryActive(country)
+                elif attribute == "sleeper":
+                    adjust_success = self.adjustCountrySleeper(country)
+                elif attribute == "cadre":
+                    adjust_success = self.adjustCountryCadre(country)
+                elif attribute == "aid":
+                    adjust_success = self.adjustCountryAid(country)
+                elif attribute == "besieged":
+                    adjust_success = self.adjustCountryBesieged(country)
+                elif attribute == "regime":
+                    adjust_success = self.adjustCountryRegime(country)
+                elif attribute == "plots":
+                    adjust_success = self.adjustCountryPlots(country)
+                elif attribute == "marker":
+                    adjust_success = self.adjustCountryMarker(country)
+                if adjust_success:
                     self.map[country].printCountry()
                 else:
                     print country, "unchanged"
             else:
-                print "Invalid attribute - ", input
+                print "Invalid attribute - ", attribute
 
     def adjust_state(self):
-        print "Warning! No cross validation of data changes is carried out"
+        print "Warning: your changes will not be checked for correctness!"
         print "Start adjusting"
-        adjustType = self.getAdjustFromUser()
-        if adjustType == "":
+        adjust_type = self.getAdjustFromUser()
+        if adjust_type == "":
             print ""
             return
-        elif adjustType == "ideology":
+        elif adjust_type == "ideology":
             self.adjustIdeology()
-        elif adjustType == "prestige":
+        elif adjust_type == "prestige":
             self.adjustPrestige()
-        elif adjustType == "funding":
+        elif adjust_type == "funding":
             self.adjustFunding()
-        elif adjustType == "lapsing":
+        elif adjust_type == "lapsing":
             self.adjustLapsing()
-        elif adjustType == "marker":
+        elif adjust_type == "marker":
             self.adjustMarker()
         else:
-            self.adjustCountry(adjustType)
+            self.adjustCountry(adjust_type)
         print ""
 
     def show_history(self, argument):
@@ -3121,14 +3111,15 @@ class Labyrinth(object):
         if not self._find_countries(lambda c: self._can_deploy_to(c.name)):
             print "There are no Muslim Allies to deploy to."
             return
-        moveFrom = None
+        move_from = None
         available = 0
-        while not moveFrom:
-            input = self.getCountryFromUser("From what country (track for Troop Track) (? for list)?: ",  "track", self.listCountriesWithTroops)
-            if input == "":
+        while not move_from:
+            user_input = self.getCountryFromUser("From what country (track for Troop Track) (? for list)?: ", "track",
+                                            self.listCountriesWithTroops)
+            if user_input == "":
                 print ""
                 return
-            elif input == "track":
+            elif user_input == "track":
                 if self.troops <= 0:
                     print "There are no troops on the Troop Track."
                     print ""
@@ -3137,59 +3128,59 @@ class Labyrinth(object):
                     print "Deploy from Troop Track - %d available" % self.troops
                     print ""
                     available = self.troops
-                    moveFrom = input
+                    move_from = user_input
             else:
-                if self.map[input].troops() <= 0:
-                    print "There are no troops in %s." % input
+                if self.map[user_input].troops() <= 0:
+                    print "There are no troops in %s." % user_input
                     print ""
                     return
                 else:
-                    print "Deploy from %s = %d available" % (input, self.map[input].troops())
+                    print "Deploy from %s = %d available" % (user_input, self.map[user_input].troops())
                     print ""
-                    available = self.map[input].troops()
-                    moveFrom = input
-        moveTo = None
-        while not moveTo:
-            input = self.getCountryFromUser(
+                    available = self.map[user_input].troops()
+                    move_from = user_input
+        move_to = None
+        while not move_to:
+            user_input = self.getCountryFromUser(
                 "To what country ('track' for Troop Track, ? for list): ", "track", self.listDeployOptions)
-            if input == "":
+            if user_input == "":
                 print ""
                 return
-            elif input == "track":
-                print "Deploying troops from %s to Troop Track" % moveFrom
+            elif user_input == "track":
+                print "Deploying troops from %s to Troop Track" % move_from
                 print ""
-                moveTo = input
+                move_to = user_input
             else:
-                print "Deploying troops from %s to %s" % (moveFrom, input)
+                print "Deploying troops from %s to %s" % (move_from, user_input)
                 print ""
-                moveTo = input
-        howMany = 0
-        while not howMany:
-            input = self.getNumTroopsFromUser("Deploy how many troops (%d available)? " % available, available)
-            if input == "":
+                move_to = user_input
+        how_many = 0
+        while not how_many:
+            user_input = self.getNumTroopsFromUser("Deploy how many troops (%d available)? " % available, available)
+            if user_input == "":
                 print ""
                 return
             else:
-                howMany = input
-        if moveFrom == "track":
-            self.troops -= howMany
-            troopsLeft = self.troops
+                how_many = user_input
+        if move_from == "track":
+            self.troops -= how_many
+            troops_left = self.troops
         else:
-            if self.map[moveFrom].regimeChange:
-                if (self.map[moveFrom].troops() - howMany) < (5 + self.map[moveFrom].totalCells(True)):
+            if self.map[move_from].regimeChange:
+                if (self.map[move_from].troops() - how_many) < (5 + self.map[move_from].totalCells(True)):
                     print "You cannot move that many troops from a Regime Change country."
                     print ""
                     return
-            self.map[moveFrom].changeTroops(-howMany)
-            troopsLeft = self.map[moveFrom].troops()
-        if moveTo == "track":
-            self.troops += howMany
-            troopsNow = self.troops
+            self.map[move_from].changeTroops(-how_many)
+            troops_left = self.map[move_from].troops()
+        if move_to == "track":
+            self.troops += how_many
+            troops_now = self.troops
         else:
-            self.map[moveTo].changeTroops(howMany)
-            troopsNow = self.map[moveTo].troops()
+            self.map[move_to].changeTroops(how_many)
+            troops_now = self.map[move_to].troops()
         self.outputToHistory(
-            "* %d troops deployed from %s (%d) to %s (%d)" % (howMany, moveFrom, troopsLeft, moveTo, troopsNow))
+            "* %d troops deployed from %s (%d) to %s (%d)" % (how_many, move_from, troops_left, move_to, troops_now))
 
     def disrupt_cells_or_cadre(self):
         """Performs a Disrupt operation for the US player."""
