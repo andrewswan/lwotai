@@ -55,14 +55,18 @@ class Utils(object):
 
     @staticmethod
     def choose_option(prompt, options):
-        """Prompts the user to choose from the given options. Returns a number from 1 to the length of that list."""
+        """Prompts the user to choose from the given list of options.
+        Returns a number from 1 to the length of that list."""
         print prompt
         for number, option in enumerate(options):
             print "(" + str(number + 1) + ") " + option
         while True:
             input_str = raw_input("Enter choice: ")
-            input_int = int(input_str)
-            if 1 <= input_int <= len(options):
-                return input_int
-            else:
+            try:
+                input_int = int(input_str)
+                if 1 <= input_int <= len(options):
+                    return input_int
+                else:
+                    print "Please enter a number from 1 to", len(options)
+            except ValueError:
                 print "Please enter a number from 1 to", len(options)
