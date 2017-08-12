@@ -1579,64 +1579,64 @@ class Labyrinth(object):
             self.outputToHistory("%s tested, governance %s" % (self.map[country].name, self.map[country].govStr()), False)
 
     def getCountriesWithUSPostureByGovernance(self):
-        dict = {GOOD: [], FAIR: [], POOR: []}
+        countries_by_governance = {GOOD: [], FAIR: [], POOR: []}
         for country in self.map:
             if (country != "United States") and (self.map[country].posture == self.map["United States"].posture):
                 if self.map[country].is_good():
-                    dict[GOOD].append(country)
+                    countries_by_governance[GOOD].append(country)
                 elif self.map[country].is_fair():
-                    dict[FAIR].append(country)
+                    countries_by_governance[FAIR].append(country)
                 elif self.map[country].is_poor():
-                    dict[POOR].append(country)
-        return dict
+                    countries_by_governance[POOR].append(country)
+        return countries_by_governance
 
     def getCountriesWithTroopsByGovernance(self):
-        dict = {GOOD: [], FAIR: [], POOR: []}
+        countries_by_governance = {GOOD: [], FAIR: [], POOR: []}
         for country in self.map:
             if self.map[country].troops() > 0:
                 if self.map[country].is_good():
-                    dict[GOOD].append(country)
+                    countries_by_governance[GOOD].append(country)
                 elif self.map[country].is_fair():
-                    dict[FAIR].append(country)
+                    countries_by_governance[FAIR].append(country)
                 elif self.map[country].is_poor():
-                    dict[POOR].append(country)
-        return dict
+                    countries_by_governance[POOR].append(country)
+        return countries_by_governance
 
     def getCountriesWithAidByGovernance(self):
-        dict = {GOOD: [], FAIR: [], POOR: []}
+        countries_by_governance = {GOOD: [], FAIR: [], POOR: []}
         for country in self.map:
             if self.map[country].aid > 0:
                 if self.map[country].is_good():
-                    dict[GOOD].append(country)
+                    countries_by_governance[GOOD].append(country)
                 elif self.map[country].is_fair():
-                    dict[FAIR].append(country)
+                    countries_by_governance[FAIR].append(country)
                 elif self.map[country].is_poor():
-                    dict[POOR].append(country)
-        return dict
+                    countries_by_governance[POOR].append(country)
+        return countries_by_governance
 
     def getNonMuslimCountriesByGovernance(self):
-        dict = {GOOD: [], FAIR: [], POOR: []}
+        countries_by_governance = {GOOD: [], FAIR: [], POOR: []}
         for country in self.map:
             if (country != "United States") and (self.map[country].type == "Non-Muslim"):
                 if self.map[country].is_good():
-                    dict[GOOD].append(country)
+                    countries_by_governance[GOOD].append(country)
                 elif self.map[country].is_fair():
-                    dict[FAIR].append(country)
+                    countries_by_governance[FAIR].append(country)
                 elif self.map[country].is_poor():
-                    dict[POOR].append(country)
-        return dict
+                    countries_by_governance[POOR].append(country)
+        return countries_by_governance
 
     def getMuslimCountriesByGovernance(self):
-        dict = {GOOD: [], FAIR: [], POOR: []}
+        countries_by_governance = {GOOD: [], FAIR: [], POOR: []}
         for country in self.map:
             if self.map[country].type != "Non-Muslim":
                 if self.map[country].is_good():
-                    dict[GOOD].append(country)
+                    countries_by_governance[GOOD].append(country)
                 elif self.map[country].is_fair():
-                    dict[FAIR].append(country)
+                    countries_by_governance[FAIR].append(country)
                 elif self.map[country].is_poor():
-                    dict[POOR].append(country)
-        return dict
+                    countries_by_governance[POOR].append(country)
+        return countries_by_governance
 
     def handleTravel(self, ops, isRadicalization=False, isSchengenVisas=False, isCleanOperatives=False):
         if isSchengenVisas:
