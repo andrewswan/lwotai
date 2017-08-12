@@ -3172,7 +3172,7 @@ class Labyrinth(object):
                     print "You cannot move that many troops from a Regime Change country."
                     print ""
                     return
-            self.map[move_from].changeTroops(-how_many)
+            self.map[move_from].changeTroops(how_many * -1)
             troops_left = self.map[move_from].troops()
         if move_to == "track":
             self.troops += how_many
