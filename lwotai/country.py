@@ -31,6 +31,9 @@ class Country(object):
         self.troopCubes = 0
         self.type = country_type
 
+    def __repr__(self):
+        return self.name
+
     def alignment(self):
         return self.__alignment
 
