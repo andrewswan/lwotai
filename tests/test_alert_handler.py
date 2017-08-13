@@ -7,10 +7,11 @@ class AlertHandlerTest(LabyrinthTestCase):
 
     def test_alert(self):
         app = Labyrinth(1, 1, self.set_up_test_scenario)
-        self.assertEqual(app.map["Iraq"].plots, 2)
-        app.handleAlert("Iraq")
-        self.assertEqual(app.map["Iraq"].plots, 1)
-        app.handleAlert("Iraq")
-        self.assertEqual(app.map["Iraq"].plots, 0)
-        app.handleAlert("Iraq")
-        self.assertEqual(app.map["Iraq"].plots, 0)
+        iraq = app.map.get("Iraq")
+        self.assertEqual(iraq.plots, 2)
+        app.handle_alert("Iraq")
+        self.assertEqual(iraq.plots, 1)
+        app.handle_alert("Iraq")
+        self.assertEqual(iraq.plots, 0)
+        app.handle_alert("Iraq")
+        self.assertEqual(iraq.plots, 0)

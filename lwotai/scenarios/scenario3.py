@@ -47,6 +47,6 @@ class Scenario3(Scenario):
         random.shuffle(possibles)
         for i in range(3):
             game.testCountry(possibles[i])
-            game.placeCells(possibles[i], 1)
+            game.place_cells(possibles[i], 1)
         print "Remove the 'Patriot Act' and 'Tora Bora' cards (43 and 109) from the game."
         print ""

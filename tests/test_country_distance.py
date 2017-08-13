@@ -10,7 +10,7 @@ class CountryDistanceTest(LabyrinthTestCase):
         self.__app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
 
     def assert_distance(self, from_country, to_country, expected_distance):
-        self.assertEqual(self.__app.countryDistance(from_country, to_country), expected_distance)
+        self.assertEqual(self.__app.country_distance(from_country, to_country), expected_distance)
 
     def test_distance(self):
         self.assert_distance("Iran", "Iran", 0)

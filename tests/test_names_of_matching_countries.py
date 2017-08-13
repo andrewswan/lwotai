@@ -12,5 +12,7 @@ class NamesOfCountriesMatchingPredicateTest(LabyrinthTestCase):
         schengen_countries = app.names_of_countries(lambda c: c.schengen)
 
         # Check
-        self.assertEqual(schengen_countries,
-                         ['France', 'Italy', 'Germany', 'Spain', 'Scandinavia', 'Eastern Europe', 'Benelux'])
+        expected_names = ['France', 'Scandinavia', 'Benelux', 'Italy', 'Germany', 'Spain', 'Eastern Europe']
+        self.assertEqual(len(expected_names), len(schengen_countries))
+        for expected_name in expected_names:
+            self.assertTrue(expected_name in schengen_countries, "Could not find '%s'" % expected_name)

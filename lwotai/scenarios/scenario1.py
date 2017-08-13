@@ -14,22 +14,22 @@ class Scenario1(Scenario):
         game.startYear = 2001
         game.troops = 11
         game.turn = 1
-        game.map["Afghanistan"].make_islamist_rule()
-        game.map["Afghanistan"].make_adversary()
-        game.map["Afghanistan"].sleeperCells = 4
-        game.map["Gulf States"].make_fair()
-        game.map["Gulf States"].make_ally()
-        game.map["Gulf States"].troopCubes = 2
-        game.map["Iraq"].make_poor()
-        game.map["Iraq"].make_adversary()
-        game.map["Libya"].make_poor()
-        game.map["Libya"].make_adversary()
-        game.map["Pakistan"].make_fair()
-        game.map["Pakistan"].make_neutral()
-        game.map["Saudi Arabia"].make_poor()
-        game.map["Saudi Arabia"].make_ally()
-        game.map["Saudi Arabia"].troopCubes = 2
-        game.map["Somalia"].besieged = 1
-        game.map["Syria"].make_fair()
-        game.map["Syria"].make_adversary()
-        game.map["United States"].posture = "Hard"
+        game.get_country("Afghanistan").make_islamist_rule()
+        game.get_country("Afghanistan").make_adversary()
+        game.get_country("Afghanistan").sleeperCells = 4
+        game.get_country("Gulf States").make_fair()
+        game.get_country("Gulf States").make_ally()
+        game.get_country("Gulf States").troopCubes = 2
+        game.get_country("Iraq").make_poor()
+        game.get_country("Iraq").make_adversary()
+        game.get_country("Libya").make_poor()
+        game.get_country("Libya").make_adversary()
+        game.get_country("Pakistan").make_fair()
+        game.get_country("Pakistan").make_neutral()
+        game.get_country("Saudi Arabia").make_poor()
+        game.get_country("Saudi Arabia").make_ally()
+        game.get_country("Saudi Arabia").troopCubes = 2
+        game.get_country("Somalia").besieged = 1
+        game.get_country("Syria").make_fair()
+        game.get_country("Syria").make_adversary()
+        game.get_country("United States").posture = "Hard"

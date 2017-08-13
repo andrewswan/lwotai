@@ -7,7 +7,8 @@ from lwotai.utils import Utils
 class Country(object):
     """A country on the map"""
 
-    def __init__(self, app, name, country_type, posture, governance, schengen, recruit, oil, resources):
+    def __init__(self, app, name, country_type, posture, governance, schengen, recruit, oil, resources,
+                 schengen_link=False):
         self.__alignment = None
         self.__governance = governance
         self.activeCells = 0
@@ -25,7 +26,7 @@ class Country(object):
         self.regimeChange = 0
         self.resources = resources
         self.schengen = schengen
-        self.schengenLink = False
+        self.schengenLink = schengen_link
         self.sleeperCells = 0
         self.troopCubes = 0
         self.type = country_type
@@ -152,7 +153,8 @@ class Country(object):
         return self.__governance is not None and self.__governance.is_worse_than(governance)
 
     def is_muslim(self):
-        return self.type == "Suni" or self.type == "Shia-Mix"
+        """Indicates whether this country is Muslim (does not include Iran)"""
+        return self.type in ["Shia-Mix", "Suni"]
 
     def is_major_jihad_possible(self, ops, excess_cells_needed, bhutto_in_play):
         if self.is_islamist_rule():
@@ -166,6 +168,10 @@ class Country(object):
         ops_needed_from_poor = 1 if self.besieged else 2
         ops_needed = ops_needed_from_poor + self.__governance.levels_above_poor()
         return ops >= ops_needed
+
+    def can_have_posture(self):
+        """Indicates whether this country can have a posture (excludes the US)"""
+        return not self.is_muslim() and self.name not in ["Iran", "United States"]
 
     def can_recruit(self, madrassas):
         return (self.totalCells(True) > 0 or
@@ -234,13 +240,23 @@ class Country(object):
         if self.activeCells < 0:        #20150131PS - changed from <= to <
             if "Sadr" in self.markers:
                 self.markers.remove("Sadr")
-                self.app.outputToHistory("Sadr removed from %s" % self.name, False)
+                self.app.output_to_history("Sadr removed from %s" % self.name, False)
                 self.activeCells = 0    # 20150131PS - added
                 return
             else:
                 self.activeCells = 0
-        self.app.outputToHistory("Active cell Removed to Funding Track", False)
+        self.app.output_to_history("Active cell Removed to Funding Track", False)
         self.app.cells += 1
+
+    def get_resources(self, oil_price_spikes):
+        """
+        Returns the amount of resources produced by this country,
+        given how many oil price spikes are in effect.
+        """
+        if self.oil:
+            return self.resources + oil_price_spikes
+        else:
+            return self.resources
 
     def troops(self):
         troopCount = self.troopCubes
@@ -253,7 +269,7 @@ class Country(object):
         if self.troopCubes < 0:
             if "NATO" in self.markers:
                 self.markers.remove("NATO")
-                self.app.outputToHistory("NATO removed from %s" % self.name, True)
+                self.app.output_to_history("NATO removed from %s" % self.name, True)
             self.troopCubes = 0
 
     def govStr(self):
@@ -277,18 +293,21 @@ class Country(object):
             return "IR"
 
     def countryStr(self):
-        markersStr = ""
+        """Returns the string representation of this Country"""
+        markers_str = ""
         if len(self.markers) != 0:
-            markersStr = "\n   Markers: %s" % ", ".join(self.markers)
-        if self.type == "Shia-Mix" or self.type == "Suni":
-            return "%s, %s %s, %d Resource(s)\n   Troops:%d Active:%d Sleeper:%d Cadre:%d Aid:%d Besieged:%d Reg Ch:%d Plots:%d %s" % (self.name, self.govStr(), self.__alignment, self.app.countryResources(self.name), self.troops(), self.activeCells, self.sleeperCells, self.cadre, self.aid, self.besieged, self.regimeChange, self.plots, markersStr)
+            markers_str = "\n   Markers: %s" % ", ".join(self.markers)
+        if self.is_muslim():
+            resources = self.get_resources(self.app.oil_price_spikes())
+            return "%s, %s %s, %d Resource(s)\n   Troops:%d Active:%d Sleeper:%d Cadre:%d Aid:%d Besieged:%d Reg Ch:%d Plots:%d %s" %\
+                   (self.name, self.govStr(), self.__alignment, resources, self.troops(), self.activeCells,
+                    self.sleeperCells, self.cadre, self.aid, self.besieged, self.regimeChange, self.plots, markers_str)
         elif self.name == "Philippines":
-            return "%s - Posture:%s\n   Troops:%d Active:%d Sleeper:%d Cadre:%d Plots:%d %s" % (self.name, self.posture, self.troops(), self.activeCells, self.sleeperCells, self.cadre, self.plots, markersStr)
+            return "%s - Posture:%s\n   Troops:%d Active:%d Sleeper:%d Cadre:%d Plots:%d %s" % (self.name, self.posture, self.troops(), self.activeCells, self.sleeperCells, self.cadre, self.plots, markers_str)
         elif self.type == "Non-Muslim" and self.type != "United States":    # 20150131PS This is illogical but does no harm
-            return "%s - Posture:%s\n   Active:%d Sleeper:%d Cadre:%d Plots:%d %s" % (self.name, self.posture, self.activeCells, self.sleeperCells, self.cadre, self.plots, markersStr)
+            return "%s - Posture:%s\n   Active:%d Sleeper:%d Cadre:%d Plots:%d %s" % (self.name, self.posture, self.activeCells, self.sleeperCells, self.cadre, self.plots, markers_str)
         elif self.type == "Iran":
-            return "%s, %s\n   Active:%d Sleeper:%d Cadre:%d Plots:%d %s" % (self.name, self.govStr(), self.activeCells, self.sleeperCells, self.cadre, self.plots, markersStr)
+            return "%s, %s\n   Active:%d Sleeper:%d Cadre:%d Plots:%d %s" % (self.name, self.govStr(), self.activeCells, self.sleeperCells, self.cadre, self.plots, markers_str)
 
     def printCountry(self):
         print self.countryStr()
-

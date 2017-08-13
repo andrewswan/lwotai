@@ -58,13 +58,13 @@ class DisruptTest(LabyrinthTestCase):
     def test_num_disruptable(self):
         # Set up
         app = Labyrinth(1, 1)
-        app.map["Canada"].sleeperCells = 1
-        app.map["Iraq"].sleeperCells = 1
-        app.map["Iraq"].make_ally()
-        app.map["Jordan"].sleeperCells = 1
-        app.map["Jordan"].troopCubes = 2
-        app.map["Libya"].sleeperCells = 1
-        app.map["Libya"].troopCubes = 1 # Should not be enough
+        app.get_country("Canada").sleeperCells = 1
+        app.get_country("Iraq").sleeperCells = 1
+        app.get_country("Iraq").make_ally()
+        app.get_country("Jordan").sleeperCells = 1
+        app.get_country("Jordan").troopCubes = 2
+        app.get_country("Libya").sleeperCells = 1
+        app.get_country("Libya").troopCubes = 1  # Should not be enough
 
         # Invoke & assert
         self.assertEqual(app.num_disruptable(), 3)

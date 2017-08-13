@@ -13,8 +13,8 @@ class RadicalizationTest(LabyrinthTestCase):
         mock_randomizer = mock(Randomizer())
         app = Labyrinth(1, 1, self.set_up_test_scenario, randomizer=mock_randomizer)
         country_name = "Iraq"
-        when(mock_randomizer).pick_one(app.map.keys()).thenReturn(country_name)
-        country = app.map[country_name]
+        when(mock_randomizer).pick_one(app.map.country_names()).thenReturn(country_name)
+        country = app.get_country(country_name)
         country.cadre = 1
         sleepers_before = country.sleeperCells
 

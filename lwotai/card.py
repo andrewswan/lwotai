@@ -22,28 +22,25 @@ class Card(object):
             return False
         elif self.type == "US" and side == "US":
             if self.number == 1:  # Backlash
-                for country in app.map:
-                    if (app.map[country].type != "Non-Muslim") and (app.map[country].plots > 0):
-                        return True
-                return False
+                return app.contains_country(lambda c: c.type != "Non-Muslim" and c.plots > 0)
             elif self.number == 2:  # Biometrics
                 return True
-            elif self.number == 3:  # CTR    20150616PS
-                return app.map["United States"].posture == "Soft"
+            elif self.number == 3:  # CTR
+                return app.us_posture() == "Soft"
             elif self.number == 2:  # Biometrics
                 return True
             elif self.number == 4:  # Moro Talks
                 return True
             elif self.number == 5:  # NEST
                 return True
-            elif self.number == 6 or self.number == 7 :  # Sanctions
+            elif self.number in [6, 7]:  # Sanctions
                 return "Patriot Act" in app.markers
-            elif self.number == 8 or self.number == 9 or self.number == 10:  # Special Forces
-                for country in app.map:
-                    if app.map[country].totalCells(True) > 0:
-                        for subCountry in app.map:
-                            if country == subCountry or app.isAdjacent(subCountry, country):
-                                if app.map[subCountry].troops() > 0:
+            elif self.number in [8, 9, 10]:  # Special Forces
+                for country in app.get_countries():
+                    if country.totalCells(True) > 0:
+                        for subCountry in app.get_countries():
+                            if country.name == subCountry.name or app.is_adjacent(subCountry.name, country.name):
+                                if subCountry.troops() > 0:
                                     return True
                 return False
             elif self.number == 11:  # Abbas
@@ -51,14 +48,11 @@ class Card(object):
             elif self.number == 12:  # Al-Azhar
                 return True
             elif self.number == 13:  # Anbar Awakening
-                return (app.map["Iraq"].troops() > 0) or (app.map["Syria"].troops() > 0)
+                return (app.get_country("Iraq").troops() > 0) or (app.get_country("Syria").troops() > 0)
             elif self.number == 14:  # Covert Action
-                for country in app.map:
-                    if app.map[country].is_adversary():
-                        return True
-                return False
+                return app.contains_country(lambda c: c.is_adversary())
             elif self.number == 15:  # Ethiopia Strikes
-                return (app.map["Somalia"].is_islamist_rule()) or (app.map["Sudan"].is_islamist_rule())
+                return (app.get_country("Somalia").is_islamist_rule()) or (app.get_country("Sudan").is_islamist_rule())
             elif self.number == 16:  # Euro-Islam
                 return True
             elif self.number == 17:  # FSB
@@ -70,117 +64,95 @@ class Card(object):
             elif self.number == 20:  # King Abdullah
                 return True
             elif self.number == 21:  # Let's Roll
-                allyGoodPlotCountries = 0
-                for country in app.map:
-                    if app.map[country].plots > 0:
-                        if app.map[country].is_ally() or app.map[country].is_good():
-                            allyGoodPlotCountries += 1
-                return allyGoodPlotCountries > 0
+                return app.contains_country(lambda c: c.plots > 0 and (c.is_ally() or c.is_good()))
             elif self.number == 22:  # Mossad and Shin Bet
-                targetCells = 0
-                targetCells += app.map["Israel"].totalCells()
-                targetCells += app.map["Jordan"].totalCells()
-                targetCells += app.map["Lebanon"].totalCells()
-                return targetCells > 0
-            elif self.number == 23 or self.number == 24 or self.number == 25:  # Predator
-                numMuslimCellCountries = 0
-                for country in app.map:
-                    if app.map[country].totalCells(True) > 0:
-                        if app.map[country].type == "Suni" or app.map[country].type == "Shia-Mix":
-                            numMuslimCellCountries += 1
-                return numMuslimCellCountries > 0
+                target_cells = app.get_country("Israel").totalCells()
+                target_cells += app.get_country("Jordan").totalCells()
+                target_cells += app.get_country("Lebanon").totalCells()
+                return target_cells > 0
+            elif self.number in [23, 24, 25]:  # Predator
+                return app.contains_country(lambda c: c.totalCells(True) > 0 and c.is_muslim())
             elif self.number == 26:  # Quartet
-                if not "Abbas" in app.markers:
+                if "Abbas" not in app.markers:
                     return False
                 if app.troops <= 4:
                     return False
-                for country in app.map:
-                    if app.isAdjacent(country, "Israel"):
-                        if app.map[country].is_islamist_rule():
-                            return False
-                return True
+                return not app.contains_country(lambda c: app.is_adjacent(c.name, "Israel") and c.is_islamist_rule())
             elif self.number == 27:  # Saddam Captured
-                return app.map["Iraq"].troops() > 0
+                return app.get_country("Iraq").troops() > 0
             elif self.number == 28:  # Sharia
-                return app.numBesieged() > 0
+                return app.num_besieged() > 0
             elif self.number == 29:  # Tony Blair
                 return True
             elif self.number == 30:  # UN Nation Building
-                numRC = app.numRegimeChange()
-                return (numRC > 0) and ("Vieira de Mello Slain" not in app.markers)
+                return app.num_regime_change() > 0 and "Vieira de Mello Slain" not in app.markers
             elif self.number == 31:  # Wiretapping
                 if "Leak-Wiretapping" in app.markers:
                     return False
-                for country in ["United States", "United Kingdom", "Canada"]:
-                    if app.map[country].totalCells() > 0 or app.map[country].cadre > 0 or app.map[country].plots > 0:
+                for country_name in ["United States", "United Kingdom", "Canada"]:
+                    country = app.get_country(country_name)
+                    if country.totalCells() > 0 or country.cadre > 0 or country.plots > 0:
                         return True
                 return False
             elif self.number == 32:  # Back Channel
-                if app.map["United States"].posture == "Hard":
+                if app.us_posture() == "Hard":
                     return False
-                numAdv = app.numAdversary()
-                if numAdv <= 0:
+                if app.num_adversary() <= 0:
                     return False
                 app.listAdversaryCountries()
-                return app.getYesNoFromUser("Do you have a card with a value that exactly matches an Adversary's Resources? (y/n): ")
+                return app.get_yes_no_from_user(
+                    "Do you have a card with a value that exactly matches an Adversary's Resources? (y/n): ")
             elif self.number == 33:  # Benazir Bhutto
                 if "Bhutto Shot" in app.markers:
                     return False
-                if app.map["Pakistan"].is_islamist_rule():
+                if app.get_country("Pakistan").is_islamist_rule():
                     return False
-                for countryObj in app.map["Pakistan"].links:
-                    if countryObj.is_islamist_rule():
+                for country in app.get_country("Pakistan").links:
+                    if country.is_islamist_rule():
                         return False
                 return True
             elif self.number == 34:  # Enhanced Measures
-                if "Leak-Enhanced Measures" in app.markers or app.map["United States"].posture == "Soft":
+                if "Leak-Enhanced Measures" in app.markers or app.us_posture() == "Soft":
                     return False
                 return app.num_disruptable() > 0
             elif self.number == 35:  # Hajib
-                return app.numIslamistRule() == 0
+                return app.num_islamist_rule() == 0
             elif self.number == 36:  # Indo-Pakistani Talks
-                if app.map['Pakistan'].is_good() or app.map['Pakistan'].is_fair():
-                    return True
-                return False
+                pakistan = app.get_country('Pakistan')
+                return pakistan.is_good() or pakistan.is_fair()
             elif self.number == 37:  # Iraqi WMD
-                if app.map["United States"].posture == "Hard" and app.map["Iraq"].is_adversary():
-                    return True
-                return False
+                return app.us_posture() == "Hard" and app.get_country("Iraq").is_adversary()
             elif self.number == 38:  # Libyan Deal
-                if app.map["Libya"].is_poor():
-                    if app.map["Iraq"].is_ally() or app.map["Syria"].is_ally():
+                if app.get_country("Libya").is_poor():
+                    if app.get_country("Iraq").is_ally() or app.get_country("Syria").is_ally():
                         return True
                 return False
             elif self.number == 39:  # Libyan WMD
-                if app.map["United States"].posture == "Hard" and app.map["Libya"].is_adversary() and "Libyan Deal" not in app.markers:
+                if app.us_posture() == "Hard" and app.get_country("Libya").is_adversary() and "Libyan Deal" not in app.markers:
                     return True
                 return False
             elif self.number == 40:  # Mass Turnout
-                return app.numRegimeChange() > 0
+                return app.num_regime_change() > 0
             elif self.number == 41:  # NATO
-                return (app.numRegimeChange() > 0) and (app.gwotPenalty() >= 0)
+                return (app.num_regime_change() > 0) and (app.gwot_penalty() >= 0)
             elif self.number == 42:  # Pakistani Offensive
-                return (app.map["Pakistan"].is_ally()) and ("FATA" in app.map["Pakistan"].markers)
+                return (app.get_country("Pakistan").is_ally()) and ("FATA" in app.get_country("Pakistan").markers)
             elif self.number == 43:  # Patriot Act
                 return True
             elif self.number == 44:  # Renditions
-                return (app.map["United States"].posture == "Hard") and ("Leak-Renditions" not in app.markers)
+                return app.us_posture() == "Hard" and "Leak-Renditions" not in app.markers
             elif self.number == 45:  # Safer Now
-                if app.numIslamistRule() > 0:
+                if app.num_islamist_rule() > 0:
                     return False
-                for country in app.map:
-                    if app.map[country].is_good():
-                        if app.map[country].totalCells(True) > 0 or app.map[country].plots > 0:
-                            return False
+                for country in app.get_countries():
+                    if country.is_good() and (country.totalCells(True) > 0 or country.plots > 0):
+                        return False
                 return True
             elif self.number == 46:  # Sistani
-                targetCountries = 0
-                for country in app.map:
-                    if app.map[country].type == "Shia-Mix":
-                        if app.map[country].regimeChange > 0:
-                            if (app.map[country].totalCells(True)) > 0:
-                                targetCountries += 1
-                return targetCountries > 0
+                for country in app.get_countries():
+                    if country.type == "Shia-Mix" and country.regimeChange > 0 and country.totalCells(True) > 0:
+                        return True
+                return False
             elif self.number == 47:  # The door of Itjihad was closed
                 return True
             else:
@@ -189,32 +161,25 @@ class Card(object):
             if "The door of Itjihad was closed" in app.lapsing and not ignore_itjihad:
                 return False
             if self.number == 48:  # Adam Gadahn
-                if app.numCellsAvailable() <= 0:
+                if app.num_cells_available() <= 0:
                     return False
-                return app.getYesNoFromUser("Is this the 1st card of the Jihadist Action Phase? (y/n): ")
+                return app.get_yes_no_from_user("Is this the 1st card of the Jihadist Action Phase? (y/n): ")
             elif self.number == 49:  # Al-Ittihad al-Islami
                 return True
             elif self.number == 50:  # Ansar al-Islam
-                return app.map["Iraq"].governance_is_worse_than(GOOD)
+                return app.get_country("Iraq").governance_is_worse_than(GOOD)
             elif self.number == 51:  # FREs
-                return app.map["Iraq"].troops() > 0
+                return app.get_country("Iraq").troops() > 0
             elif self.number == 52:  # IDEs
-                for country in app.map:
-                    if app.map[country].regimeChange > 0:
-                        if (app.map[country].totalCells(True)) > 0:
-                            return True
-                return False
+                return app.contains_country(lambda c: c.regimeChange > 0 and c.totalCells(True) > 0)
             elif self.number == 53:  # Madrassas
-                return app.getYesNoFromUser("Is this the 1st card of the Jihadist Action Phase? (y/n): ")
+                return app.get_yes_no_from_user("Is this the 1st card of the Jihadist Action Phase? (y/n): ")
             elif self.number == 54:  # Moqtada al-Sadr
-                return app.map["Iraq"].troops() > 0
+                return app.get_country("Iraq").troops() > 0
             elif self.number == 55:  # Uyghur Jihad
                 return True
             elif self.number == 56:  # Vieira de Mello Slain
-                for country in app.map:
-                    if app.map[country].regimeChange > 0 and app.map[country].totalCells() > 0:
-                        return True
-                return False
+                return app.contains_country(lambda c: c.regimeChange > 0 and c.totalCells() > 0)
             elif self.number == 57:  # Abu Sayyaf
                 return "Moro Talks" not in app.markers
             elif self.number == 58:  # Al-Anbar
@@ -222,11 +187,11 @@ class Card(object):
             elif self.number == 59:  # Amerithrax
                 return True
             elif self.number == 60:  # Bhutto Shot
-                return app.map["Pakistan"].totalCells() > 0
+                return app.get_country("Pakistan").totalCells() > 0
             elif self.number == 61:  # Detainee Release
                 if "GTMO" in app.lapsing or "Renditions" in app.markers:
                     return False
-                return app.getYesNoFromUser("Did the US Disrupt during this or the last Action Phase? (y/n): ")
+                return app.get_yes_no_from_user("Did the US Disrupt during this or the last Action Phase? (y/n): ")
             elif self.number == 62:  # Ex-KGB
                 return True
             elif self.number == 63:  # Gaza War
@@ -235,9 +200,9 @@ class Card(object):
                 return True
             elif self.number == 65:  # HEU
                 possibles = 0
-                if app.map["Russia"].totalCells() > 0 and "CTR" not in app.map["Russia"].markers:
+                if app.get_country("Russia").totalCells() > 0 and "CTR" not in app.get_country("Russia").markers:
                     possibles += 1
-                if app.map["Central Asia"].totalCells() > 0 and "CTR" not in app.map["Central Asia"].markers:
+                if app.get_country("Central Asia").totalCells() > 0 and "CTR" not in app.get_country("Central Asia").markers:
                     possibles += 1
                 return possibles > 0
             elif self.number == 66:  # Homegrown
@@ -247,34 +212,25 @@ class Card(object):
             elif self.number == 68:  # Jemaah Islamiya
                 return True
             elif self.number == 69:  # Kazakh Strain
-                return app.map["Central Asia"].totalCells() > 0 and "CTR" not in app.map["Central Asia"].markers
+                return app.get_country("Central Asia").totalCells() > 0 and "CTR" not in app.get_country("Central Asia").markers
             elif self.number == 70:  # Lashkar-e-Tayyiba
                 return "Indo-Pakistani Talks" not in app.markers
             elif self.number == 71:  # Loose Nuke
-                return app.map["Russia"].totalCells() > 0 and "CTR" not in app.map["Russia"].markers
+                return app.get_country("Russia").totalCells() > 0 and "CTR" not in app.get_country("Russia").markers
             elif self.number == 72:  # Opium
-                return app.map["Afghanistan"].totalCells() > 0
+                return app.get_country("Afghanistan").totalCells() > 0
             elif self.number == 73:  # Pirates
-                return app.map["Somalia"].is_islamist_rule() or app.map["Yemen"].is_islamist_rule()
+                return app.get_country("Somalia").is_islamist_rule() or app.get_country("Yemen").is_islamist_rule()
             elif self.number == 74:  # Schengen Visas
                 return True
             elif self.number == 75:  # Schroeder & Chirac
-                return app.map["United States"].posture == "Hard"
+                return app.us_posture() == "Hard"
             elif self.number == 76:  # Abu Ghurayb
-                targetCountries = 0
-                for country in app.map:
-                    if app.map[country].regimeChange > 0:
-                        if (app.map[country].totalCells(True)) > 0:
-                            targetCountries += 1
-                return targetCountries > 0
+                return app.contains_country(lambda c: c.regimeChange > 0 and c.totalCells(True) > 0)
             elif self.number == 77:  # Al Jazeera
-                if app.map["Saudi Arabia"].troops() > 0:
+                if app.get_country("Saudi Arabia").troops() > 0:
                     return True
-                for country in app.map:
-                    if app.isAdjacent("Saudi Arabia", country):
-                        if app.map[country].troops() > 0:
-                            return True
-                return False
+                return app.contains_country(lambda c: app.is_adjacent("Saudi Arabia", c.name) and c.troops() > 0)
             elif self.number == 78:  # Axis of Evil
                 return True
             elif self.number == 79:  # Clean Operatives
@@ -282,44 +238,31 @@ class Card(object):
             elif self.number == 80:  # FATA
                 return True
             elif self.number == 81:  # Foreign Fighters
-                return app.numRegimeChange() > 0
+                return app.num_regime_change() > 0
             elif self.number == 82:  # Jihadist Videos
                 return True
             elif self.number == 83:  # Kashmir
                 return "Indo-Pakistani Talks" not in app.markers
-            elif self.number == 84 or self.number == 85:  # Leak
+            elif self.number in [84, 85]:  # Leak
                 return ("Enhanced Measures" in app.markers) or ("Renditions" in app.markers) or ("Wiretapping" in app.markers)
             elif self.number == 86:  # Lebanon War
                 return True
-            elif self.number == 87 or self.number == 88 or self.number == 89:  # Martyrdom Operation
-                for country in app.map:
-                    if not app.map[country].is_islamist_rule():
-                        if app.map[country].totalCells(True) > 0:
-                            return True
-                return False
+            elif self.number in [87, 88, 89]:  # Martyrdom Operation
+                return app.contains_country(lambda c: not c.is_islamist_rule() and c.totalCells(True) > 0)
             elif self.number == 90:  # Quagmire
-                if app.prestige >= 7:
-                    return False
-                for country in app.map:
-                    if app.map[country].regimeChange > 0:
-                        if app.map[country].totalCells(True) > 0:
-                            return True
-                return False
+                valid_target = app.contains_country(lambda c: c.regimeChange > 0 and c.totalCells(True) > 0)
+                return valid_target and app.prestige < 7
             elif self.number == 91:  # Regional al-Qaeda
-                num = 0
-                for country in app.map:
-                    if app.map[country].type == "Suni" or app.map[country].type == "Shia-Mix":
-                        if app.map[country].is_ungoverned():
-                            num += 1
-                return num >= 2
+                targets = app.find_countries(lambda c: c.is_muslim() and c.is_ungoverned())
+                return len(targets) >= 2
             elif self.number == 92:  # Saddam
-                if "Saddam Captured" in app.markers:
-                    return False
-                return (app.map["Iraq"].is_poor()) and (app.map["Iraq"].is_adversary())
+                iraq = app.get_country("Iraq")
+                return "Saddam Captured" not in app.markers and iraq.is_poor() and iraq.is_adversary()
             elif self.number == 93:  # Taliban
                 return True
             elif self.number == 94:  # The door of Itjihad was closed
-                return app.getYesNoFromUser("Was a country tested or improved to Fair or Good this or last Action Phase.? (y/n): ")
+                return app.get_yes_no_from_user(
+                    "Was a country tested or improved to Fair or Good this or last Action Phase.? (y/n): ")
             elif self.number == 95:  # Wahhabism
                 return True
         else:  # Unassociated Events
@@ -328,7 +271,7 @@ class Card(object):
             if self.number == 96:  # Danish Cartoons
                 return True
             elif self.number == 97:  # Fatwa
-                return app.getYesNoFromUser("Do both sides have cards remaining beyond this one? (y/n): ")
+                return app.get_yes_no_from_user("Do both sides have cards remaining beyond this one? (y/n): ")
             elif self.number == 98:  # Gaza Withdrawl
                 return True
             elif self.number == 99:  # HAMAS Elected
@@ -344,41 +287,32 @@ class Card(object):
             elif self.number == 104 or self.number == 105:  # Iran
                 return True
             elif self.number == 106:  # Jaysh al-Mahdi
-                for country in app.map:
-                    if app.map[country].type == "Shia-Mix":
-                        if app.map[country].troops() > 0 and app.map[country].totalCells() > 0:
-                            return True
-                return False
+                return app.contains_country(lambda c: c.type == "Shia-Mix" and c.troops() > 0 and c.totalCells() > 0)
             elif self.number == 107:  # Kurdistan
                 return True
             elif self.number == 108:  # Musharraf
-                if "Benazir Bhutto" in app.markers:
-                    return False
-                return app.map["Pakistan"].totalCells() > 0
+                return "Benazir Bhutto" not in app.markers and app.get_country("Pakistan").totalCells() > 0
             elif self.number == 109:  # Tora Bora
-                for country in app.map:
-                    if app.map[country].regimeChange > 0:
-                        if app.map[country].totalCells() >= 2:
-                            return True
-                return False
+                return app.contains_country(lambda c: c.regimeChange > 0 and c.totalCells() >= 2)
             elif self.number == 110:  # Zarqawi
-                return app.map["Iraq"].troops() > 0 or app.map["Syria"].troops() > 0 or app.map["Lebanon"].troops() > 0 or app.map["Jordan"].troops() > 0
+                return app.get_country("Iraq").troops() > 0 or app.get_country("Syria").troops() > 0 or \
+                    app.get_country("Lebanon").troops() > 0 or app.get_country("Jordan").troops() > 0
             elif self.number == 111:  # Zawahiri
                 if side == "US":
-                    if "FATA" in app.map["Pakistan"].markers:
+                    if "FATA" in app.get_country("Pakistan").markers:
                         return False
                     if "Al-Anbar" in app.markers:
                         return False
-                    return app.numIslamistRule() == 0
+                    return app.num_islamist_rule() == 0
                 else:
                     return True
             elif self.number == 112:  # Bin Ladin
                 if side == "US":
-                    if "FATA" in app.map["Pakistan"].markers:
+                    if "FATA" in app.get_country("Pakistan").markers:
                         return False
                     if "Al-Anbar" in app.markers:
                         return False
-                    return app.numIslamistRule() == 0
+                    return app.num_islamist_rule() == 0
                 else:
                     return True
             elif self.number == 113:  # Darfur
@@ -387,26 +321,22 @@ class Card(object):
                 return True
             elif self.number == 115:  # Hambali
                 possibles = ["Indonesia/Malaysia"]
-                for countryObj in app.map["Indonesia/Malaysia"].links:
-                    possibles.append(countryObj.name)
+                for country in app.get_country("Indonesia/Malaysia").links:
+                    possibles.append(country.name)
                 for country in possibles:
-                    if app.map[country].totalCells(True) > 0:
-                        if app.map[country].type == "Non-Muslim":
-                            if app.map[country].posture == "Hard":
+                    if app.get_country(country).totalCells(True) > 0:
+                        if app.get_country(country).type == "Non-Muslim":
+                            if app.get_country(country).posture == "Hard":
                                 return True
                         else:
-                            if app.map[country].is_ally():
+                            if app.get_country(country).is_ally():
                                 return True
             elif self.number == 116:  # KSM
                 if side == "US":
-                    for country in app.map:
-                        if app.map[country].plots > 0:
-                            if app.map[country].type == "Non-Muslim" or app.map[country].is_ally():
-                                return True
-                    return False
+                    return app.contains_country(lambda c: c.plots > 0 and (c.type == "Non-Muslim" or c.is_ally()))
                 else:
                     return True
-            elif self.number == 117 or self.number == 118:  # Oil Price Spike
+            elif self.number in [117, 118]:  # Oil Price Spike
                 return True
             elif self.number == 119:  # Saleh
                 return True
@@ -554,46 +484,47 @@ class Card(object):
         return False
 
     def playEvent(self, side, app):
-        app.outputToHistory("Card played for Event.", True)
+        app.output_to_history("Card played for Event.", True)
         if self.type == "US" and side == "Jihadist":
             return False
         elif self.type == "Jihadist" and side == "US":
             return False
         elif self.type == "US" and side == "US":
             if self.number == 1:  # Backlash
-                for country in app.map:
-                    if (app.map[country].type != "Non-Muslim") and (app.map[country].plots > 0):
-                        app.outputToHistory("Plot in Muslim country found. Select the plot during plot phase. Backlash in play", True)  #20150131PS
+                for country in app.get_countries():
+                    if country.type != "Non-Muslim" and country.plots > 0:
+                        app.output_to_history("Plot in Muslim country found. Select the plot during plot phase. Backlash in play")
                         app.backlashInPlay = True
                         return True
                 return False
             elif self.number == 2:  # Biometrics
                 app.lapsing.append("Biometrics")
-                app.outputToHistory("Biometrics in play. This turn, travel to adjacent Good countries must roll to succeed and no non-adjacent travel.", True)
+                app.output_to_history("Biometrics in play. This turn, travel to adjacent Good countries must roll to"
+                                      " succeed and no non-adjacent travel.", True)
             elif self.number == 3:  # CTR    20150616PS
-                app.map["Russia"].markers.append("CTR")    # 20150616PS
-                app.outputToHistory("CTR Marker added Russia", True)    # 20150616PS
-                if (app.map["Central Asia"].is_ally()) or (app.map["Central Asia"].is_neutral()):
-                    app.map["Central Asia"].markers.append("CTR")    # 20150616PS
-                    app.outputToHistory("CTR Marker added in Central Asia", True)    # 20150616PS
+                app.get_country("Russia").markers.append("CTR")    # 20150616PS
+                app.output_to_history("CTR Marker added Russia", True)    # 20150616PS
+                if (app.get_country("Central Asia").is_ally()) or (app.get_country("Central Asia").is_neutral()):
+                    app.get_country("Central Asia").markers.append("CTR")    # 20150616PS
+                    app.output_to_history("CTR Marker added in Central Asia", True)    # 20150616PS
             elif self.number == 4:  # Moro Talks
                 app.markers.append("Moro Talks")
-                app.outputToHistory("Moro Talks in play.", False)
+                app.output_to_history("Moro Talks in play.", False)
                 app.testCountry("Philippines")
-                app.changeFunding(-1)
+                app.change_funding(-1)
             elif self.number == 5:  # NEST
                 app.markers.append("NEST")
-                app.outputToHistory("NEST in play. If jihadists have WMD, all plots in the US placed face up.", True)
-            elif self.number == 6 or self.number == 7:  # Sanctions
+                app.output_to_history("NEST in play. If jihadists have WMD, all plots in the US placed face up.", True)
+            elif self.number in [6, 7]:  # Sanctions
                 if "Patriot Act" in app.markers:
-                    app.changeFunding(-2)
+                    app.change_funding(-2)
                 else:
                     return False
             elif self.number == 8 or self.number == 9 or self.number == 10:  # Special Forces
                 while True:
-                    country_name = app.getCountryFromUser("Remove a cell from which country that has troops or is adjacent" +
+                    country_name = app.get_country_from_user("Remove a cell from which country that has troops or is adjacent" +
                                                    " to a country with troops (? for list)?: ",  "XXX",
-                                                   app.listCountriesWithCellAndAdjacentTroops)
+                                                             app.listCountriesWithCellAndAdjacentTroops)
                     if country_name == "":
                         print ""
                         return
@@ -604,55 +535,51 @@ class Card(object):
                         else:
                             foundTroops = False
                             for country in app.map:
-                                if country == country_name or app.isAdjacent(country_name, country):
-                                    if app.map[country].troops() > 0:
+                                if country == country_name or app.is_adjacent(country_name, country):
+                                    if app.get_country(country).troops() > 0:
                                         foundTroops = True
                                         break
                             if not foundTroops:
                                 print "Neither this or any adjacent country have troops."
                                 print ""
                             else:
-                                app.removeCell(country_name, side)    # 20150131PS added side
-                                app.outputToHistory(app.map[country_name].countryStr(), True)
+                                app.remove_cell(country_name, side)    # 20150131PS added side
+                                app.output_to_history(app.map[country_name].countryStr(), True)
                                 break
             elif self.number == 11:  # Abbas
-                numIRIsrael = 0
-                for country in app.map:
-                    if app.isAdjacent(country, "Israel"):
-                        if app.map[country].is_islamist_rule():
-                            numIRIsrael = 1
-                            break
+                islamist_rule_adjacent_to_israel =\
+                    app.contains_country(lambda c: app.is_adjacent(c.name, "Israel") and c.is_islamist_rule())
                 app.markers.append("Abbas")
-                app.outputToHistory("Abbas in play.", False)
-                if app.troops >= 5 and numIRIsrael <= 0:
-                    app.changePrestige(1, False)
-                    app.changeFunding(-2, True)
+                app.output_to_history("Abbas in play.", False)
+                if app.troops >= 5 and not islamist_rule_adjacent_to_israel:
+                    app.change_prestige(1, False)
+                    app.change_funding(-2, True)
             elif self.number == 12:  # Al-Azhar
                 app.testCountry("Egypt")
-                numIR = app.numIslamistRule()
+                numIR = app.num_islamist_rule()
                 if numIR <= 0:
-                    app.changeFunding(-4, True)
+                    app.change_funding(-4, True)
                 else:
-                    app.changeFunding(-2, True)
+                    app.change_funding(-2, True)
             elif self.number == 13:  # Anbar Awakening
-                if (app.map["Iraq"].troops() > 0) or (app.map["Syria"].troops() > 0):
+                if (app.get_country("Iraq").troops() > 0) or (app.get_country("Syria").troops() > 0):
                     app.markers.append("Anbar Awakening")
-                    app.outputToHistory("Anbar Awakening in play.", False)
-                    if app.map["Iraq"].troops() == 0:
-                        app.map["Syria"].aid += 1 #20150131PS changed to add rather than set to 1
-                        app.outputToHistory("Aid in Syria.", False)
-                    elif app.map["Syria"].troops() == 0:
-                        app.map["Iraq"].aid += 1    #20150131PS changed to add rather than set to 1
-                        app.outputToHistory("Aid in Iraq.", False)
+                    app.output_to_history("Anbar Awakening in play.", False)
+                    if app.get_country("Iraq").troops() == 0:
+                        app.get_country("Syria").aid += 1 #20150131PS changed to add rather than set to 1
+                        app.output_to_history("Aid in Syria.", False)
+                    elif app.get_country("Syria").troops() == 0:
+                        app.get_country("Iraq").aid += 1    #20150131PS changed to add rather than set to 1
+                        app.output_to_history("Aid in Iraq.", False)
                     else:
                         print "There are troops in both Iraq and Syria."
-                        if app.getYesNoFromUser("Do you want to add the Aid to Iraq? (y/n): "):
-                            app.map["Iraq"].aid += 1
-                            app.outputToHistory("Aid in Iraq.", False)
+                        if app.get_yes_no_from_user("Do you want to add the Aid to Iraq? (y/n): "):
+                            app.get_country("Iraq").aid += 1
+                            app.output_to_history("Aid in Iraq.", False)
                         else:
-                            app.map["Syria"].aid += 1
-                            app.outputToHistory("Aid in Syria.", False)
-                    app.changePrestige(1, False)
+                            app.get_country("Syria").aid += 1
+                            app.output_to_history("Aid in Syria.", False)
+                    app.change_prestige(1, False)
                     print ""
                 else:
                     return False
@@ -665,7 +592,7 @@ class Card(object):
                     target_country = adversary_names[0]
                 else:
                     while not target_country:
-                        country_name = app.getCountryFromUser(
+                        country_name = app.get_country_from_user(
                             "Choose an Adversary country to attempt Covert Action (? for list): ", "XXX",
                             app.listAdversaryCountries)
                         if country_name == "":
@@ -676,201 +603,205 @@ class Card(object):
                         else:
                             print "%s is not an Adversary." % country_name
                             print ""
-                action_roll = app.getRollFromUser("Enter Covert Action roll or r to have program roll: ")
+                action_roll = app.get_roll_from_user("Enter Covert Action roll or r to have program roll: ")
                 if action_roll >= 4:
                     app.map[target_country].make_neutral()
-                    app.outputToHistory("Covert Action successful, %s now Neutral." % target_country, False)
-                    app.outputToHistory(app.map[target_country].countryStr(), True)
+                    app.output_to_history("Covert Action successful, %s now Neutral." % target_country, False)
+                    app.output_to_history(app.map[target_country].countryStr(), True)
                 else:
-                    app.outputToHistory("Covert Action fails.", True)
+                    app.output_to_history("Covert Action fails.", True)
             elif self.number == 15:  # Ethiopia Strikes
-                if (app.map["Somalia"].is_islamist_rule()) or (app.map["Sudan"].is_islamist_rule()):
-                    if not app.map["Somalia"].is_islamist_rule():
-                        app.map["Sudan"].make_poor()
-                        app.map["Sudan"].make_neutral()
-                        app.outputToHistory("Sudan now Poor Neutral.", False)
-                        app.outputToHistory(app.map["Sudan"].countryStr(), True)
-                    elif not app.map["Sudan"].is_islamist_rule():
-                        app.map["Somalia"].make_poor()
-                        app.map["Somalia"].make_neutral()
-                        app.outputToHistory("Somalia now Poor Neutral.", False)
-                        app.outputToHistory(app.map["Somalia"].countryStr(), True)
+                if (app.get_country("Somalia").is_islamist_rule()) or (app.get_country("Sudan").is_islamist_rule()):
+                    if not app.get_country("Somalia").is_islamist_rule():
+                        app.get_country("Sudan").make_poor()
+                        app.get_country("Sudan").make_neutral()
+                        app.output_to_history("Sudan now Poor Neutral.", False)
+                        app.output_to_history(app.get_country("Sudan").countryStr(), True)
+                    elif not app.get_country("Sudan").is_islamist_rule():
+                        app.get_country("Somalia").make_poor()
+                        app.get_country("Somalia").make_neutral()
+                        app.output_to_history("Somalia now Poor Neutral.", False)
+                        app.output_to_history(app.get_country("Somalia").countryStr(), True)
                     else:
                         print "Both Somalia and Sudan are under Islamist Rule."
-                        if app.getYesNoFromUser("Do you want Somalia to be set to Poor Neutral? (y/n): "):
-                            app.map["Somalia"].make_poor()
-                            app.map["Somalia"].make_neutral()
-                            app.outputToHistory("Somalia now Poor Neutral.", False)
-                            app.outputToHistory(app.map["Somalia"].countryStr(), True)
+                        if app.get_yes_no_from_user("Do you want Somalia to be set to Poor Neutral? (y/n): "):
+                            app.get_country("Somalia").make_poor()
+                            app.get_country("Somalia").make_neutral()
+                            app.output_to_history("Somalia now Poor Neutral.", False)
+                            app.output_to_history(app.get_country("Somalia").countryStr(), True)
                         else:
-                            app.map["Sudan"].make_poor()
-                            app.map["Sudan"].make_neutral()
-                            app.outputToHistory("Sudan now Poor Neutral.", False)
-                            app.outputToHistory(app.map["Sudan"].countryStr(), True)
+                            app.get_country("Sudan").make_poor()
+                            app.get_country("Sudan").make_neutral()
+                            app.output_to_history("Sudan now Poor Neutral.", False)
+                            app.output_to_history(app.get_country("Sudan").countryStr(), True)
                     print ""
                 else:
                     return False
             elif self.number == 16:  # Euro-Islam
-                posture = app.getPostureFromUser("Select Benelux's Posture (hard or soft): ")
+                posture = app.get_posture_from_user("Select Benelux's Posture (hard or soft): ")
                 app.executeCardEuroIslam(posture)
             elif self.number == 17:  # FSB
-                app.outputToHistory("Examine Jihadist hand for Loose Nukes, HEU, or Kazakh Strain.", False)
-                hasThem = app.getYesNoFromUser("Does the Jihadist hand have Loose Nukes, HEU, or Kazakh Strain? (y/n): ")
+                app.output_to_history("Examine Jihadist hand for Loose Nukes, HEU, or Kazakh Strain.", False)
+                hasThem = app.get_yes_no_from_user("Does the Jihadist hand have Loose Nukes, HEU, or Kazakh Strain? (y/n): ")
                 if hasThem:
-                    app.outputToHistory("Discard Loose Nukes, HEU, or Kazakh Strain from the Jihadist hand.", False)
+                    app.output_to_history("Discard Loose Nukes, HEU, or Kazakh Strain from the Jihadist hand.", False)
                 else:
-                    russiaCells = app.map["Russia"].totalCells(True)
-                    cenAsiaCells = app.map["Central Asia"].totalCells(True)
+                    russiaCells = app.get_country("Russia").totalCells(True)
+                    cenAsiaCells = app.get_country("Central Asia").totalCells(True)
                     if russiaCells > 0 or cenAsiaCells > 0:
                         if russiaCells == 0:
-                            app.removeCell("Central Asia", side)    # 20150131PS added side
-                            app.outputToHistory(app.map["Central Asia"].countryStr(), True)
+                            app.remove_cell("Central Asia", side)    # 20150131PS added side
+                            app.output_to_history(app.get_country("Central Asia").countryStr(), True)
                         elif cenAsiaCells == 0:
-                            app.removeCell("Russia", side)    # 20150131PS added side
-                            app.outputToHistory(app.map["Russia"].countryStr(), True)
+                            app.remove_cell("Russia", side)    # 20150131PS added side
+                            app.output_to_history(app.get_country("Russia").countryStr(), True)
                         else:
-                            isRussia = app.getYesNoFromUser("There are cells in both Russia and Central Asia. Do you want to remove a cell in Russia? (y/n): ")
+                            isRussia = app.get_yes_no_from_user("There are cells in both Russia and Central Asia. Do you want to remove a cell in Russia? (y/n): ")
                             if isRussia:
-                                app.removeCell("Russia", side)    # 20150131PS added side
-                                app.outputToHistory(app.map["Russia"].countryStr(), True)
+                                app.remove_cell("Russia", side)    # 20150131PS added side
+                                app.output_to_history(app.get_country("Russia").countryStr(), True)
                             else:
-                                app.removeCell("Central Asia", side)    # 20150131PS added side
-                                app.outputToHistory(app.map["Central Asia"].countryStr(), False)
+                                app.remove_cell("Central Asia", side)    # 20150131PS added side
+                                app.output_to_history(app.get_country("Central Asia").countryStr(), False)
                     else:
-                        app.outputToHistory("There are no cells in Russia or Central Asia.", False)
-                app.outputToHistory("Shuffle Jihadist hand.", True)
+                        app.output_to_history("There are no cells in Russia or Central Asia.", False)
+                app.output_to_history("Shuffle Jihadist hand.", True)
             elif self.number == 18:  # Intel Community
-                app.outputToHistory("Examine Jihadist hand. Do not change order of cards.", False)
-                app.outputToHistory("Conduct a 1-value operation (Use commands: alert, deploy, disrupt, reassessment, regime, withdraw, or woi).", False)
-                app.outputToHistory("You may now interrupt this action phase to play another card (Use the u command).", True)
+                app.output_to_history("Examine Jihadist hand. Do not change order of cards.", False)
+                app.output_to_history("Conduct a 1-value operation (Use commands: alert, deploy, disrupt, reassessment, regime, withdraw, or woi).", False)
+                app.output_to_history("You may now interrupt this action phase to play another card (Use the u command).", True)
             elif self.number == 19:  # Kemalist Republic
-                app.outputToHistory("Turkey now a Fair Ally.", False)
-                app.map["Turkey"].make_fair()
-                app.map["Turkey"].make_ally()
-                app.outputToHistory(app.map["Turkey"].countryStr(), True)
+                app.output_to_history("Turkey now a Fair Ally.", False)
+                app.get_country("Turkey").make_fair()
+                app.get_country("Turkey").make_ally()
+                app.output_to_history(app.get_country("Turkey").countryStr(), True)
             elif self.number == 20:  # King Abdullah
-                app.outputToHistory("Jordan now a Fair Ally.", False)
-                app.map["Jordan"].make_fair()
-                app.map["Jordan"].make_ally()
-                app.outputToHistory(app.map["Jordan"].countryStr(), True)
-                app.changePrestige(1)
-                app.changeFunding(-1)
+                app.output_to_history("Jordan now a Fair Ally.", False)
+                app.get_country("Jordan").make_fair()
+                app.get_country("Jordan").make_ally()
+                app.output_to_history(app.get_country("Jordan").countryStr(), True)
+                app.change_prestige(1)
+                app.change_funding(-1)
             elif self.number == 21:  # Let's Roll
                 while True:
-                    plotCountry = app.getCountryFromUser("Draw a card.  Choose an Ally or Good country to remove a plot from (? for list): ", "XXX", app.listGoodAllyPlotCountries)
-                    if plotCountry == "":
+                    plot_country_name = app.get_country_from_user(
+                        "Draw a card. Choose an Ally or Good country to remove a plot from (? for list): ", "XXX",
+                        app.listGoodAllyPlotCountries)
+                    if plot_country_name == "":
                         print ""
                         return
                     else:
-                        if not app.map[plotCountry].is_good() and not app.map[plotCountry].is_ally():
-                            print "%s is neither Good nor an Ally." % plotCountry
+                        plot_country = app.get_country(plot_country_name)
+                        if not plot_country.is_good() and not plot_country.is_ally():
+                            print "%s is neither Good nor an Ally." % plot_country.name
                             print ""
-                        elif app.map[plotCountry].plots <= 0:
-                            print "%s has no plots." % plotCountry
+                        elif plot_country.plots <= 0:
+                            print "%s has no plots." % plot_country.name
                             print ""
                         else:
                             while True:
-                                postureCountry = app.getCountryFromUser(
+                                posture_country = app.get_country_from_user(
                                     "Now choose a non-US country to set its Posture: ", "XXX", None)
-                                if postureCountry == "":
+                                if posture_country == "":
                                     print ""
                                     return
                                 else:
-                                    if postureCountry == "United States":
+                                    if posture_country == "United States":
                                         print "Choose a non-US country."
                                         print ""
                                     else:
-                                        postureStr = app.getPostureFromUser(
-                                            "What Posture should %s have (h or s)? " % postureCountry)
-                                        app.executeCardLetsRoll(plotCountry, postureCountry, postureStr)
+                                        new_posture = app.get_posture_from_user(
+                                            "What Posture should %s have (h or s)? " % posture_country)
+                                        app.executeCardLetsRoll(plot_country_name, posture_country, new_posture)
                                         return
             elif self.number == 22:  # Mossad and Shin Bet
-                app.removeAllCellsFromCountry("Israel")
-                app.removeAllCellsFromCountry("Jordan")
-                app.removeAllCellsFromCountry("Lebanon")
-                app.outputToHistory("", False)
-            elif self.number == 23 or self.number == 24 or self.number == 25:  # Predator
+                app.remove_all_cells_from_country("Israel")
+                app.remove_all_cells_from_country("Jordan")
+                app.remove_all_cells_from_country("Lebanon")
+                app.output_to_history("", False)
+            elif self.number in [23, 24, 25]:  # Predator
                 while True:
-                    country_name = app.getCountryFromUser(
+                    country_name = app.get_country_from_user(
                         "Choose non-Iran Muslim Country to remove a cell from (? for list): ", "XXX",
                         app.listMuslimCountriesWithCells)
                     if country_name == "":
                         print ""
                         return
                     else:
-                        if app.map[country_name].totalCells(True) == 0:
+                        country = app.get_country(country_name)
+                        if country.totalCells(True) == 0:
                             print "%s has no cells." % country_name
                             print ""
-                        elif app.map[country_name].type == "Iran":
+                        elif country.type == "Iran":
                             print "Iran is not allowed."
                             print ""
-                        elif app.map[country_name].type == "Non-Muslim":
+                        elif country.type == "Non-Muslim":
                             print "Choose a Muslim country."
                             print ""
                         else:
-                            app.removeCell(country_name, side)    # 20150131PS added side
-                            app.outputToHistory(app.map[country_name].countryStr(), True)
+                            app.remove_cell(country.name, side)    # 20150131PS added side
+                            app.output_to_history(country.countryStr())
                             break
             elif self.number == 26:  # Quartet
-                if not "Abbas" in app.markers:
+                if "Abbas" not in app.markers:
                     return False
                 if app.troops <= 4:
                     return False
-                for country in app.map:
-                    if app.isAdjacent(country, "Israel"):
-                        if app.map[country].is_islamist_rule():
-                            return False
-                app.changePrestige(2)
-                app.changeFunding(-3)
-                app.outputToHistory("", False)
+                for country in app.get_countries():
+                    if app.is_adjacent(country.name, "Israel") and country.is_islamist_rule():
+                        return False
+                app.change_prestige(2)
+                app.change_funding(-3)
+                app.output_to_history("", False)
             elif self.number == 27:  # Saddam Captured
-                if app.map["Iraq"].troops() == 0:
+                if app.get_country("Iraq").troops() == 0:
                     return False
                 app.markers.append("Saddam Captured")
-                app.map["Iraq"].aid += 1
-                app.outputToHistory("Aid added in Iraq", False)
-                app.changePrestige(1)
-                app.outputToHistory(app.map["Iraq"].countryStr(), True)
+                app.get_country("Iraq").aid += 1
+                app.output_to_history("Aid added in Iraq", False)
+                app.change_prestige(1)
+                app.output_to_history(app.get_country("Iraq").countryStr(), True)
             elif self.number == 28:  # Sharia
-                numBesieged = app.numBesieged()
-                target = ""
-                if numBesieged <= 0:
+                num_besieged = app.num_besieged()
+                target_country = None
+                if num_besieged <= 0:
                     return False
-                elif numBesieged == 1:
-                    for country in app.map:
-                        if app.map[country].besieged > 0:
-                            target = country
-                            break
+                elif num_besieged == 1:
+                    target_country = app.find_countries(lambda c: c.besieged > 0)[0]
                 else:
                     while True:
-                        country_name = app.getCountryFromUser("Choose a country with a Besieged Regime marker to remove (? for list): ",  "XXX", app.listBesiegedCountries)
+                        country_name = app.get_country_from_user(
+                            "Choose a country with a Besieged Regime marker to remove (? for list): ", "XXX",
+                            app.listBesiegedCountries)
                         if country_name == "":
                             print ""
                             return
                         else:
-                            if app.map[country_name].besieged <= 0:
+                            target_country = app.get_country(country_name)
+                            if target_country.besieged <= 0:
                                 print "%s is not a Besieged Regime." % country_name
                                 print ""
                             else:
-                                target = country_name
                                 break
-                app.map[target].besieged = 0
-                app.outputToHistory("%s is no longer a Besieged Regime." % target, False)
-                app.outputToHistory(app.map[target].countryStr(), True)
+                target_country.besieged = 0
+                app.output_to_history("%s is no longer a Besieged Regime." % target_country.name, False)
+                app.output_to_history(target_country.countryStr())
             elif self.number == 29:  # Tony Blair
-                app.map["United Kingdom"].posture = app.map["United States"].posture
-                app.outputToHistory("United Kingdom posture now %s" % app.map["United Kingdom"].posture, False)
+                app.set_posture("United Kingdom", app.us_posture())
+                app.output_to_history("United Kingdom posture now %s" % app.get_posture("United Kingdom"), False)
                 print "You may roll War of Ideas in up to 3 Schengen countries."
                 for i in range(3):
-                    target = ""
-                    finishedPicking = False
-                    while not target:
-                        country_name = app.getCountryFromUser("Choose Schengen country to make a WOI roll (done to stop rolling) (? for list)?: ",  "done", app.listSchengenCountries)
+                    target_name = ""
+                    finished_picking = False
+                    while not target_name:
+                        country_name = app.get_country_from_user(
+                            "Choose Schengen country to make a WOI roll (done to stop rolling) (? for list)?: ", "done",
+                            app.listSchengenCountries)
                         if country_name == "":
                             print ""
                             return
                         elif country_name == "done":
-                            finishedPicking = True
+                            finished_picking = True
                             break
                         else:
                             if not app.map[country_name].schengen:
@@ -878,521 +809,517 @@ class Card(object):
                                 print ""
                                 return
                             else:
-                                target = country_name
-                                postureRoll = app.getRollFromUser("Enter Posture Roll or r to have program roll: ")
-                                app.executeNonMuslimWOI(target, postureRoll)
-                    if finishedPicking:
+                                target_name = country_name
+                                posture_roll = app.get_roll_from_user("Enter Posture Roll or r to have program roll: ")
+                                app.executeNonMuslimWOI(target_name, posture_roll)
+                    if finished_picking:
                         break
-                app.outputToHistory("", False)
+                app.output_to_history("", False)
             elif self.number == 30:  # UN Nation Building
-                numRC = app.numRegimeChange()
-                if (numRC <= 0) or ("Vieira de Mello Slain" in app.markers):
+                num_regime_change = app.num_regime_change()
+                if num_regime_change <= 0 or "Vieira de Mello Slain" in app.markers:
                     return False
-                target = ""
-                if numRC == 1:
-                    for country in app.map:
-                        if app.map[country].regimeChange > 0:
-                            target = country
+                target_country = None
+                if num_regime_change == 1:
+                    for country in app.get_countries():
+                        if country.regimeChange > 0:
+                            target_country = country
                             break
                 else:
                     while True:
-                        country_name = app.getCountryFromUser("Choose a Regime Change country (? for list): ",  "XXX", app.listRegimeChangeCountries)
+                        country_name = app.get_country_from_user(
+                            "Choose a Regime Change country (? for list): ", "XXX", app.listRegimeChangeCountries)
                         if country_name == "":
                             print ""
                             return
                         else:
-                            if app.map[country_name].regimeChange <= 0:
+                            target_country = app.get_country(country_name)
+                            if target_country.regimeChange <= 0:
                                 print "%s is not a Regime Change country." % country_name
                                 print ""
                             else:
-                                target = country_name
                                 break
-                app.map[target].aid += 1
-                app.outputToHistory("Aid added to %s." % target, False)
-                woiRoll = app.getRollFromUser("Enter WOI Roll or r to have program roll: ")
-                modRoll = app.modifiedWoIRoll(woiRoll, target, False)
-                app.handleMuslimWoI(modRoll, target)
+                target_country.aid += 1
+                app.output_to_history("Aid added to %s." % target_country.name, False)
+                woi_roll = app.get_roll_from_user("Enter WOI Roll or r to have program roll: ")
+                modified_woi_roll = app.modified_woi_roll(woi_roll, target_country.name, False)
+                app.handle_muslim_woi(modified_woi_roll, target_country.name)
             elif self.number == 31:  # Wiretapping
                 if "Leak-Wiretapping" in app.markers:
                     return False
                 for country in ["United States", "United Kingdom", "Canada"]:
-                    if app.map[country].activeCells > 0:
-                        num = app.map[country].activeCells
+                    if app.get_country(country).activeCells > 0:
+                        num = app.get_country(country).activeCells
                         if num > 0:
-                            app.map[country].activeCells -= num
+                            app.get_country(country).activeCells -= num
                             app.cells += num
-                            app.outputToHistory("%d Active Cell(s) removed from %s." % (num, country), False)
-                    if app.map[country].sleeperCells > 0:
-                        num = app.map[country].sleeperCells
+                            app.output_to_history("%d Active Cell(s) removed from %s." % (num, country), False)
+                    if app.get_country(country).sleeperCells > 0:
+                        num = app.get_country(country).sleeperCells
                         if num > 0:
-                            app.map[country].sleeperCells -= num
+                            app.get_country(country).sleeperCells -= num
                             app.cells += num
-                            app.outputToHistory("%d Sleeper Cell(s) removed from %s." % (num, country), False)
-                    if app.map[country].cadre > 0:
-                        num = app.map[country].cadre
+                            app.output_to_history("%d Sleeper Cell(s) removed from %s." % (num, country), False)
+                    if app.get_country(country).cadre > 0:
+                        num = app.get_country(country).cadre
                         if num > 0:
-                            app.map[country].cadre = 0
-                            app.outputToHistory("Cadre removed from %s." % country, False)
-                    if app.map[country].plots > 0:
-                        num = app.map[country].plots
+                            app.get_country(country).cadre = 0
+                            app.output_to_history("Cadre removed from %s." % country, False)
+                    if app.get_country(country).plots > 0:
+                        num = app.get_country(country).plots
                         if num > 0:
-                            app.map[country].plots -= num
-                            app.outputToHistory("%d Plots remove(d) from %s." % (num, country), False)
+                            app.get_country(country).plots -= num
+                            app.output_to_history("%d Plots remove(d) from %s." % (num, country), False)
                 app.markers.append("Wiretapping")
-                app.outputToHistory("Wiretapping in Play.", True)
+                app.output_to_history("Wiretapping in Play.", True)
             elif self.number == 32:  # Back Channel
-                if app.map["United States"].posture == "Hard":
+                if app.us_posture() == "Hard":
                     return False
-                num_adversaries = app.numAdversary()
+                num_adversaries = app.num_adversary()
                 if num_adversaries <= 0:
                     return False
-                if app.getYesNoFromUser("Do you want to discard a card with a value that exactly matches an Adversary's Resources? (y/n): "):
+                if app.get_yes_no_from_user("Do you want to discard a card with a value that exactly matches"
+                                            " an Adversary's Resources? (y/n): "):
                     while True:
-                        country_name = app.getCountryFromUser("Choose an Adversary country (? for list): ",  "XXX", app.listAdversaryCountries)
+                        country_name = app.get_country_from_user(
+                            "Choose an Adversary country (? for list): ", "XXX", app.listAdversaryCountries)
                         if country_name == "":
                             print ""
                             return False
                         else:
-                            if not app.map[country_name].is_adversary():
-                                print "%s is not a Adversary country." % country_name
+                            adversary = app.get_country(country_name)
+                            if not adversary.is_adversary():
+                                print "%s is not an Adversary country." % country_name
                                 print ""
                             else:
-                                app.map[country_name].make_neutral()
-                                app.outputToHistory("%s now Neutral" % country_name, False)
-                                app.map[country_name].aid += 1
-                                app.outputToHistory("Aid added to %s." % country_name, False)
-                                app.outputToHistory(app.map[country_name].countryStr(), True)
+                                adversary.make_neutral()
+                                app.output_to_history("%s now Neutral" % country_name, False)
+                                adversary.aid += 1
+                                app.output_to_history("Aid added to %s." % country_name, False)
+                                app.output_to_history(adversary.countryStr())
                                 break
             elif self.number == 33:  # Benazir Bhutto
                 app.markers.append("Benazir Bhutto")
-                app.outputToHistory("Benazir Bhutto in Play.", False)
-                if app.map["Pakistan"].is_poor():
-                    app.map["Pakistan"].make_fair()
-                    app.outputToHistory("Pakistan now Fair governance.", False)
-                app.outputToHistory("No Jihads in Pakistan.", False)
-                app.outputToHistory(app.map["Pakistan"].countryStr(), True)
+                app.output_to_history("Benazir Bhutto in Play.", False)
+                if app.get_country("Pakistan").is_poor():
+                    app.get_country("Pakistan").make_fair()
+                    app.output_to_history("Pakistan now Fair governance.", False)
+                app.output_to_history("No Jihads in Pakistan.", False)
+                app.output_to_history(app.get_country("Pakistan").countryStr(), True)
             elif self.number == 34:  # Enhanced Measures
                 app.markers.append("Enhanced Measures")
-                app.outputToHistory("Enhanced Measures in Play.", False)
-                app.outputToHistory("Take a random card from the Jihadist hand.", False)
+                app.output_to_history("Enhanced Measures in Play.", False)
+                app.output_to_history("Take a random card from the Jihadist hand.", False)
                 app.disrupt_cells_or_cadre()
-                app.outputToHistory("", False)
+                app.output_to_history("", False)
             elif self.number == 35:  # Hajib
                 app.testCountry("Turkey")
-                app.map["Turkey"].improve_governance()
-                app.outputToHistory("Turkey Governance now %s." % app.map["Turkey"].govStr(), False)
-                app.changeFunding(-2)
-                posture = app.getPostureFromUser("Select Frances's Posture (hard or soft): ")
-                app.map["France"].posture = posture
-                app.outputToHistory(app.map["Turkey"].countryStr(), False)
-                app.outputToHistory(app.map["France"].countryStr(), True)
+                app.get_country("Turkey").improve_governance()
+                app.output_to_history("Turkey Governance now %s." % app.get_country("Turkey").govStr(), False)
+                app.change_funding(-2)
+                posture = app.get_posture_from_user("Select Frances's Posture (hard or soft): ")
+                app.set_posture("France", posture)
+                app.output_to_history(app.get_country("Turkey").countryStr(), False)
+                app.output_to_history(app.get_country("France").countryStr(), True)
             elif self.number == 36:  # Indo-Pakistani Talks
                 app.markers.append("Indo-Pakistani Talks")
-                app.outputToHistory("Indo-Pakistani Talks in Play.", False)
-                app.map['Pakistan'].make_ally()
-                app.outputToHistory("Pakistan now Ally", False)
-                posture = app.getPostureFromUser("Select India's Posture (hard or soft): ")
-                app.map["India"].posture = posture
-                app.outputToHistory(app.map["Pakistan"].countryStr(), False)
-                app.outputToHistory(app.map["India"].countryStr(), True)
+                app.output_to_history("Indo-Pakistani Talks in Play.", False)
+                app.get_country('Pakistan').make_ally()
+                app.output_to_history("Pakistan now Ally", False)
+                posture = app.get_posture_from_user("Select India's Posture (hard or soft): ")
+                app.set_posture("India", posture)
+                app.output_to_history(app.get_country("Pakistan").countryStr(), False)
+                app.output_to_history(app.get_country("India").countryStr(), True)
             elif self.number == 37:  # Iraqi WMD
                 app.markers.append("Iraqi WMD")
-                app.outputToHistory("Iraqi WMD in Play.", False)
-                app.outputToHistory("Use this or a later card for Regime Change in Iraq at any Governance.", True)
+                app.output_to_history("Iraqi WMD in Play.", False)
+                app.output_to_history("Use this or a later card for Regime Change in Iraq at any Governance.", True)
             elif self.number == 38:  # Libyan Deal
                 app.markers.append("Libyan Deal")
-                app.outputToHistory("Libyan Deal in Play.", False)
-                app.map["Libya"].is_ally()
-                app.outputToHistory("Libya now Ally", False)
-                app.changePrestige(1)
+                app.output_to_history("Libyan Deal in Play.", False)
+                app.get_country("Libya").make_ally()
+                app.output_to_history("Libya now Ally", False)
+                app.change_prestige(1)
                 print "Select the Posture of 2 Schengen countries."
-                for i in range(2):
-                    target = ""
-                    while not target:
-                        country_name = app.getCountryFromUser("Choose Schengen country (? for list)?: ", "XXX", app.listSchengenCountries)
+                for _ in range(2):
+                    target_country = None
+                    while not target_country:
+                        country_name = app.get_country_from_user(
+                            "Choose Schengen country (? for list)?: ", "XXX", app.listSchengenCountries)
                         if country_name == "":
                             print ""
                         else:
-                            if not app.map[country_name].schengen:
+                            target_country = app.get_country(country_name)
+                            if not target_country.schengen:
                                 print "%s is not a Schengen country." % country_name
                                 print ""
                                 return
                             else:
-                                target = country_name
-                                posture = app.getPostureFromUser("Select %s's Posture (hard or soft): " % target)
-                                app.map[target].posture = posture
-                                app.outputToHistory(app.map[target].countryStr(), False)
-                app.outputToHistory("", False)
+                                posture = app.get_posture_from_user(
+                                    "Select %s's Posture (hard or soft): " % country_name)
+                                app.set_posture(country_name, posture)
+                                app.output_to_history(target_country.countryStr(), False)
+                app.output_to_history("", False)
             elif self.number == 39:  # Libyan WMD
                 app.markers.append("Libyan WMD")
-                app.outputToHistory("Libyan WMD in Play.", False)
-                app.outputToHistory("Use this or a later card for Regime Change in Libya at any Governance.", True)
+                app.output_to_history("Libyan WMD in Play.", False)
+                app.output_to_history("Use this or a later card for Regime Change in Libya at any Governance.", True)
             elif self.number == 40:  # Mass Turnout
-                numRC = app.numRegimeChange()
-                target = ""
-                if numRC <= 0:
+                target_country = None
+                num_regime_change = app.num_regime_change()
+                if num_regime_change <= 0:
                     return False
-                elif numRC == 1:
-                    for country in app.map:
-                        if app.map[country].regimeChange > 0:
-                            target = country
-                            break
+                elif num_regime_change == 1:
+                    target_country = app.find_countries(lambda c: c.regimeChange > 0)[0]
                 else:
                     while True:
-                        country_name = app.getCountryFromUser("Choose a Regime Change Country to improve governance (? for list): ",  "XXX", app.listRegimeChangeCountries)
+                        country_name = app.get_country_from_user(
+                            "Choose a Regime Change Country to improve governance (? for list): ", "XXX",
+                            app.listRegimeChangeCountries)
                         if country_name == "":
                             print ""
                             return
                         else:
-                            if app.map[country_name].regimeChange <= 0:
+                            target_country = app.get_country(country_name)
+                            if target_country.regimeChange <= 0:
                                 print "%s is not a Regime Change country." % country_name
                                 print ""
                             else:
-                                target = country_name
                                 break
-                app.improveGovernance(target)
-                app.outputToHistory("%s Governance improved." % target, False)
-                app.outputToHistory(app.map[target].countryStr(), True)
+                app.improve_governance(target_country.name)
+                app.output_to_history("%s Governance improved." % target_country.name, False)
+                app.output_to_history(target_country.countryStr())
             elif self.number == 41:  # NATO
-                numRC = app.numRegimeChange()
-                target = ""
-                if numRC <= 0:
+                target_country = None
+                num_regime_change = app.num_regime_change()
+                if num_regime_change <= 0:
                     return False
-                elif numRC == 1:
-                    for country in app.map:
-                        if app.map[country].regimeChange > 0:
-                            target = country
-                            break
+                elif num_regime_change == 1:
+                    target_country = app.find_countries(lambda c: c.regimeChange > 0)[0]
                 else:
                     while True:
-                        country_name = app.getCountryFromUser("Choose a Regime Change Country to land NATO troops (? for list): ",  "XXX", app.listRegimeChangeCountries)
+                        country_name = app.get_country_from_user(
+                            "Choose a Regime Change Country to land NATO troops (? for list): ", "XXX",
+                            app.listRegimeChangeCountries)
                         if country_name == "":
                             print ""
                             return
                         else:
-                            if app.map[country_name].regimeChange <= 0:
+                            target_country = app.get_country(country_name)
+                            if target_country.regimeChange <= 0:
                                 print "%s is not a Regime Change country." % country_name
                                 print ""
                             else:
-                                target = country_name
                                 break
-                app.map[target].markers.append("NATO")
-                app.outputToHistory("NATO added in %s" % target, False)
-                app.map[target].aid += 1
-                app.outputToHistory("Aid added in %s" % target, False)
-                app.outputToHistory(app.map[target].countryStr(), True)
+                target_country.markers.append("NATO")
+                app.output_to_history("NATO added in %s" % target_country.name, False)
+                target_country.aid += 1
+                app.output_to_history("Aid added in %s" % target_country.name, False)
+                app.output_to_history(target_country.countryStr())
             elif self.number == 42:  # Pakistani Offensive
-                if "FATA" in app.map["Pakistan"].markers:
-                    app.map["Pakistan"].markers.remove("FATA")
-                    app.outputToHistory("FATA removed from Pakistan", True)
+                if "FATA" in app.get_country("Pakistan").markers:
+                    app.get_country("Pakistan").markers.remove("FATA")
+                    app.output_to_history("FATA removed from Pakistan", True)
             elif self.number == 43:  # Patriot Act
                 app.markers.append("Patriot Act")
             elif self.number == 44:  # Renditions
                 app.markers.append("Renditions")
-                app.outputToHistory("Renditions in Play.", False)
-                app.outputToHistory("Discard a random card from the Jihadist hand.", False)
+                app.output_to_history("Renditions in Play.", False)
+                app.output_to_history("Discard a random card from the Jihadist hand.", False)
                 if app.num_disruptable() > 0:
                     app.disrupt_cells_or_cadre()
-                app.outputToHistory("", False)
+                app.output_to_history("", False)
             elif self.number == 45:  # Safer Now
-                app.changePrestige(3)
-                postureRoll = app.getRollFromUser("Enter US Posture Roll or r to have program roll: ")
-                if postureRoll <= 4:
-                    app.map["United States"].posture = "Soft"
-                    app.outputToHistory("US Posture now Soft.", False)
+                app.change_prestige(3)
+                posture_roll = app.get_roll_from_user("Enter US Posture Roll or r to have program roll: ")
+                if posture_roll <= 4:
+                    app.set_posture("United States", "Soft")
+                    app.output_to_history("US Posture now Soft.", False)
                 else:
-                    app.map["United States"].posture = "Hard"
-                    app.outputToHistory("US Posture now Hard.", False)
+                    app.set_posture("United States", "Hard")
+                    app.output_to_history("US Posture now Hard.", False)
                 while True:
-                    postureCountry = app.getCountryFromUser("Now choose a non-US country to set its Posture: ", "XXX", None)
-                    if postureCountry == "":
+                    posture_country = app.get_country_from_user("Now choose a non-US country to set its Posture: ", "XXX", None)
+                    if posture_country == "":
                         print ""
                     else:
-                        if postureCountry == "United States":
-                            print "Choos a non-US country."
+                        if posture_country == "United States":
+                            print "Choose a non-US country."
                             print ""
                         else:
-                            postureStr = app.getPostureFromUser("What Posture should %s have (h or s)? " % postureCountry)
-                            app.outputToHistory("%s Posture now %s" % (postureCountry, postureStr), False)
-                            app.map[postureCountry].posture = postureStr
-                            app.outputToHistory(app.map["United States"].countryStr(), False)
-                            app.outputToHistory(app.map[postureCountry].countryStr(), True)
+                            new_posture = app.get_posture_from_user(
+                                "What Posture should %s have (h or s)? " % posture_country)
+                            app.output_to_history("%s Posture now %s" % (posture_country, new_posture), False)
+                            app.set_posture(posture_country, new_posture)
+                            app.output_to_history(app.get_country("United States").countryStr(), False)
+                            app.output_to_history(app.get_country(posture_country).countryStr())
                             break
             elif self.number == 46:  # Sistani
-                targetCountries = []
-                for country in app.map:
-                    if app.map[country].type == "Shia-Mix":
-                        if app.map[country].regimeChange > 0:
-                            if (app.map[country].totalCells(True)) > 0:
-                                targetCountries.append(country)
-                if len(targetCountries) == 1:
-                    target = targetCountries[0]
+                target_countries = [c.name for c in app.get_countries() if
+                                    c.type == "Shia-Mix" and c.regimeChange > 0 and c.totalCells(True) > 0]
+                target_name = None
+                if len(target_countries) == 1:
+                    target_name = target_countries[0]
                 else:
-                    target = None
-                while not target:
-                    country_name = app.getCountryFromUser("Choose a Shia-Mix Regime Change Country with a cell to improve governance (? for list): ",  "XXX", app.listShiaMixRegimeChangeCountriesWithCells)
-                    if country_name == "":
-                        print ""
-                    else:
-                        if country_name not in targetCountries:
-                            print "%s is not a Shi-Mix Regime Change Country with a cell." % country_name
+                    while not target_name:
+                        country_name = app.get_country_from_user(
+                            "Choose a Shia-Mix Regime Change Country with a cell to improve governance (? for list): ",
+                            "XXX", app.listShiaMixRegimeChangeCountriesWithCells)
+                        if country_name == "":
                             print ""
                         else:
-                            target = country_name
-                            break
-                app.improveGovernance(target)
-                app.outputToHistory("%s Governance improved." % target, False)
-                app.outputToHistory(app.map[target].countryStr(), True)
+                            if country_name not in target_countries:
+                                print "%s is not a Shia-Mix Regime Change Country with a cell." % country_name
+                                print ""
+                            else:
+                                target_name = country_name
+                                break
+                app.improve_governance(target_name)
+                app.output_to_history("%s Governance improved." % target_name, False)
+                app.output_to_history(app.get_country(target_name).countryStr())
             elif self.number == 47:  # The door of Itjihad was closed
                 app.lapsing.append("The door of Itjihad was closed")
             else:
                 return False
         elif self.type == "Jihadist" and side == "Jihadist":
             if self.number == 48:  # Adam Gadahn
-                cardNum = app.getCardNumFromUser("Enter the number of the next Jihadist card or none if there are none left: ")
+                cardNum = app.get_card_num_from_user("Enter the number of the next Jihadist card or none if there are none left: ")
                 if cardNum == "none":
-                    app.outputToHistory("No cards left to recruit to US.", True)
+                    app.output_to_history("No cards left to recruit to US.", True)
                     return
                 ops = app.deck[str(cardNum)].ops
                 rolls = app.randomizer.roll_d6(ops)
                 app.executeRecruit("United States", ops, rolls, 2)
             elif self.number == 49:  # Al-Ittihad al-Islami
-                app.placeCells("Somalia", 1)
+                app.place_cells("Somalia", 1)
             elif self.number == 50:  # Ansar al-Islam
                 possible = ["Iraq", "Iran"]
-                target = random.choice(possible)
-                app.placeCells(target, 1)
+                target_name = random.choice(possible)
+                app.place_cells(target_name, 1)
             elif self.number == 51:  # FREs
                 if "Saddam Captured" in app.markers:
                     cellsToMove = 2
                 else:
                     cellsToMove = 4
                 cellsToMove = min(cellsToMove, app.cells)
-                app.placeCells("Iraq", cellsToMove)
+                app.place_cells("Iraq", cellsToMove)
             elif self.number == 52:  # IDEs
-                app.outputToHistory("US randomly discards one card.", True)
+                app.output_to_history("US randomly discards one card.", True)
             elif self.number == 53:  # Madrassas
                 app.handleRecruit(1, True)
-                cardNum = app.getCardNumFromUser("Enter the number of the next Jihadist card or none if there are none left: ")
+                cardNum = app.get_card_num_from_user("Enter the number of the next Jihadist card or none if there are none left: ")
                 if cardNum == "none":
-                    app.outputToHistory("No cards left to recruit.", True)
+                    app.output_to_history("No cards left to recruit.", True)
                     #app.outputToHistory("Jihadist Activity Phase finished, enter plot command.", True)
                     return
                 ops = app.deck[str(cardNum)].ops
                 app.handleRecruit(ops, True)
-                #app.outputToHistory("Jihadist Activity Phase finished, enter plot command.", True)
             elif self.number == 54:  # Moqtada al-Sadr
-                app.map["Iraq"].markers.append("Sadr")
-                app.outputToHistory("Sadr Marker added in Iraq", True)
+                app.get_country("Iraq").markers.append("Sadr")
+                app.output_to_history("Sadr Marker added in Iraq", True)
             elif self.number == 55:  # Uyghur Jihad
                 app.testCountry("China")
                 if app.cells > 0:
-                    if app.map["China"].posture == "Soft":
+                    if app.get_posture("China") == "Soft":
                         app.place_cell("China")
                     else:
                         app.place_cell("Central Asia")
                 else:
-                    app.outputToHistory("No cells to place.", True)
+                    app.output_to_history("No cells to place.", True)
             elif self.number == 56:  # Vieira de Mello Slain
                 app.markers.append("Vieira de Mello Slain")
-                app.outputToHistory("Vieira de Mello Slain in play.", False)
-                app.changePrestige(-1)
+                app.output_to_history("Vieira de Mello Slain in play.", False)
+                app.change_prestige(-1)
             elif self.number == 57:  # Abu Sayyaf
-                app.placeCells("Philippines", 1)
+                app.place_cells("Philippines", 1)
                 app.markers.append("Abu Sayyaf")
             elif self.number == 58:  # Al-Anbar
                 app.markers.append("Al-Anbar")
-                app.outputToHistory("Al-Anbar in play.", True)
+                app.output_to_history("Al-Anbar in play.", True)
                 app.testCountry("Iraq")
                 if app.cells > 0:
                     app.place_cell("Iraq")
             elif self.number == 59:  # Amerithrax
-                app.outputToHistory("US side discards its highest-value US-associated event card, if it has any.", True)
+                app.output_to_history("US side discards its highest-value US-associated event card, if it has any.", True)
             elif self.number == 60:  # Bhutto Shot
                 app.markers.append("Bhutto Shot")
-                app.outputToHistory("Bhutto Shot in play.", True)
+                app.output_to_history("Bhutto Shot in play.", True)
             elif self.number == 61:  # Detainee Release
                 if app.cells > 0:
-                    target = None
-                    while not target:
-                        country_name = app.getCountryFromUser("Choose a country where Disrupt occured this or last Action Phase: ",  "XXX", None)
+                    target_name = None
+                    while not target_name:
+                        country_name = app.get_country_from_user("Choose a country where Disrupt occured this or last Action Phase: ", "XXX", None)
                         if country_name == "":
                             print ""
                             return
                         else:
-                            target = country_name
+                            target_name = country_name
                             break
-                    app.place_cell(target)
-                app.outputToHistory("Draw a card for the Jihadist and put it on the top of their hand.", True)
+                    app.place_cell(target_name)
+                app.output_to_history("Draw a card for the Jihadist and put it on the top of their hand.", True)
             elif self.number == 62:  # Ex-KGB
-                if "CTR" in app.map["Russia"].markers:
-                    app.map["Russia"].markers.remove("CTR")
-                    app.outputToHistory("CTR removed from Russia.", True)
+                if "CTR" in app.get_country("Russia").markers:
+                    app.get_country("Russia").markers.remove("CTR")
+                    app.output_to_history("CTR removed from Russia.", True)
                 else:
                     targetCaucasus = False
-                    if app.map["Caucasus"].posture == "" or app.map["Caucasus"].posture == app.map["United States"].posture:
-                        if app.gwotPenalty() == 0:
-                            cacPosture = app.map["Caucasus"].posture
-                            if app.map["United States"].posture == "Hard":
-                                app.map["Caucasus"].posture = "Soft"
+                    if app.get_posture("Caucasus") in [None, "", app.us_posture()]:
+                        if app.gwot_penalty() == 0:
+                            cacPosture = app.get_posture("Caucasus")
+                            if app.us_posture() == "Hard":
+                                app.set_posture("Caucasus", "Soft")
                             else:
-                                app.map["Caucasus"].posture = "Hard"
-                            if app.gwotPenalty() < 0:
+                                app.set_posture("Caucasus", "Hard")
+                            if app.gwot_penalty() < 0:
                                 targetCaucasus = True
-                            app.map["Caucasus"].posture = cacPosture
+                            app.set_posture("Caucasus", cacPosture)
                     if targetCaucasus:
-                        if app.map["United States"].posture == "Hard":
-                            app.map["Caucasus"].posture = "Soft"
+                        if app.us_posture() == "Hard":
+                            app.set_posture("Caucasus", "Soft")
                         else:
-                            app.map["Caucasus"].posture = "Hard"
-                        app.outputToHistory("Caucasus posture now %s" % app.map["Caucasus"].posture, False)
-                        app.outputToHistory(app.map["Caucasus"].countryStr(), True)
+                            app.set_posture("Caucasus", "Hard")
+                        app.output_to_history("Caucasus posture now %s" % app.get_posture("Caucasus"), False)
+                        app.output_to_history(app.get_country("Caucasus").countryStr(), True)
                     else:
                         app.testCountry("Central Asia")
-                        if app.map["Central Asia"].is_ally():
-                            app.map["Central Asia"].make_neutral()
-                            app.outputToHistory("Central Asia now Neutral.", True)
-                        elif app.map["Central Asia"].is_neutral():
-                            app.map["Central Asia"].make_adversary()
-                            app.outputToHistory("Central Asia now Adversary.", True)
-                        app.outputToHistory(app.map["Central Asia"].countryStr(), True)
+                        if app.get_country("Central Asia").is_ally():
+                            app.get_country("Central Asia").make_neutral()
+                            app.output_to_history("Central Asia now Neutral.", True)
+                        elif app.get_country("Central Asia").is_neutral():
+                            app.get_country("Central Asia").make_adversary()
+                            app.output_to_history("Central Asia now Adversary.", True)
+                        app.output_to_history(app.get_country("Central Asia").countryStr(), True)
             elif self.number == 63:  # Gaza War
-                app.changeFunding(1)
-                app.changePrestige(-1)
-                app.outputToHistory("US discards a random card.", True)
+                app.change_funding(1)
+                app.change_prestige(-1)
+                app.output_to_history("US discards a random card.", True)
             elif self.number == 64:  # Hariri Killed
                 app.testCountry("Lebanon")
                 app.testCountry("Syria")
-                app.map["Syria"].make_adversary()
-                app.outputToHistory("Syria now Adversary.", False)
-                if app.map["Syria"].governance_is_better_than(POOR):
-                    app.worsenGovernance("Syria")
-                    app.outputToHistory("Governance in Syria worsened.", False)
-                    app.outputToHistory(app.map["Syria"].countryStr(), True)
-                app.outputToHistory(app.map["Lebanon"].countryStr(), True)
+                app.get_country("Syria").make_adversary()
+                app.output_to_history("Syria now Adversary.", False)
+                if app.get_country("Syria").governance_is_better_than(POOR):
+                    app.worsen_governance("Syria")
+                    app.output_to_history("Governance in Syria worsened.", False)
+                    app.output_to_history(app.get_country("Syria").countryStr(), True)
+                app.output_to_history(app.get_country("Lebanon").countryStr(), True)
             elif self.number == 65:  # HEU
                 possibles = []
-                if app.map["Russia"].totalCells() > 0 and "CTR" not in app.map["Russia"].markers:
+                if app.get_country("Russia").totalCells() > 0 and "CTR" not in app.get_country("Russia").markers:
                     possibles.append("Russia")
-                if app.map["Central Asia"].totalCells() > 0 and "CTR" not in app.map["Central Asia"].markers:
+                if app.get_country("Central Asia").totalCells() > 0 and "CTR" not in app.get_country("Central Asia").markers:
                     possibles.append("Central Asia")
-                target = random.choice(possibles)
+                target_name = random.choice(possibles)
                 roll = random.randint(1, 6)
-                app.executeCardHEU(target, roll)
+                app.executeCardHEU(target_name, roll)
             elif self.number == 66:  # Homegrown
-                app.placeCells("United Kingdom", 1)
+                app.place_cells("United Kingdom", 1)
             elif self.number == 67:  # Islamic Jihad Union
-                app.placeCells("Central Asia", 1)
+                app.place_cells("Central Asia", 1)
                 if app.cells > 0:
-                    app.placeCells("Afghanistan", 1)
+                    app.place_cells("Afghanistan", 1)
             elif self.number == 68:  # Jemaah Islamiya
-                app.placeCells("Indonesia/Malaysia", 2)
+                app.place_cells("Indonesia/Malaysia", 2)
             elif self.number == 69:  # Kazakh Strain
                 roll = random.randint(1, 6)
                 app.executeCardHEU("Central Asia", roll)
             elif self.number == 70:  # Lashkar-e-Tayyiba
-                app.placeCells("Pakistan", 1)
+                app.place_cells("Pakistan", 1)
                 if app.cells > 0:
-                    app.placeCells("India", 1)
+                    app.place_cells("India", 1)
             elif self.number == 71:  # Loose Nuke
                 roll = random.randint(1, 6)
                 app.executeCardHEU("Russia", roll)
             elif self.number == 72:  # Opium
                 cellsToPlace = min(app.cells, 3)
-                if app.map["Afghanistan"].is_islamist_rule():
+                if app.get_country("Afghanistan").is_islamist_rule():
                     cellsToPlace = app.cells
-                app.placeCells("Afghanistan", cellsToPlace)
+                app.place_cells("Afghanistan", cellsToPlace)
             elif self.number == 73:  # Pirates
                 app.markers.append("Pirates")
-                app.outputToHistory("Pirates in play.", False)
+                app.output_to_history("Pirates in play.", False)
             elif self.number == 74:  # Schengen Visas
                 if app.cells == 15:
-                    app.outputToHistory("No cells to travel.", False)
+                    app.output_to_history("No cells to travel.", False)
                     return
                 app.handleTravel(2, False, True)
             elif self.number == 75:  # Schroeder & Chirac
-                app.map["Germany"].posture = "Soft"
-                app.outputToHistory("%s Posture now %s" % ("Germany", app.map["Germany"].posture), True)
-                app.map["France"].posture = "Soft"
-                app.outputToHistory("%s Posture now %s" % ("France", app.map["France"].posture), True)
-                app.changePrestige(-1)
+                app.set_posture("Germany", "Soft")
+                app.output_to_history("%s Posture now %s" % ("Germany", app.get_posture("Germany")), True)
+                app.set_posture("France", "Soft")
+                app.output_to_history("%s Posture now %s" % ("France", app.get_posture("France")), True)
+                app.change_prestige(-1)
             elif self.number == 76:  # Abu Ghurayb
-                app.outputToHistory("Draw 2 cards.", False)
-                app.changePrestige(-2)
-                allys = app.minorJihadInGoodFairChoice(1, True)
-                if not allys:
-                    app.outputToHistory("No Allys to shift.", True)
+                app.output_to_history("Draw 2 cards.", False)
+                app.change_prestige(-2)
+                allies = app.minor_jihad_in_good_fair_choice(1, True)
+                if not allies:
+                    app.output_to_history("No Allies to shift.", True)
                 else:
-                    target = allys[0][0]
-                    app.map[target].make_neutral()
-                    app.outputToHistory("%s Alignment shifted to Neutral." % target, True)
+                    target_name = allies[0][0]
+                    app.get_country(target_name).make_neutral()
+                    app.output_to_history("%s Alignment shifted to Neutral." % target_name, True)
             elif self.number == 77:  # Al Jazeera
-                choices = app.minorJihadInGoodFairChoice(1, False, True)
+                choices = app.minor_jihad_in_good_fair_choice(1, False, True)
                 if not choices:
-                    app.outputToHistory("No countries to shift.", True)
+                    app.output_to_history("No countries to shift.", True)
                 else:
-                    target = choices[0][0]
-                    if app.map[target].is_ally():
-                        app.map[target].make_neutral()
-                    elif app.map[target].is_neutral():
-                        app.map[target].make_adversary()
-                    app.outputToHistory("%s Alignment shifted to %s." % (target, app.map[target].alignment()), True)
+                    target = app.get_country(choices[0][0])
+                    if target.is_ally():
+                        target.make_neutral()
+                    elif target.is_neutral():
+                        target.make_adversary()
+                    app.output_to_history("%s Alignment shifted to %s." % (target.name, target.alignment()))
             elif self.number == 78:  # Axis of Evil
-                app.outputToHistory("US discards any Iran, Hizballah, or Jaysh al-Mahdi cards from hand.", False)
-                if app.map["United States"].posture == "Soft":
-                    app.map["United States"].posture = "Hard"
-                    app.outputToHistory("US Posture now Hard.", False)
-                prestigeRolls = []
+                app.output_to_history("US discards any Iran, Hizballah, or Jaysh al-Mahdi cards from hand.", False)
+                if app.us_posture() == "Soft":
+                    app.set_posture("United States", "Hard")
+                    app.output_to_history("US Posture now Hard.", False)
+                prestige_rolls = []
                 for i in range(3):
-                    prestigeRolls.append(random.randint(1, 6))
-                presMultiplier = 1
-                if prestigeRolls[0] <= 4:
-                    presMultiplier = -1
-                app.changePrestige(min(prestigeRolls[1], prestigeRolls[2]) * presMultiplier)
+                    prestige_rolls.append(random.randint(1, 6))
+                prestige_multiplier = 1
+                if prestige_rolls[0] <= 4:
+                    prestige_multiplier = -1
+                app.change_prestige(min(prestige_rolls[1], prestige_rolls[2]) * prestige_multiplier)
             elif self.number == 79:  # Clean Operatives
                 app.handleTravel(2, False, False, True)
             elif self.number == 80:  # FATA
                 app.testCountry("Pakistan")
-                if app.map["Pakistan"].markers.count("FATA") == 0:
-                    app.map["Pakistan"].markers.append("FATA")
-                    app.outputToHistory("FATA marker added in Pakistan", True)
-                app.placeCells("Pakistan", 1)
+                if app.get_country("Pakistan").markers.count("FATA") == 0:
+                    app.get_country("Pakistan").markers.append("FATA")
+                    app.output_to_history("FATA marker added in Pakistan", True)
+                app.place_cells("Pakistan", 1)
             elif self.number == 81:  # Foreign Fighters
-                possibles = []
-                for country in app.map:
-                    if app.map[country].regimeChange > 0:
-                        possibles.append(country)
-                if len(possibles) <= 0:
+                possibles = app.find_countries(lambda c: c.regimeChange > 0)
+                if not possibles:
                     return False
                 target = random.choice(possibles)
-                app.placeCells(target, 5)
-                if app.map[target].aid > 0:
-                    app.map[target].aid -= 1
-                    app.outputToHistory("Aid removed from %s" % target, False)
+                app.place_cells(target.name, 5)
+                if target.aid > 0:
+                    target.aid -= 1
+                    app.output_to_history("Aid removed from %s" % target.name, False)
                 else:
-                    app.map[target].besieged = 1
-                    app.outputToHistory("%s to Besieged Regime" % target, False)
-                app.outputToHistory(app.map[target].countryStr(), True)
+                    target.besieged = 1
+                    app.output_to_history("%s to Besieged Regime" % target.name, False)
+                app.output_to_history(target.countryStr())
             elif self.number == 82:  # Jihadist Videos
-                possibles = []
-                for country in app.map:
-                    if app.map[country].totalCells() == 0:
-                        possibles.append(country)
+                possibles = app.find_countries(lambda c: c.totalCells() == 0)
                 random.shuffle(possibles)
                 for i in range(3):
-                    app.testCountry(possibles[i])
+                    app.testCountry(possibles[i].name)
                     # number of available cells does not matter for Jihadist Videos
-                    # if app.cells > 0:
                     rolls = [random.randint(1, 6)]
-                    app.executeRecruit(possibles[i], 1, rolls, False, True)
+                    app.executeRecruit(possibles[i].name, 1, rolls, False, True)
             elif self.number == 83:  # Kashmir
-                app.placeCells("Pakistan", 1)
-                if app.map["Pakistan"].is_ally():
-                    app.map["Pakistan"].make_neutral()
-                elif app.map["Pakistan"].is_neutral():
-                    app.map["Pakistan"].make_adversary()
-                app.outputToHistory("%s Alignment shifted to %s." % ("Pakistan", app.map["Pakistan"].alignment()), True)
-                app.outputToHistory(app.map["Pakistan"].countryStr(), True)
+                app.place_cells("Pakistan", 1)
+                pakistan = app.get_country("Pakistan")
+                if pakistan.is_ally():
+                    pakistan.make_neutral()
+                elif pakistan.is_neutral():
+                    pakistan.make_adversary()
+                app.output_to_history("%s Alignment shifted to %s." % ("Pakistan", pakistan.alignment()), True)
+                app.output_to_history(pakistan.countryStr(), True)
             elif self.number == 84 or self.number == 85:  # Leak
                 possibles = []
                 if "Enhanced Measures" in app.markers:
@@ -1401,216 +1328,211 @@ class Card(object):
                     possibles.append("Renditions")
                 if "Wiretapping" in app.markers:
                     possibles.append("Wiretapping")
-                target = random.choice(possibles)
-                app.markers.remove(target)
-                app.markers.append("Leak-"+target)
-                app.outputToHistory("%s removed and can no longer be played." % target, False)
-                usPrestigeRolls = []
-                for i in range(3):
-                    usPrestigeRolls.append(random.randint(1, 6))
-                postureRoll = random.randint(1, 6)
-                presMultiplier = 1
-                if usPrestigeRolls[0] <= 4:
-                    presMultiplier = -1
-                app.changePrestige(min(usPrestigeRolls[1], usPrestigeRolls[2]) * presMultiplier, False)
-                if postureRoll <= 4:
-                    app.map["United States"].posture = "Soft"
+                target_name = random.choice(possibles)
+                app.markers.remove(target_name)
+                app.markers.append("Leak-"+target_name)
+                app.output_to_history("%s removed and can no longer be played." % target_name, False)
+                us_prestige_rolls = []
+                for _ in range(3):
+                    us_prestige_rolls.append(random.randint(1, 6))
+                posture_roll = random.randint(1, 6)
+                prestige_multiplier = 1
+                if us_prestige_rolls[0] <= 4:
+                    prestige_multiplier = -1
+                app.change_prestige(min(us_prestige_rolls[1], us_prestige_rolls[2]) * prestige_multiplier, False)
+                if posture_roll <= 4:
+                    app.set_posture("United States", "Soft")
                 else:
-                    app.map["United States"].posture = "Hard"
-                app.outputToHistory("US Posture now %s" % app.map["United States"].posture, True)
-                allies = app.minorJihadInGoodFairChoice(1, True)
+                    app.set_posture("United States", "Hard")
+                app.output_to_history("US Posture now %s" % app.us_posture(), True)
+                allies = app.minor_jihad_in_good_fair_choice(1, True)
                 if not allies:
-                    app.outputToHistory("No Allies to shift.", True)
+                    app.output_to_history("No Allies to shift.", True)
                 else:
-                    target = allies[0][0]
-                    app.map[target].make_neutral()
-                    app.outputToHistory("%s Alignment shifted to Neutral." % target, True)
+                    target_name = allies[0][0]
+                    app.get_country(target_name).make_neutral()
+                    app.output_to_history("%s Alignment shifted to Neutral." % target_name, True)
             elif self.number == 86:  # Lebanon War
-                app.outputToHistory("US discards a random card.", False)
-                app.changePrestige(-1, False)
-                possibles = []
-                for country in app.map:
-                    if app.map[country].type == "Shia-Mix":
-                        possibles.append(country)
+                app.output_to_history("US discards a random card.", False)
+                app.change_prestige(-1, False)
+                possibles = app.find_countries(lambda c: c.type == "Shia-Mix")
                 target = random.choice(possibles)
-                app.placeCells(target, 1)
-            elif self.number == 87 or self.number == 88 or self.number == 89:  # Martyrdom Operation
+                app.place_cells(target.name, 1)
+            elif self.number in [87, 88, 89]:  # Martyrdom Operation
                 if app.executePlot(1, False, [1], True) == 1:
-                    app.outputToHistory("No plots could be placed.", True)
+                    app.output_to_history("No plots could be placed.")
                     app.handleRadicalization(app.deck[str(self.number)].ops)
             elif self.number == 90:  # Quagmire
-                app.map["United States"].posture = "Soft"
-                app.outputToHistory("US Posture now Soft.", False)
-                app.outputToHistory("US randomly discards two cards and Jihadist plays them.", False)
-                app.outputToHistory("Do this using the j # command for each card.", True)
+                app.set_posture("United States", "Soft")
+                app.output_to_history("US Posture now Soft.", False)
+                app.output_to_history("US randomly discards two cards and Jihadist plays them.", False)
+                app.output_to_history("Do this using the j # command for each card.", True)
             elif self.number == 91:  # Regional al-Qaeda
-                possibles = []
-                for country in app.map:
-                    if app.map[country].is_muslim() and app.map[country].is_ungoverned():
-                        possibles.append(country)
+                possibles = app.find_countries(lambda c: c.is_muslim() and c.is_ungoverned())
                 random.shuffle(possibles)
-                if app.numIslamistRule() > 0:
-                    app.placeCells(possibles[0], 2)
-                    app.placeCells(possibles[1], 2)
+                if app.num_islamist_rule() > 0:
+                    app.place_cells(possibles[0].name, 2)
+                    app.place_cells(possibles[1].name, 2)
                 else:
-                    app.placeCells(possibles[0], 1)
-                    app.placeCells(possibles[1], 1)
+                    app.place_cells(possibles[0].name, 1)
+                    app.place_cells(possibles[1].name, 1)
             elif self.number == 92:  # Saddam
                 app.funding = 9
-                app.outputToHistory("Jihadist Funding now 9.", True)
+                app.output_to_history("Jihadist Funding now 9.")
             elif self.number == 93:  # Taliban
                 app.testCountry("Afghanistan")
-                app.map["Afghanistan"].besieged = 1
-                app.outputToHistory("Afghanistan is now a Besieged Regime.", False)
-                app.placeCells("Afghanistan", 1)
-                app.placeCells("Pakistan", 1)
-                if (app.map["Afghanistan"].is_islamist_rule()) or (app.map["Pakistan"].is_islamist_rule()):
-                    app.changePrestige(-3)
+                app.get_country("Afghanistan").besieged = 1
+                app.output_to_history("Afghanistan is now a Besieged Regime.", False)
+                app.place_cells("Afghanistan", 1)
+                app.place_cells("Pakistan", 1)
+                if (app.get_country("Afghanistan").is_islamist_rule()) or (app.get_country("Pakistan").is_islamist_rule()):
+                    app.change_prestige(-3)
                 else:
-                    app.changePrestige(-1)
+                    app.change_prestige(-1)
             elif self.number == 94:  # The door of Itjihad was closed
-                target = None
-                while not target:
-                    country = app.getCountryFromUser("Choose a country tested or improved to Fair or Good this or last Action Phase: ", "XXX", None)
-                    if country == "":
+                target_country = None
+                while not target_country:
+                    country_name = app.get_country_from_user(
+                        "Choose a country tested or improved to Fair or Good this or last Action Phase: ", "XXX", None)
+                    if country_name == "":
                         print ""
-                    elif app.map[country].is_fair() or app.map[country].is_good():
-                        target = country
+                    elif app.get_country(country_name).is_fair() or app.get_country(country_name).is_good():
+                        target_country = app.get_country(country_name)
                     else:
                         print "%s is neither Fair nor Good."
-                app.map[target].worsenGovernance()
-                app.outputToHistory("%s Governance worsened." % target, False)
-                app.outputToHistory(app.map[target].countryStr(), True)
+                app.worsen_governance(target_country.name)
+                app.output_to_history("%s Governance worsened." % target_country.name, False)
+                app.output_to_history(target_country.countryStr())
             elif self.number == 95:  # Wahhabism
-                if app.map["Saudi Arabia"].is_islamist_rule():
-                    app.changeFunding(9)
+                if app.get_country("Saudi Arabia").is_islamist_rule():
+                    app.change_funding(9)
                 else:
-                    app.changeFunding(app.map["Saudi Arabia"].governance_as_funding())
+                    app.change_funding(app.get_country("Saudi Arabia").governance_as_funding())
         else:
             if self.number == 96:  # Danish Cartoons
-                posture = app.getPostureFromUser("Select Scandinavia's Posture (hard or soft): ")
-                app.map["Scandinavia"].posture = posture
-                app.outputToHistory("Scandinavia posture now %s." % posture, False)
-                possibles = []
-                for country in app.map:
-                    if app.map[country].is_muslim() and not app.map[country].is_islamist_rule():
-                        possibles.append(country)
+                posture = app.get_posture_from_user("Select Scandinavia's Posture (hard or soft): ")
+                app.set_posture("Scandinavia", posture)
+                app.output_to_history("Scandinavia posture now %s." % posture, False)
+                possibles = app.find_countries(lambda c: c.is_muslim() and not c.is_islamist_rule())
                 target = random.choice(possibles)
-                app.testCountry(target)
-                if app.numIslamistRule() > 0:
-                    app.outputToHistory("Place any available plot in %s." % target, False)
+                app.testCountry(target.name)
+                if app.num_islamist_rule() > 0:
+                    app.output_to_history("Place any available plot in %s." % target.name, False)
                 else:
-                    app.outputToHistory("Place a Plot 1 in %s." % target, False)
-                app.map[target].plots += 1
+                    app.output_to_history("Place a Plot 1 in %s." % target.name, False)
+                target.plots += 1
             elif self.number == 97:  # Fatwa
-                app.outputToHistory("Trade random cards.", False)
+                app.output_to_history("Trade random cards.", False)
                 if side == "US":
-                    app.outputToHistory("Conduct a 1-value operation (Use commands: alert, deploy, disrupt, reassessment, regime, withdraw, or woi).", False)
+                    app.output_to_history("Conduct a 1-value operation (Use commands: alert, deploy, disrupt,"
+                                          " reassessment, regime, withdraw, or woi).", False)
                 else:
                     app.aiFlowChartMajorJihad(97)
             elif self.number == 98:  # Gaza Withdrawl
                 if side == "US":
-                    app.changeFunding(-1)
+                    app.change_funding(-1)
                 else:
-                    app.placeCells("Israel", 1)
+                    app.place_cells("Israel", 1)
             elif self.number == 99:  # HAMAS Elected
-                app.outputToHistory("US selects and discards one card.", False)
-                app.changePrestige(-1)
-                app.changeFunding(-1)
+                app.output_to_history("US selects and discards one card.", False)
+                app.change_prestige(-1)
+                app.change_funding(-1)
             elif self.number == 100:  # His Ut-Tahrir
                 if app.troops >= 10:
-                    app.changeFunding(-2)
+                    app.change_funding(-2)
                 elif app.troops < 5:
-                    app.changeFunding(2)
+                    app.change_funding(2)
             elif self.number == 101:  # Kosovo
-                app.changePrestige(1)
+                app.change_prestige(1)
                 app.testCountry("Serbia")
-                if app.map["United States"].posture == "Soft":
-                    app.map["Serbia"].posture = "Hard"
+                if app.us_posture() == "Soft":
+                    app.set_posture("Serbia", "Hard")
                 else:
-                    app.map["Serbia"].posture = "Soft"
-                app.outputToHistory("Serbia Posture now %s." %                         app.map["Serbia"].posture, True)
+                    app.set_posture("Serbia", "Soft")
+                app.output_to_history("Serbia Posture now %s." % app.get_posture("Serbia"), True)
             elif self.number == 102:  # Former Soviet Union
                 testRoll = random.randint(1, 6)
                 if testRoll <= 4:
-                    app.map["Central Asia"].make_poor()
+                    app.get_country("Central Asia").make_poor()
                 else:
-                    app.map["Central Asia"].make_fair()
-                app.map["Central Asia"].make_neutral()
-                app.outputToHistory("%s tested, governance %s" % (app.map["Central Asia"].name, app.map["Central Asia"].govStr()), False)
+                    app.get_country("Central Asia").make_fair()
+                app.get_country("Central Asia").make_neutral()
+                app.output_to_history("%s tested, governance %s" % ("Central Asia", app.get_country("Central Asia").govStr()), False)
             elif self.number == 103:  # Hizballah
                 if side == "US":
                     oneAway = []
                     twoAway = []
                     threeAway = []
-                    for countryObj in app.map["Lebanon"].links:
+                    for countryObj in app.get_country("Lebanon").links:
                         oneAway.append(countryObj.name)
                     for country in oneAway:
-                        for subCountryObj in app.map[country].links:
+                        for subCountryObj in app.get_country(country).links:
                             if subCountryObj.name not in twoAway and subCountryObj.name not in oneAway and subCountryObj.name != "Lebanon":
                                 twoAway.append(subCountryObj.name)
                     for country in twoAway:
-                        for subCountryObj in app.map[country].links:
+                        for subCountryObj in app.get_country(country).links:
                             if subCountryObj.name not in threeAway and subCountryObj.name not in twoAway and subCountryObj.name not in oneAway and subCountryObj.name != "Lebanon":
                                 threeAway.append(subCountryObj.name)
                     possibles = []
                     for country in oneAway:
-                        if country not in possibles and app.map[country].totalCells(True) > 0 and app.map[country].type == "Shia-Mix":
+                        if country not in possibles and app.get_country(country).totalCells(True) > 0 and app.get_country(country).type == "Shia-Mix":
                             possibles.append(country)
                     for country in twoAway:
-                        if country not in possibles and app.map[country].totalCells(True) > 0 and app.map[country].type == "Shia-Mix":
+                        if country not in possibles and app.get_country(country).totalCells(True) > 0 and app.get_country(country).type == "Shia-Mix":
                             possibles.append(country)
                     for country in threeAway:
-                        if country not in possibles and app.map[country].totalCells(True) > 0 and app.map[country].type == "Shia-Mix":
+                        if country not in possibles and app.get_country(country).totalCells(True) > 0 and app.get_country(country).type == "Shia-Mix":
                             possibles.append(country)
                     if len(possibles) <= 0:
-                        app.outputToHistory("No Shia-Mix countries with cells within 3 countries of Lebanon.", True)
-                        target = None
+                        app.output_to_history("No Shia-Mix countries with cells within 3 countries of Lebanon.", True)
+                        target_name = None
                     elif len(possibles) == 1:
-                        target = possibles[0]
+                        target_name = possibles[0]
                     else:
-                        target = None
-                        while not target:
-                            country_name = app.getCountryFromUser("Remove a cell from what Shia-Mix country within 3 countries of Lebanon (? for list)?: ",  "XXX", app.listCountriesInParam, possibles)
+                        target_name = None
+                        while not target_name:
+                            country_name = app.get_country_from_user(
+                                "Remove a cell from what Shia-Mix country within 3 countries of Lebanon (? for list): ",
+                                "XXX", app.listCountriesInParam, possibles)
                             if country_name == "":
                                 print ""
                             else:
-                                if app.map[country_name].totalCells(True) <= 0:
+                                if app.get_country(country_name).totalCells(True) <= 0:
                                     print "There are no cells in %s" % country_name
                                     print ""
                                 elif country_name not in possibles:
                                     print "%s not a Shia-Mix country within 3 countries of Lebanon." % country_name
                                     print ""
                                 else:
-                                    target = country_name
-                    if target:
-                        app.removeCell(target, side)    # 20150131PS added side
-                        app.outputToHistory(app.map[target].countryStr(), True)
+                                    target_name = country_name
+                    if target_name:
+                        app.remove_cell(target_name, side)    # 20150131PS added side
+                        app.output_to_history(app.get_country(target_name).countryStr(), True)
                 else:
                     app.testCountry("Lebanon")
-                    app.map["Lebanon"].make_poor()
-                    app.outputToHistory("Lebanon governance now Poor.", False)
-                    app.map["Lebanon"].make_neutral()
-                    app.outputToHistory("Lebanon alignment now Neutral.", True)
+                    app.get_country("Lebanon").make_poor()
+                    app.output_to_history("Lebanon governance now Poor.", False)
+                    app.get_country("Lebanon").make_neutral()
+                    app.output_to_history("Lebanon alignment now Neutral.", True)
             elif self.number == 104 or self.number == 105:  # Iran
                 if side == "US":
-                    target = None
-                    while not target:
-                        country_name = app.getCountryFromUser("Choose a Shia-Mix country to test. You can then remove a cell from there or Iran (? for list)?: ",  "XXX", app.listShiaMixCountries)
+                    target_name = None
+                    while not target_name:
+                        country_name = app.get_country_from_user("Choose a Shia-Mix country to test. You can then remove a cell from there or Iran (? for list)?: ", "XXX", app.listShiaMixCountries)
                         if country_name == "":
                             print ""
                         else:
-                            if app.map[country_name].type != "Shia-Mix":
+                            if app.get_country(country_name).type == "Shia-Mix":
+                                target_name = country_name
+                            else:
                                 print "%s is not a Shia-Mix country." % country_name
                                 print ""
-                            else:
-                                target = country_name
-                    picked = target
+                    picked = target_name
                     app.testCountry(picked)
-                    if app.map["Iran"].totalCells(True) > 0:
-                        target = None
-                        while not target:
-                            country_name = app.getCountryFromUser("Remove a cell from %s or %s: " % (picked, "Iran"),  "XXX", None)
+                    if app.get_country("Iran").totalCells(True) > 0:
+                        target_name = None
+                        while not target_name:
+                            country_name = app.get_country_from_user("Remove a cell from %s or %s: " % (picked, "Iran"), "XXX", None)
                             if country_name == "":
                                 print ""
                             else:
@@ -1618,74 +1540,64 @@ class Card(object):
                                     print "Remove a cell from %s or %s: " % (picked, "Iran")
                                     print ""
                                 else:
-                                    target = country_name
+                                    target_name = country_name
                     else:
-                        target = picked
-                    app.removeCell(target, side)    # 20150131PS added side
-                    app.outputToHistory(app.map[target].countryStr(), True)
+                        target_name = picked
+                    app.remove_cell(target_name, side)    # 20150131PS added side
+                    app.output_to_history(app.get_country(target_name).countryStr(), True)
                 else:
-                    possibles = []
-                    for country in app.map:
-                        if app.map[country].type == "Shia-Mix":
-                            possibles.append(country)
-                    target = random.choice(possibles)
-                    app.testCountry(target)
-                    tested = target
-                    target = None
-                    goods = []
-                    for country in app.map:
-                        if app.map[country].type == "Shia-Mix" or app.map[country].type == "Suni":
-                            if app.map[country].is_good():
-                                goods.append(country)
-                    if len(goods) > 1:
+                    possibles = [country.name for country in app.get_countries() if country.type == "Shia-Mix"]
+                    target_name = random.choice(possibles)
+                    app.testCountry(target_name)
+                    tested = target_name
+                    target_name = None
+                    good_countries = [country.name for country in app.map.countries() if
+                             country.is_muslim() and country.is_good()]
+                    if len(good_countries) > 1:
                         distances = []
-                        for country in goods:
-                            distances.append((app.countryDistance(tested, country), country))
+                        for country in good_countries:
+                            distances.append((app.country_distance(tested, country), country))
                         distances.sort()
-                        target = distances[0][1]
-                    elif len(goods) == 1:
-                        target = goods[0]
+                        target_name = distances[0][1]
+                    elif len(good_countries) == 1:
+                        target_name = good_countries[0]
                     else:
-                        fairs = []
-                        for country in app.map:
-                            if app.map[country].type == "Shia-Mix" or app.map[country].type == "Suni":
-                                if app.map[country].is_fair():
-                                    fairs.append(country)
-                        if len(fairs) > 1:
+                        fair_countries = [country.name for country in app.map.countries() if
+                                 country.is_muslim() and country.is_fair()]
+                        if len(fair_countries) > 1:
                             distances = []
-                            for country in fairs:
-                                distances.append((app.countryDistance(tested, country), country))
+                            for country in fair_countries:
+                                distances.append((app.country_distance(tested, country), country))
                             distances.sort()
-                            target = distances[0][1]
-                        elif len(fairs) == 1:
-                            target = fairs[0]
+                            target_name = distances[0][1]
+                        elif len(fair_countries) == 1:
+                            target_name = fair_countries[0]
                         else:
-                            app.outputToHistory("No Good or Fair countries to Jihad in.", True)
+                            app.output_to_history("No Good or Fair countries to Jihad in.", True)
                             return
-                    app.outputToHistory("%s selected for jihad rolls." % target, False)
+                    app.output_to_history("%s selected for jihad rolls." % target_name, False)
                     for i in range(2):
                         roll = random.randint(1, 6)
-                        app.outputToHistory("Rolled: " + str(roll), False)
-                        if app.map[target].is_non_recruit_success(roll):
-                            if app.map[target].governance_is_better_than(POOR):
-                                app.map[target].worsenGovernance()
-                                app.outputToHistory("Governance worsened in %s." % target, False)
-                                app.outputToHistory(app.map[target].countryStr(), True)
+                        app.output_to_history("Rolled: " + str(roll), False)
+                        if app.get_country(target_name).is_non_recruit_success(roll):
+                            if app.get_country(target_name).governance_is_better_than(POOR):
+                                app.worsen_governance(target_name)
+                                app.output_to_history("Governance worsened in %s." % target_name, False)
+                                app.output_to_history(app.get_country(target_name).countryStr(), True)
                         else:
-                            app.outputToHistory("Roll failed.  No change to governance in %s." % target, False)
+                            app.output_to_history("Roll failed.  No change to governance in %s." % target_name, False)
 
             elif self.number == 106:  # Jaysh al-Mahdi
                 if side == "US":
-                    target = None
-                    possibles = []
-                    for country in app.map:
-                        if app.map[country].type == "Shia-Mix":
-                            if app.map[country].troops() > 0 and app.map[country].totalCells() > 0:
-                                possibles.append(country)
+                    target_name = None
+                    possibles = [country.name for country in app.map.countries() if
+                                 country.type == "Shia-Mix" and country.troops() > 0 and country.totalCells() > 0]
                     if len(possibles) == 1:
-                        target = possibles[0]
-                    while not target:
-                        country_name = app.getCountryFromUser("Choose a Shia-Mix country with cells and troops (? for list)?: ",  "XXX", app.listShiaMixCountriesWithCellsTroops)
+                        target_name = possibles[0]
+                    while not target_name:
+                        country_name = app.get_country_from_user(
+                            "Choose a Shia-Mix country with cells and troops (? for list)?: ", "XXX",
+                            app.listShiaMixCountriesWithCellsTroops)
                         if country_name == "":
                             print ""
                         else:
@@ -1693,113 +1605,98 @@ class Card(object):
                                 print "%s is not a Shia-Mix country with cells and troops." % country_name
                                 print ""
                             else:
-                                target = country_name
-                    app.removeCell(target, side)    # 20150131PS added side
-                    app.removeCell(target, side)    # 20150131PS added side
-                    app.outputToHistory(app.map[target].countryStr(), True)
+                                target_name = country_name
+                    app.remove_cell(target_name, side)    # 20150131PS added side
+                    app.remove_cell(target_name, side)    # 20150131PS added side
+                    app.output_to_history(app.get_country(target_name).countryStr(), True)
                 else:   # jihadist play
-                    possibles = []
-                    for country in app.map:
-                        if app.map[country].type == "Shia-Mix":
-                            possibles.append(country)
-                    target = random.choice(possibles)
-                    app.testCountry(target)
-                    tested = target
-                    target = None
-                    goods = []
-                    for country in app.map:
-                        if app.map[country].is_muslim():
-                            if app.map[country].is_good():
-                                goods.append(country)
-                    if len(goods) > 1:
+                    possibles = [country.name for country in app.get_countries() if country.type == "Shia-Mix"]
+                    target_name = random.choice(possibles)
+                    app.testCountry(target_name)
+                    tested = target_name
+                    target_name = None
+                    good_countries = [c.name for c in app.get_countries() if c.is_muslim() and c.is_good()]
+                    if len(good_countries) > 1:
                         distances = []
-                        for country in goods:
-                            distances.append((app.countryDistance(tested, country), country))
+                        for country in good_countries:
+                            distances.append((app.country_distance(tested, country), country))
                         distances.sort()
-                        target = distances[0][1]
-                    elif len(goods) == 1:
-                        target = goods[0]
+                        target_name = distances[0][1]
+                    elif len(good_countries) == 1:
+                        target_name = good_countries[0]
                     else:
-                        fairs = []
-                        for country in app.map:
-                            if app.map[country].type == "Shia-Mix" or app.map[country].type == "Suni":
-                                if app.map[country].is_fair():
-                                    fairs.append(country)
-                        if len(fairs) > 1:
+                        fair_countries = [c.name for c in app.get_countries() if c.is_muslim() and c.is_fair()]
+                        if len(fair_countries) > 1:
                             distances = []
-                            for country in fairs:
-                                distances.append((app.countryDistance(tested, country), country))
+                            for country in fair_countries:
+                                distances.append((app.country_distance(tested, country), country))
                             distances.sort()
-                            target = distances[0][1]
-                        elif len(fairs) == 1:
-                            target = fairs[0]
+                            target_name = distances[0][1]
+                        elif len(fair_countries) == 1:
+                            target_name = fair_countries[0]
                         else:
-                            app.outputToHistory("No Good or Fair countries to worsen Governance in.", True)
+                            app.output_to_history("No Good or Fair countries to worsen Governance in.", True)
                             return
-                        if app.map[target].governance_is_better_than(ISLAMIST_RULE):
-                            app.map[target].worsenGovernance()
-                            app.outputToHistory("Governance worsened in %s." % target, False)
-                            app.outputToHistory(app.map[target].countryStr(), True)
+                        if app.get_country(target_name).governance_is_better_than(ISLAMIST_RULE):
+                            app.worsen_governance(target_name)
+                            app.output_to_history("Governance worsened in %s." % target_name, False)
+                            app.output_to_history(app.get_country(target_name).countryStr(), True)
             elif self.number == 107:  # Kurdistan
                 if side == "US":
                     app.testCountry("Iraq")
-                    app.map["Iraq"].aid += 1
-                    app.outputToHistory("Aid added to Iraq.", False)
-                    app.outputToHistory(app.map["Iraq"].countryStr(), True)
+                    app.get_country("Iraq").aid += 1
+                    app.output_to_history("Aid added to Iraq.", False)
+                    app.output_to_history(app.get_country("Iraq").countryStr(), True)
                 else:
                     app.testCountry("Turkey")
-                    target = None
+                    target_name = None
                     possibles = []
-                    if app.map["Turkey"].governance_is_better_than(POOR):
+                    if app.get_country("Turkey").governance_is_better_than(POOR):
                         possibles.append("Turkey")
-                    if app.map["Iraq"].is_governed() and app.map["Iraq"].governance_is_better_than(POOR):
+                    if app.get_country("Iraq").is_governed() and app.get_country("Iraq").governance_is_better_than(POOR):
                         possibles.append("Iraq")
                     if len(possibles) == 0:
-                        app.outputToHistory("Iraq and Turkey cannot have governance worsened.", True)
+                        app.output_to_history("Iraq and Turkey cannot have governance worsened.", True)
                         return
                     elif len(possibles) == 0:
-                        target = possibles[0]
+                        target_name = possibles[0]
                     else:
                         countryScores = {}
                         for country in possibles:
                             countryScores[country] = 0
-                            if app.map[country].aid > 0:
+                            if app.get_country(country).aid > 0:
                                 countryScores[country] += 10000
-                            if app.map[country].besieged > 0:
+                            if app.get_country(country).besieged > 0:
                                 countryScores[country] += 1000
-                            countryScores[country] += (app.countryResources(country) * 100)
+                            countryScores[country] += (app.country_resources_by_name(country) * 100)
                             countryScores[country] += random.randint(1, 99)
                         countryOrder = []
                         for country in countryScores:
-                            countryOrder.append((countryScores[country], (app.map[country].totalCells(True)), country))
+                            countryOrder.append((countryScores[country], (app.get_country(country).totalCells(True)), country))
                         countryOrder.sort()
                         countryOrder.reverse()
-                        target = countryOrder[0][2]
-                    app.map[target].worsenGovernance()
-                    app.outputToHistory("Governance worsened in %s." % target, False)
-                    app.outputToHistory(app.map[target].countryStr(), True)
+                        target_name = countryOrder[0][2]
+                    app.worsen_governance(target_name)
+                    app.output_to_history("Governance worsened in %s." % target_name, False)
+                    app.output_to_history(app.get_country(target_name).countryStr(), True)
             elif self.number == 108:  # Musharraf
-                app.removeCell("Pakistan", side)    # 20150131PS added side
-                app.map["Pakistan"].make_poor()
-                app.map["Pakistan"].make_ally()
-                app.outputToHistory("Pakistan now Poor Ally.", False)
-                app.outputToHistory(app.map["Pakistan"].countryStr(), True)
+                app.remove_cell("Pakistan", side)    # 20150131PS added side
+                app.get_country("Pakistan").make_poor()
+                app.get_country("Pakistan").make_ally()
+                app.output_to_history("Pakistan now Poor Ally.", False)
+                app.output_to_history(app.get_country("Pakistan").countryStr(), True)
             elif self.number == 109:  # Tora Bora
-                possibles = []
-                for country in app.map:
-                    if app.map[country].regimeChange > 0:
-                        if app.map[country].totalCells() >= 2:
-                            possibles.append(country)
-                target = None
+                possibles = [c.name for c in app.get_countries() if c.regimeChange > 0 and c.totalCells() >= 2]
+                target_name = None
                 if len(possibles) == 0:
                     return False
                 if len(possibles) == 1:
-                    target = possibles[0]
+                    target_name = possibles[0]
                 else:
                     if side == "US":
-                        app.outputToHistory("US draws one card.", False)
-                        while not target:
-                            country_name = app.getCountryFromUser("Choose a Regime Change country with at least 2 troops. (? for list)?: ",  "XXX", app.listRegimeChangeWithTwoCells)
+                        app.output_to_history("US draws one card.", False)
+                        while not target_name:
+                            country_name = app.get_country_from_user("Choose a Regime Change country with at least 2 troops. (? for list)?: ", "XXX", app.listRegimeChangeWithTwoCells)
                             if country_name == "":
                                 print ""
                             else:
@@ -1807,104 +1704,104 @@ class Card(object):
                                     print "%s is not a Regime Change country with at least 2 troops." % country_name
                                     print ""
                                 else:
-                                    target = country_name
+                                    target_name = country_name
                     else:
-                        app.outputToHistory("Jihadist draws one card.", False)
-                        target = random.choice(possibles)
-                app.removeCell(target, side)    # 20150131PS added side
-                app.removeCell(target, side)    # 20150131PS added side
-                prestigeRolls = []
+                        app.output_to_history("Jihadist draws one card.", False)
+                        target_name = random.choice(possibles)
+                app.remove_cell(target_name, side)    # 20150131PS added side
+                app.remove_cell(target_name, side)    # 20150131PS added side
+                prestige_rolls = []
                 for i in range(3):
-                    prestigeRolls.append(random.randint(1, 6))
-                presMultiplier = 1
-                if prestigeRolls[0] <= 4:
-                    presMultiplier = -1
-                app.changePrestige(min(prestigeRolls[1], prestigeRolls[2]) * presMultiplier)
+                    prestige_rolls.append(random.randint(1, 6))
+                prestige_multiplier = 1
+                if prestige_rolls[0] <= 4:
+                    prestige_multiplier = -1
+                app.change_prestige(min(prestige_rolls[1], prestige_rolls[2]) * prestige_multiplier)
             elif self.number == 110:  # Zarqawi
                 if side == "US":
-                    app.changePrestige(3)
-                    app.outputToHistory("Remove card from game.", False)
+                    app.change_prestige(3)
+                    app.output_to_history("Remove card from game.", False)
                 else:
                     possibles = []
                     for country in ["Iraq", "Syria", "Lebanon", "Jordan"]:
-                        if app.map[country].troops() > 0:
+                        if app.get_country(country).troops() > 0:
                             possibles.append(country)
-                    target = random.choice(possibles)
-                    app.placeCells(target, 3)
-                    app.map[target].plots += 1
-                    app.outputToHistory("Add a Plot 2 to %s." % target, False)
-                    app.outputToHistory(app.map[target].countryStr(), True)
+                    target_name = random.choice(possibles)
+                    app.place_cells(target_name, 3)
+                    app.get_country(target_name).plots += 1
+                    app.output_to_history("Add a Plot 2 to %s." % target_name, False)
+                    app.output_to_history(app.get_country(target_name).countryStr(), True)
             elif self.number == 111:  # Zawahiri
                 if side == "US":
-                    app.changeFunding(-2)
+                    app.change_funding(-2)
                 else:
-                    if app.numIslamistRule() > 0:
-                        app.changePrestige(-3)
+                    if app.num_islamist_rule() > 0:
+                        app.change_prestige(-3)
                     else:
-                        app.changePrestige(-1)
+                        app.change_prestige(-1)
             elif self.number == 112:  # Bin Ladin
                 if side == "US":
-                    app.changeFunding(-4)
-                    app.changePrestige(1)
-                    app.outputToHistory("Remove card from game.", False)
+                    app.change_funding(-4)
+                    app.change_prestige(1)
+                    app.output_to_history("Remove card from game.", False)
                 else:
-                    if app.numIslamistRule() > 0:
-                        app.changePrestige(-4)
+                    if app.num_islamist_rule() > 0:
+                        app.change_prestige(-4)
                     else:
-                        app.changePrestige(-2)
+                        app.change_prestige(-2)
             elif self.number == 113:  # Darfur
                 app.testCountry("Sudan")
                 if app.prestige >= 7:
-                    app.map["Sudan"].aid += 1
-                    app.outputToHistory("Aid added to Sudan.", False)
-                    if app.map["Sudan"].is_adversary():
-                        app.map["Sudan"].make_neutral()
-                        app.outputToHistory("Sudan alignment improved.", False)
-                    elif app.map["Sudan"].is_neutral():
-                        app.map["Sudan"].make_ally()
-                        app.outputToHistory("Sudan alignment improved.", False)
+                    app.get_country("Sudan").aid += 1
+                    app.output_to_history("Aid added to Sudan.", False)
+                    if app.get_country("Sudan").is_adversary():
+                        app.get_country("Sudan").make_neutral()
+                        app.output_to_history("Sudan alignment improved.", False)
+                    elif app.get_country("Sudan").is_neutral():
+                        app.get_country("Sudan").make_ally()
+                        app.output_to_history("Sudan alignment improved.", False)
                 else:
-                    app.map["Sudan"].besieged = 1
-                    app.outputToHistory("Sudan now Besieged Regime.", False)
-                    if app.map["Sudan"].is_ally():
-                        app.map["Sudan"].make_neutral()
-                        app.outputToHistory("Sudan alignment worsened.", False)
-                    elif app.map["Sudan"].is_neutral():
-                        app.map["Sudan"].make_adversary()
-                        app.outputToHistory("Sudan alignment worsened.", False)
-                app.outputToHistory(app.map["Sudan"].countryStr(), True)
+                    app.get_country("Sudan").besieged = 1
+                    app.output_to_history("Sudan now Besieged Regime.", False)
+                    if app.get_country("Sudan").is_ally():
+                        app.get_country("Sudan").make_neutral()
+                        app.output_to_history("Sudan alignment worsened.", False)
+                    elif app.get_country("Sudan").is_neutral():
+                        app.get_country("Sudan").make_adversary()
+                        app.output_to_history("Sudan alignment worsened.", False)
+                app.output_to_history(app.get_country("Sudan").countryStr(), True)
             elif self.number == 114:  # GTMO
                 app.lapsing.append("GTMO")
-                app.outputToHistory("GTMO in play. No recruit operations or Detainee Release the rest of this turn.", False)
-                prestigeRolls = []
+                app.output_to_history("GTMO in play. No recruit operations or Detainee Release the rest of this turn.", False)
+                prestige_rolls = []
                 for i in range(3):
-                    prestigeRolls.append(random.randint(1, 6))
-                presMultiplier = 1
-                if prestigeRolls[0] <= 4:
-                    presMultiplier = -1
-                app.changePrestige(min(prestigeRolls[1], prestigeRolls[2]) * presMultiplier)
+                    prestige_rolls.append(random.randint(1, 6))
+                prestige_multiplier = 1
+                if prestige_rolls[0] <= 4:
+                    prestige_multiplier = -1
+                app.change_prestige(min(prestige_rolls[1], prestige_rolls[2]) * prestige_multiplier)
             elif self.number == 115:  # Hambali
                 if side == "US":
                     possibles = ["Indonesia/Malaysia"]
                     targets = []
-                    target = None
-                    for countryObj in app.map["Indonesia/Malaysia"].links:
+                    target_name = None
+                    for countryObj in app.get_country("Indonesia/Malaysia").links:
                         possibles.append(countryObj.name)
                     for country in possibles:
-                        if app.map[country].totalCells(True) > 0:
-                            if app.map[country].type == "Non-Muslim":
-                                if app.map[country].posture == "Hard":
+                        if app.get_country(country).totalCells(True) > 0:
+                            if app.get_country(country).type == "Non-Muslim":
+                                if app.get_country(country).posture == "Hard":
                                     targets.append(country)
                             else:
-                                if app.map[country].is_ally():
+                                if app.get_country(country).is_ally():
                                     targets.append(country)
                     if len(targets) == 1:
-                        target = targets[0]
+                        target_name = targets[0]
                     else:
-                        while not target:
-                            country_name = app.getCountryFromUser("Choose Indonesia or an adjacent country that has" +
-                                                                  " a cell and is Ally or Hard. (? for list)?: ", "XXX",
-                                                                  app.listHambali)
+                        while not target_name:
+                            country_name = app.get_country_from_user("Choose Indonesia or an adjacent country that "
+                                                                     "has a cell and is Ally or Hard. (? for list)?: ",
+                                                                     "XXX", app.listHambali)
                             if country_name == "":
                                 print ""
                             else:
@@ -1912,71 +1809,72 @@ class Card(object):
                                     print "%s is not Indonesia or an adjacent country that has a cell and is Ally or Hard." % country_name
                                     print ""
                                 else:
-                                    target = country_name
-                    app.removeCell(target, side)    # 20150131PS added side
-                    app.outputToHistory("US draw 2 cards.", False)
+                                    target_name = country_name
+                    app.remove_cell(target_name, side)    # 20150131PS added side
+                    app.output_to_history("US draw 2 cards.", False)
                 else:
                     possibles = ["Indonesia/Malaysia"]
                     targets = []
-                    target = None
-                    for countryObj in app.map["Indonesia/Malaysia"].links:
+                    target_name = None
+                    for countryObj in app.get_country("Indonesia/Malaysia").links:
                         possibles.append(countryObj.name)
                     for country in possibles:
-                        if app.map[country].totalCells(True) > 0:
-                            if app.map[country].type == "Non-Muslim":
-                                if app.map[country].posture == "Hard":
+                        if app.get_country(country).totalCells(True) > 0:
+                            if app.get_country(country).type == "Non-Muslim":
+                                if app.get_country(country).posture == "Hard":
                                     targets.append(country)
                             else:
-                                if app.map[country].is_ally():
+                                if app.get_country(country).is_ally():
                                     targets.append(country)
-                    target = random.choice(targets)
-                    app.map[target].plots += 1
-                    app.outputToHistory("Place an plot in %s." % target, True)
+                    target_name = random.choice(targets)
+                    app.get_country(target_name).plots += 1
+                    app.output_to_history("Place an plot in %s." % target_name, True)
             elif self.number == 116:  # KSM
                 if side == "US":
-                    for country in app.map:
-                        if app.map[country].plots > 0:
-                            if app.map[country].is_ally() or app.map[country].type == "Non-Muslim":
-                                numPlots = app.map[country].plots
-                                app.map[country].plots = 0
-                                app.outputToHistory("%d Plots removed from %s." % (numPlots, country), False)
-                    app.outputToHistory("US draws 2 cards.", True)
+                    for country in app.get_countries():
+                        if country.plots > 0:
+                            if country.is_ally() or country.type == "Non-Muslim":
+                                num_plots = country.plots
+                                country.plots = 0
+                                app.output_to_history("%d Plots removed from %s." % (num_plots, country.name), False)
+                    app.output_to_history("US draws 2 cards.", True)
                 else:
                     if app.executePlot(1, False, [1], False, False, True) == 1:
-                        app.outputToHistory("No plots could be placed.", True)
+                        app.output_to_history("No plots could be placed.", True)
             elif self.number == 117 or self.number == 118:  # Oil Price Spike
                 app.lapsing.append("Oil Price Spike")
-                app.outputToHistory("Oil Price Spike in play. Add +1 to the resources of each Oil Exporter country for the turn.", False)
+                app.output_to_history("Oil Price Spike in play. Add +1 to the resources of each Oil Exporter country for the turn.", False)
                 if side == "US":
-                    app.outputToHistory("Select, reveal, and draw a card other than Oil Price Spike from the discard pile or a box.", True)
+                    app.output_to_history(
+                        "Select, reveal, and draw a card other than Oil Price Spike from the discard pile or a box.")
                 else:
-                    if app.getYesNoFromUser("Are there any Jihadist event cards in the discard pile? "):
-                        app.outputToHistory("Draw from the Discard Pile randomly among the highest-value Jihadist-associated event cards. Put the card on top of the Jihadist hand.", True)
+                    if app.get_yes_no_from_user("Are there any Jihadist event cards in the discard pile? "):
+                        app.output_to_history("Draw from the Discard Pile randomly among the highest-value Jihadist-associated event cards. Put the card on top of the Jihadist hand.", True)
             elif self.number == 119:  # Saleh
                 app.testCountry("Yemen")
                 if side == "US":
-                    if not app.map["Yemen"].is_islamist_rule():
-                        if app.map["Yemen"].is_adversary():
-                            app.map["Yemen"].make_neutral()
-                        elif app.map["Yemen"].is_neutral():
-                            app.map["Yemen"].make_ally()
-                        app.outputToHistory("Yemen Alignment improved to %s." % app.map["Yemen"].alignment(), False)
-                        app.map["Yemen"].aid += 1
-                        app.outputToHistory("Aid added to Yemen.", True)
+                    if not app.get_country("Yemen").is_islamist_rule():
+                        if app.get_country("Yemen").is_adversary():
+                            app.get_country("Yemen").make_neutral()
+                        elif app.get_country("Yemen").is_neutral():
+                            app.get_country("Yemen").make_ally()
+                        app.output_to_history("Yemen Alignment improved to %s." % app.get_country("Yemen").alignment(), False)
+                        app.get_country("Yemen").aid += 1
+                        app.output_to_history("Aid added to Yemen.", True)
                 else:
-                    if app.map["Yemen"].is_ally():
-                        app.map["Yemen"].make_neutral()
-                    elif app.map["Yemen"].is_neutral():
-                        app.map["Yemen"].make_adversary()
-                    app.outputToHistory("Yemen Alignment worsened to %s." % app.map["Yemen"].alignment(), False)
-                    app.map["Yemen"].besieged = 1
-                    app.outputToHistory("Yemen now Besieged Regime.", True)
+                    if app.get_country("Yemen").is_ally():
+                        app.get_country("Yemen").make_neutral()
+                    elif app.get_country("Yemen").is_neutral():
+                        app.get_country("Yemen").make_adversary()
+                    app.output_to_history("Yemen Alignment worsened to %s." % app.get_country("Yemen").alignment(), False)
+                    app.get_country("Yemen").besieged = 1
+                    app.output_to_history("Yemen now Besieged Regime.", True)
             elif self.number == 120:  # US Election
                 app.executeCardUSElection(random.randint(1, 6))
         if self.remove:
-            app.outputToHistory("Remove card from game.", True)
+            app.output_to_history("Remove card from game.", True)
         if self.mark:
-            app.outputToHistory("Place marker for card.", True)
+            app.output_to_history("Place marker for card.", True)
         if self.lapsing:
-            app.outputToHistory("Place card in Lapsing.", True)
+            app.output_to_history("Place card in Lapsing.", True)
 

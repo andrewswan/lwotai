@@ -13,49 +13,49 @@ class Scenario4(Scenario):
         game.startYear = 2003
         game.troops = 0
         game.turn = 1
-        game.map["Afghanistan"].make_poor()
-        game.map["Afghanistan"].make_ally()
-        game.map["Afghanistan"].sleeperCells = 1
-        game.map["Afghanistan"].troopCubes = 5
-        game.map["Afghanistan"].regimeChange = 1
-        game.map["Central Asia"].make_fair()
-        game.map["Central Asia"].make_neutral()
-        game.map["Gulf States"].make_fair()
-        game.map["Gulf States"].make_ally()
-        game.map["Gulf States"].troopCubes = 2
-        game.map["Indonesia/Malaysia"].make_fair()
-        game.map["Indonesia/Malaysia"].make_neutral()
-        game.map["Indonesia/Malaysia"].sleeperCells = 1
-        game.map["Iran"].sleeperCells = 1
-        game.map["Iraq"].make_poor()
-        game.map["Iraq"].make_ally()
-        game.map["Iraq"].troopCubes = 6
-        game.map["Iraq"].sleeperCells = 3
-        game.map["Iraq"].regimeChange = 1
-        game.map["Libya"].make_poor()
-        game.map["Libya"].make_adversary()
-        game.map["Pakistan"].make_fair()
-        game.map["Pakistan"].make_ally()
-        game.map["Pakistan"].sleeperCells = 1
-        game.map["Pakistan"].markers.append("FATA")
-        game.map["Philippines"].posture = "Soft"
-        game.map["Philippines"].troopCubes = 2
-        game.map["Philippines"].sleeperCells = 1
-        game.map["Saudi Arabia"].make_poor()
-        game.map["Saudi Arabia"].make_ally()
-        game.map["Saudi Arabia"].sleeperCells = 1
-        game.map["Somalia"].besieged = 1
-        game.map["Syria"].make_fair()
-        game.map["Syria"].make_adversary()
-        game.map["Syria"].sleeperCells = 1
-        game.map["United Kingdom"].posture = "Hard"
+        game.get_country("Afghanistan").make_poor()
+        game.get_country("Afghanistan").make_ally()
+        game.get_country("Afghanistan").sleeperCells = 1
+        game.get_country("Afghanistan").troopCubes = 5
+        game.get_country("Afghanistan").regimeChange = 1
+        game.get_country("Central Asia").make_fair()
+        game.get_country("Central Asia").make_neutral()
+        game.get_country("Gulf States").make_fair()
+        game.get_country("Gulf States").make_ally()
+        game.get_country("Gulf States").troopCubes = 2
+        game.get_country("Indonesia/Malaysia").make_fair()
+        game.get_country("Indonesia/Malaysia").make_neutral()
+        game.get_country("Indonesia/Malaysia").sleeperCells = 1
+        game.get_country("Iran").sleeperCells = 1
+        game.get_country("Iraq").make_poor()
+        game.get_country("Iraq").make_ally()
+        game.get_country("Iraq").troopCubes = 6
+        game.get_country("Iraq").sleeperCells = 3
+        game.get_country("Iraq").regimeChange = 1
+        game.get_country("Libya").make_poor()
+        game.get_country("Libya").make_adversary()
+        game.get_country("Pakistan").make_fair()
+        game.get_country("Pakistan").make_ally()
+        game.get_country("Pakistan").sleeperCells = 1
+        game.get_country("Pakistan").markers.append("FATA")
+        game.get_country("Philippines").posture = "Soft"
+        game.get_country("Philippines").troopCubes = 2
+        game.get_country("Philippines").sleeperCells = 1
+        game.get_country("Saudi Arabia").make_poor()
+        game.get_country("Saudi Arabia").make_ally()
+        game.get_country("Saudi Arabia").sleeperCells = 1
+        game.get_country("Somalia").besieged = 1
+        game.get_country("Syria").make_fair()
+        game.get_country("Syria").make_adversary()
+        game.get_country("Syria").sleeperCells = 1
+        game.get_country("United Kingdom").posture = "Hard"
         game.markers.append("Abu Sayyaf")
         game.markers.append("Enhanced Measures")
         game.markers.append("NEST")
         game.markers.append("Patriot Act")
         game.markers.append("Renditions")
         game.markers.append("Wiretapping")
-        for country in game.map.values():
+        for country in game.get_countries():
             if country.schengen:
                 game.testCountry(country.name)
         print ""

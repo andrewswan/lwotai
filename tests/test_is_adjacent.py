@@ -7,9 +7,9 @@ class IsAdjacent(LabyrinthTestCase):
 
     def test_is_adjacent(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertTrue(app.isAdjacent("Iran", "Iraq"))
-        self.assertTrue(app.isAdjacent("Germany", "Spain"))
-        self.assertTrue(app.isAdjacent("Libya", "Italy"))
-        self.assertTrue(app.isAdjacent("Benelux", "Russia"))
-        self.assertTrue(app.isAdjacent("Lebanon", "France"))
-        self.assertFalse(app.isAdjacent("United States", "Lebanon"))
+        self.assertTrue(app.is_adjacent("Iran", "Iraq"))
+        self.assertTrue(app.is_adjacent("Germany", "Spain"))
+        self.assertTrue(app.is_adjacent("Libya", "Italy"))
+        self.assertTrue(app.is_adjacent("Benelux", "Russia"))
+        self.assertTrue(app.is_adjacent("Lebanon", "France"))
+        self.assertFalse(app.is_adjacent("United States", "Lebanon"))

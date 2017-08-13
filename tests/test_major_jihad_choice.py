@@ -17,75 +17,75 @@ class MajorJihadChoice(LabyrinthTestCase):
 
     def test_major_jihad_choice(self):
         app = Labyrinth(1, 1, self.set_up_test_scenario)
-        self.assertEqual(app.majorJihadChoice(3), False)    # 3 Ops
-        app.map["Gulf States"].make_poor()
-        app.map["Gulf States"].sleeperCells = 5
-        app.map["Gulf States"].activeCells = 4
-        app.map["Gulf States"].troopCubes = 4
-        app.map["Gulf States"].besieged = 0
-        self.assertEqual(app.majorJihadChoice(3), "Gulf States")    # 3 Ops
-        self.assertEqual(app.majorJihadChoice(2), "Gulf States")    # 2 Ops
-        self.assertEqual(app.majorJihadChoice(1), False)    # 1 Ops
-        app.map["Gulf States"].make_fair()
-        self.assertEqual(app.majorJihadChoice(3), "Gulf States")    # 3 Ops
-        self.assertEqual(app.majorJihadChoice(2), False)    # 2 Ops
-        self.assertEqual(app.majorJihadChoice(1), False)    # 1 Ops
-        app.map["Gulf States"].make_good()
-        self.assertEqual(app.majorJihadChoice(3), False)    # 3 Ops
-        self.assertEqual(app.majorJihadChoice(2), False)    # 2 Ops
-        self.assertEqual(app.majorJihadChoice(1), False)    # 1 Ops
-        app.map["Gulf States"].besieged = 1
-        app.map["Gulf States"].make_poor()
-        self.assertEqual(app.majorJihadChoice(3), "Gulf States")    # 3 Ops
-        self.assertEqual(app.majorJihadChoice(2), "Gulf States")    # 2 Ops
-        self.assertEqual(app.majorJihadChoice(1), "Gulf States")    # 1 Ops
-        app.map["Gulf States"].make_fair()
-        self.assertEqual(app.majorJihadChoice(3), "Gulf States")    # 3 Ops
-        self.assertEqual(app.majorJihadChoice(2), "Gulf States")    # 2 Ops
-        self.assertEqual(app.majorJihadChoice(1), False)    # 1 Ops
-        app.map["Gulf States"].make_good()
-        self.assertEqual(app.majorJihadChoice(3), "Gulf States")    # 3 Ops
-        self.assertEqual(app.majorJihadChoice(2), False)    # 2 Ops
-        self.assertEqual(app.majorJihadChoice(1), False)    # 1 Ops
+        self.assertEqual(app.major_jihad_choice(3), False)    # 3 Ops
+        app.get_country("Gulf States").make_poor()
+        app.get_country("Gulf States").sleeperCells = 5
+        app.get_country("Gulf States").activeCells = 4
+        app.get_country("Gulf States").troopCubes = 4
+        app.get_country("Gulf States").besieged = 0
+        self.assertEqual(app.major_jihad_choice(3), "Gulf States")    # 3 Ops
+        self.assertEqual(app.major_jihad_choice(2), "Gulf States")    # 2 Ops
+        self.assertEqual(app.major_jihad_choice(1), False)    # 1 Ops
+        app.get_country("Gulf States").make_fair()
+        self.assertEqual(app.major_jihad_choice(3), "Gulf States")    # 3 Ops
+        self.assertEqual(app.major_jihad_choice(2), False)    # 2 Ops
+        self.assertEqual(app.major_jihad_choice(1), False)    # 1 Ops
+        app.get_country("Gulf States").make_good()
+        self.assertEqual(app.major_jihad_choice(3), False)    # 3 Ops
+        self.assertEqual(app.major_jihad_choice(2), False)    # 2 Ops
+        self.assertEqual(app.major_jihad_choice(1), False)    # 1 Ops
+        app.get_country("Gulf States").besieged = 1
+        app.get_country("Gulf States").make_poor()
+        self.assertEqual(app.major_jihad_choice(3), "Gulf States")    # 3 Ops
+        self.assertEqual(app.major_jihad_choice(2), "Gulf States")    # 2 Ops
+        self.assertEqual(app.major_jihad_choice(1), "Gulf States")    # 1 Ops
+        app.get_country("Gulf States").make_fair()
+        self.assertEqual(app.major_jihad_choice(3), "Gulf States")    # 3 Ops
+        self.assertEqual(app.major_jihad_choice(2), "Gulf States")    # 2 Ops
+        self.assertEqual(app.major_jihad_choice(1), False)    # 1 Ops
+        app.get_country("Gulf States").make_good()
+        self.assertEqual(app.major_jihad_choice(3), "Gulf States")    # 3 Ops
+        self.assertEqual(app.major_jihad_choice(2), False)    # 2 Ops
+        self.assertEqual(app.major_jihad_choice(1), False)    # 1 Ops
 
-        app.map["Gulf States"].make_poor()
-        app.map["Gulf States"].sleeperCells = 5
-        app.map["Gulf States"].activeCells = 4
-        app.map["Gulf States"].troopCubes = 4
-        app.map["Gulf States"].besieged = 0
-        app.map["Afghanistan"].make_poor()
-        app.map["Afghanistan"].sleeperCells = 3
-        app.map["Afghanistan"].activeCells = 3
-        app.map["Afghanistan"].troopCubes = 1
-        app.map["Afghanistan"].besieged = 0
+        app.get_country("Gulf States").make_poor()
+        app.get_country("Gulf States").sleeperCells = 5
+        app.get_country("Gulf States").activeCells = 4
+        app.get_country("Gulf States").troopCubes = 4
+        app.get_country("Gulf States").besieged = 0
+        app.get_country("Afghanistan").make_poor()
+        app.get_country("Afghanistan").sleeperCells = 3
+        app.get_country("Afghanistan").activeCells = 3
+        app.get_country("Afghanistan").troopCubes = 1
+        app.get_country("Afghanistan").besieged = 0
 
-        self.assertEqual(app.majorJihadChoice(3), "Gulf States")  # 3 Ops
-        self.assertEqual(app.majorJihadChoice(2), "Gulf States")  # 2 Ops
-        self.assertEqual(app.majorJihadChoice(1), False)  # 1 Ops
+        self.assertEqual(app.major_jihad_choice(3), "Gulf States")  # 3 Ops
+        self.assertEqual(app.major_jihad_choice(2), "Gulf States")  # 2 Ops
+        self.assertEqual(app.major_jihad_choice(1), False)  # 1 Ops
 
-        app.map["Saudi Arabia"].make_poor()
-        app.map["Saudi Arabia"].sleeperCells = 5
-        app.map["Saudi Arabia"].activeCells = 4
-        app.map["Saudi Arabia"].troopCubes = 4
-        app.map["Saudi Arabia"].besieged = 0
+        app.get_country("Saudi Arabia").make_poor()
+        app.get_country("Saudi Arabia").sleeperCells = 5
+        app.get_country("Saudi Arabia").activeCells = 4
+        app.get_country("Saudi Arabia").troopCubes = 4
+        app.get_country("Saudi Arabia").besieged = 0
 
-        self.assertTrue(app.majorJihadChoice(3) in ["Gulf States", "Saudi Arabia"])  # 3 Ops
-        self.assertTrue(app.majorJihadChoice(3) in ["Gulf States", "Saudi Arabia"])  # 3 Ops
-        self.assertTrue(app.majorJihadChoice(3) in ["Gulf States", "Saudi Arabia"])  # 3 Ops
-        self.assertTrue(app.majorJihadChoice(3) in ["Gulf States", "Saudi Arabia"])  # 3 Ops
-        self.assertTrue(app.majorJihadChoice(3) in ["Gulf States", "Saudi Arabia"])  # 3 Ops
-        self.assertTrue(app.majorJihadChoice(3) in ["Gulf States", "Saudi Arabia"])  # 3 Ops
-        self.assertTrue(app.majorJihadChoice(3) in ["Gulf States", "Saudi Arabia"])  # 3 Ops
-        self.assertTrue(app.majorJihadChoice(3) in ["Gulf States", "Saudi Arabia"])  # 3 Ops
-        self.assertTrue(app.majorJihadChoice(3) in ["Gulf States", "Saudi Arabia"])  # 3 Ops
-        self.assertTrue(app.majorJihadChoice(3) in ["Gulf States", "Saudi Arabia"])  # 3 Ops
+        self.assertTrue(app.major_jihad_choice(3) in ["Gulf States", "Saudi Arabia"])  # 3 Ops
+        self.assertTrue(app.major_jihad_choice(3) in ["Gulf States", "Saudi Arabia"])  # 3 Ops
+        self.assertTrue(app.major_jihad_choice(3) in ["Gulf States", "Saudi Arabia"])  # 3 Ops
+        self.assertTrue(app.major_jihad_choice(3) in ["Gulf States", "Saudi Arabia"])  # 3 Ops
+        self.assertTrue(app.major_jihad_choice(3) in ["Gulf States", "Saudi Arabia"])  # 3 Ops
+        self.assertTrue(app.major_jihad_choice(3) in ["Gulf States", "Saudi Arabia"])  # 3 Ops
+        self.assertTrue(app.major_jihad_choice(3) in ["Gulf States", "Saudi Arabia"])  # 3 Ops
+        self.assertTrue(app.major_jihad_choice(3) in ["Gulf States", "Saudi Arabia"])  # 3 Ops
+        self.assertTrue(app.major_jihad_choice(3) in ["Gulf States", "Saudi Arabia"])  # 3 Ops
+        self.assertTrue(app.major_jihad_choice(3) in ["Gulf States", "Saudi Arabia"])  # 3 Ops
 
-        app.map["Pakistan"].make_poor()
-        app.map["Pakistan"].sleeperCells = 5
-        app.map["Pakistan"].activeCells = 4
-        app.map["Pakistan"].troopCubes = 4
-        app.map["Pakistan"].besieged = 0
+        app.get_country("Pakistan").make_poor()
+        app.get_country("Pakistan").sleeperCells = 5
+        app.get_country("Pakistan").activeCells = 4
+        app.get_country("Pakistan").troopCubes = 4
+        app.get_country("Pakistan").besieged = 0
 
-        self.assertEqual(app.majorJihadChoice(3), "Pakistan")    # 3 Ops
-        self.assertEqual(app.majorJihadChoice(2), "Pakistan")    # 2 Ops
-        self.assertEqual(app.majorJihadChoice(1), False)    # 1 Ops
+        self.assertEqual(app.major_jihad_choice(3), "Pakistan")  # 3 Ops
+        self.assertEqual(app.major_jihad_choice(2), "Pakistan")  # 2 Ops
+        self.assertEqual(app.major_jihad_choice(1), False)  # 1 Ops
