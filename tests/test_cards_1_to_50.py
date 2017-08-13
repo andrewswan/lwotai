@@ -250,7 +250,7 @@ class Card11(LabyrinthTestCase):
         self.assertTrue(app.funding == 3)
         self.assertTrue("Abbas" in app.markers)
         app.get_country("Israel").plots = 1
-        app.resolvePlot("Israel", 1, [1], [], [], [], [], False)
+        app.resolve_plot("Israel", 1, [1], [], [], [], [], False)
         self.assertFalse("Abbas" in app.markers)
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
@@ -261,7 +261,7 @@ class Card11(LabyrinthTestCase):
         self.assertTrue(app.funding == 3)
         self.assertTrue("Abbas" in app.markers)
         app.get_country("Israel").plots = 1
-        app.resolvePlot("Israel", 1, [1], [], [], [], [], False)
+        app.resolve_plot("Israel", 1, [1], [], [], [], [], False)
         self.assertFalse("Abbas" in app.markers)
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
@@ -272,7 +272,7 @@ class Card11(LabyrinthTestCase):
         self.assertTrue(app.funding == 5)
         self.assertTrue("Abbas" in app.markers)
         app.get_country("Israel").plots = 1
-        app.resolvePlot("Israel", 1, [1], [], [], [], [], False)
+        app.resolve_plot("Israel", 1, [1], [], [], [], [], False)
         self.assertFalse("Abbas" in app.markers)
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
@@ -282,7 +282,7 @@ class Card11(LabyrinthTestCase):
         self.assertTrue(app.funding == 5)
         self.assertTrue("Abbas" in app.markers)
         app.get_country("Israel").plots = 1
-        app.resolvePlot("Israel", 1, [1], [], [], [], [], False)
+        app.resolve_plot("Israel", 1, [1], [], [], [], [], False)
         self.assertFalse("Abbas" in app.markers)
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
@@ -405,17 +405,17 @@ class Card16(LabyrinthTestCase):
 
     def test_event(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        app.executeCardEuroIslam("Hard")
+        app.execute_card_euro_islam("Hard")
         self.assertTrue(app.get_country("Benelux").posture == "Hard")
         self.assertTrue(app.funding == 4)
         app.get_country("Iraq").make_islamist_rule()
-        app.executeCardEuroIslam("Soft")
+        app.execute_card_euro_islam("Soft")
         self.assertTrue(app.get_country("Benelux").posture == "Soft")
         self.assertTrue(app.funding == 4)
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.funding = 1
-        app.executeCardEuroIslam("Hard")
+        app.execute_card_euro_islam("Hard")
         self.assertTrue(app.get_country("Benelux").posture == "Hard")
         self.assertTrue(app.funding == 1)
 
@@ -689,9 +689,9 @@ class Card29(LabyrinthTestCase):
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("United States").posture = "Hard"
-        app.executeNonMuslimWOI("Spain", 4)
+        app.execute_non_muslim_woi("Spain", 4)
         self.assertTrue(app.get_country("Spain").posture == "Soft")
-        app.executeNonMuslimWOI("France", 5)
+        app.execute_non_muslim_woi("France", 5)
         self.assertTrue(app.get_country("France").posture == "Hard")
 
 

@@ -7,42 +7,42 @@ class RecruitTest(LabyrinthTestCase):
 
     def test_recruit_choice(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertFalse(app.recruitChoice(3))
+        self.assertFalse(app.recruit_choice(3))
         app.get_country("Gulf States").make_good()
         app.get_country("Gulf States").activeCells = 1
-        self.assertEqual(app.recruitChoice(1), "Gulf States")
+        self.assertEqual(app.recruit_choice(1), "Gulf States")
         app.get_country("Gulf States").activeCells = 0
         app.get_country("Gulf States").cadre = 1
-        self.assertEqual(app.recruitChoice(1), "Gulf States")
+        self.assertEqual(app.recruit_choice(1), "Gulf States")
         app.get_country("Gulf States").activeCells = 1
         app.get_country("Gulf States").cadre = 0
         app.get_country("Iraq").make_good()
         app.get_country("Iraq").activeCells = 1
         for i in range(10):
-            ret_val = app.recruitChoice(i)
+            ret_val = app.recruit_choice(i)
             self.assertTrue(ret_val in ["Iraq", "Gulf States"])
         app.get_country("Iraq").activeCells = 0
         app.get_country("Iraq").cadre = 1
-        self.assertEqual(app.recruitChoice(1), "Gulf States")
+        self.assertEqual(app.recruit_choice(1), "Gulf States")
         app.get_country("Iraq").troopCubes = 2
-        self.assertEqual(app.recruitChoice(1), "Iraq")
+        self.assertEqual(app.recruit_choice(1), "Iraq")
         app.get_country("Gulf States").besieged = 1
-        self.assertEqual(app.recruitChoice(1), "Gulf States")
+        self.assertEqual(app.recruit_choice(1), "Gulf States")
         app.get_country("Russia").sleeperCells = 1
-        self.assertEqual(app.recruitChoice(1), "Russia")
+        self.assertEqual(app.recruit_choice(1), "Russia")
         app.get_country("Philippines").sleeperCells = 1
-        self.assertEqual(app.recruitChoice(1), "Philippines")
+        self.assertEqual(app.recruit_choice(1), "Philippines")
         app.get_country("Iraq").make_islamist_rule()
         app.get_country("Iraq").activeCells = 6
-        self.assertEqual(app.recruitChoice(1), "Philippines")
+        self.assertEqual(app.recruit_choice(1), "Philippines")
         app.get_country("Iraq").activeCells = 5
-        self.assertEqual(app.recruitChoice(3), "Iraq")
+        self.assertEqual(app.recruit_choice(3), "Iraq")
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").activeCells = 1
         app.get_country("Gulf States").troopCubes = 5
-        self.assertEqual(app.recruitChoice(3), "Iraq")
+        self.assertEqual(app.recruit_choice(3), "Iraq")
         app.get_country("Gulf States").troopCubes = 6
-        self.assertEqual(app.recruitChoice(1), "Gulf States")
+        self.assertEqual(app.recruit_choice(1), "Gulf States")
 
     def test_execute_recruit(self):
         # Normal

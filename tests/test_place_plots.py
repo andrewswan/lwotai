@@ -8,23 +8,23 @@ class PlacePlotsTest(LabyrinthTestCase):
     def test_place_plot(self):
         # no cells
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        unusedOps = app.executePlot(1, True, [1])
+        unusedOps = app.execute_plot(1, True, [1])
         self.assertEqual(unusedOps, 1)
-        unusedOps = app.executePlot(2, False, [1, 2])
+        unusedOps = app.execute_plot(2, False, [1, 2])
         self.assertEqual(unusedOps, 2)
-        unusedOps = app.executePlot(3, True, [1, 2, 3])
+        unusedOps = app.execute_plot(3, True, [1, 2, 3])
         self.assertEqual(unusedOps, 3)
 
         # 1 cell in US
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("United States").sleeperCells = 1
-        unusedOps = app.executePlot(1, True, [2])
+        unusedOps = app.execute_plot(1, True, [2])
         self.assertEqual(unusedOps, 0)
         self.assertEqual(app.get_country("United States").activeCells, 1)
         self.assertEqual(app.get_country("United States").sleeperCells, 0)
         self.assertEqual(app.get_country("United States").plots, 0)
 
-        unusedOps = app.executePlot(1, True, [1])
+        unusedOps = app.execute_plot(1, True, [1])
         self.assertEqual(unusedOps, 0)
         self.assertEqual(app.get_country("United States").activeCells, 1)
         self.assertEqual(app.get_country("United States").plots, 1)
@@ -32,7 +32,7 @@ class PlacePlotsTest(LabyrinthTestCase):
         # 2 cells in us
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("United States").sleeperCells = 2
-        unusedOps = app.executePlot(1, True, [1])
+        unusedOps = app.execute_plot(1, True, [1])
         self.assertEqual(unusedOps, 0)
         self.assertEqual(app.get_country("United States").activeCells, 1)
         self.assertEqual(app.get_country("United States").sleeperCells, 1)
@@ -40,7 +40,7 @@ class PlacePlotsTest(LabyrinthTestCase):
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("United States").sleeperCells = 2
-        unusedOps = app.executePlot(2, True, [1, 1])
+        unusedOps = app.execute_plot(2, True, [1, 1])
         self.assertEqual(unusedOps, 0)
         self.assertEqual(app.get_country("United States").activeCells, 2)
         self.assertEqual(app.get_country("United States").sleeperCells, 0)
@@ -48,7 +48,7 @@ class PlacePlotsTest(LabyrinthTestCase):
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("United States").sleeperCells = 2
-        unusedOps = app.executePlot(2, True, [1, 2])
+        unusedOps = app.execute_plot(2, True, [1, 2])
         self.assertEqual(unusedOps, 0)
         self.assertEqual(app.get_country("United States").activeCells, 2)
         self.assertEqual(app.get_country("United States").sleeperCells, 0)
@@ -56,7 +56,7 @@ class PlacePlotsTest(LabyrinthTestCase):
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("United States").sleeperCells = 2
-        unusedOps = app.executePlot(3, True, [1, 2, 3])
+        unusedOps = app.execute_plot(3, True, [1, 2, 3])
         self.assertEqual(unusedOps, 1)
         self.assertEqual(app.get_country("United States").activeCells, 2)
         self.assertEqual(app.get_country("United States").sleeperCells, 0)
@@ -65,7 +65,7 @@ class PlacePlotsTest(LabyrinthTestCase):
         # 3 cells in us
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("United States").sleeperCells = 3
-        unusedOps = app.executePlot(1, True, [1])
+        unusedOps = app.execute_plot(1, True, [1])
         self.assertEqual(unusedOps, 0)
         self.assertEqual(app.get_country("United States").activeCells, 1)
         self.assertEqual(app.get_country("United States").sleeperCells, 2)
@@ -73,7 +73,7 @@ class PlacePlotsTest(LabyrinthTestCase):
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("United States").sleeperCells = 3
-        unusedOps = app.executePlot(2, True, [1, 1])
+        unusedOps = app.execute_plot(2, True, [1, 1])
         self.assertEqual(unusedOps, 0)
         self.assertEqual(app.get_country("United States").activeCells, 2)
         self.assertEqual(app.get_country("United States").sleeperCells, 1)
@@ -81,7 +81,7 @@ class PlacePlotsTest(LabyrinthTestCase):
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("United States").sleeperCells = 3
-        unusedOps = app.executePlot(2, True, [1, 2])
+        unusedOps = app.execute_plot(2, True, [1, 2])
         self.assertEqual(unusedOps, 0)
         self.assertEqual(app.get_country("United States").activeCells, 2)
         self.assertEqual(app.get_country("United States").sleeperCells, 1)
@@ -89,7 +89,7 @@ class PlacePlotsTest(LabyrinthTestCase):
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("United States").sleeperCells = 3
-        unusedOps = app.executePlot(2, True, [1, 2])
+        unusedOps = app.execute_plot(2, True, [1, 2])
         self.assertEqual(unusedOps, 0)
         self.assertEqual(app.get_country("United States").activeCells, 2)
         self.assertEqual(app.get_country("United States").sleeperCells, 1)
@@ -97,7 +97,7 @@ class PlacePlotsTest(LabyrinthTestCase):
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("United States").sleeperCells = 3
-        unusedOps = app.executePlot(3, True, [1, 1, 3])
+        unusedOps = app.execute_plot(3, True, [1, 1, 3])
         self.assertEqual(unusedOps, 0)
         self.assertEqual(app.get_country("United States").activeCells, 3)
         self.assertEqual(app.get_country("United States").sleeperCells, 0)
@@ -112,7 +112,7 @@ class PlacePlotsTest(LabyrinthTestCase):
         app.get_country("Canada").sleeperCells = 1
         app.get_country("Iraq").sleeperCells = 1
         app.get_country("Iraq").aid = 1
-        unusedOps = app.executePlot(1, True, [1])
+        unusedOps = app.execute_plot(1, True, [1])
         self.assertEqual(unusedOps, 0)
         self.assertEqual(app.get_country("Israel").activeCells, 1)
         self.assertEqual(app.get_country("Israel").sleeperCells, 0)
@@ -129,7 +129,7 @@ class PlacePlotsTest(LabyrinthTestCase):
         app.get_country("Iraq").make_fair()
         app.get_country("Iraq").sleeperCells = 1
         app.get_country("Iraq").aid = 1
-        unusedOps = app.executePlot(2, True, [1, 1])
+        unusedOps = app.execute_plot(2, True, [1, 1])
         self.assertEqual(unusedOps, 0)
         self.assertEqual(app.get_country("Israel").activeCells, 1)
         self.assertEqual(app.get_country("Israel").sleeperCells, 0)
@@ -145,7 +145,7 @@ class PlacePlotsTest(LabyrinthTestCase):
         app.get_country("Iraq").make_fair()
         app.get_country("Iraq").sleeperCells = 1
         app.get_country("Iraq").aid = 1
-        unusedOps = app.executePlot(1, True, [1])
+        unusedOps = app.execute_plot(1, True, [1])
         self.assertEqual(unusedOps, 0)
         self.assertEqual(app.get_country("Israel").activeCells, 0)
         self.assertEqual(app.get_country("Israel").sleeperCells, 1)
@@ -164,7 +164,7 @@ class PlacePlotsTest(LabyrinthTestCase):
         app.get_country("Iraq").make_fair()
         app.get_country("Iraq").sleeperCells = 1
         app.get_country("Iraq").aid = 1
-        unusedOps = app.executePlot(1, True, [1])
+        unusedOps = app.execute_plot(1, True, [1])
         self.assertEqual(unusedOps, 0)
         self.assertEqual(app.get_country("Israel").activeCells, 0)
         self.assertEqual(app.get_country("Israel").sleeperCells, 1)
@@ -184,7 +184,7 @@ class PlacePlotsTest(LabyrinthTestCase):
         app.get_country("Iraq").make_fair()
         app.get_country("Iraq").sleeperCells = 1
         app.get_country("Iraq").aid = 0
-        unusedOps = app.executePlot(1, True, [1])
+        unusedOps = app.execute_plot(1, True, [1])
         self.assertEqual(unusedOps, 1)
         self.assertEqual(app.get_country("Israel").activeCells, 0)
         self.assertEqual(app.get_country("Israel").sleeperCells, 1)
@@ -203,7 +203,7 @@ class PlacePlotsTest(LabyrinthTestCase):
         app.get_country("Iraq").make_fair()
         app.get_country("Iraq").sleeperCells = 1
         app.get_country("Iraq").aid = 0
-        unusedOps = app.executePlot(1, True, [1])
+        unusedOps = app.execute_plot(1, True, [1])
         self.assertEqual(unusedOps, 0)
         self.assertEqual(app.get_country("Israel").activeCells, 1)
         self.assertEqual(app.get_country("Israel").sleeperCells, 0)
@@ -222,7 +222,7 @@ class PlacePlotsTest(LabyrinthTestCase):
         app.get_country("Iraq").make_fair()
         app.get_country("Iraq").sleeperCells = 1
         app.get_country("Iraq").aid = 0
-        unusedOps = app.executePlot(2, True, [1, 1])
+        unusedOps = app.execute_plot(2, True, [1, 1])
         self.assertEqual(unusedOps, 0)
         self.assertEqual(app.get_country("Israel").activeCells, 1)
         self.assertEqual(app.get_country("Israel").sleeperCells, 0)
@@ -241,7 +241,7 @@ class PlacePlotsTest(LabyrinthTestCase):
         app.get_country("Iraq").make_fair()
         app.get_country("Iraq").sleeperCells = 1
         app.get_country("Iraq").aid = 0
-        unusedOps = app.executePlot(3, True, [1, 1, 1])
+        unusedOps = app.execute_plot(3, True, [1, 1, 1])
         self.assertEqual(unusedOps, 0)
         self.assertEqual(app.get_country("Israel").activeCells, 1)
         self.assertEqual(app.get_country("Israel").sleeperCells, 0)
@@ -262,7 +262,7 @@ class PlacePlotsTest(LabyrinthTestCase):
         app.get_country("Iraq").troopCubes = 1
         app.get_country("Philippines").sleeperCells = 1
         app.get_country("Philippines").troopCubes = 1
-        unusedOps = app.executePlot(1, True, [1])
+        unusedOps = app.execute_plot(1, True, [1])
         self.assertEqual(unusedOps, 0)
         self.assertEqual(app.get_country("Israel").activeCells, 0)
         self.assertEqual(app.get_country("Israel").sleeperCells, 1)
@@ -287,7 +287,7 @@ class PlacePlotsTest(LabyrinthTestCase):
         app.get_country("Gulf States").make_fair()
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").aid = 1
-        unusedOps = app.executePlot(1, True, [1])
+        unusedOps = app.execute_plot(1, True, [1])
         self.assertEqual(unusedOps, 0)
         self.assertEqual(app.get_country("Iraq").plots, 0)
         self.assertEqual(app.get_country("Gulf States").plots, 1)
@@ -305,7 +305,7 @@ class PlacePlotsTest(LabyrinthTestCase):
         app.get_country("Gulf States").make_fair()
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").aid = 1
-        unusedOps = app.executePlot(1, False, [1])
+        unusedOps = app.execute_plot(1, False, [1])
         self.assertEqual(unusedOps, 0)
         self.assertEqual(app.get_country("Iraq").plots, 1)
         self.assertEqual(app.get_country("Gulf States").plots, 0)

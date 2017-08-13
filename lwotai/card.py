@@ -639,7 +639,7 @@ class Card(object):
                     return False
             elif self.number == 16:  # Euro-Islam
                 posture = app.get_posture_from_user("Select Benelux's Posture (hard or soft): ")
-                app.executeCardEuroIslam(posture)
+                app.execute_card_euro_islam(posture)
             elif self.number == 17:  # FSB
                 app.output_to_history("Examine Jihadist hand for Loose Nukes, HEU, or Kazakh Strain.", False)
                 hasThem = app.get_yes_no_from_user("Does the Jihadist hand have Loose Nukes, HEU, or Kazakh Strain? (y/n): ")
@@ -811,7 +811,7 @@ class Card(object):
                             else:
                                 target_name = country_name
                                 posture_roll = app.get_roll_from_user("Enter Posture Roll or r to have program roll: ")
-                                app.executeNonMuslimWOI(target_name, posture_roll)
+                                app.execute_non_muslim_woi(target_name, posture_roll)
                     if finished_picking:
                         break
                 app.output_to_history("", False)
@@ -1359,9 +1359,9 @@ class Card(object):
                 target = random.choice(possibles)
                 app.place_cells(target.name, 1)
             elif self.number in [87, 88, 89]:  # Martyrdom Operation
-                if app.executePlot(1, False, [1], True) == 1:
+                if app.execute_plot(1, False, [1], True) == 1:
                     app.output_to_history("No plots could be placed.")
-                    app.handleRadicalization(app.deck[str(self.number)].ops)
+                    app.handle_radicalization(app.deck[str(self.number)].ops)
             elif self.number == 90:  # Quagmire
                 app.set_posture("United States", "Soft")
                 app.output_to_history("US Posture now Soft.", False)
@@ -1427,7 +1427,7 @@ class Card(object):
                     app.output_to_history("Conduct a 1-value operation (Use commands: alert, deploy, disrupt,"
                                           " reassessment, regime, withdraw, or woi).", False)
                 else:
-                    app.aiFlowChartMajorJihad(97)
+                    app.ai_flow_chart_major_jihad(97)
             elif self.number == 98:  # Gaza Withdrawl
                 if side == "US":
                     app.change_funding(-1)
@@ -1839,7 +1839,7 @@ class Card(object):
                                 app.output_to_history("%d Plots removed from %s." % (num_plots, country.name), False)
                     app.output_to_history("US draws 2 cards.", True)
                 else:
-                    if app.executePlot(1, False, [1], False, False, True) == 1:
+                    if app.execute_plot(1, False, [1], False, False, True) == 1:
                         app.output_to_history("No plots could be placed.", True)
             elif self.number == 117 or self.number == 118:  # Oil Price Spike
                 app.lapsing.append("Oil Price Spike")

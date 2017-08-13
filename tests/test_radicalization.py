@@ -19,7 +19,7 @@ class RadicalizationTest(LabyrinthTestCase):
         sleepers_before = country.sleeperCells
 
         # Invoke
-        app.handleRadicalization(1)
+        app.handle_radicalization(1)
 
         # Assert
         sleepers_after = country.sleeperCells

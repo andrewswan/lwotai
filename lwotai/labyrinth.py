@@ -45,7 +45,7 @@ class Labyrinth(object):
         self.validLapsingMarkers = []
         self.whichPlayer = ""
         # Initialise
-        self.deckSetup()
+        self.deck_setup()
         self.valid_markers_setup()
         # Apply any passed-in setup function
         if setup_function:
@@ -63,7 +63,8 @@ class Labyrinth(object):
         self.output_to_history("")
         self.output_to_history("[[ %d (Turn %s) ]]" % (self.startYear + (self.turn - 1), self.turn), True)
 
-    def debug_print(self, _):
+    @staticmethod
+    def debug_print(_):
         return
 
     def output_to_history(self, output, line_feed=True):
@@ -114,7 +115,7 @@ class Labyrinth(object):
         print "US Prestige: %d" % self.prestige
         print ""
 
-    def deckSetup(self):
+    def deck_setup(self):
         self.deck["1"] = Card(1, "US", "Backlash", 1, False, False, False)
         self.deck["2"] = Card(2, "US", "Biometrics", 1, False, False, True)
         self.deck["3"] = Card(3, "US", "CTR", 1, False, True, False)
@@ -424,7 +425,7 @@ class Labyrinth(object):
 
         if use_gwot_penalty:
             modified_roll += self.gwot_penalty()
-            if self.gwot_penalty() <> 0:
+            if self.gwot_penalty() != 0:
                 self.output_to_history("-1 for GWOT Relations Penalty", False)
 
         if self.map.get(country).aid > 0:
@@ -447,16 +448,16 @@ class Labyrinth(object):
                 elif self.map.get(country).posture == "Soft":
                     world_position -= 1
         if world_position > 0:
-            worldPosStr = "Hard"
+            world_position_str = "Hard"
         elif world_position < 0:
-            worldPosStr = "Soft"
+            world_position_str = "Soft"
         else:
-            worldPosStr = "Even"
+            world_position_str = "Even"
         if world_position > 3:
             world_position = 3
         elif world_position < -3:
             world_position = -3
-        if self.us_posture() != worldPosStr:
+        if self.us_posture() != world_position_str:
             return -(abs(world_position))
         else:
             return 0
@@ -628,7 +629,8 @@ class Labyrinth(object):
                 self.output_to_history(self.map.get(country).countryStr(), True)
             elif self.map.get(country).is_ally():
                 self.improve_governance(country)
-                self.output_to_history("* WoI in %s succeeded - Governance now %s." % (country, self.map.get(country).govStr()), False)
+                self.output_to_history("* WoI in %s succeeded - Governance now %s." %
+                                       (country, self.map.get(country).govStr()), False)
                 self.output_to_history(self.map.get(country).countryStr(), True)
 
     def handle_alert(self, country):
@@ -899,7 +901,7 @@ class Labyrinth(object):
     def major_jihad_choice(self, ops):
         """Return AI choice country."""
         possible = self.major_jihad_possible(ops)
-        if possible == []:
+        if not possible:
             return False
         else:
             if "Pakistan" in possible:
@@ -976,7 +978,7 @@ class Labyrinth(object):
         if self.prestige < 1:
             self.prestige = 1
 
-    def recruitChoice(self, ops, is_madrassas=False):
+    def recruit_choice(self, ops, is_madrassas=False):
         self.debug_print("DEBUG: recruit with remaining %d ops" % ops)
         self.debug_print("DEBUG: recruit with remaining %d ops" % (2 * ops))
         country_scores = {}
@@ -1061,7 +1063,7 @@ class Labyrinth(object):
     def handleRecruit(self, ops, is_madrassas=False):
         self.debug_print("recruit ops: ")
         self.debug_print("DEBUG: recruit with remaining %d ops" % ops)
-        country = self.recruitChoice(ops, is_madrassas)
+        country = self.recruit_choice(ops, is_madrassas)
         if not country:
             self.output_to_history("* No countries qualify to Recruit.", True)
             return ops
@@ -1622,13 +1624,13 @@ class Labyrinth(object):
                 i += 1
         return rollPosition
 
-    def executePlot(self, ops, isOps, plotRolls, isMartyrdomOperation=False, isDanishCartoons=False, isKSM=False):
+    def execute_plot(self, ops, isOps, plotRolls, isMartyrdomOperation=False, isDanishCartoons=False, isKSM=False):
         if not isMartyrdomOperation and not isDanishCartoons and not isKSM:
             self.output_to_history("* Jihadists Plotting", False)
         # In US
         self.debug_print("DEBUG: In US")
-        rollPosition = self.placePlots("United States", 0, plotRolls, isMartyrdomOperation, isDanishCartoons, isKSM)
-        if rollPosition == ops:
+        roll_position = self.placePlots("United States", 0, plotRolls, isMartyrdomOperation, isDanishCartoons, isKSM)
+        if roll_position == ops:
             return 0
         if self.prestige >= 4:
             # Prestige high
@@ -1636,44 +1638,44 @@ class Labyrinth(object):
             if ("Abu Sayyaf" in self.markers) and ((self.map.get("Philippines").totalCells(True)) >= self.map.get("Philippines").troops()):
                 # In Philippines
                 self.debug_print("DEBUG: Philippines")
-                rollPosition = self.placePlots("Philippines", rollPosition, plotRolls, isMartyrdomOperation, isDanishCartoons, isKSM)
-                if rollPosition == ops:
+                roll_position = self.placePlots("Philippines", roll_position, plotRolls, isMartyrdomOperation, isDanishCartoons, isKSM)
+                if roll_position == ops:
                     return 0
             # With troops
             self.debug_print("DEBUG: troops")
-            troopDict = self.getCountriesWithTroopsByGovernance()
-            rollPosition = self.handlePlotPriorities(troopDict, ops, rollPosition, plotRolls, isOps, isMartyrdomOperation, isDanishCartoons, isKSM)
-            if rollPosition == ops:
+            troop_dict = self.getCountriesWithTroopsByGovernance()
+            roll_position = self.handlePlotPriorities(troop_dict, ops, roll_position, plotRolls, isOps, isMartyrdomOperation, isDanishCartoons, isKSM)
+            if roll_position == ops:
                 return 0
         # No GWOT Penalty
         if self.gwot_penalty() >= 0:
             self.debug_print("DEBUG: No GWOT Penalty")
             postureDict = self.getCountriesWithUSPostureByGovernance()
-            rollPosition = self.handlePlotPriorities(postureDict, ops, rollPosition, plotRolls, isOps, isMartyrdomOperation, isDanishCartoons, isKSM)
-            if rollPosition == ops:
+            roll_position = self.handlePlotPriorities(postureDict, ops, roll_position, plotRolls, isOps, isMartyrdomOperation, isDanishCartoons, isKSM)
+            if roll_position == ops:
                 return 0
         # With aid
         self.debug_print("DEBUG: aid")
-        aidDict = self.getCountriesWithAidByGovernance()
-        rollPosition = self.handlePlotPriorities(aidDict, ops, rollPosition, plotRolls, isOps, isMartyrdomOperation, isDanishCartoons, isKSM)
-        if rollPosition == ops:
+        aid_dict = self.getCountriesWithAidByGovernance()
+        roll_position = self.handlePlotPriorities(aid_dict, ops, roll_position, plotRolls, isOps, isMartyrdomOperation, isDanishCartoons, isKSM)
+        if roll_position == ops:
             return 0
         # Funding < 9
         if self.funding < 9:
             self.debug_print("DEBUG: Funding < 9")
-            nonMuslimDict = self.getNonMuslimCountriesByGovernance()
-            rollPosition = self.handlePlotPriorities(nonMuslimDict, ops, rollPosition, plotRolls, isOps, isMartyrdomOperation, isDanishCartoons, isKSM)
-            if rollPosition == ops:
+            non_muslim_dict = self.getNonMuslimCountriesByGovernance()
+            roll_position = self.handlePlotPriorities(non_muslim_dict, ops, roll_position, plotRolls, isOps, isMartyrdomOperation, isDanishCartoons, isKSM)
+            if roll_position == ops:
                 return 0
-            muslimDict = self.getMuslimCountriesByGovernance()
-            rollPosition = self.handlePlotPriorities(muslimDict, ops, rollPosition, plotRolls, isOps, isMartyrdomOperation, isDanishCartoons, isKSM)
-            if rollPosition == ops:
+            muslim_dict = self.getMuslimCountriesByGovernance()
+            roll_position = self.handlePlotPriorities(muslim_dict, ops, roll_position, plotRolls, isOps, isMartyrdomOperation, isDanishCartoons, isKSM)
+            if roll_position == ops:
                 return 0
-        return len(plotRolls) - rollPosition
+        return len(plotRolls) - roll_position
 
     def handle_ai_plot_action(self, ops, is_ops):
         plot_rolls = [random.randint(1, 6) for _ in range(ops)]
-        return self.executePlot(ops, is_ops, plot_rolls)
+        return self.execute_plot(ops, is_ops, plot_rolls)
 
     def place_cell(self, country_name):
         """Places a cell from the funding track into the given country"""
@@ -1685,22 +1687,22 @@ class Labyrinth(object):
         self.output_to_history("--> Sleeper Cell placed in %s." % country_name, True)
         self.output_to_history(self.map.get(country_name).countryStr(), True)
 
-    def handleRadicalization(self, ops):
+    def handle_radicalization(self, ops):
         self.output_to_history("* Radicalization with %d ops." % ops, False)
-        opsRemaining = ops
+        ops_remaining = ops
         # First box
-        if opsRemaining > 0:
+        if ops_remaining > 0:
             if self.cells > 0:
                 country_name = self.randomizer.pick_one(self.map.country_names())
                 self.place_cell(country_name)
-                opsRemaining -= 1
+                ops_remaining -= 1
                 # Second box
-        if opsRemaining > 0:
+        if ops_remaining > 0:
             if self.cells < 15:
                 self.handleTravel(1, True)
-                opsRemaining -= 1
+                ops_remaining -= 1
                 # Third box
-        if opsRemaining > 0:
+        if ops_remaining > 0:
             if self.funding < 9:
                 possibles = []
                 for country in self.map.country_names():
@@ -1712,9 +1714,9 @@ class Labyrinth(object):
                     self.testCountry(location)
                     self.map.get(location).plots += 1
                     self.output_to_history("--> Plot placed in %s." % location, True)
-                    opsRemaining -= 1
+                    ops_remaining -= 1
                     # Fourth box
-        while opsRemaining > 0:
+        while ops_remaining > 0:
             possibles = []
             for country in self.map.country_names():
                 if (self.map.get(country).type == "Shia-Mix" or self.map.get(country).type == "Suni") and (self.map.get(country).is_good() or self.map.get(country).is_fair()):
@@ -1727,9 +1729,9 @@ class Labyrinth(object):
                 self.map.get(location).worsen_governance()
                 self.output_to_history("--> Governance in %s worsens to %s." % (location, self.map.get(location).govStr()), True)
                 self.output_to_history(self.map.get(location).countryStr(), True)
-                opsRemaining -= 1
+                ops_remaining -= 1
 
-    def resolvePlot(self, country, plotType, postureRoll, usPrestigeRolls, schCountries, schPostureRolls, govRolls, isBacklash=False):
+    def resolve_plot(self, country, plotType, postureRoll, usPrestigeRolls, schCountries, schPostureRolls, govRolls, isBacklash=False):
         self.output_to_history("--> Resolve \"%s\" plot in %s" % (str(plotType), country), False)
         if country == "United States":
             self._resolve_plot_in_us(plotType, postureRoll, usPrestigeRolls)
@@ -1820,122 +1822,124 @@ class Labyrinth(object):
                 successes -= 1
                 self.output_to_history("Governance to %s" % self.map.get(country).govStr(), True)
 
-    def _resolve_plot_in_us(self, plotType, postureRoll, usPrestigeRolls):
-        if plotType == "WMD":
+    def _resolve_plot_in_us(self, plot_type, posture_roll, us_prestige_rolls):
+        if plot_type == "WMD":
             self.gameOver = True
             self.output_to_history("== GAME OVER - JIHADIST AUTOMATIC VICTORY ==", True)
         else:
             self.funding = 9
             self.output_to_history("Jihadist Funding now 9", False)
-            presMultiplier = 1
-            if usPrestigeRolls[0] <= 4:
-                presMultiplier = -1
-            self.change_prestige(min(usPrestigeRolls[1], usPrestigeRolls[2]) * presMultiplier)
+            prestige_multiplier = 1
+            if us_prestige_rolls[0] <= 4:
+                prestige_multiplier = -1
+            self.change_prestige(min(us_prestige_rolls[1], us_prestige_rolls[2]) * prestige_multiplier)
             self.output_to_history("US Prestige now %d" % self.prestige, False)
-            if postureRoll <= 4:
+            if posture_roll <= 4:
                 self.us().posture = "Soft"
             else:
                 self.us().posture = "Hard"
             self.output_to_history("US Posture now %s" % self.us_posture(), True)
 
-    def eventPutsCell(self, cardNum):
-        return self.deck[str(cardNum)].putsCell()
+    def event_puts_cell(self, card_number):
+        return self.deck[str(card_number)].putsCell()
 
-    def playableNonUSEvent(self, cardNum):
-        return self.deck[str(cardNum)].type != "US" and  self.deck[str(cardNum)].playable("Jihadist", self, False)
+    def playable_non_us_event(self, card_number):
+        card = self.deck[str(card_number)]
+        return card.type != "US" and card.playable("Jihadist", self, False)
 
-    def playableUSEvent(self, cardNum):
-        return self.deck[str(cardNum)].type == "US" and  self.deck[str(cardNum)].playable("US", self, False)
+    def playable_us_event(self, card_number):
+        card = self.deck[str(card_number)]
+        return card.type == "US" and card.playable("US", self, False)
 
-    def aiFlowChartTop(self, cardNum):
+    def ai_flow_chart_top(self, card_number):
         self.debug_print("DEBUG: START")
         self.debug_print("DEBUG: Playable Non-US event? [1]")
-        if self.playableNonUSEvent(cardNum):
+        if self.playable_non_us_event(card_number):
             self.debug_print("DEBUG: YES")
             self.output_to_history("Playable Non-US Event.", False)
             self.debug_print("Event Recruits or places cell? [2]")
-            if self.eventPutsCell(cardNum):
+            if self.event_puts_cell(card_number):
                 self.debug_print("DEBUG: YES")
                 self.debug_print("Track has cell? [3]")
                 if self.cells > 0:
                     self.debug_print("DEBUG: YES")
-                    self.aiFlowChartPlayEvent(cardNum)
+                    self.aiFlowChartPlayEvent(card_number)
                 else:
                     self.debug_print("DEBUG: NO")
                     self.debug_print("DEBUG: Radicalization [4]")
-                    self.handleRadicalization(self.deck[str(cardNum)].ops)
+                    self.handle_radicalization(self.deck[str(card_number)].ops)
             else:
                 self.debug_print("DEBUG: NO")
-                self.aiFlowChartPlayEvent(cardNum)
+                self.aiFlowChartPlayEvent(card_number)
         else:
             self.debug_print("DEBUG: NO")
             self.debug_print("DEBUG: Playble US event? [7]")
-            if self.playableUSEvent(cardNum):
+            if self.playable_us_event(card_number):
                 self.debug_print("DEBUG: YES")
                 self.debug_print("DEBUG: Plot Here [5]")
                 self.output_to_history("Playable US Event.", False)
-                unusedOps = self.handle_ai_plot_action(self.deck[str(cardNum)].ops, True)
+                unusedOps = self.handle_ai_plot_action(self.deck[str(card_number)].ops, True)
                 if unusedOps > 0:
                     self.debug_print("DEBUG: Radicalization with remaining %d ops" % unusedOps)
-                    self.handleRadicalization(unusedOps)
+                    self.handle_radicalization(unusedOps)
                 self.debug_print("DEBUG: END")
             else:
                 self.debug_print("DEBUG: NO")
                 self.output_to_history("Unplayable Event. Using Ops for Operations.", False)
-                self.aiFlowChartMajorJihad(cardNum)
+                self.ai_flow_chart_major_jihad(card_number)
 
-    def aiFlowChartPlayEvent(self, cardNum):
+    def aiFlowChartPlayEvent(self, card_number):
         self.debug_print("Play Event [6]")
-        self.deck[str(cardNum)].playEvent("Jihadist", self)
+        self.deck[str(card_number)].playEvent("Jihadist", self)
         self.debug_print("Unassociated Event? [8]")
-        if self.deck[str(cardNum)].type == "Unassociated":
+        if self.deck[str(card_number)].type == "Unassociated":
             self.debug_print("DEBUG: YES")
             self.output_to_history("Unassociated event now being used for Ops.", False)
-            self.aiFlowChartMajorJihad(cardNum)
+            self.ai_flow_chart_major_jihad(card_number)
         else:
             self.debug_print("DEBUG: NO")
             self.debug_print("end [9]")
 
-    def aiFlowChartMajorJihad(self, cardNum):
+    def ai_flow_chart_major_jihad(self, card_number):
         self.debug_print("DEBUG: Major Jihad success possible? [10]")
-        country = self.major_jihad_choice(self.deck[str(cardNum)].ops)
+        country = self.major_jihad_choice(self.deck[str(card_number)].ops)
         if country:
             self.debug_print("DEBUG: YES")
             self.debug_print("DEBUG: Major Jihad [11]")
-            unusedOps = self.handle_jihad(country, self.deck[str(cardNum)].ops)
-            if unusedOps > 0:
-                self.debug_print("DEBUG: Radicalization with remaining %d ops" % unusedOps)
-                self.handleRadicalization(unusedOps)
+            unused_ops = self.handle_jihad(country, self.deck[str(card_number)].ops)
+            if unused_ops > 0:
+                self.debug_print("DEBUG: Radicalization with remaining %d ops" % unused_ops)
+                self.handle_radicalization(unused_ops)
         else:
             self.debug_print("DEBUG: NO")
             self.debug_print("DEBUG: Jihad possible in Good/Fair? [12]")
-            countryList = self.minor_jihad_in_good_fair_choice(self.deck[str(cardNum)].ops)
-            if countryList:
+            country_list = self.minor_jihad_in_good_fair_choice(self.deck[str(card_number)].ops)
+            if country_list:
                 self.debug_print("DEBUG: YES")
-                unusedOps = self.handle_minor_jihad(countryList, self.deck[str(cardNum)].ops)
-                if unusedOps > 0:
-                    self.debug_print("DEBUG: Radicalization with remaining %d ops" % unusedOps)
-                    self.handleRadicalization(unusedOps)
+                unused_ops = self.handle_minor_jihad(country_list, self.deck[str(card_number)].ops)
+                if unused_ops > 0:
+                    self.debug_print("DEBUG: Radicalization with remaining %d ops" % unused_ops)
+                    self.handle_radicalization(unused_ops)
             else:
                 self.debug_print("DEBUG: NO")
                 self.debug_print("DEBUG: Cells Available? [14]")
                 if self.num_cells_available() > 0:
                     self.debug_print("DEBUG: YES")
                     self.debug_print("DEBUG: Recruit [15]")
-                    unusedOps = self.handleRecruit(self.deck[str(cardNum)].ops)
-                    if unusedOps > 0:
-                        self.debug_print("DEBUG: Radicalization with remaining %d ops" % unusedOps)
-                        self.handleRadicalization(unusedOps)
+                    unused_ops = self.handleRecruit(self.deck[str(card_number)].ops)
+                    if unused_ops > 0:
+                        self.debug_print("DEBUG: Radicalization with remaining %d ops" % unused_ops)
+                        self.handle_radicalization(unused_ops)
                 else:
                     self.debug_print("DEBUG: NO")
                     self.debug_print("DEBUG: Travel [16]")
-                    unusedOps = self.handleTravel(self.deck[str(cardNum)].ops)
-                    if unusedOps > 0:
-                        self.debug_print("DEBUG: Radicalization with remaining %d ops" % unusedOps)
-                        self.handleRadicalization(unusedOps)
+                    unused_ops = self.handleTravel(self.deck[str(card_number)].ops)
+                    if unused_ops > 0:
+                        self.debug_print("DEBUG: Radicalization with remaining %d ops" % unused_ops)
+                        self.handle_radicalization(unused_ops)
 
-    def executeNonMuslimWOI(self, country, postureRoll):
-        if postureRoll > 4:
+    def execute_non_muslim_woi(self, country, posture_roll):
+        if posture_roll > 4:
             self.map.get(country).posture = "Hard"
             self.output_to_history("* War of Ideas in %s - Posture Hard" % country, False)
             if self.us_posture() == "Hard":
@@ -1946,7 +1950,7 @@ class Labyrinth(object):
             if self.us_posture() == "Soft":
                 self.change_prestige(1)
 
-    def executeCardEuroIslam(self, posStr):
+    def execute_card_euro_islam(self, posStr):
         self.map.get("Benelux").posture = posStr
         if self.num_islamist_rule() == 0:
             self.funding -= 1
@@ -3203,10 +3207,10 @@ class Labyrinth(object):
         card_num = self._parse_card_number(card_num_str)
         if not card_num:
             return
-        self.SaveUndo()
+        self.save_undo()
         self.output_to_history("", False)
         self.output_to_history("== Jihadist plays %s - %d Ops ==" % (self.deck[str(card_num)].name, self.deck[str(card_num)].ops), True)
-        self.aiFlowChartTop(card_num)
+        self.ai_flow_chart_top(card_num)
 
     @staticmethod
     def _parse_card_number(card_num_str):
@@ -3228,7 +3232,7 @@ class Labyrinth(object):
         card_num = self._parse_card_number(card_num_str)
         if not card_num:
             return
-        self.SaveUndo()
+        self.save_undo()
         self.output_to_history("", False)
         self.output_to_history("== US plays %s - %d Ops ==" % (self.deck[str(card_num)].name, self.deck[str(card_num)].ops), True)
 
@@ -3265,39 +3269,38 @@ class Labyrinth(object):
 
     def resolve_plots(self):
         """Resolves any active plots at the end of the US action phase."""
-        foundPlot = False
+        found_plot = False
         for country in self.map.country_names():
             while self.map.get(country).plots > 0:
-                if not foundPlot:
+                if not found_plot:
                     self.output_to_history("", False)
                     self.output_to_history("[[ Resolving Plots ]]", True)
-                foundPlot = True
+                found_plot = True
                 print ""
-                plotType = self.get_plot_type_from_user("Enter Plot type from %s: " % country)
+                plot_type = self.get_plot_type_from_user("Enter Plot type from %s: " % country)
                 print ""
-                isBacklash = False
+                is_backlash = False
                 if self.backlashInPlay and (self.map.get(country).type != 'Non-Muslim'):
-                    isBacklash = self.get_yes_no_from_user("Was this plot selected with backlash (y/n): ")
+                    is_backlash = self.get_yes_no_from_user("Was this plot selected with backlash (y/n): ")
                 posture_roll = 0
-                usPrestigeRolls = []
+                us_prestige_rolls = []
                 schCountries = []
                 schPostureRolls = []
-                govRolls = []
+                gov_rolls = []
                 if country == "United States":
-                    if plotType != "WMD":
+                    if plot_type != "WMD":
                         posture_roll = random.randint(1, 6)
-                        usPrestigeRolls.append(random.randint(1, 6))
-                        usPrestigeRolls.append(random.randint(1, 6))
-                        usPrestigeRolls.append(random.randint(1, 6))
+                        us_prestige_rolls.append(random.randint(1, 6))
+                        us_prestige_rolls.append(random.randint(1, 6))
+                        us_prestige_rolls.append(random.randint(1, 6))
                 elif self.map.get(country).type != "Non-Muslim":
                     if country != "Iran":
-                        numRolls = 0
-                        if plotType == "WMD":
-                            numRolls = 3
+                        if plot_type == "WMD":
+                            num_rolls = 3
                         else:
-                            numRolls = plotType
-                        for _ in range(numRolls):
-                            govRolls.append(random.randint(1, 6))
+                            num_rolls = plot_type
+                        for _ in range(num_rolls):
+                            gov_rolls.append(random.randint(1, 6))
                 elif self.map.get(country).type == "Non-Muslim":
                     posture_roll = random.randint(1, 6)
                     if self.map.get(country).schengen:
@@ -3308,9 +3311,9 @@ class Labyrinth(object):
                             schCountries[1] = random.choice(schengen_choices)
                         for _ in range(2):
                             schPostureRolls.append(random.randint(1, 6))
-                self.resolvePlot(country, plotType, posture_roll, usPrestigeRolls, schCountries, schPostureRolls,
-                                 govRolls, isBacklash)
-        if not foundPlot:
+                self.resolve_plot(country, plot_type, posture_roll, us_prestige_rolls, schCountries, schPostureRolls,
+                                  gov_rolls, is_backlash)
+        if not found_plot:
             self.output_to_history("", False)
             self.output_to_history("[[ No unblocked plots to resolve ]]", True)
         self.backlashInPlay = False
@@ -3335,71 +3338,65 @@ class Labyrinth(object):
             if self.funding < 1:
                 self.funding = 1
             self.output_to_history("Jihadist Funding now %d" % self.funding, False)
-        anyIR = False
-        for country in self.map.country_names():
-            if self.map.get(country).is_islamist_rule():
-                anyIR = True
-                break
-        if anyIR:
+        any_islamist_rule = self.contains_country(lambda c: c.is_islamist_rule())
+        if any_islamist_rule:
             self._reduce_prestige(1)
             self.output_to_history("Islamist Rule - US Prestige now %d" % self.prestige, False)
         else:
-            self.output_to_history("No Islamist Rule - US Prestige stays at %d" % self.prestige, False)  # 20150131PS - added
-        worldPos = 0
+            self.output_to_history("No Islamist Rule - US Prestige stays at %d" % self.prestige, False)
+        world_position = 0
         for country in self.map.country_names():
             if not (self.map.get(country).type == "Shia-Mix" or self.map.get(country).type == "Suni") and self.map.get(country).type != "Iran" and self.map.get(country).name != "United States":
                 if self.map.get(country).posture == "Hard":
-                    worldPos += 1
+                    world_position += 1
                 elif self.map.get(country).posture == "Soft":
-                    worldPos -= 1
-        if (self.us_posture() == "Hard" and worldPos >= 3) or (self.us_posture() == "Soft" and worldPos <= -3):
+                    world_position -= 1
+        if (self.us_posture() == "Hard" and world_position >= 3) or (self.us_posture() == "Soft" and world_position <= -3):
             self._increase_prestige(1)
             self.output_to_history("GWOT World posture is 3 and matches US - US Prestige now %d" % self.prestige, False)
         for event in self.lapsing:
             self.output_to_history("%s has Lapsed." % event, False)
         self.lapsing = []
-        goodRes = 0
-        islamRes = 0
-        goodC = 0
-        islamC = 0
-        worldPos = 0
+        good_resources = 0
+        islamist_resources = 0
+        good_or_fair_countries = 0
+        islamist_countries = 0
+        world_position = 0
         for country in self.map.country_names():
             if self.map.get(country).type == "Shia-Mix" or self.map.get(country).type == "Suni":
                 if self.map.get(country).is_good():
-                    goodC += 1
-                    goodRes += self.country_resources_by_name(country)
+                    good_or_fair_countries += 1
+                    good_resources += self.country_resources_by_name(country)
                 elif self.map.get(country).is_fair():
-                    goodC += 1
+                    good_or_fair_countries += 1
                 elif self.map.get(country).is_poor():
-                    islamC += 1
+                    islamist_countries += 1
                 elif self.map.get(country).is_islamist_rule():
-                    islamC += 1
-                    islamRes += self.country_resources_by_name(country)
+                    islamist_countries += 1
+                    islamist_resources += self.country_resources_by_name(country)
         self.output_to_history("---", False)
-        self.output_to_history("Good Resources:     %d" % goodRes, False)
-        self.output_to_history("Islamist Resources: %d" % islamRes, False)
+        self.output_to_history("Good Resources:     %d" % good_resources, False)
+        self.output_to_history("Islamist Resources: %d" % islamist_resources, False)
         self.output_to_history("---", False)
-        self.output_to_history("Good/Fair Countries:     %d" % goodC, False)
-        self.output_to_history("Poor/Islamist Countries: %d" % islamC, False)
+        self.output_to_history("Good/Fair Countries:     %d" % good_or_fair_countries, False)
+        self.output_to_history("Poor/Islamist Countries: %d" % islamist_countries, False)
         self.turn += 1
         self.output_to_history("---", False)
         self.output_to_history("", False)
-        usCards = 0
-        jihadistCards = 0
         if self.funding >= 7:
-            jihadistCards = 9
+            jihadist_cards = 9
         elif self.funding >= 4:
-            jihadistCards = 8
+            jihadist_cards = 8
         else:
-            jihadistCards = 7
+            jihadist_cards = 7
         if self.troops >= 10:
-            usCards = 9
+            us_cards = 9
         elif self.troops >= 5:
-            usCards = 8
+            us_cards = 8
         else:
-            usCards = 7
-        self.output_to_history("Jihadist draws %d cards." % jihadistCards, False)
-        self.output_to_history("US draws %d cards." % usCards, False)
+            us_cards = 7
+        self.output_to_history("Jihadist draws %d cards." % jihadist_cards, False)
+        self.output_to_history("US draws %d cards." % us_cards, False)
         self.output_to_history("---", False)
         self.output_to_history("", False)
         self.output_to_history("[[ %d (Turn %s) ]]" % (self.startYear + (self.turn - 1), self.turn), False)
@@ -3417,14 +3414,14 @@ class Labyrinth(object):
         print "%d (Turn %s)" % (self.startYear + (self.turn - 1), self.turn)
         print ""
 
-    def SaveUndo(self):
+    def save_undo(self):
         """Saves the undo file for this game"""
         self.saver.save_undo_file(self)
 
     def roll_back(self):
         self.roll_turn = -1
-        needTurn = True
-        while needTurn:
+        need_turn = True
+        while need_turn:
             try:
                 last_turn = self.turn - 1
                 turn_str = raw_input("Roll back to which turn? (0 to %d, or Q to cancel): " % last_turn)
@@ -3435,7 +3432,7 @@ class Labyrinth(object):
                     turn_number = int(turn_str)
                     if 0 <= turn_number <= last_turn:
                         self.roll_turn = turn_number
-                        needTurn = False
+                        need_turn = False
                     else:
                         raise ValueError
             except ValueError:
