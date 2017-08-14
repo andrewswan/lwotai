@@ -57,7 +57,7 @@ class Scenario4(Scenario):
         game.markers.append("Wiretapping")
         for country in game.get_countries():
             if country.schengen:
-                game.testCountry(country.name)
+                game.test_country(country.name)
         print ""
         print "Remove the cards Patriot Act, Tora Bora, NEST, Abu Sayyaf, KSM and Iraqi WMD from the game."
         print ""

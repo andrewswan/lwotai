@@ -75,7 +75,7 @@ class Card02(LabyrinthTestCase):
         self.assertEqual(dest, ["Gulf States"])
         app.get_country("Sudan").make_islamist_rule()        
         app.get_country("Sudan").sleeperCells = 4    
-        sources = app.travelSources(dest, 1)
+        sources = app.travel_sources(dest, 1)
         self.assertEqual(sources, ["Iraq"])
 
     def testTravelToGood(self):
@@ -92,9 +92,9 @@ class Card02(LabyrinthTestCase):
         self.assertEqual(dest, ["Gulf States"])
         app.get_country("Sudan").make_islamist_rule()        
         app.get_country("Sudan").sleeperCells = 4    
-        sources = app.travelSources(dest, 1)
+        sources = app.travel_sources(dest, 1)
         self.assertEqual(sources, ["Iraq"])
-        app.handleTravel(1)
+        app.handle_travel(1)
 
 
 class Card03(LabyrinthTestCase):
@@ -230,10 +230,10 @@ class Card08and09and10(LabyrinthTestCase):
 
     def test_event(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        app.listCountriesWithCellAndAdjacentTroops()
+        app.list_countries_with_cell_and_adjacent_troops()
         app.get_country("Iran").sleeperCells = 1
         app.get_country("Iraq").troopCubes = 1
-        app.listCountriesWithCellAndAdjacentTroops()
+        app.list_countries_with_cell_and_adjacent_troops()
 
 
 class Card11(LabyrinthTestCase):
@@ -254,7 +254,7 @@ class Card11(LabyrinthTestCase):
         self.assertFalse("Abbas" in app.markers)
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        app.testCountry("Syria")
+        app.test_country("Syria")
         app.get_country("Syria").make_islamist_rule()
         app.deck["11"].playEvent("US", app)
         self.assertTrue(app.prestige == 8)
@@ -265,7 +265,7 @@ class Card11(LabyrinthTestCase):
         self.assertFalse("Abbas" in app.markers)
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        app.testCountry("Lebanon")
+        app.test_country("Lebanon")
         app.get_country("Lebanon").make_islamist_rule()
         app.deck["11"].playEvent("US", app)
         self.assertTrue(app.prestige == 7)
@@ -361,10 +361,10 @@ class Card14(LabyrinthTestCase):
 
     def test_event(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        app.listAdversaryCountries()
+        app.list_adversary_countries()
         app.get_country("Iran").make_adversary()
         app.get_country("Iraq").make_adversary()
-        app.listAdversaryCountries()
+        app.list_adversary_countries()
 
 
 class Card15(LabyrinthTestCase):
@@ -533,7 +533,7 @@ class Card21(LabyrinthTestCase):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("Canada").plots = 1
         app.get_country("Spain").posture = "Soft"
-        app.executeCardLetsRoll("Canada", "Spain", "Hard")
+        app.execute_card_lets_roll("Canada", "Spain", "Hard")
         self.assertTrue(app.get_country("Canada").plots == 0)
         self.assertTrue(app.get_country("Spain").posture == "Hard")
 

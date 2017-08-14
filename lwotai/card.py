@@ -99,7 +99,7 @@ class Card(object):
                     return False
                 if app.num_adversary() <= 0:
                     return False
-                app.listAdversaryCountries()
+                app.list_adversary_countries()
                 return app.get_yes_no_from_user(
                     "Do you have a card with a value that exactly matches an Adversary's Resources? (y/n): ")
             elif self.number == 33:  # Benazir Bhutto
@@ -510,7 +510,7 @@ class Card(object):
             elif self.number == 4:  # Moro Talks
                 app.markers.append("Moro Talks")
                 app.output_to_history("Moro Talks in play.", False)
-                app.testCountry("Philippines")
+                app.test_country("Philippines")
                 app.change_funding(-1)
             elif self.number == 5:  # NEST
                 app.markers.append("NEST")
@@ -524,7 +524,7 @@ class Card(object):
                 while True:
                     country_name = app.get_country_from_user("Remove a cell from which country that has troops or is adjacent" +
                                                    " to a country with troops (? for list)?: ",  "XXX",
-                                                             app.listCountriesWithCellAndAdjacentTroops)
+                                                             app.list_countries_with_cell_and_adjacent_troops)
                     if country_name == "":
                         print ""
                         return
@@ -555,7 +555,7 @@ class Card(object):
                     app.change_prestige(1, False)
                     app.change_funding(-2, True)
             elif self.number == 12:  # Al-Azhar
-                app.testCountry("Egypt")
+                app.test_country("Egypt")
                 numIR = app.num_islamist_rule()
                 if numIR <= 0:
                     app.change_funding(-4, True)
@@ -594,7 +594,7 @@ class Card(object):
                     while not target_country:
                         country_name = app.get_country_from_user(
                             "Choose an Adversary country to attempt Covert Action (? for list): ", "XXX",
-                            app.listAdversaryCountries)
+                            app.list_adversary_countries)
                         if country_name == "":
                             print ""
                             return
@@ -686,7 +686,7 @@ class Card(object):
                 while True:
                     plot_country_name = app.get_country_from_user(
                         "Draw a card. Choose an Ally or Good country to remove a plot from (? for list): ", "XXX",
-                        app.listGoodAllyPlotCountries)
+                        app.list_good_ally_plot_countries)
                     if plot_country_name == "":
                         print ""
                         return
@@ -712,7 +712,7 @@ class Card(object):
                                     else:
                                         new_posture = app.get_posture_from_user(
                                             "What Posture should %s have (h or s)? " % posture_country)
-                                        app.executeCardLetsRoll(plot_country_name, posture_country, new_posture)
+                                        app.execute_card_lets_roll(plot_country_name, posture_country, new_posture)
                                         return
             elif self.number == 22:  # Mossad and Shin Bet
                 app.remove_all_cells_from_country("Israel")
@@ -723,7 +723,7 @@ class Card(object):
                 while True:
                     country_name = app.get_country_from_user(
                         "Choose non-Iran Muslim Country to remove a cell from (? for list): ", "XXX",
-                        app.listMuslimCountriesWithCells)
+                        app.list_muslim_countries_with_cells)
                     if country_name == "":
                         print ""
                         return
@@ -772,7 +772,7 @@ class Card(object):
                     while True:
                         country_name = app.get_country_from_user(
                             "Choose a country with a Besieged Regime marker to remove (? for list): ", "XXX",
-                            app.listBesiegedCountries)
+                            app.list_besieged_countries)
                         if country_name == "":
                             print ""
                             return
@@ -796,7 +796,7 @@ class Card(object):
                     while not target_name:
                         country_name = app.get_country_from_user(
                             "Choose Schengen country to make a WOI roll (done to stop rolling) (? for list)?: ", "done",
-                            app.listSchengenCountries)
+                            app.list_schengen_countries)
                         if country_name == "":
                             print ""
                             return
@@ -828,7 +828,7 @@ class Card(object):
                 else:
                     while True:
                         country_name = app.get_country_from_user(
-                            "Choose a Regime Change country (? for list): ", "XXX", app.listRegimeChangeCountries)
+                            "Choose a Regime Change country (? for list): ", "XXX", app.list_regime_change_countries)
                         if country_name == "":
                             print ""
                             return
@@ -882,7 +882,7 @@ class Card(object):
                                             " an Adversary's Resources? (y/n): "):
                     while True:
                         country_name = app.get_country_from_user(
-                            "Choose an Adversary country (? for list): ", "XXX", app.listAdversaryCountries)
+                            "Choose an Adversary country (? for list): ", "XXX", app.list_adversary_countries)
                         if country_name == "":
                             print ""
                             return False
@@ -913,7 +913,7 @@ class Card(object):
                 app.disrupt_cells_or_cadre()
                 app.output_to_history("", False)
             elif self.number == 35:  # Hajib
-                app.testCountry("Turkey")
+                app.test_country("Turkey")
                 app.get_country("Turkey").improve_governance()
                 app.output_to_history("Turkey Governance now %s." % app.get_country("Turkey").govStr(), False)
                 app.change_funding(-2)
@@ -945,7 +945,7 @@ class Card(object):
                     target_country = None
                     while not target_country:
                         country_name = app.get_country_from_user(
-                            "Choose Schengen country (? for list)?: ", "XXX", app.listSchengenCountries)
+                            "Choose Schengen country (? for list)?: ", "XXX", app.list_schengen_countries)
                         if country_name == "":
                             print ""
                         else:
@@ -975,7 +975,7 @@ class Card(object):
                     while True:
                         country_name = app.get_country_from_user(
                             "Choose a Regime Change Country to improve governance (? for list): ", "XXX",
-                            app.listRegimeChangeCountries)
+                            app.list_regime_change_countries)
                         if country_name == "":
                             print ""
                             return
@@ -1000,7 +1000,7 @@ class Card(object):
                     while True:
                         country_name = app.get_country_from_user(
                             "Choose a Regime Change Country to land NATO troops (? for list): ", "XXX",
-                            app.listRegimeChangeCountries)
+                            app.list_regime_change_countries)
                         if country_name == "":
                             print ""
                             return
@@ -1064,7 +1064,7 @@ class Card(object):
                     while not target_name:
                         country_name = app.get_country_from_user(
                             "Choose a Shia-Mix Regime Change Country with a cell to improve governance (? for list): ",
-                            "XXX", app.listShiaMixRegimeChangeCountriesWithCells)
+                            "XXX", app.list_shia_mix_regime_change_countries_with_cells)
                         if country_name == "":
                             print ""
                         else:
@@ -1089,7 +1089,7 @@ class Card(object):
                     return
                 ops = app.deck[str(cardNum)].ops
                 rolls = app.randomizer.roll_d6(ops)
-                app.executeRecruit("United States", ops, rolls, 2)
+                app.execute_recruit("United States", ops, rolls, 2)
             elif self.number == 49:  # Al-Ittihad al-Islami
                 app.place_cells("Somalia", 1)
             elif self.number == 50:  # Ansar al-Islam
@@ -1106,19 +1106,19 @@ class Card(object):
             elif self.number == 52:  # IDEs
                 app.output_to_history("US randomly discards one card.", True)
             elif self.number == 53:  # Madrassas
-                app.handleRecruit(1, True)
+                app.handle_recruit(1, True)
                 cardNum = app.get_card_num_from_user("Enter the number of the next Jihadist card or none if there are none left: ")
                 if cardNum == "none":
                     app.output_to_history("No cards left to recruit.", True)
                     #app.outputToHistory("Jihadist Activity Phase finished, enter plot command.", True)
                     return
                 ops = app.deck[str(cardNum)].ops
-                app.handleRecruit(ops, True)
+                app.handle_recruit(ops, True)
             elif self.number == 54:  # Moqtada al-Sadr
                 app.get_country("Iraq").markers.append("Sadr")
                 app.output_to_history("Sadr Marker added in Iraq", True)
             elif self.number == 55:  # Uyghur Jihad
-                app.testCountry("China")
+                app.test_country("China")
                 if app.cells > 0:
                     if app.get_posture("China") == "Soft":
                         app.place_cell("China")
@@ -1136,7 +1136,7 @@ class Card(object):
             elif self.number == 58:  # Al-Anbar
                 app.markers.append("Al-Anbar")
                 app.output_to_history("Al-Anbar in play.", True)
-                app.testCountry("Iraq")
+                app.test_country("Iraq")
                 if app.cells > 0:
                     app.place_cell("Iraq")
             elif self.number == 59:  # Amerithrax
@@ -1181,7 +1181,7 @@ class Card(object):
                         app.output_to_history("Caucasus posture now %s" % app.get_posture("Caucasus"), False)
                         app.output_to_history(app.get_country("Caucasus").countryStr(), True)
                     else:
-                        app.testCountry("Central Asia")
+                        app.test_country("Central Asia")
                         if app.get_country("Central Asia").is_ally():
                             app.get_country("Central Asia").make_neutral()
                             app.output_to_history("Central Asia now Neutral.", True)
@@ -1194,8 +1194,8 @@ class Card(object):
                 app.change_prestige(-1)
                 app.output_to_history("US discards a random card.", True)
             elif self.number == 64:  # Hariri Killed
-                app.testCountry("Lebanon")
-                app.testCountry("Syria")
+                app.test_country("Lebanon")
+                app.test_country("Syria")
                 app.get_country("Syria").make_adversary()
                 app.output_to_history("Syria now Adversary.", False)
                 if app.get_country("Syria").governance_is_better_than(POOR):
@@ -1211,7 +1211,7 @@ class Card(object):
                     possibles.append("Central Asia")
                 target_name = random.choice(possibles)
                 roll = random.randint(1, 6)
-                app.executeCardHEU(target_name, roll)
+                app.execute_card_heu(target_name, roll)
             elif self.number == 66:  # Homegrown
                 app.place_cells("United Kingdom", 1)
             elif self.number == 67:  # Islamic Jihad Union
@@ -1222,14 +1222,14 @@ class Card(object):
                 app.place_cells("Indonesia/Malaysia", 2)
             elif self.number == 69:  # Kazakh Strain
                 roll = random.randint(1, 6)
-                app.executeCardHEU("Central Asia", roll)
+                app.execute_card_heu("Central Asia", roll)
             elif self.number == 70:  # Lashkar-e-Tayyiba
                 app.place_cells("Pakistan", 1)
                 if app.cells > 0:
                     app.place_cells("India", 1)
             elif self.number == 71:  # Loose Nuke
                 roll = random.randint(1, 6)
-                app.executeCardHEU("Russia", roll)
+                app.execute_card_heu("Russia", roll)
             elif self.number == 72:  # Opium
                 cellsToPlace = min(app.cells, 3)
                 if app.get_country("Afghanistan").is_islamist_rule():
@@ -1242,7 +1242,7 @@ class Card(object):
                 if app.cells == 15:
                     app.output_to_history("No cells to travel.", False)
                     return
-                app.handleTravel(2, False, True)
+                app.handle_travel(2, False, True)
             elif self.number == 75:  # Schroeder & Chirac
                 app.set_posture("Germany", "Soft")
                 app.output_to_history("%s Posture now %s" % ("Germany", app.get_posture("Germany")), True)
@@ -1283,9 +1283,9 @@ class Card(object):
                     prestige_multiplier = -1
                 app.change_prestige(min(prestige_rolls[1], prestige_rolls[2]) * prestige_multiplier)
             elif self.number == 79:  # Clean Operatives
-                app.handleTravel(2, False, False, True)
+                app.handle_travel(2, False, False, True)
             elif self.number == 80:  # FATA
-                app.testCountry("Pakistan")
+                app.test_country("Pakistan")
                 if app.get_country("Pakistan").markers.count("FATA") == 0:
                     app.get_country("Pakistan").markers.append("FATA")
                     app.output_to_history("FATA marker added in Pakistan", True)
@@ -1307,10 +1307,10 @@ class Card(object):
                 possibles = app.find_countries(lambda c: c.totalCells() == 0)
                 random.shuffle(possibles)
                 for i in range(3):
-                    app.testCountry(possibles[i].name)
+                    app.test_country(possibles[i].name)
                     # number of available cells does not matter for Jihadist Videos
                     rolls = [random.randint(1, 6)]
-                    app.executeRecruit(possibles[i].name, 1, rolls, False, True)
+                    app.execute_recruit(possibles[i].name, 1, rolls, False, True)
             elif self.number == 83:  # Kashmir
                 app.place_cells("Pakistan", 1)
                 pakistan = app.get_country("Pakistan")
@@ -1380,7 +1380,7 @@ class Card(object):
                 app.funding = 9
                 app.output_to_history("Jihadist Funding now 9.")
             elif self.number == 93:  # Taliban
-                app.testCountry("Afghanistan")
+                app.test_country("Afghanistan")
                 app.get_country("Afghanistan").besieged = 1
                 app.output_to_history("Afghanistan is now a Besieged Regime.", False)
                 app.place_cells("Afghanistan", 1)
@@ -1415,7 +1415,7 @@ class Card(object):
                 app.output_to_history("Scandinavia posture now %s." % posture, False)
                 possibles = app.find_countries(lambda c: c.is_muslim() and not c.is_islamist_rule())
                 target = random.choice(possibles)
-                app.testCountry(target.name)
+                app.test_country(target.name)
                 if app.num_islamist_rule() > 0:
                     app.output_to_history("Place any available plot in %s." % target.name, False)
                 else:
@@ -1444,7 +1444,7 @@ class Card(object):
                     app.change_funding(2)
             elif self.number == 101:  # Kosovo
                 app.change_prestige(1)
-                app.testCountry("Serbia")
+                app.test_country("Serbia")
                 if app.us_posture() == "Soft":
                     app.set_posture("Serbia", "Hard")
                 else:
@@ -1493,7 +1493,7 @@ class Card(object):
                         while not target_name:
                             country_name = app.get_country_from_user(
                                 "Remove a cell from what Shia-Mix country within 3 countries of Lebanon (? for list): ",
-                                "XXX", app.listCountriesInParam, possibles)
+                                "XXX", app.list_countries_in_param, possibles)
                             if country_name == "":
                                 print ""
                             else:
@@ -1509,7 +1509,7 @@ class Card(object):
                         app.remove_cell(target_name, side)    # 20150131PS added side
                         app.output_to_history(app.get_country(target_name).countryStr(), True)
                 else:
-                    app.testCountry("Lebanon")
+                    app.test_country("Lebanon")
                     app.get_country("Lebanon").make_poor()
                     app.output_to_history("Lebanon governance now Poor.", False)
                     app.get_country("Lebanon").make_neutral()
@@ -1518,7 +1518,7 @@ class Card(object):
                 if side == "US":
                     target_name = None
                     while not target_name:
-                        country_name = app.get_country_from_user("Choose a Shia-Mix country to test. You can then remove a cell from there or Iran (? for list)?: ", "XXX", app.listShiaMixCountries)
+                        country_name = app.get_country_from_user("Choose a Shia-Mix country to test. You can then remove a cell from there or Iran (? for list)?: ", "XXX", app.list_shia_mix_countries)
                         if country_name == "":
                             print ""
                         else:
@@ -1528,7 +1528,7 @@ class Card(object):
                                 print "%s is not a Shia-Mix country." % country_name
                                 print ""
                     picked = target_name
-                    app.testCountry(picked)
+                    app.test_country(picked)
                     if app.get_country("Iran").totalCells(True) > 0:
                         target_name = None
                         while not target_name:
@@ -1548,7 +1548,7 @@ class Card(object):
                 else:
                     possibles = [country.name for country in app.get_countries() if country.type == "Shia-Mix"]
                     target_name = random.choice(possibles)
-                    app.testCountry(target_name)
+                    app.test_country(target_name)
                     tested = target_name
                     target_name = None
                     good_countries = [country.name for country in app.map.countries() if
@@ -1597,7 +1597,7 @@ class Card(object):
                     while not target_name:
                         country_name = app.get_country_from_user(
                             "Choose a Shia-Mix country with cells and troops (? for list)?: ", "XXX",
-                            app.listShiaMixCountriesWithCellsTroops)
+                            app.list_shia_mix_countries_with_cells_troops)
                         if country_name == "":
                             print ""
                         else:
@@ -1612,7 +1612,7 @@ class Card(object):
                 else:   # jihadist play
                     possibles = [country.name for country in app.get_countries() if country.type == "Shia-Mix"]
                     target_name = random.choice(possibles)
-                    app.testCountry(target_name)
+                    app.test_country(target_name)
                     tested = target_name
                     target_name = None
                     good_countries = [c.name for c in app.get_countries() if c.is_muslim() and c.is_good()]
@@ -1643,12 +1643,12 @@ class Card(object):
                             app.output_to_history(app.get_country(target_name).countryStr(), True)
             elif self.number == 107:  # Kurdistan
                 if side == "US":
-                    app.testCountry("Iraq")
+                    app.test_country("Iraq")
                     app.get_country("Iraq").aid += 1
                     app.output_to_history("Aid added to Iraq.", False)
                     app.output_to_history(app.get_country("Iraq").countryStr(), True)
                 else:
-                    app.testCountry("Turkey")
+                    app.test_country("Turkey")
                     target_name = None
                     possibles = []
                     if app.get_country("Turkey").governance_is_better_than(POOR):
@@ -1696,7 +1696,7 @@ class Card(object):
                     if side == "US":
                         app.output_to_history("US draws one card.", False)
                         while not target_name:
-                            country_name = app.get_country_from_user("Choose a Regime Change country with at least 2 troops. (? for list)?: ", "XXX", app.listRegimeChangeWithTwoCells)
+                            country_name = app.get_country_from_user("Choose a Regime Change country with at least 2 troops. (? for list)?: ", "XXX", app.list_regime_change_with_two_cells)
                             if country_name == "":
                                 print ""
                             else:
@@ -1750,7 +1750,7 @@ class Card(object):
                     else:
                         app.change_prestige(-2)
             elif self.number == 113:  # Darfur
-                app.testCountry("Sudan")
+                app.test_country("Sudan")
                 if app.prestige >= 7:
                     app.get_country("Sudan").aid += 1
                     app.output_to_history("Aid added to Sudan.", False)
@@ -1801,7 +1801,7 @@ class Card(object):
                         while not target_name:
                             country_name = app.get_country_from_user("Choose Indonesia or an adjacent country that "
                                                                      "has a cell and is Ally or Hard. (? for list)?: ",
-                                                                     "XXX", app.listHambali)
+                                                                     "XXX", app.list_hambali)
                             if country_name == "":
                                 print ""
                             else:
@@ -1851,7 +1851,7 @@ class Card(object):
                     if app.get_yes_no_from_user("Are there any Jihadist event cards in the discard pile? "):
                         app.output_to_history("Draw from the Discard Pile randomly among the highest-value Jihadist-associated event cards. Put the card on top of the Jihadist hand.", True)
             elif self.number == 119:  # Saleh
-                app.testCountry("Yemen")
+                app.test_country("Yemen")
                 if side == "US":
                     if not app.get_country("Yemen").is_islamist_rule():
                         if app.get_country("Yemen").is_adversary():
@@ -1870,7 +1870,7 @@ class Card(object):
                     app.get_country("Yemen").besieged = 1
                     app.output_to_history("Yemen now Besieged Regime.", True)
             elif self.number == 120:  # US Election
-                app.executeCardUSElection(random.randint(1, 6))
+                app.execute_card_us_election(random.randint(1, 6))
         if self.remove:
             app.output_to_history("Remove card from game.", True)
         if self.mark:

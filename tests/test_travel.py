@@ -202,30 +202,30 @@ class TravelTest(LabyrinthTestCase):
 
         app.get_country("Lebanon").make_fair()
         app.get_country("Lebanon").activeCells = 1
-        sources = app.travelSources(dest, 1)
+        sources = app.travel_sources(dest, 1)
         self.assertEqual(sources, ["Lebanon"])
 
         app.get_country("Iraq").make_fair()
         app.get_country("Iraq").activeCells = 1
-        sources = app.travelSources(dest, 1)
+        sources = app.travel_sources(dest, 1)
         self.assertEqual(sources, ["Iraq"])
 
         app.get_country("Egypt").make_fair()
         app.get_country("Egypt").activeCells = 1
         app.get_country("Egypt").regimeChange = 1
         app.get_country("Egypt").troopCubes = 2
-        sources = app.travelSources(dest, 1)
+        sources = app.travel_sources(dest, 1)
         self.assertEqual(sources, ["Iraq"])
         app.get_country("Egypt").activeCells = 3
-        sources = app.travelSources(dest, 1)
+        sources = app.travel_sources(dest, 1)
         self.assertEqual(sources, ["Egypt"])
 
         app.get_country("Yemen").make_islamist_rule()
         app.get_country("Yemen").activeCells = 3
         app.get_country("Yemen").troopCubes = 2
-        sources = app.travelSources(dest, 3)
+        sources = app.travel_sources(dest, 3)
         self.assertEqual(sources, ["Egypt"])
-        sources = app.travelSources(dest, 2)
+        sources = app.travel_sources(dest, 2)
         self.assertEqual(sources, ["Yemen"])
 
         #multi
@@ -259,21 +259,21 @@ class TravelTest(LabyrinthTestCase):
         app.get_country("Yemen").make_islamist_rule()
         app.get_country("Yemen").activeCells = 4
         app.get_country("Yemen").troopCubes = 2
-        sources = app.travelSources(dest, 3)
+        sources = app.travel_sources(dest, 3)
         self.assertEqual(sources, ["Yemen", "Egypt", "Iraq"])
 
         app.get_country("Yemen").activeCells = 5
-        sources = app.travelSources(dest, 3)
+        sources = app.travel_sources(dest, 3)
         self.assertEqual(sources, ["Yemen", "Yemen", "Egypt"])
 
         app.get_country("Yemen").activeCells = 6
-        sources = app.travelSources(dest, 3)
+        sources = app.travel_sources(dest, 3)
         self.assertEqual(sources, ["Yemen", "Yemen", "Yemen"])
 
         app.get_country("Yemen").activeCells = 4
-        sources = app.travelSources(dest, 3)
+        sources = app.travel_sources(dest, 3)
         app.get_country("Egypt").activeCells = 4
-        sources = app.travelSources(dest, 3)
+        sources = app.travel_sources(dest, 3)
         self.assertEqual(sources, ["Yemen", "Egypt", "Egypt"])
 
         app.get_country("Iraq").make_fair()
@@ -282,5 +282,5 @@ class TravelTest(LabyrinthTestCase):
         app.get_country("Iraq").activeCells = 4
         app.get_country("Egypt").activeCells = 0
         app.get_country("Egypt").sleeperCells = 4
-        sources = app.travelSources(dest, 3)
+        sources = app.travel_sources(dest, 3)
         self.assertEqual(sources, ["Yemen", "Iraq", "Iraq"])

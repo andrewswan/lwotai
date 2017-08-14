@@ -127,10 +127,12 @@ class Country(object):
 
     def _ought_to_have_been_tested(self):
         """Indicates whether this country ought to have been tested by now"""
-        return self.sleeperCells > 0 or self.activeCells > 0 or \
-               self.troopCubes > 0 or self.aid > 0 or \
-               self.regimeChange > 0 or self.cadre > 0 or \
-               self.plots > 0
+        return self.sleeperCells > 0 or self.activeCells > 0 or self.troopCubes > 0 or self.aid > 0 or\
+            self.regimeChange > 0 or self.cadre > 0 or self.plots > 0
+
+    def has_data(self):
+        """Indicates whether this country contains anything not printed on the board"""
+        return self._ought_to_have_been_tested() or self.besieged > 0 or self.markers
 
     def is_non_recruit_success(self, roll):
         return self.is_governed() and self.__governance.is_success(roll)

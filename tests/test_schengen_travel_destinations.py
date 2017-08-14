@@ -17,7 +17,7 @@ class TravelDestinationsForSchengenVisasTest(LabyrinthTestCase):
         unmarked_country.posture = ""
 
         # Invoke
-        destinations = app.travelDestinationsSchengenVisas()
+        destinations = app.travel_destinations_schengen_visas()
 
         # Check
         expected_country = unmarked_country.name
@@ -36,7 +36,7 @@ class TravelDestinationsForSchengenVisasTest(LabyrinthTestCase):
             country.posture = ""
 
         # Invoke
-        destinations = app.travelDestinationsSchengenVisas()
+        destinations = app.travel_destinations_schengen_visas()
 
         # Check
         self.assertEqual(destinations, chosen_countries)

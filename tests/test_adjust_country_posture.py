@@ -30,7 +30,7 @@ class AdjustCountryPosture(LabyrinthTestCase):
         self.assertEqual(app.map.get(non_muslim_country).posture, "")  # means "Untested"
 
         # Invoke
-        successful = app.adjustCountryPosture(non_muslim_country)
+        successful = app.adjust_country_posture(non_muslim_country)
 
         # Check
         self.assertEqual(successful, expected_successful)
