@@ -3319,12 +3319,12 @@ class Labyrinth(object):
                 self.output_to_history("Played for Event.", False)
                 self.deck[str(card_num)].playEvent("US", self)
                 if card_num == 120:
-                    self.prompt_us_to_spend_ops(card_num)
+                    print self.get_us_prompt_to_spend_ops(card_num)
             elif choice == "ops":
                 self.output_to_history("Played for Ops.", False)
                 if card_num == 120:
                     print "When finished with Ops enter u 120 again to play the event."
-                self.prompt_us_to_spend_ops(card_num)
+                print self.get_us_prompt_to_spend_ops(card_num)
         else:
             if self.deck[str(card_num)].type == "Jihadist":
                 if self.deck[str(card_num)].playable("Jihadist", self, True):
@@ -3335,16 +3335,28 @@ class Labyrinth(object):
                         self.deck[str(card_num)].playEvent("Jihadist", self)
                     else:
                         print "Use the Ops now then enter u <card #> again to play the event"
-                    self.prompt_us_to_spend_ops(card_num)
+                    print self.get_us_prompt_to_spend_ops(card_num)
                     return
                     # Here if it's unplayable by either side.
             self.output_to_history("Unplayable %s Event" % self.deck[str(card_num)].type, False)
-            self.prompt_us_to_spend_ops(card_num)
+            print self.get_us_prompt_to_spend_ops(card_num)
 
-    def prompt_us_to_spend_ops(self, card_number):
+    def get_us_prompt_to_spend_ops(self, card_number):
         """Prompts the US player to spend the given card's Ops value"""
-        print "%d Ops available. Use commands: alert, deploy, disrupt, reassessment, regime, withdraw, or woi" %\
-              self.deck[str(card_number)].ops
+        ops = self.deck[str(card_number)].ops
+        operation_min_ops = {
+            "alert": 3,
+            "deploy": 1,
+            "disrupt": 1,
+            "reassessment": 3,
+            "regime_change": 3,
+            "reserves": 1,
+            "war_of_ideas": 1,
+            "withdraw": 3
+        }
+        valid_commands = [op for op in operation_min_ops if operation_min_ops[op] <= ops]
+        available_commands = ", ".join(sorted(valid_commands))
+        return "%d Ops available. Use one of: %s" % (ops, available_commands)
 
     def resolve_plots(self):
         """Resolves any active plots at the end of the US action phase."""
