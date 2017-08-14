@@ -2474,7 +2474,7 @@ class Labyrinth(object):
             lapsing = "Lapsing: %s" % ", ".join(self.lapsing)
 
         summary = [
-            "Jihadist Ideology: %s" % self.ideology.name,
+            "Jihadist Ideology: %s" % self.ideology.name(),
             "",
             "VICTORY",
             "Good Resources: %d        Islamist Resources: %d" % (good_resources, islamist_resources),
