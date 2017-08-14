@@ -3319,14 +3319,12 @@ class Labyrinth(object):
                 self.output_to_history("Played for Event.", False)
                 self.deck[str(card_num)].playEvent("US", self)
                 if card_num == 120:
-                    print "Now, %d Ops available. Use commands: alert, deploy, disrupt, reassessment, regime," \
-                          " withdraw, or woi" % self.deck[str(card_num)].ops
+                    self.prompt_us_to_spend_ops(card_num)
             elif choice == "ops":
                 self.output_to_history("Played for Ops.", False)
                 if card_num == 120:
                     print "When finished with Ops enter u 120 again to play the event."
-                print "%d Ops available. Use commands: alert, deploy, disrupt, reassessment, regime, withdraw, or" \
-                      " woi" % self.deck[str(card_num)].ops
+                self.prompt_us_to_spend_ops(card_num)
         else:
             if self.deck[str(card_num)].type == "Jihadist":
                 if self.deck[str(card_num)].playable("Jihadist", self, True):
@@ -3337,13 +3335,16 @@ class Labyrinth(object):
                         self.deck[str(card_num)].playEvent("Jihadist", self)
                     else:
                         print "Use the Ops now then enter u <card #> again to play the event"
-                    print "%d Ops available. Use commands: alert, deploy, disrupt, reassessment, regime, withdraw," \
-                          " or woi" % self.deck[str(card_num)].ops
+                    self.prompt_us_to_spend_ops(card_num)
                     return
                     # Here if it's unplayable by either side.
             self.output_to_history("Unplayable %s Event" % self.deck[str(card_num)].type, False)
-            print "%d Ops available. Use commands: alert, deploy, disrupt, reassessment, regime, withdraw, or woi" %\
-                  self.deck[str(card_num)].ops
+            self.prompt_us_to_spend_ops(card_num)
+
+    def prompt_us_to_spend_ops(self, card_number):
+        """Prompts the US player to spend the given card's Ops value"""
+        print "%d Ops available. Use commands: alert, deploy, disrupt, reassessment, regime, withdraw, or woi" %\
+              self.deck[str(card_number)].ops
 
     def resolve_plots(self):
         """Resolves any active plots at the end of the US action phase."""
