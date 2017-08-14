@@ -117,6 +117,12 @@ class Country(object):
         if self.plots > 0:
             self.plots -= 1
 
+    def activate_sleepers(self, sleeper_cells_to_activate):
+        """Activates the given number of sleeper cells in this country"""
+        assert sleeper_cells_to_activate <= self.sleeperCells
+        self.activeCells += sleeper_cells_to_activate
+        self.sleeperCells -= sleeper_cells_to_activate
+
     def check_is_tested(self):
         if self._ought_to_have_been_tested():
             assert self.is_governed(), "Ungoverned country: %s" % self.printCountry()

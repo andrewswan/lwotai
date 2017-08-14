@@ -704,98 +704,128 @@ class Labyrinth(object):
             self.output_to_history(self.map.get(move_to).countryStr(), False)
         self.output_to_history("US Prestige %d" % self.prestige)
 
-    def handle_disrupt(self, where):
-        number_to_disrupt = 1
-        if "Al-Anbar" in self.markers and where in ["Iraq", "Syria"]:
-            number_to_disrupt = 1
-        elif self.map.get(where).troops() >= 2 or self.map.get(where).posture == "Hard":
-            number_to_disrupt = min(2, self.map.get(where).totalCells(False))
-        if self.map.get(where).totalCells(False) <= 0 and self.map.get(where).has_cadre():
-            if "Al-Anbar" not in self.markers or (where != "Iraq" and where != "Syria"):
-                self.output_to_history("* Cadre removed in %s" % where)
-                self.map.get(where).cadre = 0
-        elif self.map.get(where).totalCells(False) <= number_to_disrupt:
-            self.output_to_history(
-                "* %d cell(s) disrupted in %s." % (self.map.get(where).totalCells(False), where), False)
-            if self.map.get(where).sleeperCells > 0:
-                self.map.get(where).activeCells += self.map.get(where).sleeperCells
-                number_to_disrupt -= self.map.get(where).sleeperCells
-                self.map.get(where).sleeperCells = 0
-            if number_to_disrupt > 0:
-                self.map.get(where).activeCells -= number_to_disrupt
-                self.cells += number_to_disrupt
-                if self.map.get(where).activeCells < 0:
-                    self.map.get(where).activeCells = 0
-                if self.cells > 15:
-                    self.cells = 15
-            if self.map.get(where).totalCells(False) <= 0:
-                self.output_to_history("Cadre added in %s." % where, False)
-                self.map.get(where).cadre = 1
-            if self.map.get(where).troops() >= 2:
-                self._increase_prestige(1)
-                self.output_to_history("US Prestige now %d." % self.prestige, False)
-            self.output_to_history(self.map.get(where).countryStr(), True)
+    def handle_disrupt(self, target_name):
+        """Performs a disrupt action in the named country"""
+        target = self.map.get(target_name)
+        number_to_disrupt = self._get_number_of_cells_to_disrupt(target)
+        if target.totalCells(False) <= 0 and target.has_cadre():
+            self._disrupt_cadre(target)
+        elif target.totalCells(False) <= number_to_disrupt:
+            self._disrupt_all_cells(number_to_disrupt, target)
         else:
-            if self.map.get(where).activeCells == 0:
-                self.map.get(where).activeCells += number_to_disrupt
-                self.map.get(where).sleeperCells -= number_to_disrupt
-                self.output_to_history("* %d cell(s) disrupted in %s." % (number_to_disrupt, where), False)
-            elif self.map.get(where).sleeperCells == 0:
-                self.map.get(where).activeCells -= number_to_disrupt
-                self.cells += number_to_disrupt
-                self.output_to_history("* %d cell(s) disrupted in %s." % (number_to_disrupt, where), False)
-                if self.map.get(where).totalCells(False) <= 0:
-                    self.output_to_history("Cadre added in %s." % where, False)
-                    self.map.get(where).cadre = 1
+            # More cells than disrupt actions
+            if target.activeCells <= 0:
+                target.activate_sleepers(number_to_disrupt)
+                self.output_to_history("* %d cell(s) disrupted in %s." % (number_to_disrupt, target_name), False)
+            elif target.sleeperCells <= 0:
+                self._disrupt_active_cells(number_to_disrupt, target)
             else:
+                # A mixture of active and sleeper cells
                 if number_to_disrupt == 1:
-                    cell_type = self._get_cell_type(
-                        "You can disrupt one cell. Enter a or s for either an active or sleeper cell: ")
-                    if cell_type == "a":
-                        self.map.get(where).activeCells -= number_to_disrupt
-                        self.cells += number_to_disrupt
-                        self.output_to_history("* %d cell(s) disrupted in %s." % (number_to_disrupt, where))
-                    else:  # sleeper
-                        self.map.get(where).sleeperCells -= number_to_disrupt
-                        self.map.get(where).activeCells += number_to_disrupt
-                        self.output_to_history("* %d cell(s) disrupted in %s." % (number_to_disrupt, where))
+                    self._disrupt_one_cell(target)
                 else:
-                    disrupt_str = None
-                    while not disrupt_str:
-                        if self.map.get(where).sleeperCells >= 2 and self.map.get(where).activeCells >= 2:
-                            cell_type = self.my_raw_input(
-                                "You can disrupt two cells. Enter aa, as, or ss for active or sleeper cells: ")
-                            cell_type = cell_type.lower()
-                            if cell_type == "aa" or cell_type == "as" or cell_type == "sa" or cell_type == "ss":
-                                disrupt_str = cell_type
-                        elif self.map.get(where).sleeperCells >= 2:
-                            cell_type = self.my_raw_input(
-                                "You can disrupt two cells. Enter as, or ss for active or sleeper cells: ")
-                            cell_type = cell_type.lower()
-                            if cell_type == "as" or cell_type == "sa" or cell_type == "ss":
-                                disrupt_str = cell_type
-                        elif self.map.get(where).activeCells >= 2:
-                            cell_type = self.my_raw_input(
-                                "You can disrupt two cells. Enter aa, or as for active or sleeper cells: ")
-                            cell_type = cell_type.lower()
-                            if cell_type == "as" or cell_type == "sa" or cell_type == "aa":
-                                disrupt_str = cell_type
-                    if cell_type == "aa":
-                        self.map.get(where).activeCells -= 2
-                        self.cells += 2
-                        self.output_to_history("* %d cell(s) disrupted in %s." % (number_to_disrupt, where))
-                    elif cell_type == "as" or cell_type == "sa":
-                        self.map.get(where).sleeperCells -= 1
-                        self.cells += 1
-                        self.output_to_history("* %d cell(s) disrupted in %s." % (number_to_disrupt, where))
-                    else:
-                        self.map.get(where).sleeperCells -= 2
-                        self.map.get(where).activeCells += 2
-                        self.output_to_history("* %d cell(s) disrupted in %s." % (number_to_disrupt, where))
-            if self.map.get(where).troops() >= 2:
+                    self._disrupt_two_cells(target)
+            if target.troops() >= 2:
                 self._increase_prestige(1)
                 self.output_to_history("US Prestige now %d." % self.prestige, False)
-            self.output_to_history(self.map.get(where).countryStr(), True)
+            self.output_to_history(target.countryStr(), True)
+
+    def _get_two_cell_types(self, options):
+        """Prompts the user to choose one of the given options for disrupting two cells, returns None if not valid"""
+        prompt = "You can disrupt two cells. Enter one of %s for active or sleeper cells: " % options
+        cell_types = self.my_raw_input(prompt)
+        if cell_types and cell_types.lower in options:
+            return cell_types.lower()
+        return None
+
+    def _disrupt_two_cells(self, target):
+        """Disrupts two cells in the given target Country (assumes at least one active and one sleeper)"""
+        assert target.activeCells and target.sleeperCells
+        cell_types = None
+        while not cell_types:
+            if target.sleeperCells >= 2 and target.activeCells >= 2:
+                # Free choice
+                cell_types = self._get_two_cell_types(["aa", "as", "ss"])
+            elif target.sleeperCells >= 2:
+                # 1 active cell
+                cell_types = self._get_two_cell_types(["as", "ss"])
+            elif target.activeCells >= 2:
+                # 1 or 2 active cells and 1 sleeper cell
+                cell_types = self._get_two_cell_types(["aa", "as"])
+        if cell_types == "aa":
+            target.activeCells -= 2
+            self.cells += 2
+        elif cell_types == "as":
+            target.sleeperCells -= 1
+            self.cells += 1
+        else:
+            # Two sleepers
+            target.sleeperCells -= 2
+            target.activeCells += 2
+        self.output_to_history("* 2 cells disrupted in %s." % target.name)
+
+    def _disrupt_one_cell(self, target):
+        """Disrupts one cell in the given target Country"""
+        cell_type = self._get_cell_type("You can disrupt one cell. Enter a or s for either an active or sleeper cell: ")
+        if cell_type == "a":
+            target.activeCells -= 1
+            self.cells += 1
+            self.output_to_history("* 1 cell disrupted in %s." % target.name)
+        else:
+            # sleeper
+            target.sleeperCells -= 1
+            target.activeCells += 1
+            self.output_to_history("* 1 cell disrupted in %s." % target.name)
+
+    def _disrupt_active_cells(self, number_to_disrupt, target):
+        """Disrupts the given number of active cells in the given target Country"""
+        assert target.activeCells >= number_to_disrupt
+        target.activeCells -= number_to_disrupt
+        self.cells += number_to_disrupt
+        self.output_to_history("* %d cell(s) disrupted in %s." % (number_to_disrupt, target.name), False)
+        if target.totalCells(False) <= 0:
+            self.output_to_history("Cadre added in %s." % target.name, False)
+            target.cadre = 1
+
+    def _disrupt_all_cells(self, number_to_disrupt, target):
+        """Disrupts all cells in the given target Country"""
+        self.output_to_history(
+            "* %d cell(s) disrupted in %s." % (target.totalCells(False), target.name), False)
+        if target.sleeperCells > 0:
+            # First make all sleepers active
+            target.activeCells += target.sleeperCells
+            number_to_disrupt -= target.sleeperCells
+            target.sleeperCells = 0
+        if number_to_disrupt > 0:
+            # Spend any remaining removals on removing active cells
+            target.activeCells -= number_to_disrupt
+            self.cells += number_to_disrupt
+            if target.activeCells < 0:
+                target.activeCells = 0
+            if self.cells > 15:
+                self.cells = 15
+        if target.totalCells(False) <= 0:
+            self.output_to_history("Cadre added in %s." % target.name, False)
+            target.cadre = 1
+        if target.troops() >= 2:
+            self._increase_prestige(1)
+            self.output_to_history("US Prestige now %d." % self.prestige, False)
+        self.output_to_history(target.countryStr(), True)
+
+    def _get_number_of_cells_to_disrupt(self, target):
+        """Returns the number of cells that can be disrupted in the given country"""
+        if "Al-Anbar" in self.markers and target.name in ["Iraq", "Syria"]:
+            return 1
+        elif target.troops() >= 2 or target.posture == "Hard":
+            return min(2, target.totalCells(False))
+        else:
+            return 1
+
+    def _disrupt_cadre(self, target):
+        """Disrupts all cadre in the given country"""
+        if "Al-Anbar" not in self.markers or target.name not in ["Iraq", "Syria"]:
+            self.output_to_history("* Cadre removed in %s" % target.name)
+            target.cadre = 0
 
     def _get_cell_type(self, prompt):
         """Prompts the user to choose a cell type; 'a' or 's', case-insensitive"""
