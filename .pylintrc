@@ -425,5 +425,6 @@ known-third-party=enchant
 overgeneral-exceptions=Exception
 
 [HAKUCHO]
-# Suppresses certain levels of message
-disable=R,C
+
+# Suppresses certain levels of message (C = convention, W = warning, E = error)
+disable=C
