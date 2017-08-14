@@ -1486,69 +1486,81 @@ class Labyrinth(object):
         return countries_by_governance
 
     def handle_travel(self, ops, is_radicalization=False, is_schengen_visas=False, is_clean_operatives=False):
-        if is_schengen_visas:
-            destinations = self.travel_destinations_schengen_visas()
-        elif is_clean_operatives:
-            destinations = ["United States", "United States"]
-        else:
-            destinations = self.travel_destinations(ops, is_radicalization)
+        destinations = self._get_travel_destinations(is_clean_operatives, is_radicalization, is_schengen_visas, ops)
         sources = self.travel_sources(destinations, ops, is_radicalization)
         if not is_radicalization and not is_schengen_visas and not is_clean_operatives:
             self.output_to_history("* Cells Travel", False)
         for i in range(len(sources)):
-            self.output_to_history("->Travel from %s to %s." % (sources[i], destinations[i]), False)
-            success = False
-            if is_radicalization:
+            self._travel_one_cell(
+                destinations[i], is_clean_operatives, is_radicalization, is_schengen_visas, sources[i])
+        return ops - len(sources)
+
+    def _travel_one_cell(self, destination_country_name, is_clean_operatives, is_radicalization, is_schengen_visas,
+                         source_country_name):
+        """Travels one cell from the named source country to the named destination country"""
+        self.output_to_history("->Travel from %s to %s." % (source_country_name, destination_country_name), False)
+        success = False
+        destination_country = self.get_country(destination_country_name)
+        if is_radicalization:
+            success = True
+            display_str = "Travel by Radicalization is automatically successful."
+        elif is_schengen_visas:
+            success = True
+            display_str = "Travel by Schengen Visas is automatically successful."
+        elif is_clean_operatives:
+            success = True
+            display_str = "Travel by Clean Operatives is automatically successful."
+        else:
+            if source_country_name == destination_country_name:
                 success = True
-                display_str = "Travel by Radicalization is automatically successful."
-            elif is_schengen_visas:
-                success = True
-                display_str = "Travel by Schengen Visas is automatically successful."
-            elif is_clean_operatives:
-                success = True
-                display_str = "Travel by Clean Operatives is automatically successful."
+                display_str = "Travel within country automatically successful."
             else:
-                if sources[i] == destinations[i]:
-                    success = True
-                    display_str = "Travel within country automatically successful."
-                else:
-                    if self.is_adjacent(sources[i], destinations[i]):
-                        if "Biometrics" not in self.lapsing:
-                            success = True
-                            display_str = "Travel to adjacent country automatically successful."
-                        else:
-                            roll = random.randint(1, 6)
-                            if self.get_country(destinations[i]).is_non_recruit_success(roll):
-                                success = True
-                                display_str = "Travel roll needed due to Biometrics - roll successful."
-                            else:
-                                display_str =\
-                                    "Travel roll needed due to Biometrics - roll failed, cell to funding track."
+                if self.is_adjacent(source_country_name, destination_country_name):
+                    if "Biometrics" not in self.lapsing:
+                        success = True
+                        display_str = "Travel to adjacent country automatically successful."
                     else:
                         roll = random.randint(1, 6)
-                        if self.get_country(destinations[i]).is_non_recruit_success(roll):
+                        if destination_country.is_non_recruit_success(roll):
                             success = True
-                            display_str = "Travel roll successful."
+                            display_str = "Travel roll needed due to Biometrics - roll successful."
                         else:
-                            display_str = "Travel roll failed, cell to funding track."
-            self.output_to_history(display_str)
-            self.test_country(destinations[i])
-            if success:
-                if self.get_country(sources[i]).activeCells > 0:
-                    self.get_country(sources[i]).activeCells -= 1
+                            display_str = \
+                                "Travel roll needed due to Biometrics - roll failed, cell to funding track."
                 else:
-                    self.get_country(sources[i]).sleeperCells -= 1
-                self.get_country(destinations[i]).sleeperCells += 1
-                self.output_to_history(self.get_country(sources[i]).countryStr(), False)
-                self.output_to_history(self.get_country(destinations[i]).countryStr(), True)
+                    roll = random.randint(1, 6)
+                    if destination_country.is_non_recruit_success(roll):
+                        success = True
+                        display_str = "Travel roll successful."
+                    else:
+                        display_str = "Travel roll failed, cell to funding track."
+        self.output_to_history(display_str)
+        self.test_country(destination_country_name)
+        source_country = self.get_country(source_country_name)
+        if success:
+            if source_country.activeCells > 0:
+                source_country.activeCells -= 1
             else:
-                if self.get_country(sources[i]).activeCells > 0:
-                    self.get_country(sources[i]).activeCells -= 1
-                else:
-                    self.get_country(sources[i]).sleeperCells -= 1
-                self.cells += 1
-                self.output_to_history(self.get_country(sources[i]).countryStr(), True)
-        return ops - len(sources)
+                source_country.sleeperCells -= 1
+            destination_country.sleeperCells += 1
+            self.output_to_history(source_country.countryStr(), False)
+            self.output_to_history(destination_country.countryStr())
+        else:
+            if source_country.activeCells > 0:
+                source_country.activeCells -= 1
+            else:
+                source_country.sleeperCells -= 1
+            self.cells += 1
+            self.output_to_history(source_country.countryStr())
+
+    def _get_travel_destinations(self, is_clean_operatives, is_radicalization, is_schengen_visas, ops):
+        """Returns a list of country names"""
+        if is_schengen_visas:
+            return self.travel_destinations_schengen_visas()
+        elif is_clean_operatives:
+            return ["United States", "United States"]
+        else:
+            return self.travel_destinations(ops, is_radicalization)
 
     def place_plots(self, country, roll_position, plot_rolls, is_martyrdom_operation=False, is_danish_cartoons=False,
                     is_ksm=False):
