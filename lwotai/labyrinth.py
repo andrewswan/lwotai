@@ -1900,7 +1900,7 @@ class Labyrinth(object):
             self.output_to_history("US Posture now %s" % self.us_posture(), True)
 
     def event_puts_cell(self, card_number):
-        return self.deck[str(card_number)].putsCell()
+        return self.deck[str(card_number)].puts_cell()
 
     def playable_non_us_event(self, card_number):
         card = self.deck[str(card_number)]
@@ -2095,8 +2095,8 @@ class Labyrinth(object):
             country = self.map.get(country_name)
             if country.is_neutral() or country.is_ally() or country.is_ungoverned():
                 print "%s, %s %s - %d Active Cells, %d Sleeper Cells, %d Cadre, %d troops" %\
-                      (country_name, country.governance_str(), country.alignment(), country.activeCells, country.sleeperCells,
-                       country.cadre, country.troops())
+                      (country_name, country.governance_str(), country.alignment(), country.activeCells,
+                       country.sleeperCells, country.cadre, country.troops())
         for country_name in self.map.country_names():
             country = self.map.get(country_name)
             if country.type == "Non-Muslim" and country_name != "United States" and country.posture == "Hard":
@@ -2428,7 +2428,8 @@ class Labyrinth(object):
         print "%d (Turn %s)" % (self.startYear + (self.turn - 1), self.turn)
         print ""
 
-    def show_summary(self):
+    def get_summary(self):
+        """Returns a human-readable summary of the game state"""
         good_resources = 0
         islamist_resources = 0
         good_or_fair_countries = 0
@@ -2451,44 +2452,55 @@ class Labyrinth(object):
                     net_hard_countries += 1
                 elif self.map.get(country_name).posture == "Soft":
                     net_hard_countries -= 1
-        print ""
-        print "Jihadist Ideology:", self.ideology.name
-        print ""
-        print "VICTORY"
-        print "Good Resources: %d        Islamist Resources: %d" % (good_resources, islamist_resources)
-        print "Good/Fair Countries: %d   Poor/Islamist Countries: %d" %\
-              (good_or_fair_countries, poor_or_islamist_countries)
-        print ""
         if net_hard_countries > 0:
             world_posture_str = "Hard"
         elif net_hard_countries < 0:
             world_posture_str = "Soft"
         else:
             world_posture_str = "Even"
-        print "GWOT"
-        print "US Posture: %s    World Posture: %s %d" % (self.us_posture(), world_posture_str, abs(net_hard_countries))
-        print "US Prestige: %d" % self.prestige
-        print ""
-        print "TROOPS"
         if self.troops >= 10:
-            print "Low Intensity: %d troops available" % self.troops
+            troop_track = "Low Intensity: %d troops available" % self.troops
         elif self.troops >= 5:
-            print "War: %d troops available" % self.troops
+            troop_track = "War: %d troops available" % self.troops
         else:
-            print "Overstretch: %d troops available" % self.troops
-        print ""
-        print "JIHADIST FUNDING"
-        print "Funding: %d    Cells Available: %d" % (self.funding, self.cells)
-        print ""
-        print "EVENTS"
+            troop_track = "Overstretch: %d troops available" % self.troops
         if not self.markers:
-            print "Markers: None"
+            markers = "Markers: None"
         else:
-            print "Markers: %s" % ", ".join(self.markers)
+            markers = "Markers: %s" % ", ".join(self.markers)
         if not self.lapsing:
-            print "Lapsing: None"
+            lapsing = "Lapsing: None"
         else:
-            print "Lapsing: %s" % ", ".join(self.lapsing)
+            lapsing = "Lapsing: %s" % ", ".join(self.lapsing)
+
+        summary = [
+            "Jihadist Ideology: %s" % self.ideology.name,
+            "",
+            "VICTORY",
+            "Good Resources: %d        Islamist Resources: %d" % (good_resources, islamist_resources),
+            "Good/Fair Countries: %d   Poor/Islamist Countries: %d" % (
+                good_or_fair_countries, poor_or_islamist_countries),
+            "",
+            "GWOT",
+            "US Posture: %s    World Posture: %s %d" % (self.us_posture(), world_posture_str, abs(net_hard_countries)),
+            "US Prestige: %d" % self.prestige,
+            "",
+            "TROOPS",
+            troop_track,
+            "",
+            "JIHADIST FUNDING",
+            "Funding: %d    Cells Available: %d" % (self.funding, self.cells),
+            "",
+            "EVENTS",
+            markers,
+            lapsing
+        ]
+        return summary
+
+    def print_summary(self):
+        print ""
+        for line in self.get_summary():
+            print line
         print ""
 
     def find_countries(self, predicate):

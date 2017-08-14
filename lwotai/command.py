@@ -90,7 +90,7 @@ class Command(Cmd):
 
     def do_summary(self, _):
         """Displays a summary of the game status."""
-        self.app.show_summary()
+        self.app.print_summary()
 
     def do_turn(self, _):
         """Use this command to indicate the end of the turn."""
