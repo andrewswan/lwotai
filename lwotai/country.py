@@ -125,7 +125,7 @@ class Country(object):
 
     def check_is_tested(self):
         if self._ought_to_have_been_tested():
-            assert self.is_governed(), "Ungoverned country: %s" % self.printCountry()
+            assert self.is_governed(), "Ungoverned country: %s" % self.print_country()
             if self.type == "Non-Muslim":
                 assert self.posture != "", "%s has no posture" % self.name
             elif self.type != "Iran":
@@ -143,7 +143,7 @@ class Country(object):
     def is_non_recruit_success(self, roll):
         return self.is_governed() and self.__governance.is_success(roll)
 
-    def is_recruit_success(self, roll, recruit_override = None):
+    def is_recruit_success(self, roll, recruit_override=None):
         max_recruit_roll = self.max_recruit_roll(recruit_override)
         return max_recruit_roll is not None and roll <= max_recruit_roll
 
@@ -154,7 +154,7 @@ class Country(object):
             self.aid = 0
             self.besieged = 0
 
-    def worsenGovernance(self):
+    def worsen_governance(self):
         self.__governance = self.__governance.worsen()
 
     def governance_is_better_than(self, governance):
@@ -174,7 +174,7 @@ class Country(object):
             return False
         if bhutto_in_play and self.name == "Pakistan":
             return False
-        if self.totalCells(True) - self.troops() < excess_cells_needed:
+        if self.total_cells(True) - self.troops() < excess_cells_needed:
             return False
         ops_needed_from_poor = 1 if self.besieged else 2
         ops_needed = ops_needed_from_poor + self.__governance.levels_above_poor()
@@ -185,7 +185,7 @@ class Country(object):
         return not self.is_muslim() and self.name not in ["Iran", "United States"]
 
     def can_recruit(self, madrassas):
-        return (self.totalCells(True) > 0 or
+        return (self.total_cells(True) > 0 or
                 self.has_cadre() or
                 (madrassas and self.governance_is_worse_than(FAIR)))
 
@@ -195,21 +195,22 @@ class Country(object):
     def can_disrupt(self):
         """Indicates whether the US can conduct a Disrupt operation in this country"""
         return (
-            (self.totalCells() > 0 or self.has_cadre()) and
+            (self.total_cells() > 0 or self.has_cadre()) and
             (self.is_ally() or self.troops() >= 2 or self.type == "Non-Muslim")
         )
 
     def get_disrupt_summary(self):
-        postureStr = ""
-        troopsStr = ""
+        posture_str = ""
+        troops_str = ""
         if self.type == "Non-Muslim":
-            postureStr = ", Posture %s" % self.posture
+            posture_str = ", Posture %s" % self.posture
         else:
-            troopsStr = ", Troops: %d" % self.troops()
-        return "%s - %d Active Cells, %d Sleeper Cells, %d Cadre, Ops Reqd %d%s%s" % (self.name, self.activeCells,
-                                                                                      self.sleeperCells, self.cadre, self.__governance.min_us_ops(), troopsStr, postureStr)
+            troops_str = ", Troops: %d" % self.troops()
+        return "%s - %d Active Cells, %d Sleeper Cells, %d Cadre, Ops Reqd %d%s%s" %\
+               (self.name, self.activeCells, self.sleeperCells, self.cadre, self.__governance.min_us_ops(), troops_str,
+                posture_str)
 
-    def max_recruit_roll(self, recruit_override = None):
+    def max_recruit_roll(self, recruit_override=None):
         if recruit_override:
             return recruit_override
         if self.recruit > 0:
@@ -222,21 +223,21 @@ class Country(object):
         return self.__governance.max_success_roll()
 
     def get_recruit_score(self, ops):
-        if self.is_regime_change() and self.troops() - self.totalCells(True) >= 5:
+        if self.is_regime_change() and self.troops() - self.total_cells(True) >= 5:
             return 100000000
-        if self.is_islamist_rule() and self.totalCells(True) < 2 * ops:
+        if self.is_islamist_rule() and self.total_cells(True) < 2 * ops:
             return 10000000
         if not self.is_islamist_rule() and not self.is_regime_change():
             return self.max_recruit_roll() * 1000000
         return None
 
-    def totalCells(self, includeSadr = False):
+    def total_cells(self, include_sadr=False):
         total = self.activeCells + self.sleeperCells
-        if includeSadr and "Sadr" in self.markers:
+        if include_sadr and "Sadr" in self.markers:
             total += 1
         return total
 
-    def numActiveCells(self):
+    def num_active_cells(self):
         total = self.activeCells
         if "Sadr" in self.markers:
             total += 1
@@ -246,9 +247,9 @@ class Country(object):
         """Reduces the level of aid by the given amount, but not below zero"""
         self.aid = max(self.aid - aid_lost, 0)
 
-    def removeActiveCell(self):
+    def remove_active_cell(self):
         self.activeCells -= 1
-        if self.activeCells < 0:        #20150131PS - changed from <= to <
+        if self.activeCells < 0:  # 20150131PS - changed from <= to <
             if "Sadr" in self.markers:
                 self.markers.remove("Sadr")
                 self.app.output_to_history("Sadr removed from %s" % self.name, False)
@@ -270,12 +271,12 @@ class Country(object):
             return self.resources
 
     def troops(self):
-        troopCount = self.troopCubes
+        troop_count = self.troopCubes
         if "NATO" in self.markers:
-            troopCount += 2
-        return troopCount
+            troop_count += 2
+        return troop_count
 
-    def changeTroops(self, delta):
+    def change_troops(self, delta):
         self.troopCubes += delta
         if self.troopCubes < 0:
             if "NATO" in self.markers:
@@ -283,7 +284,7 @@ class Country(object):
                 self.app.output_to_history("NATO removed from %s" % self.name, True)
             self.troopCubes = 0
 
-    def govStr(self):
+    def governance_str(self):
         if self.is_ungoverned():
             return "Untested"
         return str(self.__governance)
@@ -293,32 +294,39 @@ class Country(object):
         return self.cadre > 0
 
     @staticmethod
-    def typePretty(theType):
-        if theType == "Non-Muslim":
+    def type_pretty(country_type):
+        if country_type == "Non-Muslim":
             return "NM"
-        elif theType == "Suni":
+        elif country_type == "Suni":
             return "SU"
-        elif theType == "Shia-Mix":
+        elif country_type == "Shia-Mix":
             return "SM"
         else:
             return "IR"
 
-    def countryStr(self):
-        """Returns the string representation of this Country"""
+    def summary(self):
+        """Returns a textual summary of this Country"""
         markers_str = ""
         if len(self.markers) != 0:
             markers_str = "\n   Markers: %s" % ", ".join(self.markers)
         if self.is_muslim():
             resources = self.get_resources(self.app.oil_price_spikes())
-            return "%s, %s %s, %d Resource(s)\n   Troops:%d Active:%d Sleeper:%d Cadre:%d Aid:%d Besieged:%d Reg Ch:%d Plots:%d %s" %\
-                   (self.name, self.govStr(), self.__alignment, resources, self.troops(), self.activeCells,
+            return "%s, %s %s, %d Resource(s)\n" \
+                   "   Troops:%d Active:%d Sleeper:%d Cadre:%d Aid:%d Besieged:%d Reg Ch:%d Plots:%d %s" %\
+                   (self.name, self.governance_str(), self.__alignment, resources, self.troops(), self.activeCells,
                     self.sleeperCells, self.cadre, self.aid, self.besieged, self.regimeChange, self.plots, markers_str)
         elif self.name == "Philippines":
-            return "%s - Posture:%s\n   Troops:%d Active:%d Sleeper:%d Cadre:%d Plots:%d %s" % (self.name, self.posture, self.troops(), self.activeCells, self.sleeperCells, self.cadre, self.plots, markers_str)
-        elif self.type == "Non-Muslim" and self.type != "United States":    # 20150131PS This is illogical but does no harm
-            return "%s - Posture:%s\n   Active:%d Sleeper:%d Cadre:%d Plots:%d %s" % (self.name, self.posture, self.activeCells, self.sleeperCells, self.cadre, self.plots, markers_str)
+            return "%s - Posture:%s\n   Troops:%d Active:%d Sleeper:%d Cadre:%d Plots:%d %s" %\
+                   (self.name, self.posture, self.troops(), self.activeCells, self.sleeperCells, self.cadre, self.plots,
+                    markers_str)
+        elif self.type == "Non-Muslim" and self.type != "United States":  # 20150131PS This is illogical but harmless
+            return "%s - Posture:%s\n   Active:%d Sleeper:%d Cadre:%d Plots:%d %s" %\
+                   (self.name, self.posture, self.activeCells, self.sleeperCells, self.cadre, self.plots, markers_str)
         elif self.type == "Iran":
-            return "%s, %s\n   Active:%d Sleeper:%d Cadre:%d Plots:%d %s" % (self.name, self.govStr(), self.activeCells, self.sleeperCells, self.cadre, self.plots, markers_str)
+            return "%s, %s\n   Active:%d Sleeper:%d Cadre:%d Plots:%d %s" %\
+                   (self.name, self.governance_str(), self.activeCells, self.sleeperCells, self.cadre, self.plots,
+                    markers_str)
 
-    def printCountry(self):
-        print self.countryStr()
+    def print_country(self):
+        """Prints a textual summary of this Country"""
+        print self.summary()

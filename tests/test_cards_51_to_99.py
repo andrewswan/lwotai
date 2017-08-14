@@ -11,7 +11,7 @@ class Card51(LabyrinthTestCase):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         iraq = app.get_country("Iraq")
         self.assertFalse(app.deck["51"].playable("Jihadist", app, False))    
-        iraq.changeTroops(1)
+        iraq.change_troops(1)
         self.assertTrue(app.deck["51"].playable("Jihadist", app, False))    
 
     def test_puts_cell(self):
@@ -22,7 +22,7 @@ class Card51(LabyrinthTestCase):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.test_country("Iraq")
         iraq = app.get_country("Iraq")
-        iraq.changeTroops(1)
+        iraq.change_troops(1)
         app.deck["51"].playEvent("Jihadist", app)
         self.assertTrue(iraq.sleeperCells == 4)
 
@@ -30,7 +30,7 @@ class Card51(LabyrinthTestCase):
         iraq = app.get_country("Iraq")
         app.markers.append("Saddam Captured")
         app.test_country("Iraq")
-        iraq.changeTroops(1)
+        iraq.change_troops(1)
         app.deck["51"].playEvent("Jihadist", app)
         self.assertTrue(iraq.sleeperCells == 2)
 
@@ -38,7 +38,7 @@ class Card51(LabyrinthTestCase):
         iraq = app.get_country("Iraq")
         app.cells = 3
         app.test_country("Iraq")
-        iraq.changeTroops(1)
+        iraq.change_troops(1)
         app.deck["51"].playEvent("Jihadist", app)
         self.assertTrue(iraq.sleeperCells == 3)
 
@@ -90,7 +90,7 @@ class Card54(LabyrinthTestCase):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         iraq = app.get_country("Iraq")
         self.assertFalse(app.deck["54"].playable("Jihadist", app, False))
-        iraq.changeTroops(1)
+        iraq.change_troops(1)
         self.assertTrue(app.deck["54"].playable("Jihadist", app, False))    
 
     def test_puts_cell(self):

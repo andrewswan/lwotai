@@ -449,7 +449,7 @@ class Card110(LabyrinthTestCase):
         app.test_country("Iraq")
         app.get_country("Iraq").troopCubes = 2
         app.deck["110"].playEvent("Jihadist", app)
-        self.assertEqual(app.get_country("Iraq").totalCells(True), 3)
+        self.assertEqual(app.get_country("Iraq").total_cells(True), 3)
         self.assertEqual(app.get_country("Iraq").plots, 1)
 
 

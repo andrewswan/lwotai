@@ -140,7 +140,7 @@ class RegimeChangeHandlerTest(LabyrinthTestCase):
 
         app = Labyrinth(1, 1, self.set_up_test_scenario)
         app.troops -= 8
-        app.get_country("Pakistan").changeTroops(8)
+        app.get_country("Pakistan").change_troops(8)
         app.get_country("United States").posture = "Hard"
         self.assertTrue(app.get_country("Afghanistan").is_islamist_rule())
         self.assertTrue(app.get_country("Afghanistan").is_adversary())

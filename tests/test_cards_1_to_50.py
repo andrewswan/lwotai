@@ -124,9 +124,9 @@ class Card03(LabyrinthTestCase):
         app.deck["3"].playEvent("US", app)
         self.assertTrue("CTR" in app.get_country("Russia").markers)
         self.assertTrue("CTR" in app.get_country("Central Asia").markers)
-        print app.get_country("Russia").countryStr()
-        self.assertTrue("Markers: CTR" in app.get_country("Russia").countryStr())
-        self.assertTrue("Markers: CTR" in app.get_country("Central Asia").countryStr())
+        print app.get_country("Russia").summary()
+        self.assertTrue("Markers: CTR" in app.get_country("Russia").summary())
+        self.assertTrue("Markers: CTR" in app.get_country("Central Asia").summary())
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.toggle_us_posture()
@@ -1190,7 +1190,7 @@ class Card41(LabyrinthTestCase):
         app.get_country("Libya").make_poor()
         app.get_country("Libya").make_ally()
         app.get_country("Libya").regimeChange = 1
-        app.get_country("Libya").changeTroops(2)
+        app.get_country("Libya").change_troops(2)
         app.deck["41"].playEvent("US", app)
         self.assertTrue(app.get_country("Libya").aid == 1)
         self.assertTrue(app.get_country("Libya").troops() == 4)

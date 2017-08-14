@@ -6,7 +6,7 @@ class LabyrinthTestCase(unittest.TestCase):
 
     def assertCells(self, app, country, expected_cells, include_sadr = False):
         """Asserts that the given country contains the given number of cells"""
-        self.assertEqual(expected_cells, app.map.get(country).totalCells(include_sadr))
+        self.assertEqual(expected_cells, app.map.get(country).total_cells(include_sadr))
 
     def assert_new_messages(self, app, message_count_before, expected_messages):
         expected_message_count = len(expected_messages)
