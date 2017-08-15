@@ -70,3 +70,19 @@ class Utils(object):
                     print "Please enter a number from 1 to", len(options)
             except ValueError:
                 print "Please enter a number from 1 to", len(options)
+
+    @staticmethod
+    def parse_card_number(card_num_str):
+        """Parses a valid card number from the given textual input"""
+        try:
+            card_num = int(card_num_str)
+            if card_num < 1 or card_num > 120:
+                print "Enter a card number from 1 to 120"
+                print ""
+                return None
+            else:
+                return card_num
+        except ValueError:
+            print "Enter a card number from 1 to 120"
+            print ""
+            return None

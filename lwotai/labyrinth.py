@@ -6,7 +6,6 @@ from lwotai.governance import governance_with_level
 from lwotai.ideologies.ideologies import get_ideology, IDEOLOGIES
 from lwotai.map import Map
 from lwotai.randomizer import Randomizer
-from lwotai.saver import Saver
 from lwotai.scenarios.scenarios import get_scenario
 from lwotai.utils import Utils
 
@@ -20,7 +19,6 @@ class Labyrinth(object):
         self.ideology = get_ideology(ideology_num)
         self.testUserInput = test_user_input
         self.randomizer = kwargs.get('randomizer', Randomizer())
-        self.saver = kwargs.get('saver', Saver())
         # Defaults
         self.backlashInPlay = False
         self.cells = 0
@@ -3273,51 +3271,30 @@ class Labyrinth(object):
         pre_third_roll = self.get_roll_from_user("Enter third die for Prestige roll or r to have program roll: ")
         self.handle_withdraw(move_from, move_to, how_many, (pre_first_roll, pre_second_roll, pre_third_roll))
 
-    def play_jihadist_card(self, card_num_str):
-        card_num = self._parse_card_number(card_num_str)
-        if not card_num:
-            return
-        self.save_undo()
+    def play_jihadist_card(self, card_number):
+        """Plays the given numbered card during the Jihadist action phase"""
         self.output_to_history("", False)
-        self.output_to_history(
-            "== Jihadist plays %s - %d Ops ==" % (self.deck[str(card_num)].name, self.deck[str(card_num)].ops))
-        self.ai_flow_chart_top(card_num)
+        card = self.deck[str(card_number)]
+        self.output_to_history("== Jihadist plays %s - %d Ops ==" % (card.name, card.ops))
+        self.ai_flow_chart_top(card_number)
 
-    @staticmethod
-    def _parse_card_number(card_num_str):
-        try:
-            card_num = int(card_num_str)
-            if card_num < 1 or card_num > 120:
-                print "Enter a card number from 1 to 120"
-                print ""
-                return None
-            else:
-                return card_num
-        except ValueError:
-            print "Enter a card number from 1 to 120"
-            print ""
-            return None
-
-    def play_us_card(self, card_num_str):
+    def play_us_card(self, card_num):
         """Plays the given card as the US when it's the US action phase."""
-        card_num = self._parse_card_number(card_num_str)
-        if not card_num:
-            return
-        self.save_undo()
         self.output_to_history("", False)
+        card = self.deck[str(card_num)]
         self.output_to_history(
-            "== US plays %s - %d Ops ==" % (self.deck[str(card_num)].name, self.deck[str(card_num)].ops))
+            "== US plays %s - %d Ops ==" % (card.name, card.ops))
 
-        if self.deck[str(card_num)].playable("US", self, True):
-            self.output_to_history("Playable %s Event" % self.deck[str(card_num)].type, False)
-            if card_num != 120:
-                choice = self.get_event_or_ops_from_user("Play card for Event or Ops (enter e or o): ")
-            else:
+        if card.playable("US", self, True):
+            self.output_to_history("Playable %s Event" % card.type, False)
+            if card_num == 120:
                 choice = self.get_event_or_ops_from_user(
                     "This event must be played, do you want the Event or Ops to happen first (enter e or o): ")
+            else:
+                choice = self.get_event_or_ops_from_user("Play card for Event or Ops (enter e or o): ")
             if choice == "event":
                 self.output_to_history("Played for Event.", False)
-                self.deck[str(card_num)].playEvent("US", self)
+                card.playEvent("US", self)
                 if card_num == 120:
                     print self.get_us_prompt_to_spend_ops(card_num)
             elif choice == "ops":
@@ -3326,19 +3303,19 @@ class Labyrinth(object):
                     print "When finished with Ops enter u 120 again to play the event."
                 print self.get_us_prompt_to_spend_ops(card_num)
         else:
-            if self.deck[str(card_num)].type == "Jihadist":
-                if self.deck[str(card_num)].playable("Jihadist", self, True):
+            if card.type == "Jihadist":
+                if card.playable("Jihadist", self, True):
                     self.output_to_history("Jihadist Event is playable.", False)
                     play_event_first = self.get_yes_no_from_user(
                         "Do you want to play the Jihadist event before using the Ops? (y/n): ")
                     if play_event_first:
-                        self.deck[str(card_num)].playEvent("Jihadist", self)
+                        card.playEvent("Jihadist", self)
                     else:
                         print "Use the Ops now then enter u <card #> again to play the event"
                     print self.get_us_prompt_to_spend_ops(card_num)
                     return
-                    # Here if it's unplayable by either side.
-            self.output_to_history("Unplayable %s Event" % self.deck[str(card_num)].type, False)
+            # Here if it's unplayable by either side.
+            self.output_to_history("Unplayable %s Event" % card.type, False)
             print self.get_us_prompt_to_spend_ops(card_num)
 
     def get_us_prompt_to_spend_ops(self, card_number):
@@ -3419,8 +3396,6 @@ class Labyrinth(object):
 
     def end_turn(self):
         """Performs end-of-turn activities."""
-        self.saver.save_turn_file(self)
-
         self.output_to_history("* End of Turn.", False)
         if "Pirates" in self.markers and\
                 (self.map.get("Somalia").is_islamist_rule() or self.map.get("Yemen").is_islamist_rule()):
@@ -3496,19 +3471,9 @@ class Labyrinth(object):
     def undo_last_turn(self):
         self.undo = self.get_yes_no_from_user("Undo to last card played? (y/n): ")
 
-    def quit(self):
-        if self.get_yes_no_from_user("Save? (y/n): "):
-            print "Saving suspend file."
-            self.saver.save_suspend_file(self)
-        print "Exiting."
-
     def print_turn_number(self):
         print "%d (Turn %s)" % (self.startYear + (self.turn - 1), self.turn)
         print ""
-
-    def save_undo(self):
-        """Saves the undo file for this game"""
-        self.saver.save_undo_file(self)
 
     def roll_back(self):
         self.roll_turn = -1

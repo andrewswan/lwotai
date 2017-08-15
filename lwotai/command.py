@@ -1,4 +1,7 @@
 from cmd import Cmd
+
+from lwotai.utils import Utils
+
 from lwotai.saver import Saver
 
 
@@ -53,9 +56,12 @@ class Command(Cmd):
         """Displays the game history. Type 'history save' to also save it to a file called history.txt."""
         self.app.show_history(argument)
 
-    def do_jihadist_card(self, card_number):
+    def do_jihadist_card(self, card_num_str):
         """Plays the given card as the Jihadist player, when it's their turn."""
-        self.app.play_jihadist_card(card_number)
+        card_num = Utils.parse_card_number(card_num_str)
+        if card_num:
+            self.saver.save_undo_file(self.app)
+            self.app.play_jihadist_card(card_num)
 
     def do_plot(self, _):
         """Use this command after the US Action Phase to resolve any unblocked plots."""
@@ -63,7 +69,10 @@ class Command(Cmd):
 
     def do_quit(self, _):
         """Quits the game and prompts you to save."""
-        self.app.quit()
+        if Utils.getUserYesNoResponse("Save? (y/n): "):
+            print "Saving suspend file."
+            self.saver.save_suspend_file(self.app)
+        print "Exiting."
 
     def do_reassessment(self, _):
         """Changes the US Posture, i.e. toggles between Hard <--> Soft."""
@@ -94,15 +103,19 @@ class Command(Cmd):
 
     def do_turn(self, _):
         """Use this command to indicate the end of the turn."""
+        self.saver.save_turn_file(self.app)
         self.app.end_turn()
 
     def do_undo(self):
         """Rolls back to the last card played."""
         self.app.undo_last_turn()
 
-    def do_us_card(self, card_number):
+    def do_us_card(self, card_num_str):
         """Plays the given card as the US when it's the US action phase."""
-        self.app.play_us_card(card_number)
+        card_number = Utils.parse_card_number(card_num_str)
+        if card_number:
+            self.saver.save_undo_file(self)
+            self.app.play_us_card(card_number)
 
     def do_war_of_ideas(self, _):
         """Carries out a "War of Ideas" action in a selected country."""
