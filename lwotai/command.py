@@ -100,7 +100,7 @@ class Command(Cmd):
 
     def do_turn(self, _):
         """Use this command to indicate the end of the turn."""
-        self.saver.save_turn_file(self.app)
+        self.saver.save_current_turn_file(self.app)
         self.app.end_turn()
 
     def do_undo(self):

@@ -14,7 +14,7 @@ class SaverTest(unittest.TestCase):
         game_to_save = Labyrinth(1, 1)
         turn_number = 9999  # so as not to overwrite a real turn file
         game_to_save.turn = turn_number
-        saver.save_turn_file(game_to_save)
+        saver.save_current_turn_file(game_to_save)
 
         # Invoke
         loaded_game = saver.load_turn_file(turn_number)

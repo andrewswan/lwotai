@@ -34,8 +34,9 @@ class Saver(object):
     UNDO_FILE = "undo.lwot"
     ROLLBACK_FILE = "turn."
 
-    def __init__(self):
-        pass
+    def suspended_game_exists(self):
+        """Indicates whether a saved game exists"""
+        return os.path.exists(self.SUSPEND_FILE)
 
     def new_session(self):
         """The user is starting a new game session"""
@@ -46,10 +47,6 @@ class Saver(object):
             if "turn." in the_file and ".lwot" in the_file:
                 os.remove(the_file)
 
-    def suspended_game_exists(self):
-        """Indicates whether a saved game exists"""
-        return os.path.exists(self.SUSPEND_FILE)
-
     def load_suspend_file(self):
         """Loads the game; returns a Labyrinth object"""
         with open(self.SUSPEND_FILE, 'rb') as suspend_file:
@@ -57,11 +54,6 @@ class Saver(object):
         app.stdout = sys.stdout
         app.undo = False
         return app
-
-    def save_rollback_file(self, app, turn_number):
-        """Saves a rollback file at the start of the given turn"""
-        turn_file = self.ROLLBACK_FILE + str(turn_number) + ".lwot"
-        self._save_game(app, turn_file)
 
     def load_turn_file(self, turn_number):
         """Returns the saved game as it was at the given turn number"""
@@ -80,23 +72,29 @@ class Saver(object):
         app.stdout = sys.stdout
         return app
 
-    def _delete_undo_file_if_exists(self):
-        if os.path.exists(self.UNDO_FILE):
-            os.remove(self.UNDO_FILE)
+    def save_current_turn_file(self, app):
+        """Saves the given game at its current turn number"""
+        self.save_turn_file(app, app.turn)
+
+    def save_turn_file(self, app, turn_number):
+        """Saves a rollback file at the start of the given turn"""
+        turn_file = self.ROLLBACK_FILE + str(turn_number) + ".lwot"
+        self._save_game(app, turn_file)
+
+    def save_suspend_file(self, app):
+        """Saves the suspend file for the given game"""
+        self._save_game(app, self.SUSPEND_FILE)
 
     def save_undo_file(self, app):
         self._save_game(app, self.UNDO_FILE)
 
-    def save_turn_file(self, app):
-        """Saves the given app at its current turn number"""
-        self._save_game(app, self.ROLLBACK_FILE + str(app.turn) + ".lwot")
-
-    def save_suspend_file(self, app):
-        self._save_game(app, self.SUSPEND_FILE)
+    def _delete_undo_file_if_exists(self):
+        if os.path.exists(self.UNDO_FILE):
+            os.remove(self.UNDO_FILE)
 
     @staticmethod
     def _save_game(app, save_file_name):
-        """Saves the given app to the given file"""
+        """Saves the given game to the given file"""
         Utils.require_type(app, Labyrinth)
         with open(save_file_name, 'wb') as save_file:
             pickle.dump(app, save_file, 2)

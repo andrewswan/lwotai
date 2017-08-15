@@ -60,7 +60,7 @@ def main():
         app = saver.load_suspend_file()
     else:
         app = _create_game()
-        saver.save_rollback_file(app, 0)
+        saver.save_turn_file(app, 0)
 
     command = Command(app, saver)
 
