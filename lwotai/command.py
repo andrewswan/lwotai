@@ -12,7 +12,7 @@ class Command(Cmd):
         Cmd.__init__(self, complete_key, std_in, std_out)
         self.app = Utils.require_type(app, Labyrinth)
         self.saver = Utils.require_type(saver, Saver)
-        self.prompt = "Enter command (? for help): "
+        self.prompt = "Enter command (? for help, Tab to complete): "
 
     # noinspection SpellCheckingInspection: comes from Cmd superclass
     def emptyline(self):
