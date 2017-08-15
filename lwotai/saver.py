@@ -18,6 +18,9 @@ Thanks to Dave Horn for implementing the Save and Undo system.
 import os
 import sys
 
+from lwotai.labyrinth import Labyrinth
+from lwotai.utils import Utils
+
 try:
     import cPickle as pickle
 except ImportError:
@@ -94,5 +97,6 @@ class Saver(object):
     @staticmethod
     def _save_game(app, save_file_name):
         """Saves the given app to the given file"""
+        Utils.require_type(app, Labyrinth)
         with open(save_file_name, 'wb') as save_file:
             pickle.dump(app, save_file, 2)
