@@ -31,17 +31,14 @@ class Labyrinth(object):
         self.markers = []
         self.phase = ""
         self.prestige = 0
-        self.prompt = "Command: "
         self.roll_turn = -1
         self.startYear = 0
         self.troops = 0
         self.turn = 1
-        self.uCard = 1
         self.undo = False
         self.validCountryMarkers = []
         self.validGlobalMarkers = []
         self.validLapsingMarkers = []
-        self.whichPlayer = ""
         # Initialise
         self.deck_setup()
         self.valid_markers_setup()
