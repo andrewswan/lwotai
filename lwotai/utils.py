@@ -23,7 +23,8 @@ class Utils(object):
         :param required_type: the required type
         :return: the checked value
         """
-        assert isinstance(value, required_type)
+        if not isinstance(value, required_type):
+            raise AssertionError('"%s" is a "%s"' % (value, type(value)))
         return value
 
     @staticmethod

@@ -8,20 +8,18 @@ from lwotai.utils import Utils
 class Command(Cmd):
     """The command-line processor for this application"""
 
-    def __init__(self, app, saver=Saver(), completekey='tab', stdin=None, stdout=None):
-        Cmd.__init__(self, completekey, stdin, stdout)
-        assert type(app) is Labyrinth
-        assert type(saver) is Saver
-        self.app = app
+    def __init__(self, app, saver=Saver(), complete_key='tab', std_in=None, std_out=None):
+        Cmd.__init__(self, complete_key, std_in, std_out)
+        self.app = Utils.require_type(app, Labyrinth)
+        self.saver = Utils.require_type(saver, Saver)
         self.prompt = "Enter command (? for help): "
-        self.saver = saver
 
     # noinspection SpellCheckingInspection: comes from Cmd superclass
     def emptyline(self):
         self.app.print_turn_number()
 
     def postcmd(self, stop, line):
-        self.saver.save_suspend_file(self)
+        self.saver.save_suspend_file(self.app)
         if line == "quit":
             return True
         if self.app.undo:
