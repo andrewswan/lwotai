@@ -1,8 +1,8 @@
 from cmd import Cmd
 
-from lwotai.utils import Utils
-
+from lwotai.labyrinth import Labyrinth
 from lwotai.saver import Saver
+from lwotai.utils import Utils
 
 
 class Command(Cmd):
@@ -10,6 +10,8 @@ class Command(Cmd):
 
     def __init__(self, app, saver=Saver(), completekey='tab', stdin=None, stdout=None):
         Cmd.__init__(self, completekey, stdin, stdout)
+        assert type(app) is Labyrinth
+        assert type(saver) is Saver
         self.app = app
         self.prompt = "Enter command (? for help): "
         self.saver = saver
