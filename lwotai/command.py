@@ -58,10 +58,7 @@ class Command(Cmd):
 
     def do_jihadist_card(self, card_num_str):
         """Plays the given card as the Jihadist player, when it's their turn."""
-        card_num = Utils.parse_card_number(card_num_str)
-        if card_num:
-            self.saver.save_undo_file(self.app)
-            self.app.play_jihadist_card(card_num)
+        self._play_card(card_num_str, self.app.play_jihadist_card)
 
     def do_plot(self, _):
         """Use this command after the US Action Phase to resolve any unblocked plots."""
@@ -112,10 +109,17 @@ class Command(Cmd):
 
     def do_us_card(self, card_num_str):
         """Plays the given card as the US when it's the US action phase."""
-        card_number = Utils.parse_card_number(card_num_str)
+        self._play_card(card_num_str, self.app.play_us_card)
+
+    def _play_card(self, card_num_str, handler):
+        """Plays the given card using the given handler function"""
+        if card_num_str:
+            card_number = Utils.parse_card_number(card_num_str)
+        else:
+            card_number = Utils.prompt_for_card_number()
         if card_number:
-            self.saver.save_undo_file(self)
-            self.app.play_us_card(card_number)
+            self.saver.save_undo_file(self.app)
+            handler(card_number)
 
     def do_war_of_ideas(self, _):
         """Carries out a "War of Ideas" action in a selected country."""

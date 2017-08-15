@@ -73,6 +73,21 @@ class Utils(object):
                 print "Please enter a number from 1 to", len(options)
 
     @staticmethod
+    def prompt_for_card_number():
+        """Asks the user to enter a card number; returns None if they enter nothing"""
+        while True:
+            card_num_str = raw_input("Which card (1-120)? ")
+            if not card_num_str:
+                return None
+            try:
+                card_num = int(card_num_str)
+                if 1 <= card_num <= 120:
+                    return card_num
+            except ValueError:
+                pass
+            print "Invalid card number '%s'" % card_num_str
+
+    @staticmethod
     def parse_card_number(card_num_str):
         """Parses a valid card number from the given textual input"""
         try:
