@@ -91,7 +91,7 @@ class Command(Cmd):
 
     def do_roll_back(self, _):
         """Rolls the game back to a chosen turn in the game."""
-        self.app.roll_back()
+        self.app.load_turn_file()
 
     def do_status(self, country_name):
         """Displays the game status, or 'status [country]' displays the status of that country."""

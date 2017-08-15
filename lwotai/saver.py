@@ -60,7 +60,7 @@ class Saver(object):
         turn_file = self.ROLLBACK_FILE + str(turn_number) + ".lwot"
         self._save_game(app, turn_file)
 
-    def roll_back(self, turn_number):
+    def load_turn_file(self, turn_number):
         """Returns the saved game as it was at the given turn number"""
         turn_file_name = self.ROLLBACK_FILE + str(turn_number) + '.lwot'
         with open(turn_file_name, 'rb') as turn_file:

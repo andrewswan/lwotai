@@ -73,7 +73,7 @@ def main():
             app = saver.load_undo_file()
         elif app.roll_turn >= 0:
             print "Rolling back to turn " + str(app.roll_turn)
-            app = saver.roll_back(app.roll_turn)
+            app = saver.load_turn_file(app.roll_turn)
         else:
             break
 
