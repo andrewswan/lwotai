@@ -1087,7 +1087,7 @@ class Card(object):
                 if card_num == "none":
                     app.output_to_history("No cards left to recruit to US.", True)
                     return
-                ops = app.deck[str(card_num)].ops
+                ops = app.deck.get(card_num).ops
                 rolls = app.randomizer.roll_d6(ops)
                 app.execute_recruit("United States", ops, rolls, 2)
             elif self.number == 49:  # Al-Ittihad al-Islami
@@ -1112,7 +1112,7 @@ class Card(object):
                 if card_num == "none":
                     app.output_to_history("No cards left to recruit.", True)
                     return
-                ops = app.deck[str(card_num)].ops
+                ops = app.deck.get(card_num).ops
                 app.handle_recruit(ops, True)
             elif self.number == 54:  # Moqtada al-Sadr
                 app.get_country("Iraq").markers.append("Sadr")

@@ -1,6 +1,7 @@
 import random
 
-from lwotai.card import Card
+from lwotai.cards import CARDS
+from lwotai.deck import Deck
 from lwotai.governance import GOOD, FAIR, POOR
 from lwotai.governance import governance_with_level
 from lwotai.ideologies.ideologies import get_ideology, IDEOLOGIES
@@ -22,7 +23,7 @@ class Labyrinth(object):
         # Defaults
         self.backlashInPlay = False
         self.cells = 0
-        self.deck = {}
+        self.deck = Deck(CARDS)
         self.funding = 0
         self.gameOver = False
         self.history = []
@@ -40,7 +41,6 @@ class Labyrinth(object):
         self.validGlobalMarkers = []
         self.validLapsingMarkers = []
         # Initialise
-        self.deck_setup()
         self.valid_markers_setup()
         # Apply any passed-in setup function
         if setup_function:
@@ -49,6 +49,10 @@ class Labyrinth(object):
             self.scenario.set_up(self)
             self._print_initial_state()
         self._print_game_start_messages()
+
+    def card(self, card_number):
+        """Returns the given numbered card"""
+        return self.deck.get(card_number)
 
     def _print_game_start_messages(self):
         self.output_to_history(self.scenario.name, False)
@@ -109,128 +113,6 @@ class Labyrinth(object):
         print "World Posture: %s %d" % (world_posture_str, abs(net_hard_countries))
         print "US Prestige: %d" % self.prestige
         print ""
-
-    def deck_setup(self):
-        self.deck["1"] = Card(1, "US", "Backlash", 1, False, False, False)
-        self.deck["2"] = Card(2, "US", "Biometrics", 1, False, False, True)
-        self.deck["3"] = Card(3, "US", "CTR", 1, False, True, False)
-        self.deck["4"] = Card(4, "US", "Moro Talks", 1, True, True, False)
-        self.deck["5"] = Card(5, "US", "NEST", 1, True, True, False)
-        self.deck["6"] = Card(6, "US", "Sanctions", 1, False, False, False)
-        self.deck["7"] = Card(7, "US", "Sanctions", 1, False, False, False)
-        self.deck["8"] = Card(8, "US", "Special Forces", 1, False, False, False)
-        self.deck["9"] = Card(9, "US", "Special Forces", 1, False, False, False)
-        self.deck["10"] = Card(10, "US", "Special Forces", 1, False, False, False)
-        self.deck["11"] = Card(11, "US", "Abbas", 2, True, True, False)
-        self.deck["12"] = Card(12, "US", "Al-Azhar", 2, False, False, False)
-        self.deck["13"] = Card(13, "US", "Anbar Awakening", 2, False, True, False)
-        self.deck["14"] = Card(14, "US", "Covert Action", 2, False, False, False)
-        self.deck["15"] = Card(15, "US", "Ethiopia Strikes", 2, True, False, False)
-        self.deck["16"] = Card(16, "US", "Euro-Islam", 2, True, False, False)
-        self.deck["17"] = Card(17, "US", "FSB", 2, False, False, False)
-        self.deck["18"] = Card(18, "US", "Intel Community", 2, False, False, False)
-        self.deck["19"] = Card(19, "US", "Kemalist Republic", 2, False, False, False)
-        self.deck["20"] = Card(20, "US", "King Abdullah", 2, True, False, False)
-        self.deck["21"] = Card(21, "US", "Let's Roll", 2, False, False, False)
-        self.deck["22"] = Card(22, "US", "Mossad and Shin Bet", 2, False, False, False)
-        self.deck["23"] = Card(23, "US", "Predator", 2, False, False, False)
-        self.deck["24"] = Card(24, "US", "Predator", 2, False, False, False)
-        self.deck["25"] = Card(25, "US", "Predator", 2, False, False, False)
-        self.deck["26"] = Card(26, "US", "Quartet", 2, False, False, False)
-        self.deck["27"] = Card(27, "US", "Sadam Captured", 2, True, True, False)
-        self.deck["28"] = Card(28, "US", "Sharia", 2, False, False, False)
-        self.deck["29"] = Card(29, "US", "Tony Blair", 2, True, False, False)
-        self.deck["30"] = Card(30, "US", "UN Nation Building", 2, False, False, False)
-        self.deck["31"] = Card(31, "US", "Wiretapping", 2, False, True, False)
-        self.deck["32"] = Card(32, "US", "Back Channel", 3, False, False, False)
-        self.deck["33"] = Card(33, "US", "Benazir Bhutto", 3, True, True, False)
-        self.deck["34"] = Card(34, "US", "Enhanced Measures", 3, False, True, False)
-        self.deck["35"] = Card(35, "US", "Hijab", 3, True, False, False)
-        self.deck["36"] = Card(36, "US", "Indo-Pakistani Talks", 3, True, True, False)
-        self.deck["37"] = Card(37, "US", "Iraqi WMD", 3, True, True, False)
-        self.deck["38"] = Card(38, "US", "Libyan Deal", 3, True, True, False)
-        self.deck["39"] = Card(39, "US", "Libyan WMD", 3, True, True, False)
-        self.deck["40"] = Card(40, "US", "Mass Turnout", 3, False, False, False)
-        self.deck["41"] = Card(41, "US", "NATO", 3, False, True, False)
-        self.deck["42"] = Card(42, "US", "Pakistani Offensive", 3, False, False, False)
-        self.deck["43"] = Card(43, "US", "Patriot Act", 3, True, True, False)
-        self.deck["44"] = Card(44, "US", "Renditions", 3, False, True, False)
-        self.deck["45"] = Card(45, "US", "Safer Now", 3, False, False, False)
-        self.deck["46"] = Card(46, "US", "Sistani", 3, False, False, False)
-        self.deck["47"] = Card(47, "US", "The door of Itjihad was closed", 3, False, False, True)
-        self.deck["48"] = Card(48, "Jihadist", "Adam Gadahn", 1, False, False, False)
-        self.deck["49"] = Card(49, "Jihadist", "Al-Ittihad al-Islami", 1, True, False, False)
-        self.deck["50"] = Card(50, "Jihadist", "Ansar al-Islam", 1, True, False, False)
-        self.deck["51"] = Card(51, "Jihadist", "FREs", 1, False, False, False)
-        self.deck["52"] = Card(52, "Jihadist", "IEDs", 1, False, False, False)
-        self.deck["53"] = Card(53, "Jihadist", "Madrassas", 1, False, False, False)
-        self.deck["54"] = Card(54, "Jihadist", "Moqtada al-Sadr", 1, True, True, False)
-        self.deck["55"] = Card(55, "Jihadist", "Uyghur Jihad", 1, True, False, False)
-        self.deck["56"] = Card(56, "Jihadist", "Vieira de Mello Slain", 1, True, True, False)
-        self.deck["57"] = Card(57, "Jihadist", "Abu Sayyaf", 2, True, True, False)
-        self.deck["58"] = Card(58, "Jihadist", "Al-Anbar", 2, True, True, False)
-        self.deck["59"] = Card(59, "Jihadist", "Amerithrax", 2, False, False, False)
-        self.deck["60"] = Card(60, "Jihadist", "Bhutto Shot", 2, True, True, False)
-        self.deck["61"] = Card(61, "Jihadist", "Detainee Release", 2, False, False, False)
-        self.deck["62"] = Card(62, "Jihadist", "Ex-KGB", 2, False, False, False)
-        self.deck["63"] = Card(63, "Jihadist", "Gaza War", 2, False, False, False)
-        self.deck["64"] = Card(64, "Jihadist", "Hariri Killed", 2, True, False, False)
-        self.deck["65"] = Card(65, "Jihadist", "HEU", 2, True, False, False)
-        self.deck["66"] = Card(66, "Jihadist", "Homegrown", 2, False, False, False)
-        self.deck["67"] = Card(67, "Jihadist", "Islamic Jihad Union", 2, True, False, False)
-        self.deck["68"] = Card(68, "Jihadist", "Jemaah Islamiya", 2, False, False, False)
-        self.deck["69"] = Card(69, "Jihadist", "Kazakh Strain", 2, True, False, False)
-        self.deck["70"] = Card(70, "Jihadist", "Lashkar-e-Tayyiba", 2, False, False, False)
-        self.deck["71"] = Card(71, "Jihadist", "Loose Nuke", 2, True, False, False)
-        self.deck["72"] = Card(72, "Jihadist", "Opium", 2, False, False, False)
-        self.deck["73"] = Card(73, "Jihadist", "Pirates", 2, True, True, False)
-        self.deck["74"] = Card(74, "Jihadist", "Schengen Visas", 2, False, False, False)
-        self.deck["75"] = Card(75, "Jihadist", "Schroeder & Chirac", 2, True, False, False)
-        self.deck["76"] = Card(76, "Jihadist", "Abu Ghurayb", 3, True, False, False)
-        self.deck["77"] = Card(77, "Jihadist", "Al Jazeera", 3, False, False, False)
-        self.deck["78"] = Card(78, "Jihadist", "Axis of Evil", 3, False, False, False)
-        self.deck["79"] = Card(79, "Jihadist", "Clean Operatives", 3, False, False, False)
-        self.deck["80"] = Card(80, "Jihadist", "FATA", 3, False, True, False)
-        self.deck["81"] = Card(81, "Jihadist", "Foreign Fighters", 3, False, False, False)
-        self.deck["82"] = Card(82, "Jihadist", "Jihadist Videos", 3, False, False, False)
-        self.deck["83"] = Card(83, "Jihadist", "Kashmir", 3, False, False, False)
-        self.deck["84"] = Card(84, "Jihadist", "Leak", 3, False, False, False)
-        self.deck["85"] = Card(85, "Jihadist", "Leak", 3, False, False, False)
-        self.deck["86"] = Card(86, "Jihadist", "Lebanon War", 3, False, False, False)
-        self.deck["87"] = Card(87, "Jihadist", "Martyrdom Operation", 3, False, False, False)
-        self.deck["88"] = Card(88, "Jihadist", "Martyrdom Operation", 3, False, False, False)
-        self.deck["89"] = Card(89, "Jihadist", "Martyrdom Operation", 3, False, False, False)
-        self.deck["90"] = Card(90, "Jihadist", "Quagmire", 3, False, False, False)
-        self.deck["91"] = Card(91, "Jihadist", "Regional al-Qaeda", 3, False, False, False)
-        self.deck["92"] = Card(92, "Jihadist", "Saddam", 3, False, False, False)
-        self.deck["93"] = Card(93, "Jihadist", "Taliban", 3, False, False, False)
-        self.deck["94"] = Card(94, "Jihadist", "The door of Itjihad was closed", 3, False, False, False)
-        self.deck["95"] = Card(95, "Jihadist", "Wahhabism", 3, False, False, False)
-        self.deck["96"] = Card(96, "Unassociated", "Danish Cartoons", 1, True, False, False)
-        self.deck["97"] = Card(97, "Unassociated", "Fatwa", 1, False, False, False)
-        self.deck["98"] = Card(98, "Unassociated", "Gaza Withdrawal", 1, True, False, False)
-        self.deck["99"] = Card(99, "Unassociated", "HAMAS Elected", 1, True, False, False)
-        self.deck["100"] = Card(100, "Unassociated", "Hizb Ut-Tahrir", 1, False, False, False)
-        self.deck["101"] = Card(101, "Unassociated", "Kosovo", 1, False, False, False)
-        self.deck["102"] = Card(102, "Unassociated", "Former Soviet Union", 2, False, False, False)
-        self.deck["103"] = Card(103, "Unassociated", "Hizballah", 2, False, False, False)
-        self.deck["104"] = Card(104, "Unassociated", "Iran", 2, False, False, False)
-        self.deck["105"] = Card(105, "Unassociated", "Iran", 2, False, False, False)
-        self.deck["106"] = Card(106, "Unassociated", "Jaysh al-Mahdi", 2, False, False, False)
-        self.deck["107"] = Card(107, "Unassociated", "Kurdistan", 2, False, False, False)
-        self.deck["108"] = Card(108, "Unassociated", "Musharraf", 2, False, False, False)
-        self.deck["109"] = Card(109, "Unassociated", "Tora Bora", 2, True, False, False)
-        self.deck["110"] = Card(110, "Unassociated", "Zarqawi", 2, False, False, False)
-        self.deck["111"] = Card(111, "Unassociated", "Zawahiri", 2, False, False, False)
-        self.deck["112"] = Card(112, "Unassociated", "Bin Ladin", 3, False, False, False)
-        self.deck["113"] = Card(113, "Unassociated", "Darfur", 3, False, False, False)
-        self.deck["114"] = Card(114, "Unassociated", "GTMO", 3, False, False, True)
-        self.deck["115"] = Card(115, "Unassociated", "Hambali", 3, False, False, False)
-        self.deck["116"] = Card(116, "Unassociated", "KSM", 3, False, False, False)
-        self.deck["117"] = Card(117, "Unassociated", "Oil Price Spike", 3, False, False, True)
-        self.deck["118"] = Card(118, "Unassociated", "Oil Price Spike", 3, False, False, True)
-        self.deck["119"] = Card(119, "Unassociated", "Saleh", 3, False, False, False)
-        self.deck["120"] = Card(120, "Unassociated", "US Election", 3, False, False, False)
 
     def valid_markers_setup(self):
         self.validGlobalMarkers.append("Moro Talks")
@@ -1895,14 +1777,14 @@ class Labyrinth(object):
             self.output_to_history("US Posture now %s" % self.us_posture(), True)
 
     def event_puts_cell(self, card_number):
-        return self.deck[str(card_number)].puts_cell()
+        return self.deck.get(card_number).puts_cell()
 
     def playable_non_us_event(self, card_number):
-        card = self.deck[str(card_number)]
+        card = self.deck.get(card_number)
         return card.type != "US" and card.playable("Jihadist", self, False)
 
     def playable_us_event(self, card_number):
-        card = self.deck[str(card_number)]
+        card = self.deck.get(card_number)
         return card.type == "US" and card.playable("US", self, False)
 
     def ai_flow_chart_top(self, card_number):
@@ -1921,7 +1803,7 @@ class Labyrinth(object):
                 else:
                     self.debug_print("DEBUG: NO")
                     self.debug_print("DEBUG: Radicalization [4]")
-                    self.handle_radicalization(self.deck[str(card_number)].ops)
+                    self.handle_radicalization(self.deck.get(card_number).ops)
             else:
                 self.debug_print("DEBUG: NO")
                 self.ai_flow_chart_play_event(card_number)
@@ -1932,7 +1814,7 @@ class Labyrinth(object):
                 self.debug_print("DEBUG: YES")
                 self.debug_print("DEBUG: Plot Here [5]")
                 self.output_to_history("Playable US Event.", False)
-                unused_ops = self.handle_ai_plot_action(self.deck[str(card_number)].ops, True)
+                unused_ops = self.handle_ai_plot_action(self.deck.get(card_number).ops, True)
                 if unused_ops > 0:
                     self.debug_print("DEBUG: Radicalization with remaining %d ops" % unused_ops)
                     self.handle_radicalization(unused_ops)
@@ -1944,9 +1826,9 @@ class Labyrinth(object):
 
     def ai_flow_chart_play_event(self, card_number):
         self.debug_print("Play Event [6]")
-        self.deck[str(card_number)].playEvent("Jihadist", self)
+        self.deck.get(card_number).playEvent("Jihadist", self)
         self.debug_print("Unassociated Event? [8]")
-        if self.deck[str(card_number)].type == "Unassociated":
+        if self.deck.get(card_number).type == "Unassociated":
             self.debug_print("DEBUG: YES")
             self.output_to_history("Unassociated event now being used for Ops.", False)
             self.ai_flow_chart_major_jihad(card_number)
@@ -1956,21 +1838,21 @@ class Labyrinth(object):
 
     def ai_flow_chart_major_jihad(self, card_number):
         self.debug_print("DEBUG: Major Jihad success possible? [10]")
-        country = self.major_jihad_choice(self.deck[str(card_number)].ops)
+        country = self.major_jihad_choice(self.deck.get(card_number).ops)
         if country:
             self.debug_print("DEBUG: YES")
             self.debug_print("DEBUG: Major Jihad [11]")
-            unused_ops = self.handle_jihad(country, self.deck[str(card_number)].ops)
+            unused_ops = self.handle_jihad(country, self.deck.get(card_number).ops)
             if unused_ops > 0:
                 self.debug_print("DEBUG: Radicalization with remaining %d ops" % unused_ops)
                 self.handle_radicalization(unused_ops)
         else:
             self.debug_print("DEBUG: NO")
             self.debug_print("DEBUG: Jihad possible in Good/Fair? [12]")
-            country_list = self.minor_jihad_in_good_fair_choice(self.deck[str(card_number)].ops)
+            country_list = self.minor_jihad_in_good_fair_choice(self.deck.get(card_number).ops)
             if country_list:
                 self.debug_print("DEBUG: YES")
-                unused_ops = self.handle_minor_jihad(country_list, self.deck[str(card_number)].ops)
+                unused_ops = self.handle_minor_jihad(country_list, self.deck.get(card_number).ops)
                 if unused_ops > 0:
                     self.debug_print("DEBUG: Radicalization with remaining %d ops" % unused_ops)
                     self.handle_radicalization(unused_ops)
@@ -1980,14 +1862,14 @@ class Labyrinth(object):
                 if self.num_cells_available() > 0:
                     self.debug_print("DEBUG: YES")
                     self.debug_print("DEBUG: Recruit [15]")
-                    unused_ops = self.handle_recruit(self.deck[str(card_number)].ops)
+                    unused_ops = self.handle_recruit(self.deck.get(card_number).ops)
                     if unused_ops > 0:
                         self.debug_print("DEBUG: Radicalization with remaining %d ops" % unused_ops)
                         self.handle_radicalization(unused_ops)
                 else:
                     self.debug_print("DEBUG: NO")
                     self.debug_print("DEBUG: Travel [16]")
-                    unused_ops = self.handle_travel(self.deck[str(card_number)].ops)
+                    unused_ops = self.handle_travel(self.deck.get(card_number).ops)
                     if unused_ops > 0:
                         self.debug_print("DEBUG: Radicalization with remaining %d ops" % unused_ops)
                         self.handle_radicalization(unused_ops)
@@ -3271,16 +3153,15 @@ class Labyrinth(object):
     def play_jihadist_card(self, card_number):
         """Plays the given numbered card during the Jihadist action phase"""
         self.output_to_history("", False)
-        card = self.deck[str(card_number)]
+        card = self.deck.get(card_number)
         self.output_to_history("== Jihadist plays %s - %d Ops ==" % (card.name, card.ops))
         self.ai_flow_chart_top(card_number)
 
     def play_us_card(self, card_num):
         """Plays the given card as the US when it's the US action phase."""
         self.output_to_history("", False)
-        card = self.deck[str(card_num)]
-        self.output_to_history(
-            "== US plays %s - %d Ops ==" % (card.name, card.ops))
+        card = self.deck.get(card_num)
+        self.output_to_history("== US plays %s - %d Ops ==" % (card.name, card.ops))
 
         if card.playable("US", self, True):
             self.output_to_history("Playable %s Event" % card.type, False)
@@ -3297,7 +3178,7 @@ class Labyrinth(object):
             elif choice == "ops":
                 self.output_to_history("Played for Ops.", False)
                 if card_num == 120:
-                    print "When finished with Ops enter u 120 again to play the event."
+                    print "When finished with Ops, enter u 120 again to play the event."
                 print self.get_us_prompt_to_spend_ops(card_num)
         else:
             if card.type == "Jihadist":
@@ -3317,7 +3198,7 @@ class Labyrinth(object):
 
     def get_us_prompt_to_spend_ops(self, card_number):
         """Prompts the US player to spend the given card's Ops value"""
-        ops = self.deck[str(card_number)].ops
+        ops = self.deck.get(card_number).ops
         operation_min_ops = {
             "alert": 3,
             "deploy": 1,

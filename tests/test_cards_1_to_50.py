@@ -13,22 +13,22 @@ class Card01(LabyrinthTestCase):
 
     def test_playable(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertFalse(app.deck["1"].playable("US", app, True))
+        self.assertFalse(app.card(1).playable("US", app, True))
         app.get_country("Canada").plots = 1
-        self.assertFalse(app.deck["1"].playable("US", app, True))
+        self.assertFalse(app.card(1).playable("US", app, True))
         app.get_country("Iraq").plots = 1
-        self.assertTrue(app.deck["1"].playable("US", app, True))
+        self.assertTrue(app.card(1).playable("US", app, True))
 
     def test_event(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         self.assertFalse(app.backlashInPlay)
-        app.deck["1"].playEvent("US", app)
+        app.card(1).playEvent("US", app)
         self.assertFalse(app.backlashInPlay)
         app.get_country("United States").plots = 1
-        app.deck["1"].playEvent("US", app)
+        app.card(1).playEvent("US", app)
         self.assertFalse(app.backlashInPlay)
         app.get_country("Iraq").plots = 1
-        app.deck["1"].playEvent("US", app)
+        app.card(1).playEvent("US", app)
         self.assertTrue(app.backlashInPlay)
 
 
@@ -37,12 +37,12 @@ class Card02(LabyrinthTestCase):
 
     def test_playable(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertTrue(app.deck["2"].playable("US", app, True))
+        self.assertTrue(app.card(2).playable("US", app, True))
 
     def test_event(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         self.assertFalse("Biometrics" in app.lapsing)
-        app.deck["2"].playEvent("US", app)
+        app.card(2).playEvent("US", app)
         self.assertTrue("Biometrics" in app.lapsing)
         app.end_turn()
         self.assertFalse("Biometrics" in app.lapsing)
@@ -53,7 +53,7 @@ class Card02(LabyrinthTestCase):
         app.get_country("Gulf States").besieged = 1
         dest = app.travel_destinations(1)
         self.assertEqual(dest, ["Gulf States"])
-        app.deck["2"].playEvent("US", app)
+        app.card(2).playEvent("US", app)
         dest = app.travel_destinations(1)
         self.assertTrue("Biometrics" in app.lapsing)
         self.assertEqual(dest, [])
@@ -67,7 +67,7 @@ class Card02(LabyrinthTestCase):
         app.get_country("Gulf States").besieged = 1
         dest = app.travel_destinations(1)
         self.assertEqual(dest, ["Gulf States"])
-        app.deck["2"].playEvent("US", app)
+        app.card(2).playEvent("US", app)
         dest = app.travel_destinations(1)
         self.assertEqual(dest, [])
         app.get_country("Iraq").sleeperCells = 1
@@ -84,7 +84,7 @@ class Card02(LabyrinthTestCase):
         app.get_country("Gulf States").besieged = 1
         dest = app.travel_destinations(1)
         self.assertEqual(dest, ["Gulf States"])
-        app.deck["2"].playEvent("US", app)
+        app.card(2).playEvent("US", app)
         dest = app.travel_destinations(1)
         self.assertEqual(dest, [])
         app.get_country("Iraq").sleeperCells = 1
@@ -102,9 +102,9 @@ class Card03(LabyrinthTestCase):
 
     def test_playable(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertFalse(app.deck["3"].playable("US", app, True))
+        self.assertFalse(app.card(3).playable("US", app, True))
         app.toggle_us_posture()
-        self.assertTrue(app.deck["3"].playable("US", app, True))
+        self.assertTrue(app.card(3).playable("US", app, True))
 
     def test_event(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
@@ -112,7 +112,7 @@ class Card03(LabyrinthTestCase):
         self.assertFalse("CTR" in app.get_country("Russia").markers)
         self.assertFalse("CTR" in app.get_country("Central Asia").markers)
         app.get_country("Central Asia").make_adversary()
-        app.deck["3"].playEvent("US", app)
+        app.card(3).playEvent("US", app)
         self.assertTrue("CTR" in app.get_country("Russia").markers)
         self.assertFalse("CTR" in app.get_country("Central Asia").markers)
 
@@ -121,7 +121,7 @@ class Card03(LabyrinthTestCase):
         self.assertFalse("CTR" in app.get_country("Russia").markers)
         self.assertFalse("CTR" in app.get_country("Central Asia").markers)
         app.get_country("Central Asia").make_neutral()
-        app.deck["3"].playEvent("US", app)
+        app.card(3).playEvent("US", app)
         self.assertTrue("CTR" in app.get_country("Russia").markers)
         self.assertTrue("CTR" in app.get_country("Central Asia").markers)
         print app.get_country("Russia").summary()
@@ -133,7 +133,7 @@ class Card03(LabyrinthTestCase):
         self.assertFalse("CTR" in app.get_country("Russia").markers)
         self.assertFalse("CTR" in app.get_country("Central Asia").markers)
         app.get_country("Central Asia").make_ally()
-        app.deck["3"].playEvent("US", app)
+        app.card(3).playEvent("US", app)
         self.assertTrue("CTR" in app.get_country("Russia").markers)
         self.assertTrue("CTR" in app.get_country("Central Asia").markers)
 
@@ -143,13 +143,13 @@ class Card04(LabyrinthTestCase):
 
     def test_playable(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertTrue(app.deck["4"].playable("US", app, True))
+        self.assertTrue(app.card(4).playable("US", app, True))
 
     def test_event(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         self.assertTrue(app.get_country("Philippines").posture == "")
         self.assertTrue(app.funding == 5)
-        app.deck["4"].playEvent("US", app)
+        app.card(4).playEvent("US", app)
         self.assertTrue("Moro Talks" in app.markers)
         self.assertTrue(app.get_country("Philippines").posture == "Soft" or app.get_country("Philippines").posture == "Hard")
         self.assertTrue(app.funding == 4)
@@ -158,7 +158,7 @@ class Card04(LabyrinthTestCase):
         app.funding = 1
         self.assertTrue(app.get_country("Philippines").posture == "")
         self.assertTrue(app.funding == 1)
-        app.deck["4"].playEvent("US", app)
+        app.card(4).playEvent("US", app)
         self.assertTrue(app.get_country("Philippines").posture == "Soft" or app.get_country("Philippines").posture == "Hard")
         self.assertTrue(app.funding == 1)
 
@@ -168,12 +168,12 @@ class Card05(LabyrinthTestCase):
 
     def test_playable(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertTrue(app.deck["5"].playable("US", app, True))
+        self.assertTrue(app.card(5).playable("US", app, True))
 
     def test_event(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         self.assertFalse("NEST" in app.markers)
-        app.deck["5"].playEvent("US", app)
+        app.card(5).playEvent("US", app)
         self.assertTrue("NEST" in app.markers)
 
 
@@ -182,27 +182,27 @@ class Card06and07(LabyrinthTestCase):
 
     def test_playable(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertFalse(app.deck["6"].playable("US", app, True))
-        self.assertFalse(app.deck["7"].playable("US", app, True))
+        self.assertFalse(app.card(6).playable("US", app, True))
+        self.assertFalse(app.card(7).playable("US", app, True))
         app.markers.append("Patriot Act")
-        self.assertTrue(app.deck["6"].playable("US", app, True))
-        self.assertTrue(app.deck["7"].playable("US", app, True))
+        self.assertTrue(app.card(6).playable("US", app, True))
+        self.assertTrue(app.card(7).playable("US", app, True))
 
     def test_event(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.markers.append("Patriot Act")
-        app.deck["6"].playEvent("US", app)
+        app.card(6).playEvent("US", app)
         self.assertTrue(app.funding == 3)
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.markers.append("Patriot Act")
-        app.deck["7"].playEvent("US", app)
+        app.card(7).playEvent("US", app)
         self.assertTrue(app.funding == 3)
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.funding = 2
         app.markers.append("Patriot Act")
-        app.deck["6"].playEvent("US", app)
+        app.card(6).playEvent("US", app)
         self.assertTrue(app.funding == 1)
 
 
@@ -211,22 +211,22 @@ class Card08and09and10(LabyrinthTestCase):
 
     def test_playable(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertFalse(app.deck["8"].playable("US", app, True))
-        self.assertFalse(app.deck["9"].playable("US", app, True))
-        self.assertFalse(app.deck["10"].playable("US", app, True))
+        self.assertFalse(app.card(8).playable("US", app, True))
+        self.assertFalse(app.card(9).playable("US", app, True))
+        self.assertFalse(app.card(10).playable("US", app, True))
         app.get_country("Iran").sleeperCells = 1
-        self.assertFalse(app.deck["8"].playable("US", app, True))
-        self.assertFalse(app.deck["9"].playable("US", app, True))
-        self.assertFalse(app.deck["10"].playable("US", app, True))
+        self.assertFalse(app.card(8).playable("US", app, True))
+        self.assertFalse(app.card(9).playable("US", app, True))
+        self.assertFalse(app.card(10).playable("US", app, True))
         app.get_country("Iran").troopCubes = 1
-        self.assertTrue(app.deck["8"].playable("US", app, True))
-        self.assertTrue(app.deck["9"].playable("US", app, True))
-        self.assertTrue(app.deck["10"].playable("US", app, True))
+        self.assertTrue(app.card(8).playable("US", app, True))
+        self.assertTrue(app.card(9).playable("US", app, True))
+        self.assertTrue(app.card(10).playable("US", app, True))
         app.get_country("Iran").troopCubes = 0
         app.get_country("Iraq").troopCubes = 1
-        self.assertTrue(app.deck["8"].playable("US", app, True))
-        self.assertTrue(app.deck["9"].playable("US", app, True))
-        self.assertTrue(app.deck["10"].playable("US", app, True))
+        self.assertTrue(app.card(8).playable("US", app, True))
+        self.assertTrue(app.card(9).playable("US", app, True))
+        self.assertTrue(app.card(10).playable("US", app, True))
 
     def test_event(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
@@ -241,11 +241,11 @@ class Card11(LabyrinthTestCase):
 
     def test_playable(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertTrue(app.deck["11"].playable("US", app, True))
+        self.assertTrue(app.card(11).playable("US", app, True))
 
     def test_event(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        app.deck["11"].playEvent("US", app)
+        app.card(11).playEvent("US", app)
         self.assertTrue(app.prestige == 8)
         self.assertTrue(app.funding == 3)
         self.assertTrue("Abbas" in app.markers)
@@ -256,7 +256,7 @@ class Card11(LabyrinthTestCase):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.test_country("Syria")
         app.get_country("Syria").make_islamist_rule()
-        app.deck["11"].playEvent("US", app)
+        app.card(11).playEvent("US", app)
         self.assertTrue(app.prestige == 8)
         self.assertTrue(app.funding == 3)
         self.assertTrue("Abbas" in app.markers)
@@ -267,7 +267,7 @@ class Card11(LabyrinthTestCase):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.test_country("Lebanon")
         app.get_country("Lebanon").make_islamist_rule()
-        app.deck["11"].playEvent("US", app)
+        app.card(11).playEvent("US", app)
         self.assertTrue(app.prestige == 7)
         self.assertTrue(app.funding == 5)
         self.assertTrue("Abbas" in app.markers)
@@ -277,7 +277,7 @@ class Card11(LabyrinthTestCase):
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.troops = 4
-        app.deck["11"].playEvent("US", app)
+        app.card(11).playEvent("US", app)
         self.assertTrue(app.prestige == 7)
         self.assertTrue(app.funding == 5)
         self.assertTrue("Abbas" in app.markers)
@@ -288,7 +288,7 @@ class Card11(LabyrinthTestCase):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.prestige = 12
         app.funding = 2
-        app.deck["11"].playEvent("US", app)
+        app.card(11).playEvent("US", app)
         self.assertTrue(app.prestige == 12)
         self.assertTrue(app.funding == 1)
 
@@ -298,26 +298,26 @@ class Card12(LabyrinthTestCase):
 
     def test_playable(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertTrue(app.deck["12"].playable("US", app, True))
+        self.assertTrue(app.card(12).playable("US", app, True))
 
     def test_event(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         self.assertTrue(app.get_country("Egypt").is_ungoverned())
-        app.deck["12"].playEvent("US", app)
+        app.card(12).playEvent("US", app)
         self.assertTrue(app.get_country("Egypt").is_governed())
         self.assertTrue(app.funding == 1)
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         self.assertTrue(app.get_country("Egypt").is_ungoverned())
         app.get_country("Pakistan").make_islamist_rule()
-        app.deck["12"].playEvent("US", app)
+        app.card(12).playEvent("US", app)
         self.assertTrue(app.get_country("Egypt").is_governed())
         self.assertTrue(app.funding == 3)
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.funding = 2
         self.assertTrue(app.get_country("Egypt").is_ungoverned())
-        app.deck["12"].playEvent("US", app)
+        app.card(12).playEvent("US", app)
         self.assertTrue(app.get_country("Egypt").is_governed())
         self.assertTrue(app.funding == 1)
 
@@ -327,25 +327,25 @@ class Card13(LabyrinthTestCase):
 
     def test_playable(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertFalse(app.deck["13"].playable("US", app, True))
+        self.assertFalse(app.card(13).playable("US", app, True))
         app.get_country("Iraq").troopCubes = 1
-        self.assertTrue(app.deck["13"].playable("US", app, True))
+        self.assertTrue(app.card(13).playable("US", app, True))
         app.get_country("Iraq").troopCubes = 0
         app.get_country("Syria").troopCubes = 1
-        self.assertTrue(app.deck["13"].playable("US", app, True))
+        self.assertTrue(app.card(13).playable("US", app, True))
         app.get_country("Syria").troopCubes = 0
-        self.assertFalse(app.deck["13"].playable("US", app, True))
+        self.assertFalse(app.card(13).playable("US", app, True))
 
     def test_event(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("Iraq").troopCubes = 1
-        app.deck["13"].playEvent("US", app)
+        app.card(13).playEvent("US", app)
         self.assertTrue(app.get_country("Iraq").aid > 0)
         self.assertTrue("Anbar Awakening" in app.markers)
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("Syria").troopCubes = 1
-        app.deck["13"].playEvent("US", app)
+        app.card(13).playEvent("US", app)
         self.assertTrue(app.get_country("Syria").aid > 0)
         self.assertTrue("Anbar Awakening" in app.markers)
 
@@ -355,9 +355,9 @@ class Card14(LabyrinthTestCase):
 
     def test_playable(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertFalse(app.deck["14"].playable("US", app, True))
+        self.assertFalse(app.card(14).playable("US", app, True))
         app.get_country("Iraq").make_adversary()
-        self.assertTrue(app.deck["14"].playable("US", app, True))
+        self.assertTrue(app.card(14).playable("US", app, True))
 
     def test_event(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
@@ -372,26 +372,26 @@ class Card15(LabyrinthTestCase):
 
     def test_playable(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertFalse(app.deck["15"].playable("US", app, True))
+        self.assertFalse(app.card(15).playable("US", app, True))
         app.get_country("Somalia").make_islamist_rule()
-        self.assertTrue(app.deck["15"].playable("US", app, True))
+        self.assertTrue(app.card(15).playable("US", app, True))
         app.get_country("Somalia").make_poor()
-        self.assertFalse(app.deck["15"].playable("US", app, True))
+        self.assertFalse(app.card(15).playable("US", app, True))
         app.get_country("Sudan").make_islamist_rule()
-        self.assertTrue(app.deck["15"].playable("US", app, True))
+        self.assertTrue(app.card(15).playable("US", app, True))
 
     def test_event(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("Somalia").make_islamist_rule()
         app.get_country("Somalia").make_adversary()
-        app.deck["15"].playEvent("US", app)
+        app.card(15).playEvent("US", app)
         self.assertTrue(app.get_country("Somalia").is_poor())
         self.assertTrue(app.get_country("Somalia").is_neutral())
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("Sudan").make_islamist_rule()
         app.get_country("Sudan").make_adversary()
-        app.deck["15"].playEvent("US", app)
+        app.card(15).playEvent("US", app)
         self.assertTrue(app.get_country("Sudan").is_poor())
         self.assertTrue(app.get_country("Sudan").is_neutral())
 
@@ -401,7 +401,7 @@ class Card16(LabyrinthTestCase):
 
     def test_playable(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertTrue(app.deck["16"].playable("US", app, True))
+        self.assertTrue(app.card(16).playable("US", app, True))
 
     def test_event(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
@@ -425,21 +425,21 @@ class Card17(LabyrinthTestCase):
 
     def test_playable(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertTrue(app.deck["17"].playable("US", app, True))
+        self.assertTrue(app.card(17).playable("US", app, True))
 
     def test_event(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario, ['y'])
         app.get_country("Central Asia").activeCells = 1
         app.get_country("Russia").activeCells = 1
-        app.deck["17"].playEvent("US", app)
+        app.card(17).playEvent("US", app)
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario, ['y'])
         app.get_country("Russia").activeCells = 1
-        app.deck["17"].playEvent("US", app)
+        app.card(17).playEvent("US", app)
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario, ['y'])
         app.get_country("Central Asia").sleeperCells = 1
-        app.deck["17"].playEvent("US", app)
+        app.card(17).playEvent("US", app)
 
 
 class Card18(LabyrinthTestCase):
@@ -447,12 +447,12 @@ class Card18(LabyrinthTestCase):
 
     def test_playable(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertTrue(app.deck["18"].playable("US", app, True))
+        self.assertTrue(app.card(18).playable("US", app, True))
 
     def test_event(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         history_before = len(app.history)
-        app.deck["18"].playEvent("US", app)
+        app.card(18).playEvent("US", app)
         self.assert_new_messages(app, history_before, [
             'Card played for Event.',
             'Examine Jihadist hand. Do not change order of cards.',
@@ -466,11 +466,11 @@ class Card19(LabyrinthTestCase):
 
     def test_playable(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertTrue(app.deck["19"].playable("US", app, True))
+        self.assertTrue(app.card(19).playable("US", app, True))
 
     def test_event(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        app.deck["19"].playEvent("US", app)
+        app.card(19).playEvent("US", app)
         self.assertTrue(app.get_country("Turkey").is_fair())
         self.assertTrue(app.get_country("Turkey").is_ally())
 
@@ -480,13 +480,13 @@ class Card20(LabyrinthTestCase):
 
     def test_playable(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertTrue(app.deck["20"].playable("US", app, True))
+        self.assertTrue(app.card(20).playable("US", app, True))
         self.assertTrue(app.funding == 5)
         self.assertTrue(app.prestige == 7)
 
     def test_event(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        app.deck["20"].playEvent("US", app)
+        app.card(20).playEvent("US", app)
         self.assertTrue(app.get_country("Jordan").is_fair())
         self.assertTrue(app.get_country("Jordan").is_ally())
         self.assertTrue(app.funding == 4)
@@ -495,7 +495,7 @@ class Card20(LabyrinthTestCase):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.funding = 1
         app.prestige = 12
-        app.deck["20"].playEvent("US", app)
+        app.card(20).playEvent("US", app)
         self.assertTrue(app.get_country("Jordan").is_fair())
         self.assertTrue(app.get_country("Jordan").is_ally())
         self.assertTrue(app.funding == 1)
@@ -526,7 +526,7 @@ class Card21(LabyrinthTestCase):
 
     def assert_playable(self, app, expected_value):
         """Asserts that this card is (or is not) playable for the given game state"""
-        playable = app.deck["21"].playable(self.event_owner, app, True)
+        playable = app.card(21).playable(self.event_owner, app, True)
         self.assertEqual(playable, expected_value)
 
     def test_event(self):
@@ -541,7 +541,7 @@ class Card21(LabyrinthTestCase):
         app.get_country("Spain").posture = "Soft"
         app.get_country("Saudi Arabia").make_good()
         app.get_country("Saudi Arabia").plots = 1
-        app.deck["21"].playEvent(self.event_owner, app)
+        app.card(21).playEvent(self.event_owner, app)
         self.assertTrue(app.get_country("Spain").posture == "Hard")
         self.assertTrue(app.get_country("Saudi Arabia").plots == 0)
 
@@ -551,19 +551,19 @@ class Card22(LabyrinthTestCase):
 
     def test_playable(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertFalse(app.deck["22"].playable("US", app, True))
+        self.assertFalse(app.card(22).playable("US", app, True))
         app.get_country("Israel").sleeperCells = 1
-        self.assertTrue(app.deck["22"].playable("US", app, True))
+        self.assertTrue(app.card(22).playable("US", app, True))
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertFalse(app.deck["22"].playable("US", app, True))
+        self.assertFalse(app.card(22).playable("US", app, True))
         app.get_country("Jordan").sleeperCells = 1
-        self.assertTrue(app.deck["22"].playable("US", app, True))
+        self.assertTrue(app.card(22).playable("US", app, True))
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertFalse(app.deck["22"].playable("US", app, True))
+        self.assertFalse(app.card(22).playable("US", app, True))
         app.get_country("Lebanon").sleeperCells = 1
-        self.assertTrue(app.deck["22"].playable("US", app, True))
+        self.assertTrue(app.card(22).playable("US", app, True))
 
     def test_event(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
@@ -572,7 +572,7 @@ class Card22(LabyrinthTestCase):
         app.get_country("Jordan").activeCells = 3
         app.get_country("Lebanon").sleeperCells = 2
         app.get_country("Iraq").sleeperCells = 2
-        app.deck["22"].playEvent("US", app)
+        app.card(22).playEvent("US", app)
         self.assertTrue(app.get_country("Israel").sleeperCells == 0)
         self.assertTrue(app.get_country("Israel").activeCells == 0)
         self.assertTrue(app.get_country("Jordan").sleeperCells == 0)
@@ -587,36 +587,36 @@ class Card23and24and25(LabyrinthTestCase):
 
     def test_playable(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertFalse(app.deck["23"].playable("US", app, True))
+        self.assertFalse(app.card(23).playable("US", app, True))
         app.get_country("Israel").sleeperCells = 1
-        self.assertFalse(app.deck["23"].playable("US", app, True))
+        self.assertFalse(app.card(23).playable("US", app, True))
         app.get_country("Iran").sleeperCells = 1
-        self.assertFalse(app.deck["23"].playable("US", app, True))
+        self.assertFalse(app.card(23).playable("US", app, True))
         app.get_country("Jordan").sleeperCells = 1
-        self.assertTrue(app.deck["23"].playable("US", app, True))
+        self.assertTrue(app.card(23).playable("US", app, True))
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertFalse(app.deck["24"].playable("US", app, True))
+        self.assertFalse(app.card(24).playable("US", app, True))
         app.get_country("Israel").sleeperCells = 1
-        self.assertFalse(app.deck["24"].playable("US", app, True))
+        self.assertFalse(app.card(24).playable("US", app, True))
         app.get_country("Iran").sleeperCells = 1
-        self.assertFalse(app.deck["24"].playable("US", app, True))
+        self.assertFalse(app.card(24).playable("US", app, True))
         app.get_country("Jordan").sleeperCells = 1
-        self.assertTrue(app.deck["24"].playable("US", app, True))
+        self.assertTrue(app.card(24).playable("US", app, True))
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertFalse(app.deck["25"].playable("US", app, True))
+        self.assertFalse(app.card(25).playable("US", app, True))
         app.get_country("Israel").sleeperCells = 1
-        self.assertFalse(app.deck["25"].playable("US", app, True))
+        self.assertFalse(app.card(25).playable("US", app, True))
         app.get_country("Iran").sleeperCells = 1
-        self.assertFalse(app.deck["25"].playable("US", app, True))
+        self.assertFalse(app.card(25).playable("US", app, True))
         app.get_country("Jordan").sleeperCells = 1
-        self.assertTrue(app.deck["25"].playable("US", app, True))
+        self.assertTrue(app.card(25).playable("US", app, True))
 
     def test_event(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario, ["Iraq"])
         app.get_country("Iraq").sleeperCells = 2
-        app.deck["25"].playEvent("US", app)
+        app.card(25).playEvent("US", app)
         self.assertTrue(app.get_country("Iraq").sleeperCells == 1)
 
 
@@ -625,20 +625,20 @@ class Card26(LabyrinthTestCase):
 
     def test_playable(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertFalse(app.deck["26"].playable("US", app, True))
+        self.assertFalse(app.card(26).playable("US", app, True))
         app.markers.append("Abbas")
-        self.assertTrue(app.deck["26"].playable("US", app, True))
+        self.assertTrue(app.card(26).playable("US", app, True))
         app.troops = 4
-        self.assertFalse(app.deck["26"].playable("US", app, True))
+        self.assertFalse(app.card(26).playable("US", app, True))
         app.troops = 5
-        self.assertTrue(app.deck["26"].playable("US", app, True))
+        self.assertTrue(app.card(26).playable("US", app, True))
         app.get_country("Egypt").make_islamist_rule()
-        self.assertFalse(app.deck["26"].playable("US", app, True))    
+        self.assertFalse(app.card(26).playable("US", app, True))    
 
     def test_event(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.markers.append("Abbas")
-        app.deck["26"].playEvent("US", app)
+        app.card(26).playEvent("US", app)
         self.assertTrue(app.prestige == 9)
         self.assertTrue(app.funding == 2)
 
@@ -648,14 +648,14 @@ class Card27(LabyrinthTestCase):
 
     def test_playable(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertFalse(app.deck["27"].playable("US", app, True))
+        self.assertFalse(app.card(27).playable("US", app, True))
         app.get_country("Iraq").troopCubes = 1
-        self.assertTrue(app.deck["27"].playable("US", app, True))
+        self.assertTrue(app.card(27).playable("US", app, True))
 
     def test_event(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("Iraq").troopCubes = 1
-        app.deck["27"].playEvent("US", app)
+        app.card(27).playEvent("US", app)
         self.assertTrue("Saddam Captured" in app.markers)
         self.assertTrue(app.get_country("Iraq").aid == 1)
 
@@ -665,14 +665,14 @@ class Card28(LabyrinthTestCase):
 
     def test_playable(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertFalse(app.deck["28"].playable("US", app, True))
+        self.assertFalse(app.card(28).playable("US", app, True))
         app.get_country("Iraq").besieged = 1
-        self.assertTrue(app.deck["28"].playable("US", app, True))
+        self.assertTrue(app.card(28).playable("US", app, True))
 
     def test_event(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("Iraq").besieged = 1
-        app.deck["28"].playEvent("US", app)
+        app.card(28).playEvent("US", app)
         self.assertTrue(app.get_country("Iraq").besieged == 0)
 
 
@@ -681,7 +681,7 @@ class Card29(LabyrinthTestCase):
 
     def test_playable(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertTrue(app.deck["29"].playable("US", app, True))
+        self.assertTrue(app.card(29).playable("US", app, True))
 
     def test_event(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
@@ -700,11 +700,11 @@ class Card30(LabyrinthTestCase):
 
     def test_playable(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertFalse(app.deck["30"].playable("US", app, True))
+        self.assertFalse(app.card(30).playable("US", app, True))
         app.get_country("Iraq").regimeChange = 1
-        self.assertTrue(app.deck["30"].playable("US", app, True))
+        self.assertTrue(app.card(30).playable("US", app, True))
         app.markers.append("Vieira de Mello Slain")
-        self.assertFalse(app.deck["30"].playable("US", app, True))
+        self.assertFalse(app.card(30).playable("US", app, True))
 
     def test_event(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario, ["6"])
@@ -717,7 +717,7 @@ class Card30(LabyrinthTestCase):
         app.get_country("Pakistan").regimeChange = 1
         app.get_country("Pakistan").make_poor()
         app.get_country("Pakistan").make_ally()
-        app.deck["30"].playEvent("US", app)
+        app.card(30).playEvent("US", app)
         self.assertTrue(app.get_country("Pakistan").aid == 1)
         self.assertTrue(app.get_country("Pakistan").is_fair())
 
@@ -733,7 +733,7 @@ class Card30(LabyrinthTestCase):
         app.get_country("Pakistan").regimeChange = 1
         app.get_country("Pakistan").make_poor()
         app.get_country("Pakistan").make_ally()
-        app.deck["30"].playEvent("US", app)
+        app.card(30).playEvent("US", app)
         self.assertTrue(app.get_country("Pakistan").aid == 0)
         self.assertTrue(app.get_country("Pakistan").is_poor())
         self.assertTrue(app.get_country("Iraq").aid == 1)
@@ -745,60 +745,60 @@ class Card31(LabyrinthTestCase):
 
     def test_playable(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertFalse(app.deck["31"].playable("US", app, True))
+        self.assertFalse(app.card(31).playable("US", app, True))
         app.get_country("United States").sleeperCells = 1
-        self.assertTrue(app.deck["31"].playable("US", app, True))
+        self.assertTrue(app.card(31).playable("US", app, True))
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("United States").activeCells = 1
-        self.assertTrue(app.deck["31"].playable("US", app, True))
+        self.assertTrue(app.card(31).playable("US", app, True))
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("United States").cadre = 1
-        self.assertTrue(app.deck["31"].playable("US", app, True))
+        self.assertTrue(app.card(31).playable("US", app, True))
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("United States").plots = 1
-        self.assertTrue(app.deck["31"].playable("US", app, True))
+        self.assertTrue(app.card(31).playable("US", app, True))
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertFalse(app.deck["31"].playable("US", app, True))
+        self.assertFalse(app.card(31).playable("US", app, True))
         app.get_country("United Kingdom").sleeperCells = 1
-        self.assertTrue(app.deck["31"].playable("US", app, True))
+        self.assertTrue(app.card(31).playable("US", app, True))
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("United Kingdom").activeCells = 1
-        self.assertTrue(app.deck["31"].playable("US", app, True))
+        self.assertTrue(app.card(31).playable("US", app, True))
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("United Kingdom").cadre = 1
-        self.assertTrue(app.deck["31"].playable("US", app, True))
+        self.assertTrue(app.card(31).playable("US", app, True))
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("United Kingdom").plots = 1
-        self.assertTrue(app.deck["31"].playable("US", app, True))
+        self.assertTrue(app.card(31).playable("US", app, True))
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertFalse(app.deck["31"].playable("US", app, True))
+        self.assertFalse(app.card(31).playable("US", app, True))
         app.get_country("Canada").sleeperCells = 1
-        self.assertTrue(app.deck["31"].playable("US", app, True))
+        self.assertTrue(app.card(31).playable("US", app, True))
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("Canada").activeCells = 1
-        self.assertTrue(app.deck["31"].playable("US", app, True))
+        self.assertTrue(app.card(31).playable("US", app, True))
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("Canada").cadre = 1
-        self.assertTrue(app.deck["31"].playable("US", app, True))
+        self.assertTrue(app.card(31).playable("US", app, True))
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("Canada").plots = 1
-        self.assertTrue(app.deck["31"].playable("US", app, True))
+        self.assertTrue(app.card(31).playable("US", app, True))
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("Canada").plots = 1
         app.markers.append("Leak-Wiretapping")
-        self.assertFalse(app.deck["31"].playable("US", app, True))
+        self.assertFalse(app.card(31).playable("US", app, True))
 
     def test_event(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
@@ -814,7 +814,7 @@ class Card31(LabyrinthTestCase):
         app.get_country("Canada").activeCells = 1
         app.get_country("Canada").cadre = 1
         app.get_country("Canada").plots = 1
-        app.deck["31"].playEvent("US", app)
+        app.card(31).playEvent("US", app)
         self.assertTrue("Wiretapping" in app.markers)
         self.assertTrue(app.get_country("United States").sleeperCells == 0)
         self.assertTrue(app.get_country("United States").activeCells == 0)
@@ -838,7 +838,7 @@ class Card31(LabyrinthTestCase):
         app.get_country("Canada").activeCells = 1
         app.get_country("Canada").cadre = 1
         app.get_country("Canada").plots = 1
-        app.deck["31"].playEvent("US", app)
+        app.card(31).playEvent("US", app)
         self.assertTrue("Wiretapping" in app.markers)
         self.assertTrue(app.get_country("United States").sleeperCells == 0)
         self.assertTrue(app.get_country("United States").activeCells == 0)
@@ -860,17 +860,17 @@ class Card32(LabyrinthTestCase):
     def test_playable(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario, ["y", "n"])
         app.get_country("United States").posture = "Hard"
-        self.assertFalse(app.deck["32"].playable("US", app, True))
+        self.assertFalse(app.card(32).playable("US", app, True))
         app.get_country("United States").posture = "Soft"
-        self.assertFalse(app.deck["32"].playable("US", app, True))
+        self.assertFalse(app.card(32).playable("US", app, True))
 
         app.get_country("Iraq").make_poor()
         app.get_country("Iraq").make_adversary()
         app.get_country("Pakistan").make_adversary()
         print "Say yes"
-        self.assertTrue(app.deck["32"].playable("US", app, True))
+        self.assertTrue(app.card(32).playable("US", app, True))
         print "Say no"
-        self.assertFalse(app.deck["32"].playable("US", app, True))
+        self.assertFalse(app.card(32).playable("US", app, True))
 
     def test_event(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario, ["y", "y", "Pakistan"])
@@ -879,9 +879,9 @@ class Card32(LabyrinthTestCase):
         app.get_country("Iraq").make_adversary()
         app.get_country("Pakistan").make_islamist_rule()
         app.get_country("Pakistan").make_adversary()
-        self.assertTrue(app.deck["32"].playable("US", app, True))
+        self.assertTrue(app.card(32).playable("US", app, True))
         aid_before = app.get_country("Pakistan").aid
-        app.deck["32"].playEvent("US", app)
+        app.card(32).playEvent("US", app)
         aid_after = app.get_country("Pakistan").aid
         self.assertTrue(app.get_country("Iraq").is_adversary())
         self.assertTrue(app.get_country("Pakistan").is_neutral())
@@ -893,8 +893,8 @@ class Card32(LabyrinthTestCase):
         app.get_country("Iraq").make_adversary()
         app.get_country("Pakistan").make_islamist_rule()
         app.get_country("Pakistan").make_adversary()
-        self.assertFalse(app.deck["32"].playable("US", app, True))
-        app.deck["32"].playEvent("US", app)
+        self.assertFalse(app.card(32).playable("US", app, True))
+        app.card(32).playEvent("US", app)
         self.assertTrue(app.get_country("Iraq").is_adversary())
         self.assertTrue(app.get_country("Pakistan").is_adversary())
 
@@ -904,35 +904,35 @@ class Card33(LabyrinthTestCase):
 
     def test_playable(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertTrue(app.deck["33"].playable("US", app, True))
+        self.assertTrue(app.card(33).playable("US", app, True))
         app.markers.append("Bhutto Shot")
-        self.assertFalse(app.deck["33"].playable("US", app, True))
+        self.assertFalse(app.card(33).playable("US", app, True))
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertTrue(app.deck["33"].playable("US", app, True))
+        self.assertTrue(app.card(33).playable("US", app, True))
         app.get_country("Pakistan").make_islamist_rule()
-        self.assertFalse(app.deck["33"].playable("US", app, True))
+        self.assertFalse(app.card(33).playable("US", app, True))
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("Afghanistan").make_islamist_rule()
-        self.assertFalse(app.deck["33"].playable("US", app, True))
+        self.assertFalse(app.card(33).playable("US", app, True))
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("India").make_islamist_rule()
-        self.assertFalse(app.deck["33"].playable("US", app, True))
+        self.assertFalse(app.card(33).playable("US", app, True))
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("Gulf States").make_islamist_rule()
-        self.assertFalse(app.deck["33"].playable("US", app, True))
+        self.assertFalse(app.card(33).playable("US", app, True))
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("Indonesia/Malaysia").make_islamist_rule()
-        self.assertFalse(app.deck["33"].playable("US", app, True))
+        self.assertFalse(app.card(33).playable("US", app, True))
 
     def test_event(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("Pakistan").make_poor()
-        app.deck["33"].playEvent("US", app)
+        app.card(33).playEvent("US", app)
         self.assertTrue(app.get_country("Pakistan").is_fair())
 
         # no jihad in Pakistan
@@ -944,7 +944,7 @@ class Card33(LabyrinthTestCase):
         app.get_country("Pakistan").make_fair()
         app.get_country("Pakistan").activeCells = 1
         self.assertEqual(app.minor_jihad_in_good_fair_choice(1), [("Pakistan", 1)])
-        app.deck["33"].playEvent("US", app)
+        app.card(33).playEvent("US", app)
         self.assertEqual(app.minor_jihad_in_good_fair_choice(1), False)
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
@@ -952,7 +952,7 @@ class Card33(LabyrinthTestCase):
         app.get_country("Pakistan").make_poor()
         app.get_country("Pakistan").activeCells = 5
         self.assertEqual(app.major_jihad_possible(3), ["Pakistan"])
-        app.deck["33"].playEvent("US", app)
+        app.card(33).playEvent("US", app)
         self.assertEqual(app.major_jihad_possible(3), [])
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
@@ -961,7 +961,7 @@ class Card33(LabyrinthTestCase):
         app.get_country("Iraq").make_poor()
         app.get_country("Iraq").activeCells = 5
         self.assertEqual(app.major_jihad_choice(3), "Pakistan")
-        app.deck["33"].playEvent("US", app)
+        app.card(33).playEvent("US", app)
         self.assertEqual(app.major_jihad_possible(3), ["Iraq"])
 
 
@@ -970,14 +970,14 @@ class Card34(LabyrinthTestCase):
 
     def test_playable(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertFalse(app.deck["34"].playable("US", app, True))
+        self.assertFalse(app.card(34).playable("US", app, True))
         app.get_country("Iraq").cadre = 1
         app.get_country("Iraq").make_poor()
         app.get_country("Iraq").make_neutral()
         app.get_country("Iraq").troopCubes = 2
-        self.assertTrue(app.deck["34"].playable("US", app, True))
+        self.assertTrue(app.card(34).playable("US", app, True))
         app.markers.append("Leak-Enhanced Measures")
-        self.assertFalse(app.deck["34"].playable("US", app, True))
+        self.assertFalse(app.card(34).playable("US", app, True))
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("United States").posture = "Soft"
@@ -985,7 +985,7 @@ class Card34(LabyrinthTestCase):
         app.get_country("Iraq").make_poor()
         app.get_country("Iraq").make_neutral()
         app.get_country("Iraq").troopCubes = 2
-        self.assertFalse(app.deck["34"].playable("US", app, True))
+        self.assertFalse(app.card(34).playable("US", app, True))
 
     def test_event(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario, ["Iraq"])
@@ -997,7 +997,7 @@ class Card34(LabyrinthTestCase):
         app.get_country("Pakistan").make_poor()
         app.get_country("Pakistan").make_neutral()
         app.get_country("Pakistan").troopCubes = 2
-        app.deck["34"].playEvent("US", app)
+        app.card(34).playEvent("US", app)
         self.assertTrue("Enhanced Measures" in app.markers)
         self.assertTrue(app.get_country("Pakistan").cadre == 1)
         self.assertTrue(app.get_country("Iraq").cadre == 0)
@@ -1008,13 +1008,13 @@ class Card35(LabyrinthTestCase):
 
     def test_playable(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertTrue(app.deck["35"].playable("US", app, True))
+        self.assertTrue(app.card(35).playable("US", app, True))
         app.get_country("Iraq").make_islamist_rule()
-        self.assertFalse(app.deck["35"].playable("US", app, True))
+        self.assertFalse(app.card(35).playable("US", app, True))
 
     def test_event(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario, ["h"])
-        app.deck["35"].playEvent("US", app)
+        app.card(35).playEvent("US", app)
         self.assertTrue(app.get_country("Turkey").governance_is_better_than(POOR))
         self.assertTrue(app.get_country("Turkey").is_governed())
         self.assertTrue(not app.get_country("Turkey").is_unaligned())
@@ -1028,21 +1028,21 @@ class Card36(LabyrinthTestCase):
 
     def test_playable(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertFalse(app.deck["36"].playable("US", app, True))
+        self.assertFalse(app.card(36).playable("US", app, True))
         app.get_country("Pakistan").make_islamist_rule()
-        self.assertFalse(app.deck["36"].playable("US", app, True))
+        self.assertFalse(app.card(36).playable("US", app, True))
         app.get_country("Pakistan").make_poor()
-        self.assertFalse(app.deck["36"].playable("US", app, True))
+        self.assertFalse(app.card(36).playable("US", app, True))
         app.get_country("Pakistan").make_fair()
-        self.assertTrue(app.deck["36"].playable("US", app, True))
+        self.assertTrue(app.card(36).playable("US", app, True))
         app.get_country("Pakistan").make_good()
-        self.assertTrue(app.deck["36"].playable("US", app, True))
+        self.assertTrue(app.card(36).playable("US", app, True))
 
     def test_event(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario, ["s", "1"])
         app.get_country("Pakistan").make_fair()
         app.get_country("Pakistan").make_adversary()
-        app.deck["36"].playEvent("US", app)
+        app.card(36).playEvent("US", app)
         self.assertTrue(app.get_country("Pakistan").is_ally())
         self.assertTrue("Indo-Pakistani Talks" in app.markers)
         self.assertTrue(app.get_country("India").posture == "Soft")
@@ -1056,16 +1056,16 @@ class Card37(LabyrinthTestCase):
 
     def test_playable(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertFalse(app.deck["37"].playable("US", app, True))
+        self.assertFalse(app.card(37).playable("US", app, True))
         app.get_country("Iraq").make_poor()
         app.get_country("Iraq").make_adversary()
-        self.assertTrue(app.deck["37"].playable("US", app, True))
+        self.assertTrue(app.card(37).playable("US", app, True))
         app.get_country("United States").posture = "Soft"
-        self.assertFalse(app.deck["37"].playable("US", app, True))
+        self.assertFalse(app.card(37).playable("US", app, True))
 
     def test_event(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        app.deck["37"].playEvent("US", app)
+        app.card(37).playEvent("US", app)
         self.assertTrue("Iraqi WMD" in app.markers)
         app.handle_regime_change("Iraq", "track", 6, 4, (4, 4, 4))
         self.assertFalse("Iraqi WMD" in app.markers)
@@ -1076,25 +1076,25 @@ class Card38(LabyrinthTestCase):
 
     def test_playable(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertFalse(app.deck["38"].playable("US", app, True))
+        self.assertFalse(app.card(38).playable("US", app, True))
         app.get_country("Libya").make_poor()
-        self.assertFalse(app.deck["38"].playable("US", app, True))
+        self.assertFalse(app.card(38).playable("US", app, True))
         app.get_country("Iraq").make_ally()
-        self.assertTrue(app.deck["38"].playable("US", app, True))
+        self.assertTrue(app.card(38).playable("US", app, True))
         app.get_country("Iraq").make_neutral()
-        self.assertFalse(app.deck["38"].playable("US", app, True))
+        self.assertFalse(app.card(38).playable("US", app, True))
         app.get_country("Syria").make_ally()
-        self.assertTrue(app.deck["38"].playable("US", app, True))
+        self.assertTrue(app.card(38).playable("US", app, True))
         app.get_country("Libya").make_fair()
-        self.assertFalse(app.deck["38"].playable("US", app, True))
+        self.assertFalse(app.card(38).playable("US", app, True))
         app.get_country("Libya").make_islamist_rule()
-        self.assertFalse(app.deck["38"].playable("US", app, True))
+        self.assertFalse(app.card(38).playable("US", app, True))
 
     def test_event(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario, ["france", "s", "Spain", "h"])
         app.get_country("Libya").make_poor()
         app.get_country("Iraq").make_ally()
-        app.deck["38"].playEvent("US", app)
+        app.card(38).playEvent("US", app)
         self.assertTrue("Libyan Deal" in app.markers)
         self.assertTrue(app.prestige == 8)
         self.assertTrue(app.get_country("France").posture == "Soft")
@@ -1106,20 +1106,20 @@ class Card39(LabyrinthTestCase):
 
     def test_playable(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertFalse(app.deck["39"].playable("US", app, True))
+        self.assertFalse(app.card(39).playable("US", app, True))
         app.get_country("Libya").make_poor()
         app.get_country("Libya").make_adversary()
-        self.assertTrue(app.deck["39"].playable("US", app, True))
+        self.assertTrue(app.card(39).playable("US", app, True))
         app.get_country("United States").posture = "Soft"
-        self.assertFalse(app.deck["39"].playable("US", app, True))
+        self.assertFalse(app.card(39).playable("US", app, True))
         app.get_country("United States").posture = "Hard"
-        self.assertTrue(app.deck["39"].playable("US", app, True))
+        self.assertTrue(app.card(39).playable("US", app, True))
         app.markers.append("Libyan Deal")
-        self.assertFalse(app.deck["39"].playable("US", app, True))
+        self.assertFalse(app.card(39).playable("US", app, True))
 
     def test_event(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        app.deck["39"].playEvent("US", app)
+        app.card(39).playEvent("US", app)
         self.assertTrue("Libyan WMD" in app.markers)
         app.handle_regime_change("Libya", "track", 6, 4, (4, 4, 4))
         self.assertFalse("Libyan WMD" in app.markers)
@@ -1130,19 +1130,19 @@ class Card40(LabyrinthTestCase):
 
     def test_playable(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertFalse(app.deck["40"].playable("US", app, True))
+        self.assertFalse(app.card(40).playable("US", app, True))
         app.get_country("Libya").make_poor()
         app.get_country("Libya").make_adversary()
-        self.assertFalse(app.deck["40"].playable("US", app, True))
+        self.assertFalse(app.card(40).playable("US", app, True))
         app.get_country("Libya").regimeChange = 1
-        self.assertTrue(app.deck["40"].playable("US", app, True))
+        self.assertTrue(app.card(40).playable("US", app, True))
 
     def test_event(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("Libya").make_poor()
         app.get_country("Libya").make_adversary()
         app.get_country("Libya").regimeChange = 1
-        app.deck["40"].playEvent("US", app)
+        app.card(40).playEvent("US", app)
         self.assertTrue(app.get_country("Libya").is_fair())
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
@@ -1150,7 +1150,7 @@ class Card40(LabyrinthTestCase):
         app.get_country("Libya").make_adversary()
         app.get_country("Libya").regimeChange = 1
         app.get_country("Libya").aid = 1
-        app.deck["40"].playEvent("US", app)
+        app.card(40).playEvent("US", app)
         self.assertTrue(app.get_country("Libya").is_good())
         self.assertTrue(app.get_country("Libya").regimeChange == 0)
         self.assertTrue(app.get_country("Libya").aid == 0)
@@ -1164,7 +1164,7 @@ class Card40(LabyrinthTestCase):
         app.get_country("Iraq").make_adversary()
         app.get_country("Iraq").regimeChange = 1
         app.get_country("Iraq").aid = 1
-        app.deck["40"].playEvent("US", app)
+        app.card(40).playEvent("US", app)
         self.assertTrue(app.get_country("Iraq").is_good())
         self.assertTrue(app.get_country("Iraq").regimeChange == 0)
         self.assertTrue(app.get_country("Iraq").aid == 0)
@@ -1175,15 +1175,15 @@ class Card41(LabyrinthTestCase):
 
     def test_playable(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertFalse(app.deck["41"].playable("US", app, True))
+        self.assertFalse(app.card(41).playable("US", app, True))
         app.get_country("Libya").make_poor()
         app.get_country("Libya").make_ally()
         app.get_country("Libya").regimeChange = 1
-        self.assertTrue(app.deck["41"].playable("US", app, True))
+        self.assertTrue(app.card(41).playable("US", app, True))
         app.get_country("Canada").posture = "Soft"
-        self.assertTrue(app.deck["41"].playable("US", app, True))
+        self.assertTrue(app.card(41).playable("US", app, True))
         app.get_country("Spain").posture = "Soft"
-        self.assertFalse(app.deck["41"].playable("US", app, True))
+        self.assertFalse(app.card(41).playable("US", app, True))
 
     def test_event(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario, ["Libya", "track", "3"])
@@ -1191,7 +1191,7 @@ class Card41(LabyrinthTestCase):
         app.get_country("Libya").make_ally()
         app.get_country("Libya").regimeChange = 1
         app.get_country("Libya").change_troops(2)
-        app.deck["41"].playEvent("US", app)
+        app.card(41).playEvent("US", app)
         self.assertTrue(app.get_country("Libya").aid == 1)
         self.assertTrue(app.get_country("Libya").troops() == 4)
         self.assertTrue("NATO" in app.get_country("Libya").markers)
@@ -1211,7 +1211,7 @@ class Card41(LabyrinthTestCase):
         app.get_country("Iraq").make_adversary()
         app.get_country("Iraq").regimeChange = 1
         app.get_country("Iraq").aid = 0
-        app.deck["41"].playEvent("US", app)
+        app.card(41).playEvent("US", app)
         self.assertEqual(app.get_country("Iraq").aid, 1)
         self.assertTrue(app.get_country("Iraq").troops() == 2)
         self.assertTrue("NATO" in app.get_country("Iraq").markers)
@@ -1222,21 +1222,21 @@ class Card42(LabyrinthTestCase):
 
     def test_playable(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertFalse(app.deck["42"].playable("US", app, True))
+        self.assertFalse(app.card(42).playable("US", app, True))
         app.get_country("Pakistan").make_poor()
         app.get_country("Pakistan").make_ally()
-        self.assertFalse(app.deck["42"].playable("US", app, True))
+        self.assertFalse(app.card(42).playable("US", app, True))
         app.get_country("Pakistan").markers.append("FATA")
-        self.assertTrue(app.deck["42"].playable("US", app, True))
+        self.assertTrue(app.card(42).playable("US", app, True))
         app.get_country("Pakistan").make_neutral()
-        self.assertFalse(app.deck["42"].playable("US", app, True))
+        self.assertFalse(app.card(42).playable("US", app, True))
 
     def test_event(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("Pakistan").make_poor()
         app.get_country("Pakistan").make_ally()
         app.get_country("Pakistan").markers.append("FATA")
-        app.deck["42"].playEvent("US", app)
+        app.card(42).playEvent("US", app)
         self.assertTrue("FATA" not in app.get_country("Pakistan").markers)
 
 
@@ -1245,7 +1245,7 @@ class Card43(LabyrinthTestCase):
 
     def test_playable(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertTrue(app.deck["43"].playable("US", app, True))
+        self.assertTrue(app.card(43).playable("US", app, True))
 
     def test_event(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
@@ -1255,7 +1255,7 @@ class Card43(LabyrinthTestCase):
         for country in app.get_countries():
             if country.schengen:
                 self.assertTrue(app.is_adjacent("United States", country.name))
-        app.deck["43"].playEvent("US", app)
+        app.card(43).playEvent("US", app)
         self.assertTrue("Patriot Act" in app.markers)
         self.assertTrue(app.is_adjacent("United States", "Canada"))
         self.assertFalse(app.is_adjacent("United States", "United Kingdom"))
@@ -1270,14 +1270,14 @@ class Card44(LabyrinthTestCase):
 
     def test_playable(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertTrue(app.deck["44"].playable("US", app, True))
+        self.assertTrue(app.card(44).playable("US", app, True))
         app.get_country("United States").posture = "Soft"
-        self.assertFalse(app.deck["44"].playable("US", app, True))
+        self.assertFalse(app.card(44).playable("US", app, True))
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertTrue(app.deck["44"].playable("US", app, True))
+        self.assertTrue(app.card(44).playable("US", app, True))
         app.markers.append("Leak-Renditions")
-        self.assertFalse(app.deck["44"].playable("US", app, True))
+        self.assertFalse(app.card(44).playable("US", app, True))
 
     def test_event(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario, ["Iraq"])
@@ -1289,7 +1289,7 @@ class Card44(LabyrinthTestCase):
         app.get_country("Pakistan").make_poor()
         app.get_country("Pakistan").make_neutral()
         app.get_country("Pakistan").troopCubes = 2
-        app.deck["44"].playEvent("US", app)
+        app.card(44).playEvent("US", app)
         self.assertTrue("Renditions" in app.markers)
         self.assertTrue(app.get_country("Iraq").cadre == 0)
 
@@ -1303,7 +1303,7 @@ class Card44(LabyrinthTestCase):
         app.get_country("Pakistan").make_poor()
         app.get_country("Pakistan").make_neutral()
         app.get_country("Pakistan").troopCubes = 2
-        app.deck["44"].playEvent("US", app)
+        app.card(44).playEvent("US", app)
         self.assertTrue("Renditions" in app.markers)
         self.assertTrue(app.get_country("Pakistan").cadre == 1)
         self.assertTrue(app.get_country("Pakistan").sleeperCells == 0)
@@ -1314,32 +1314,32 @@ class Card45(LabyrinthTestCase):
 
     def test_playable(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertTrue(app.deck["45"].playable("US", app, True))
+        self.assertTrue(app.card(45).playable("US", app, True))
         app.get_country("Iraq").make_islamist_rule()
         app.get_country("Iraq").make_adversary()
-        self.assertFalse(app.deck["45"].playable("US", app, True))
+        self.assertFalse(app.card(45).playable("US", app, True))
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertTrue(app.deck["45"].playable("US", app, True))
+        self.assertTrue(app.card(45).playable("US", app, True))
         app.get_country("Iraq").make_good()
         app.get_country("Iraq").make_ally()
-        self.assertTrue(app.deck["45"].playable("US", app, True))
+        self.assertTrue(app.card(45).playable("US", app, True))
         app.get_country("Iraq").cadre = 1
-        self.assertTrue(app.deck["45"].playable("US", app, True))
+        self.assertTrue(app.card(45).playable("US", app, True))
         app.get_country("Iraq").plots = 1
-        self.assertFalse(app.deck["45"].playable("US", app, True))
+        self.assertFalse(app.card(45).playable("US", app, True))
         app.get_country("Iraq").plots = 0
         app.get_country("Iraq").cadre = 0
         app.get_country("Iraq").sleeperCells = 1
-        self.assertFalse(app.deck["45"].playable("US", app, True))
+        self.assertFalse(app.card(45).playable("US", app, True))
         app.get_country("Iraq").sleeperCells = 0
         app.get_country("Iraq").activeCells = 1
-        self.assertFalse(app.deck["45"].playable("US", app, True))    
+        self.assertFalse(app.card(45).playable("US", app, True))    
 
     def test_event(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario, ["4", "Spain", "h"])
         print "Enter 4 for posture role, Spain and Hard"
-        app.deck["45"].playEvent("US", app)
+        app.card(45).playEvent("US", app)
         self.assertTrue(app.get_country("United States").posture == "Soft")
         self.assertTrue(app.prestige == 10)
         self.assertTrue(app.get_country("Spain").posture == "Hard")
@@ -1350,32 +1350,32 @@ class Card46(LabyrinthTestCase):
 
     def test_playable(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertFalse(app.deck["46"].playable("US", app, True))
+        self.assertFalse(app.card(46).playable("US", app, True))
         app.get_country("Iraq").make_fair()
         app.get_country("Iraq").make_ally()
         app.get_country("Iraq").regimeChange = 1
-        self.assertFalse(app.deck["46"].playable("US", app, True))
+        self.assertFalse(app.card(46).playable("US", app, True))
         app.get_country("Iraq").cadre = 1
-        self.assertFalse(app.deck["46"].playable("US", app, True))
+        self.assertFalse(app.card(46).playable("US", app, True))
         app.get_country("Iraq").sleeperCells = 1
-        self.assertTrue(app.deck["46"].playable("US", app, True))
+        self.assertTrue(app.card(46).playable("US", app, True))
         app.get_country("Iraq").sleeperCells = 0
         app.get_country("Iraq").activeCells = 1
-        self.assertTrue(app.deck["46"].playable("US", app, True))    
+        self.assertTrue(app.card(46).playable("US", app, True))    
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertFalse(app.deck["46"].playable("US", app, True))
+        self.assertFalse(app.card(46).playable("US", app, True))
         app.get_country("Syria").make_fair()
         app.get_country("Syria").make_ally()
         app.get_country("Syria").regimeChange = 1
-        self.assertFalse(app.deck["46"].playable("US", app, True))
+        self.assertFalse(app.card(46).playable("US", app, True))
         app.get_country("Syria").cadre = 1
-        self.assertFalse(app.deck["46"].playable("US", app, True))
+        self.assertFalse(app.card(46).playable("US", app, True))
         app.get_country("Syria").sleeperCells = 1
-        self.assertFalse(app.deck["46"].playable("US", app, True))
+        self.assertFalse(app.card(46).playable("US", app, True))
         app.get_country("Syria").sleeperCells = 0
         app.get_country("Syria").activeCells = 1
-        self.assertFalse(app.deck["46"].playable("US", app, True))    
+        self.assertFalse(app.card(46).playable("US", app, True))    
 
     def test_event(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
@@ -1383,9 +1383,9 @@ class Card46(LabyrinthTestCase):
         app.get_country("Iraq").make_ally()
         app.get_country("Iraq").regimeChange = 1
         app.get_country("Iraq").sleeperCells = 1
-        app.deck["46"].playEvent("US", app)
+        app.card(46).playEvent("US", app)
         self.assertTrue(app.get_country("Iraq").is_fair())
-        app.deck["46"].playEvent("US", app)
+        app.card(46).playEvent("US", app)
         self.assertTrue(app.get_country("Iraq").is_good())
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
@@ -1397,7 +1397,7 @@ class Card46(LabyrinthTestCase):
         app.get_country("Syria").make_ally()
         app.get_country("Syria").regimeChange = 1
         app.get_country("Syria").sleeperCells = 1
-        app.deck["46"].playEvent("US", app)
+        app.card(46).playEvent("US", app)
         self.assertTrue(app.get_country("Iraq").is_good())
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario, ["Lebanon"])
@@ -1410,7 +1410,7 @@ class Card46(LabyrinthTestCase):
         app.get_country("Lebanon").regimeChange = 1
         app.get_country("Lebanon").sleeperCells = 1
         print "Choose Lebanon"
-        app.deck["46"].playEvent("US", app)
+        app.card(46).playEvent("US", app)
         self.assertTrue(app.get_country("Lebanon").is_good())
 
 
@@ -1419,18 +1419,18 @@ class Card47(LabyrinthTestCase):
 
     def test_playable(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertTrue(app.deck["47"].playable("US", app, True))    
+        self.assertTrue(app.card(47).playable("US", app, True))    
 
     def test_event(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        app.deck["47"].playEvent("US", app)
+        app.card(47).playEvent("US", app)
         self.assertTrue("The door of Itjihad was closed" in app.lapsing)
-        self.assertFalse(app.deck["66"].playable("Jihadist", app, False))
-        self.assertFalse(app.deck["114"].playable("Jihadist", app, False))
+        self.assertFalse(app.card(66).playable("Jihadist", app, False))
+        self.assertFalse(app.card(114).playable("Jihadist", app, False))
         app.end_turn()
         self.assertFalse("The door of Itjihad was closed" in app.lapsing)
-        self.assertTrue(app.deck["66"].playable("Jihadist", app, False))
-        self.assertTrue(app.deck["114"].playable("Jihadist", app, False))
+        self.assertTrue(app.card(66).playable("Jihadist", app, False))
+        self.assertTrue(app.card(114).playable("Jihadist", app, False))
 
 
 class Card48(LabyrinthTestCase):
@@ -1439,16 +1439,16 @@ class Card48(LabyrinthTestCase):
     def test_playable(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario, ["n", "y"])
         app.cells = 0
-        self.assertFalse(app.deck["48"].playable("Jihadist", app, False))
+        self.assertFalse(app.card(48).playable("Jihadist", app, False))
         app.cells = 9
         print "Say No"
-        self.assertFalse(app.deck["48"].playable("Jihadist", app, False))
+        self.assertFalse(app.card(48).playable("Jihadist", app, False))
         print "Say Yes"
-        self.assertTrue(app.deck["48"].playable("Jihadist", app, False))
+        self.assertTrue(app.card(48).playable("Jihadist", app, False))
 
     def test_puts_cell(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertTrue(app.deck["48"].puts_cell())
+        self.assertTrue(app.card(48).puts_cell())
 
     def test_event(self):
         # Set up
@@ -1459,7 +1459,7 @@ class Card48(LabyrinthTestCase):
         self.assertCells(app, "United States", 0)
 
         # Invoke
-        app.deck["48"].playEvent("Jihadist", app)
+        app.card(48).playEvent("Jihadist", app)
 
         # Check
         self.assertCells(app, "United States", 2)
@@ -1470,19 +1470,19 @@ class Card49(LabyrinthTestCase):
 
     def test_playable(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertTrue(app.deck["49"].playable("Jihadist", app, False))    
+        self.assertTrue(app.card(49).playable("Jihadist", app, False))    
         app.cells = 1
-        self.assertTrue(app.deck["49"].playable("Jihadist", app, False))    
+        self.assertTrue(app.card(49).playable("Jihadist", app, False))    
         app.cells = 0
-        self.assertTrue(app.deck["49"].playable("Jihadist", app, False))    
+        self.assertTrue(app.card(49).playable("Jihadist", app, False))    
 
     def test_puts_cell(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertTrue(app.deck["49"].puts_cell())
+        self.assertTrue(app.card(49).puts_cell())
 
     def test_event(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        app.deck["49"].playEvent("Jihadist", app)
+        app.card(49).playEvent("Jihadist", app)
         self.assertTrue(app.get_country("Somalia").sleeperCells == 1)
 
 
@@ -1491,23 +1491,23 @@ class Card50(LabyrinthTestCase):
 
     def test_playable(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertFalse(app.deck["50"].playable("Jihadist", app, False))    
+        self.assertFalse(app.card(50).playable("Jihadist", app, False))    
         app.get_country("Iraq").make_good()
-        self.assertFalse(app.deck["50"].playable("Jihadist", app, False))    
+        self.assertFalse(app.card(50).playable("Jihadist", app, False))    
         app.get_country("Iraq").make_fair()
-        self.assertTrue(app.deck["50"].playable("Jihadist", app, False))    
+        self.assertTrue(app.card(50).playable("Jihadist", app, False))    
         app.get_country("Iraq").make_poor()
-        self.assertTrue(app.deck["50"].playable("Jihadist", app, False))    
+        self.assertTrue(app.card(50).playable("Jihadist", app, False))    
         app.get_country("Iraq").make_islamist_rule()
-        self.assertTrue(app.deck["50"].playable("Jihadist", app, False))    
+        self.assertTrue(app.card(50).playable("Jihadist", app, False))    
 
     def test_puts_cell(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertTrue(app.deck["50"].puts_cell())
+        self.assertTrue(app.card(50).puts_cell())
 
     def test_event(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        app.deck["50"].playEvent("Jihadist", app)
+        app.card(50).playEvent("Jihadist", app)
         app.get_country("Iraq").make_fair()
         self.assertTrue(app.get_country("Iraq").sleeperCells == 1 or app.get_country("Iran").sleeperCells == 1)
 

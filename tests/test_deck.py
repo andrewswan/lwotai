@@ -10,4 +10,4 @@ class DeckTest(LabyrinthTestCase):
         app = Labyrinth(1, 1, self.set_up_test_scenario)
         for i in range(121):
             if i > 0:
-                self.assertEqual(i, app.deck[str(i)].number)
+                self.assertEqual(i, app.card(i).number)

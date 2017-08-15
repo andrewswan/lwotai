@@ -22,7 +22,6 @@ class SaverTest(unittest.TestCase):
         # Check
         self.assertEqual(loaded_game.backlashInPlay, game_to_save.backlashInPlay)
         self.assertEqual(loaded_game.cells, game_to_save.cells)
-        self.assertEqual(len(loaded_game.deck), len(game_to_save.deck))
         self.assertEqual(loaded_game.funding, game_to_save.funding)
         self.assertEqual(loaded_game.gameOver, game_to_save.gameOver)
         self.assertEqual(loaded_game.history, game_to_save.history)
