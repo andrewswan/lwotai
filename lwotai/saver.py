@@ -49,11 +49,10 @@ class Saver(object):
 
     def load_game(self):
         """Loads the game; returns a Labyrinth object"""
-        f = open(self.SUSPEND_FILE,'rb')
-        app = pickle.load(f)
+        with open(self.SUSPEND_FILE, 'rb') as suspend_file:
+            app = pickle.load(suspend_file)
         app.stdout = sys.stdout
         app.undo = False
-        f.close()
         return app
 
     def save_rollback_file(self, app, turn_number):
@@ -63,21 +62,19 @@ class Saver(object):
 
     def roll_back(self, turn_number):
         """Returns the saved game as it was at the given turn number"""
-        turn_file = self.ROLLBACK_FILE + str(turn_number) + '.lwot'
-        f = open(turn_file, 'rb')
-        app = pickle.load(f)
+        turn_file_name = self.ROLLBACK_FILE + str(turn_number) + '.lwot'
+        with open(turn_file_name, 'rb') as turn_file:
+            app = pickle.load(turn_file)
         app.stdout = sys.stdout
-        f.close()
-        # rollback invalidates undo save so delete it
+        # rollback invalidates undo save, so delete it
         self._delete_undo_file_if_exists()
         return app
 
     def load_undo_file(self):
         """Loads the game from the 'undo' file (returns the loaded game)"""
-        f = open(self.UNDO_FILE, 'rb')
-        app = pickle.load(f)
+        with open(self.UNDO_FILE, 'rb') as undo_file:
+            app = pickle.load(undo_file)
         app.stdout = sys.stdout
-        f.close()
         return app
 
     def _delete_undo_file_if_exists(self):
@@ -97,6 +94,5 @@ class Saver(object):
     @staticmethod
     def _save_game(app, save_file_name):
         """Saves the given app to the given file"""
-        save_file = open(save_file_name, 'wb')
-        pickle.dump(app, save_file, 2)
-        save_file.close()
+        with open(save_file_name, 'wb') as save_file:
+            pickle.dump(app, save_file, 2)
