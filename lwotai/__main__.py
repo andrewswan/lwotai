@@ -57,7 +57,7 @@ def main():
     
     # Ask user if they want to continue previous game                    
     if saver.suspended_game_exists() and Utils.getUserYesNoResponse("Resume suspended game? (y/n): "):
-        app = saver.load_game()
+        app = saver.load_suspend_file()
     else:
         app = _create_game()
         saver.save_rollback_file(app, 0)

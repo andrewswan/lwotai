@@ -47,7 +47,7 @@ class Saver(object):
         """Indicates whether a saved game exists"""
         return os.path.exists(self.SUSPEND_FILE)
 
-    def load_game(self):
+    def load_suspend_file(self):
         """Loads the game; returns a Labyrinth object"""
         with open(self.SUSPEND_FILE, 'rb') as suspend_file:
             app = pickle.load(suspend_file)
