@@ -1777,14 +1777,14 @@ class Labyrinth(object):
             self.output_to_history("US Posture now %s" % self.us_posture(), True)
 
     def event_puts_cell(self, card_number):
-        return self.deck.get(card_number).puts_cell()
+        return self.card(card_number).puts_cell()
 
     def playable_non_us_event(self, card_number):
-        card = self.deck.get(card_number)
+        card = self.card(card_number)
         return card.type != "US" and card.playable("Jihadist", self, False)
 
     def playable_us_event(self, card_number):
-        card = self.deck.get(card_number)
+        card = self.card(card_number)
         return card.type == "US" and card.playable("US", self, False)
 
     def ai_flow_chart_top(self, card_number):
@@ -1803,7 +1803,7 @@ class Labyrinth(object):
                 else:
                     self.debug_print("DEBUG: NO")
                     self.debug_print("DEBUG: Radicalization [4]")
-                    self.handle_radicalization(self.deck.get(card_number).ops)
+                    self.handle_radicalization(self.card(card_number).ops)
             else:
                 self.debug_print("DEBUG: NO")
                 self.ai_flow_chart_play_event(card_number)
@@ -1814,7 +1814,7 @@ class Labyrinth(object):
                 self.debug_print("DEBUG: YES")
                 self.debug_print("DEBUG: Plot Here [5]")
                 self.output_to_history("Playable US Event.", False)
-                unused_ops = self.handle_ai_plot_action(self.deck.get(card_number).ops, True)
+                unused_ops = self.handle_ai_plot_action(self.card(card_number).ops, True)
                 if unused_ops > 0:
                     self.debug_print("DEBUG: Radicalization with remaining %d ops" % unused_ops)
                     self.handle_radicalization(unused_ops)
@@ -1826,9 +1826,9 @@ class Labyrinth(object):
 
     def ai_flow_chart_play_event(self, card_number):
         self.debug_print("Play Event [6]")
-        self.deck.get(card_number).playEvent("Jihadist", self)
+        self.card(card_number).playEvent("Jihadist", self)
         self.debug_print("Unassociated Event? [8]")
-        if self.deck.get(card_number).type == "Unassociated":
+        if self.card(card_number).type == "Unassociated":
             self.debug_print("DEBUG: YES")
             self.output_to_history("Unassociated event now being used for Ops.", False)
             self.ai_flow_chart_major_jihad(card_number)
@@ -1838,21 +1838,21 @@ class Labyrinth(object):
 
     def ai_flow_chart_major_jihad(self, card_number):
         self.debug_print("DEBUG: Major Jihad success possible? [10]")
-        country = self.major_jihad_choice(self.deck.get(card_number).ops)
+        country = self.major_jihad_choice(self.card(card_number).ops)
         if country:
             self.debug_print("DEBUG: YES")
             self.debug_print("DEBUG: Major Jihad [11]")
-            unused_ops = self.handle_jihad(country, self.deck.get(card_number).ops)
+            unused_ops = self.handle_jihad(country, self.card(card_number).ops)
             if unused_ops > 0:
                 self.debug_print("DEBUG: Radicalization with remaining %d ops" % unused_ops)
                 self.handle_radicalization(unused_ops)
         else:
             self.debug_print("DEBUG: NO")
             self.debug_print("DEBUG: Jihad possible in Good/Fair? [12]")
-            country_list = self.minor_jihad_in_good_fair_choice(self.deck.get(card_number).ops)
+            country_list = self.minor_jihad_in_good_fair_choice(self.card(card_number).ops)
             if country_list:
                 self.debug_print("DEBUG: YES")
-                unused_ops = self.handle_minor_jihad(country_list, self.deck.get(card_number).ops)
+                unused_ops = self.handle_minor_jihad(country_list, self.card(card_number).ops)
                 if unused_ops > 0:
                     self.debug_print("DEBUG: Radicalization with remaining %d ops" % unused_ops)
                     self.handle_radicalization(unused_ops)
@@ -1862,14 +1862,14 @@ class Labyrinth(object):
                 if self.num_cells_available() > 0:
                     self.debug_print("DEBUG: YES")
                     self.debug_print("DEBUG: Recruit [15]")
-                    unused_ops = self.handle_recruit(self.deck.get(card_number).ops)
+                    unused_ops = self.handle_recruit(self.card(card_number).ops)
                     if unused_ops > 0:
                         self.debug_print("DEBUG: Radicalization with remaining %d ops" % unused_ops)
                         self.handle_radicalization(unused_ops)
                 else:
                     self.debug_print("DEBUG: NO")
                     self.debug_print("DEBUG: Travel [16]")
-                    unused_ops = self.handle_travel(self.deck.get(card_number).ops)
+                    unused_ops = self.handle_travel(self.card(card_number).ops)
                     if unused_ops > 0:
                         self.debug_print("DEBUG: Radicalization with remaining %d ops" % unused_ops)
                         self.handle_radicalization(unused_ops)
@@ -3153,14 +3153,14 @@ class Labyrinth(object):
     def play_jihadist_card(self, card_number):
         """Plays the given numbered card during the Jihadist action phase"""
         self.output_to_history("", False)
-        card = self.deck.get(card_number)
+        card = self.card(card_number)
         self.output_to_history("== Jihadist plays %s - %d Ops ==" % (card.name, card.ops))
         self.ai_flow_chart_top(card_number)
 
     def play_us_card(self, card_num):
         """Plays the given card as the US when it's the US action phase."""
         self.output_to_history("", False)
-        card = self.deck.get(card_num)
+        card = self.card(card_num)
         self.output_to_history("== US plays %s - %d Ops ==" % (card.name, card.ops))
 
         if card.playable("US", self, True):
@@ -3198,7 +3198,7 @@ class Labyrinth(object):
 
     def get_us_prompt_to_spend_ops(self, card_number):
         """Prompts the US player to spend the given card's Ops value"""
-        ops = self.deck.get(card_number).ops
+        ops = self.card(card_number).ops
         operation_min_ops = {
             "alert": 3,
             "deploy": 1,
