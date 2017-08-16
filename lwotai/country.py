@@ -67,6 +67,9 @@ class Country(object):
     def is_fair(self):
         return self.__governance == FAIR
 
+    def is_hard(self):
+        return self.posture == "Hard"
+
     def is_poor(self):
         return self.__governance == POOR
 
@@ -75,6 +78,9 @@ class Country(object):
 
     def is_governed(self):
         return self.__governance is not None
+
+    def is_soft(self):
+        return self.posture == "Soft"
 
     def is_ungoverned(self):
         return not self.is_governed()

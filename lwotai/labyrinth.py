@@ -72,45 +72,25 @@ class Labyrinth(object):
         if line_feed:
             print ""
 
+    def _get_world_posture_str(self):
+        net_hard_countries = self.map.get_net_hard_countries()
+        if net_hard_countries > 0:
+            return "World Posture: Hard %d" % net_hard_countries
+        if net_hard_countries < 0:
+            return "World Posture: Soft %d" % -net_hard_countries
+        return "Even"
+
     def _print_initial_state(self):
-        """Performs any setup necessary after the scenario-specific setup"""
-        good_resources = 0
-        islamist_resources = 0
-        good_or_fair_countries = 0
-        poor_or_islamist_countries = 0
-        net_hard_countries = 0
-        for country in self.map.countries():
-            if country.is_muslim():
-                if country.is_good():
-                    good_or_fair_countries += 1
-                    good_resources += self.country_resources(country)
-                elif country.is_fair():
-                    good_or_fair_countries += 1
-                elif country.is_poor():
-                    poor_or_islamist_countries += 1
-                elif country.is_islamist_rule():
-                    poor_or_islamist_countries += 1
-                    islamist_resources += self.country_resources(country)
-            elif country.can_have_posture():
-                if country.posture == "Hard":
-                    net_hard_countries += 1
-                elif country.posture == "Soft":
-                    net_hard_countries -= 1
-        print "Good Resources:     %d" % good_resources
-        print "Islamist Resources: %d" % islamist_resources
+        """Prints the initial game state"""
+        print "Good Resources:     %d" % self.map.get_good_resources()
+        print "Islamist Resources: %d" % self.map.get_islamist_rule_resources()
         print "---"
-        print "Good/Fair Countries:     %d" % good_or_fair_countries
-        print "Poor/Islamist Countries: %d" % poor_or_islamist_countries
+        print "Good/Fair Countries:     %d" % self.map.count_countries(lambda c: c.is_good() or c.is_fair())
+        print "Poor/Islamist Countries: %d" % self.map.count_countries(lambda c: c.is_poor() or c.is_islamist_rule())
         print ""
         print "GWOT"
         print "US Posture: %s" % self.us_posture()
-        if net_hard_countries > 0:
-            world_posture_str = "Hard"
-        elif net_hard_countries < 0:
-            world_posture_str = "Soft"
-        else:
-            world_posture_str = "Even"
-        print "World Posture: %s %d" % (world_posture_str, abs(net_hard_countries))
+        print self._get_world_posture_str()
         print "US Prestige: %d" % self.prestige
         print ""
 

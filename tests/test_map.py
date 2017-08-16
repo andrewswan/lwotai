@@ -68,3 +68,49 @@ class MapTest(LabyrinthTestCase):
         link_names = [c.name for c in links]
         expected_link_names = ["Central Asia", "Iran", "Pakistan"]
         self.assertEqual(expected_link_names, link_names)
+
+    def test_get_good_resources(self):
+        # Set up
+        game_map = self.create_test_map()
+        game_map.get("Gulf States").make_good()
+
+        # Invoke
+        good_resources = game_map.get_good_resources()
+
+        # Assert
+        self.assertEqual(3, good_resources)
+
+    def test_get_islamist_rule_resources(self):
+        # Set up
+        game_map = self.create_test_map()
+        game_map.get("Gulf States").make_islamist_rule()
+
+        # Invoke
+        islamist_rule_resources = game_map.get_islamist_rule_resources()
+
+        # Assert
+        self.assertEqual(3, islamist_rule_resources)
+
+    def test_get_net_hard_countries_when_more_are_hard(self):
+        # Set up
+        game_map = self.create_test_map()
+        game_map.get("France").make_soft()
+
+        # Invoke
+        net_hard_countries = game_map.get_net_hard_countries()
+
+        # Assert
+        self.assertEqual(1, net_hard_countries)
+
+    def test_get_net_hard_countries_when_more_are_soft(self):
+        # Set up
+        game_map = self.create_test_map()
+        for country_name in ["Benelux", "Canada", "China", "France", "Germany", "India", "Russia", "Scandinavia"]:
+            game_map.get(country_name).make_soft()
+
+        # Invoke
+        net_hard_countries = game_map.get_net_hard_countries()
+
+        # Assert
+        self.assertEqual(-3, net_hard_countries)  # should max out at -3
+

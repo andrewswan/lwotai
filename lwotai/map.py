@@ -119,3 +119,24 @@ class Map(object):
     def contains(self, predicate):
         """Indicates whether the map contains any countries matching the given predicate"""
         return self.count_countries(predicate) > 0
+
+    def _get_resources(self, predicate):
+        return sum([c.resources for c in self.find(predicate)])
+
+    def get_good_resources(self):
+        """Returns the total number of resources controlled by Good governance countries"""
+        return self._get_resources(lambda c: c.is_good())
+
+    def get_islamist_rule_resources(self):
+        """Returns the total number of resources controlled by Good governance countries"""
+        return self._get_resources(lambda c: c.is_islamist_rule())
+
+    def get_net_hard_countries(self):
+        """Returns the net amount of hard countries in the world; a negative number means more are soft"""
+        net_hard_countries = 0
+        for country in self.countries():
+            if country.is_hard() and net_hard_countries < 3:
+                net_hard_countries += 1
+            elif country.is_soft() and net_hard_countries > -3:
+                net_hard_countries -= 1
+        return net_hard_countries
