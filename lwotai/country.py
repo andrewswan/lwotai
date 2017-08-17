@@ -119,9 +119,11 @@ class Country(object):
             self.posture = ""
 
     def remove_plot_marker(self):
-        """Removes one plot marker from this country, if any are present"""
+        """Removes one plot marker from this country, if any are present; returns True if one was removed"""
         if self.plots > 0:
             self.plots -= 1
+            return True
+        return False
 
     def activate_sleepers(self, sleeper_cells_to_activate):
         """Activates the given number of sleeper cells in this country"""

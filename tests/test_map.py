@@ -100,7 +100,7 @@ class MapTest(LabyrinthTestCase):
         net_hard_countries = game_map.get_net_hard_countries()
 
         # Assert
-        self.assertEqual(1, net_hard_countries)
+        self.assertEqual(0, net_hard_countries)  # Israel is hard
 
     def test_get_net_hard_countries_when_more_are_soft(self):
         # Set up

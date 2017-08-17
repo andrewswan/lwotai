@@ -85,14 +85,22 @@ class Labyrinth(object):
         print "Good Resources:     %d" % self.map.get_good_resources()
         print "Islamist Resources: %d" % self.map.get_islamist_rule_resources()
         print "---"
-        print "Good/Fair Countries:     %d" % self.map.count_countries(lambda c: c.is_good() or c.is_fair())
-        print "Poor/Islamist Countries: %d" % self.map.count_countries(lambda c: c.is_poor() or c.is_islamist_rule())
+        print "Good/Fair Muslim Countries:   %d" % self._count_good_or_fair_muslim_countries()
+        print "Poor/Islamist Rule Countries: %d" % self._count_poor_or_islamist_rule_countries()
         print ""
         print "GWOT"
         print "US Posture: %s" % self.us_posture()
         print self._get_world_posture_str()
         print "US Prestige: %d" % self.prestige
         print ""
+
+    def _count_good_or_fair_muslim_countries(self):
+        """Returns the number of Muslim countries with Good or Fair governance"""
+        return self.map.count_countries(lambda c: c.is_muslim() and (c.is_good() or c.is_fair()))
+
+    def _count_poor_or_islamist_rule_countries(self):
+        """Returns the number of Muslim countries with Poor governance or under Islamist Rule"""
+        return self.map.count_countries(lambda c: c.is_muslim() and (c.is_poor() or c.is_islamist_rule()))
 
     def valid_markers_setup(self):
         self.validGlobalMarkers.append("Moro Talks")
@@ -263,7 +271,7 @@ class Labyrinth(object):
                 print "Enter e or o."
                 print ""
 
-    def modified_woi_roll(self, base_roll, country, use_gwot_penalty=True):
+    def modified_woi_roll(self, base_roll, country_name, use_gwot_penalty=True):
         modified_roll = base_roll
 
         if self.prestige <= 3:
@@ -276,7 +284,7 @@ class Labyrinth(object):
             modified_roll += 2
             self.output_to_history("+2 for Prestige", False)
 
-        if self.map.get(country).is_ally() and self.map.get(country).is_fair():
+        if self.map.get(country_name).is_ally() and self.map.get(country_name).is_fair():
             modified_roll -= 1
             self.output_to_history("-1 for Attempt to shift to Good", False)
 
@@ -285,11 +293,11 @@ class Labyrinth(object):
             if self.gwot_penalty() != 0:
                 self.output_to_history("-1 for GWOT Relations Penalty", False)
 
-        if self.map.get(country).aid > 0:
-            modified_roll += self.map.get(country).aid    # 20150131PS use number of aid markers rather than 1
-            self.output_to_history("+%s for Aid" % self.map.get(country).aid, False)
+        if self.map.get(country_name).aid > 0:
+            modified_roll += self.map.get(country_name).aid    # 20150131PS use number of aid markers rather than 1
+            self.output_to_history("+%s for Aid" % self.map.get(country_name).aid, False)
 
-        for adj in self.map.get(country).links:
+        for adj in self.map.get(country_name).links:
             if adj.is_ally() and adj.is_good():
                 modified_roll += 1
                 self.output_to_history("+1 for Adjacent Good Ally", False)
@@ -298,11 +306,11 @@ class Labyrinth(object):
 
     def gwot_penalty(self):
         world_position = 0
-        for country in self.map.country_names():
-            if self.map.get(country).type == "Non-Muslim" and self.map.get(country).name != "United States":
-                if self.map.get(country).posture == "Hard":
+        for country_name in self.map.country_names():
+            if self.map.get(country_name).type == "Non-Muslim" and self.map.get(country_name).name != "United States":
+                if self.map.get(country_name).posture == "Hard":
                     world_position += 1
-                elif self.map.get(country).posture == "Soft":
+                elif self.map.get(country_name).posture == "Soft":
                     world_position -= 1
         if world_position > 0:
             world_position_str = "Hard"
@@ -346,8 +354,8 @@ class Labyrinth(object):
         assert cell_count == 15, "Expected 15 cells but have %d" % cell_count
         # Check troops
         troop_count = 0
-        for country in self.map.country_names():
-            troop_count += self.map.get(country).troops()
+        for country_name in self.map.country_names():
+            troop_count += self.map.get(country_name).troops()
         troop_count += self.troops
         assert troop_count == 15, "Expected 15 troops but have %d" % troop_count
         # Check tested countries
@@ -367,53 +375,53 @@ class Labyrinth(object):
             self.output_to_history("%d Sleeper Cell(s) placed in %s" % (cells_to_move, country_name), False)
             self.output_to_history(self.map.get(country_name).summary(), True)
 
-    def remove_cell(self, country, side):
+    def remove_cell(self, country_name, side):
         # 20150131PS included Sadr in cell count, added test for side to determine order of removal
-        if self.map.get(country).total_cells(True) == 0:
+        if self.map.get(country_name).total_cells(True) == 0:
             return
         if side == "US":
-            if self.map.get(country).sleeperCells > 0:
-                self.map.get(country).sleeperCells -= 1
+            if self.map.get(country_name).sleeperCells > 0:
+                self.map.get(country_name).sleeperCells -= 1
                 self.cells += 1
-                self.output_to_history("Sleeper Cell removed from %s." % country, True)
-            elif "Sadr" in self.map.get(country).markers:
-                self.map.get(country).markers.remove("Sadr")
-                self.output_to_history("Sadr removed from %s." % country, True)
-            elif self.map.get(country).activeCells > 0:
-                self.map.get(country).activeCells -= 1
+                self.output_to_history("Sleeper Cell removed from %s." % country_name, True)
+            elif "Sadr" in self.map.get(country_name).markers:
+                self.map.get(country_name).markers.remove("Sadr")
+                self.output_to_history("Sadr removed from %s." % country_name, True)
+            elif self.map.get(country_name).activeCells > 0:
+                self.map.get(country_name).activeCells -= 1
                 self.cells += 1
-                self.output_to_history("Active Cell removed from %s." % country, True)
+                self.output_to_history("Active Cell removed from %s." % country_name, True)
         else:
-            if self.map.get(country).activeCells > 0:
-                self.map.get(country).activeCells -= 1
+            if self.map.get(country_name).activeCells > 0:
+                self.map.get(country_name).activeCells -= 1
                 self.cells += 1
-                self.output_to_history("Active Cell removed from %s." % country, True)
-            elif self.map.get(country).sleeperCells > 0:
-                self.map.get(country).sleeperCells -= 1
+                self.output_to_history("Active Cell removed from %s." % country_name, True)
+            elif self.map.get(country_name).sleeperCells > 0:
+                self.map.get(country_name).sleeperCells -= 1
                 self.cells += 1
-                self.output_to_history("Sleeper Cell removed from %s." % country, True)
-            elif "Sadr" in self.map.get(country).markers:
-                self.map.get(country).markers.remove("Sadr")
-                self.output_to_history("Sadr removed from %s." % country, True)
-        if self.map.get(country).total_cells() == 0:
-            self.output_to_history("Cadre added in %s." % country, True)
-            self.map.get(country).cadre = 1
+                self.output_to_history("Sleeper Cell removed from %s." % country_name, True)
+            elif "Sadr" in self.map.get(country_name).markers:
+                self.map.get(country_name).markers.remove("Sadr")
+                self.output_to_history("Sadr removed from %s." % country_name, True)
+        if self.map.get(country_name).total_cells() == 0:
+            self.output_to_history("Cadre added in %s." % country_name, True)
+            self.map.get(country_name).cadre = 1
 
-    def remove_all_cells_from_country(self, country):
-        cells_to_remove = self.map.get(country).total_cells()
-        if self.map.get(country).sleeperCells > 0:
-            number_of_cells = self.map.get(country).sleeperCells
-            self.map.get(country).sleeperCells -= number_of_cells
+    def remove_all_cells_from_country(self, country_name):
+        cells_to_remove = self.map.get(country_name).total_cells()
+        if self.map.get(country_name).sleeperCells > 0:
+            number_of_cells = self.map.get(country_name).sleeperCells
+            self.map.get(country_name).sleeperCells -= number_of_cells
             self.cells += number_of_cells
-            self.output_to_history("%d Sleeper Cell(s) removed from %s." % (number_of_cells, country), False)
-        if self.map.get(country).activeCells > 0:
-            number_of_cells = self.map.get(country).activeCells
-            self.map.get(country).activeCells -= number_of_cells
+            self.output_to_history("%d Sleeper Cell(s) removed from %s." % (number_of_cells, country_name), False)
+        if self.map.get(country_name).activeCells > 0:
+            number_of_cells = self.map.get(country_name).activeCells
+            self.map.get(country_name).activeCells -= number_of_cells
             self.cells += number_of_cells
-            self.output_to_history("%d Active Cell(s) removed from %s." % (number_of_cells, country), False)
+            self.output_to_history("%d Active Cell(s) removed from %s." % (number_of_cells, country_name), False)
         if cells_to_remove > 0:
-            self.output_to_history("Cadre added in %s." % country, False)
-            self.map.get(country).cadre = 1
+            self.output_to_history("Cadre added in %s." % country_name, False)
+            self.map.get(country_name).cadre = 1
 
     def improve_governance(self, country_name):
         """Improves governance in the named country"""
@@ -471,29 +479,29 @@ class Labyrinth(object):
         """
         return country.get_resources(self.oil_price_spikes())
 
-    def handle_muslim_woi(self, roll, country):
+    def handle_muslim_woi(self, roll, country_name):
         if roll <= 3:
-            self.output_to_history("* WoI in %s failed." % country)
+            self.output_to_history("* WoI in %s failed." % country_name)
         elif roll == 4:
-            if self.map.get(country).aid == 0:        # 20150131PS check for existing aid marker
-                self.map.get(country).aid = 1
-                self.output_to_history("* WoI in %s adds Aid." % country, False)
-                self.output_to_history(self.map.get(country).summary(), True)
+            if self.map.get(country_name).aid == 0:        # 20150131PS check for existing aid marker
+                self.map.get(country_name).aid = 1
+                self.output_to_history("* WoI in %s adds Aid." % country_name, False)
+                self.output_to_history(self.map.get(country_name).summary(), True)
         else:
-            if self.map.get(country).is_neutral():
-                self.map.get(country).make_ally()
-                self.output_to_history("* WoI in %s succeeded - Alignment now Ally." % country, False)
-                self.output_to_history(self.map.get(country).summary(), True)
-            elif self.map.get(country).is_ally():
-                self.improve_governance(country)
+            if self.map.get(country_name).is_neutral():
+                self.map.get(country_name).make_ally()
+                self.output_to_history("* WoI in %s succeeded - Alignment now Ally." % country_name, False)
+                self.output_to_history(self.map.get(country_name).summary(), True)
+            elif self.map.get(country_name).is_ally():
+                self.improve_governance(country_name)
                 self.output_to_history("* WoI in %s succeeded - Governance now %s." %
-                                       (country, self.map.get(country).governance_str()), False)
-                self.output_to_history(self.map.get(country).summary(), True)
+                                       (country_name, self.map.get(country_name).governance_str()), False)
+                self.output_to_history(self.map.get(country_name).summary(), True)
 
-    def handle_alert(self, country):
-        if self.map.get(country).plots > 0:
-            self.map.get(country).plots -= 1
-            self.output_to_history("* Alert in %s - %d plot(s) remain." % (country, self.map.get(country).plots))
+    def handle_alert(self, country_name):
+        country = self.map.get(country_name)
+        if country.remove_plot_marker():
+            self.output_to_history("* Alert in %s - %d plot(s) remain." % (country.name, country.plots))
 
     def toggle_us_posture(self):
         """Switches the US posture between Hard and Soft"""
@@ -691,10 +699,10 @@ class Labyrinth(object):
             if cell_type.lower() in ["a", "s"]:
                 return cell_type.lower()
 
-    def execute_jihad(self, country, roll_list):
+    def execute_jihad(self, country_name, roll_list):
         successes = 0
         failures = 0
-        target_country = self.map.get(country)
+        target_country = self.map.get(country_name)
         original_besieged = target_country.besieged
         for roll in roll_list:
             if target_country.is_non_recruit_success(roll):
@@ -702,11 +710,11 @@ class Labyrinth(object):
             else:
                 failures += 1
         target_country.reduce_aid_by(successes)  # Same for major and minor
-        is_major_jihad = country in self.major_jihad_possible(len(roll_list))
+        is_major_jihad = country_name in self.major_jihad_possible(len(roll_list))
         self.output_to_history(
             "Jihad operation. %d Successes rolled, %d Failures rolled" % (successes, failures), False)
         if is_major_jihad:  # all cells go active
-            self.output_to_history("* Major Jihad attempt in %s" % country, False)
+            self.output_to_history("* Major Jihad attempt in %s" % country_name, False)
             sleepers = target_country.sleeperCells
             target_country.sleeperCells = 0
             target_country.activeCells += sleepers
@@ -723,7 +731,7 @@ class Labyrinth(object):
                     target_country.make_ally()
                 self.output_to_history("Alignment %s" % target_country.alignment(), False)
         else:  # a cell is active for each roll
-            self.output_to_history("* Minor Jihad attempt in %s" % country, False)
+            self.output_to_history("* Minor Jihad attempt in %s" % country_name, False)
             for _ in range(len(roll_list) - target_country.num_active_cells()):
                 self.output_to_history("Cell goes Active", False)
                 target_country.sleeperCells -= 1
@@ -733,7 +741,7 @@ class Labyrinth(object):
             successes -= 1
             self.output_to_history("Governance to %s" % target_country.governance_str(), False)
         if is_major_jihad and ((successes >= 2) or ((original_besieged > 0) and (successes >= 1))):  # Major Jihad
-            self.output_to_history("Islamist Revolution in %s" % country, False)
+            self.output_to_history("Islamist Revolution in %s" % country_name, False)
             target_country.make_islamist_rule()
             self.output_to_history("Governance to Islamist Rule", False)
             target_country.make_adversary()
@@ -744,7 +752,7 @@ class Labyrinth(object):
 
             target_country.besieged = 0
             target_country.aid = 0
-            self.funding = min(9, self.funding + self.country_resources_by_name(country))
+            self.funding = min(9, self.funding + self.country_resources_by_name(country_name))
             self.output_to_history("Funding now %d" % self.funding, False)
             if target_country.troops() > 0:
                 self.prestige = 1
@@ -760,11 +768,11 @@ class Labyrinth(object):
         self.output_to_history(target_country.summary(), False)
         print ""
 
-    def handle_jihad(self, country, ops):
+    def handle_jihad(self, country_name, ops):
         """Returns number of unused Ops"""
-        cells = self.map.get(country).total_cells(True)
+        cells = self.map.get(country_name).total_cells(True)
         roll_list = [random.randint(1, 6) for _ in range(min(cells, ops))]
-        self.execute_jihad(country, roll_list)
+        self.execute_jihad(country_name, roll_list)
         return ops - len(roll_list)
 
     def handle_minor_jihad(self, country_list, ops):
@@ -797,13 +805,13 @@ class Labyrinth(object):
                 return "Pakistan"
             else:
                 max_resources = 0
-                for country in possible:
-                    if self.country_resources_by_name(country) > max_resources:
-                        max_resources = self.country_resources_by_name(country)
+                for country_name in possible:
+                    if self.country_resources_by_name(country_name) > max_resources:
+                        max_resources = self.country_resources_by_name(country_name)
                 new_possible = []
-                for country in possible:
-                    if self.country_resources_by_name(country) == max_resources:
-                        new_possible.append(country)
+                for country_name in possible:
+                    if self.country_resources_by_name(country_name) == max_resources:
+                        new_possible.append(country_name)
                 return random.choice(new_possible)
 
     def minor_jihad_in_good_fair_choice(self, ops, is_abu_ghurayb=False, is_al_jazeera=False):
@@ -885,10 +893,11 @@ class Labyrinth(object):
             country_scores[country_name] += 100 * self.country_resources_by_name(country_name)
             country_scores[country_name] += random.randint(1, 99)
         country_order = []
-        for country in country_scores:
-            self.debug_print("here: %d " % country_scores[country])
-            if country_scores[country] > 0:
-                country_order.append((country_scores[country], (self.map.get(country).total_cells(True)), country))
+        for country_name in country_scores:
+            self.debug_print("here: %d " % country_scores[country_name])
+            if country_scores[country_name] > 0:
+                country_order.append(
+                    (country_scores[country_name], (self.map.get(country_name).total_cells(True)), country_name))
         country_order.sort()
         country_order.reverse()
         if not country_order:
@@ -898,62 +907,63 @@ class Labyrinth(object):
             self.debug_print("e")
             return country_order[0][2]
 
-    def execute_recruit(self, country, ops, rolls, recruit_override=None, is_jihadist_videos=False, is_madrassas=False):
-        self.output_to_history("* Recruit to %s" % country)
+    def execute_recruit(
+            self, country_name, ops, rolls, recruit_override=None, is_jihadist_videos=False, is_madrassas=False):
+        self.output_to_history("* Recruit to %s" % country_name)
         cells_requested = ops * self.ideology.recruits_per_success()
         cells = self.num_cells_available(is_madrassas or is_jihadist_videos)
         cells_to_recruit = min(cells_requested, cells)
-        if self.map.get(country).regimeChange or self.map.get(country).is_islamist_rule():
-            if self.map.get(country).regimeChange:
+        if self.map.get(country_name).regimeChange or self.map.get(country_name).is_islamist_rule():
+            if self.map.get(country_name).regimeChange:
                 self.output_to_history("Recruit to Regime Change country automatically successful.", False)
             else:
                 self.output_to_history("Recruit to Islamist Rule country automatically successful.", False)
             self.cells -= cells_to_recruit
-            self.map.get(country).sleeperCells += cells_to_recruit
+            self.map.get(country_name).sleeperCells += cells_to_recruit
 
             if cells_to_recruit == 0 and is_jihadist_videos:
-                self.map.get(country).cadre = 1
+                self.map.get(country_name).cadre = 1
                 self.output_to_history("No cells available to recruit.  Cadre added.", False)
-                self.output_to_history(self.map.get(country).summary(), True)
+                self.output_to_history(self.map.get(country_name).summary(), True)
                 return ops - 1
             else:
-                self.map.get(country).cadre = 0
+                self.map.get(country_name).cadre = 0
 
-            self.output_to_history("%d sleeper cells recruited to %s." % (cells_to_recruit, country), False)
-            self.output_to_history(self.map.get(country).summary(), True)
+            self.output_to_history("%d sleeper cells recruited to %s." % (cells_to_recruit, country_name), False)
+            self.output_to_history(self.map.get(country_name).summary(), True)
             return ops - self.ideology.ops_to_recruit(cells_to_recruit)
         else:
             ops_remaining = ops
             i = 0
             if (self.num_cells_available(is_jihadist_videos)) <= 0 and (ops_remaining > 0):
-                self.map.get(country).cadre = 1
+                self.map.get(country_name).cadre = 1
                 self.output_to_history("No cells available to recruit. Cadre added.", False)
-                self.output_to_history(self.map.get(country).summary(), True)
+                self.output_to_history(self.map.get(country_name).summary(), True)
                 return ops - 1
             else:
                 while self.num_cells_available(is_madrassas or is_jihadist_videos) > 0 and ops_remaining > 0:
-                    if self.map.get(country).is_recruit_success(rolls[i], recruit_override):
+                    if self.map.get(country_name).is_recruit_success(rolls[i], recruit_override):
                         cells_moving = min(self.num_cells_available(is_madrassas or is_jihadist_videos),
                                            self.ideology.recruits_per_success())
                         self.cells -= cells_moving
-                        self.map.get(country).sleeperCells += cells_moving
-                        self.map.get(country).cadre = 0
+                        self.map.get(country_name).sleeperCells += cells_moving
+                        self.map.get(country_name).cadre = 0
                         self.output_to_history("Roll successful, %d sleeper cell(s) recruited." % cells_moving, False)
                     else:
                         self.output_to_history("Roll failed.", False)
                         if is_jihadist_videos:
-                            self.map.get(country).cadre = 1
+                            self.map.get(country_name).cadre = 1
                             self.output_to_history("Cadre added.", False)
                     ops_remaining -= 1
                     i += 1
-                self.output_to_history(self.map.get(country).summary(), True)
+                self.output_to_history(self.map.get(country_name).summary(), True)
                 return ops_remaining
 
     def handle_recruit(self, ops, is_madrassas=False):
         self.debug_print("recruit ops: ")
         self.debug_print("DEBUG: recruit with remaining %d ops" % ops)
-        country = self.recruit_choice(ops, is_madrassas)
-        if not country:
+        country_name = self.recruit_choice(ops, is_madrassas)
+        if not country_name:
             self.output_to_history("* No countries qualify to Recruit.", True)
             return ops
         else:
@@ -969,7 +979,7 @@ class Labyrinth(object):
                 return ops
             else:
                 rolls = [random.randint(1, 6) for _ in range(ops)]
-                return self.execute_recruit(country, ops, rolls, None, False, is_madrassas)
+                return self.execute_recruit(country_name, ops, rolls, None, False, is_madrassas)
 
     def is_adjacent(self, here, there):
         if "Patriot Act" in self.markers:
@@ -996,9 +1006,9 @@ class Labyrinth(object):
         return False
 
     @staticmethod
-    def in_lists(country, lists):
+    def in_lists(element, lists):
         for inner_list in lists:
-            if country in inner_list:
+            if element in inner_list:
                 return True
         return False
 
@@ -2144,62 +2154,44 @@ class Labyrinth(object):
             else:
                 return
 
-        good_resources = 0
-        islamist_resources = 0
-        good_or_fair_countries = 0
-        poor_or_islamist_countries = 0
-        net_hard_countries = 0
-        for country in self.map.country_names():
-            if self.map.get(country).type == "Shia-Mix" or self.map.get(country).type == "Suni":
-                if self.map.get(country).is_good():
-                    good_or_fair_countries += 1
-                    good_resources += self.country_resources_by_name(country)
-                elif self.map.get(country).is_fair():
-                    good_or_fair_countries += 1
-                elif self.map.get(country).is_poor():
-                    poor_or_islamist_countries += 1
-                elif self.map.get(country).is_islamist_rule():
-                    poor_or_islamist_countries += 1
-                    islamist_resources += self.country_resources_by_name(country)
-            elif self.map.get(country).type != "Iran" and self.map.get(country).name != "United States":
-                if self.map.get(country).posture == "Hard":
-                    net_hard_countries += 1
-                elif self.map.get(country).posture == "Soft":
-                    net_hard_countries -= 1
+        good_resources = self.map.get_good_resources()
+        islamist_resources = self.map.get_islamist_rule_resources()
+        good_or_fair_countries = self._count_good_or_fair_muslim_countries()
+        poor_or_islamist_countries = self._count_poor_or_islamist_rule_countries()
         print ""
         print "GOOD GOVERNANCE"
         num = 0
-        for country in self.map.country_names():
-            if self.map.get(country).type != "Non-Muslim" and self.map.get(country).is_good():
+        for country_name in self.map.country_names():
+            if self.map.get(country_name).type != "Non-Muslim" and self.map.get(country_name).is_good():
                 num += 1
-                self.map.get(country).print_country()
+                self.map.get(country_name).print_country()
         if not num:
             print "none"
         print ""
         print "FAIR GOVERNANCE"
         num = 0
-        for country in self.map.country_names():
-            if self.map.get(country).type != "Non-Muslim" and self.map.get(country).is_fair():
+        for country_name in self.map.country_names():
+            if self.map.get(country_name).type != "Non-Muslim" and self.map.get(country_name).is_fair():
                 num += 1
-                self.map.get(country).print_country()
+                self.map.get(country_name).print_country()
         if not num:
             print "none"
         print ""
         print "POOR GOVERNANCE"
         num = 0
-        for country in self.map.country_names():
-            if self.map.get(country).type != "Non-Muslim" and self.map.get(country).is_poor():
+        for country_name in self.map.country_names():
+            if self.map.get(country_name).type != "Non-Muslim" and self.map.get(country_name).is_poor():
                 num += 1
-                self.map.get(country).print_country()
+                self.map.get(country_name).print_country()
         if not num:
             print "none"
         print ""
         print "ISLAMIST RULE"
         num = 0
-        for country in self.map.country_names():
-            if self.map.get(country).type != "Non-Muslim" and self.map.get(country).is_islamist_rule():
+        for country_name in self.map.country_names():
+            if self.map.get(country_name).type != "Non-Muslim" and self.map.get(country_name).is_islamist_rule():
                 num += 1
-                self.map.get(country).print_country()
+                self.map.get(country_name).print_country()
         if not num:
             print "none"
         print ""
@@ -2250,13 +2242,7 @@ class Labyrinth(object):
         print ""
         print "GWOT"
         print "US Posture: %s" % self.us_posture()
-        if net_hard_countries > 0:
-            world_pos_str = "Hard"
-        elif net_hard_countries < 0:
-            world_pos_str = "Soft"
-        else:
-            world_pos_str = "Even"
-        print "World Posture: %s %d" % (world_pos_str, abs(net_hard_countries))
+        print self._get_world_posture_str()
         print "US Prestige: %d" % self.prestige
         print ""
         print "TROOPS"
@@ -2287,48 +2273,24 @@ class Labyrinth(object):
 
     def get_summary(self):
         """Returns a human-readable summary of the game state"""
-        good_resources = 0
-        islamist_resources = 0
-        good_or_fair_countries = 0
-        poor_or_islamist_countries = 0
-        net_hard_countries = 0
-        for country_name in self.map.country_names():
-            if self.map.get(country_name).type == "Shia-Mix" or self.map.get(country_name).type == "Suni":
-                if self.map.get(country_name).is_good():
-                    good_or_fair_countries += 1
-                    good_resources += self.country_resources_by_name(country_name)
-                elif self.map.get(country_name).is_fair():
-                    good_or_fair_countries += 1
-                elif self.map.get(country_name).is_poor():
-                    poor_or_islamist_countries += 1
-                elif self.map.get(country_name).is_islamist_rule():
-                    poor_or_islamist_countries += 1
-                    islamist_resources += self.country_resources_by_name(country_name)
-            elif self.map.get(country_name).type != "Iran" and self.map.get(country_name).name != "United States":
-                if self.map.get(country_name).posture == "Hard":
-                    net_hard_countries += 1
-                elif self.map.get(country_name).posture == "Soft":
-                    net_hard_countries -= 1
-        if net_hard_countries > 0:
-            world_posture_str = "Hard"
-        elif net_hard_countries < 0:
-            world_posture_str = "Soft"
-        else:
-            world_posture_str = "Even"
+        good_resources = self.map.get_good_resources()
+        islamist_resources = self.map.get_islamist_rule_resources()
+        good_or_fair_countries = self._count_good_or_fair_muslim_countries()
+        poor_or_islamist_countries = self._count_poor_or_islamist_rule_countries()
         if self.troops >= 10:
             troop_track = "Low Intensity: %d troops available" % self.troops
         elif self.troops >= 5:
             troop_track = "War: %d troops available" % self.troops
         else:
             troop_track = "Overstretch: %d troops available" % self.troops
-        if not self.markers:
-            markers = "Markers: None"
-        else:
+        if self.markers:
             markers = "Markers: %s" % ", ".join(self.markers)
-        if not self.lapsing:
-            lapsing = "Lapsing: None"
         else:
+            markers = "Markers: None"
+        if self.lapsing:
             lapsing = "Lapsing: %s" % ", ".join(self.lapsing)
+        else:
+            lapsing = "Lapsing: None"
 
         summary = [
             "Jihadist Ideology: %s" % self.ideology.name(),
@@ -2339,7 +2301,7 @@ class Labyrinth(object):
                 good_or_fair_countries, poor_or_islamist_countries),
             "",
             "GWOT",
-            "US Posture: %s    World Posture: %s %d" % (self.us_posture(), world_posture_str, abs(net_hard_countries)),
+            ("US Posture: %s" % self.us_posture()) + "    " + self._get_world_posture_str(),
             "US Prestige: %d" % self.prestige,
             "",
             "TROOPS",
@@ -2380,12 +2342,12 @@ class Labyrinth(object):
             if self._matches(input_str, "marker"):
                 return "marker"
             possible = []
-            for country in self.map.country_names():
-                if input_str.lower() == country.lower():
-                    possible = [country]
+            for country_name in self.map.country_names():
+                if input_str.lower() == country_name.lower():
+                    possible = [country_name]
                     break
-                elif input_str.lower() in country.lower():
-                    possible.append(country)
+                elif input_str.lower() in country_name.lower():
+                    possible.append(country_name)
             if len(possible) == 0:
                 print "Unrecognized response."
                 print ""
@@ -2528,66 +2490,66 @@ class Labyrinth(object):
             print "Current events in play: %s" % ", ".join(self.markers)
         print ""
 
-    def adjust_country_governance(self, country):
-        print "Adjusting governance for -", country
+    def adjust_country_governance(self, country_name):
+        print "Adjusting governance for -", country_name
         while True:
             gov_str = self.my_raw_input("Enter governance (0-4) (0 = untested): ")
             if gov_str == "":
                 return False
             try:
                 gov_num = int(gov_str)
-                self.map.get(country).make_governance(governance_with_level(gov_num))
+                self.map.get(country_name).make_governance(governance_with_level(gov_num))
                 print "Changing governance to", gov_num
                 return True
             except ValueError:
                 print "Invalid governance value -", gov_str
 
-    def adjust_country_alignment(self, country):
-        print "Adjusting alignment for -", country
+    def adjust_country_alignment(self, country_name):
+        print "Adjusting alignment for -", country_name
         while True:
             alignment = self.my_raw_input("Enter alignment ('Ally', 'Neutral', 'Adversary'): ")
             if alignment == "":
                 return False
             if alignment == "Adversary":
                 print "Changing alignment to Adversary"
-                self.map.get(country).make_adversary()
+                self.map.get(country_name).make_adversary()
                 return True
             if alignment == "Ally":
                 print "Changing alignment to Ally"
-                self.map.get(country).make_ally()
+                self.map.get(country_name).make_ally()
                 return True
             if alignment == "Neutral":
                 print "Changing alignment to Neutral"
-                self.map.get(country).make_neutral()
+                self.map.get(country_name).make_neutral()
                 return True
             print "Invalid alignment value -", alignment
 
-    def adjust_country_posture(self, country):
+    def adjust_country_posture(self, country_name):
         """Prompts the user to set the posture of the given country (returns true if successful)"""
-        print "Adjusting posture for -", country
+        print "Adjusting posture for -", country_name
         while True:
             posture = self.my_raw_input("Enter posture ('Hard', 'Soft', 'Untested'): ")
             if posture == "":  # User aborted
                 return False
             if posture.lower() == "hard":
                 print "Changing posture to Hard"
-                self.map.get(country).make_hard()
+                self.map.get(country_name).make_hard()
                 return True
             if posture.lower() == "soft":
                 print "Changing posture to Soft"
-                self.map.get(country).make_soft()
+                self.map.get(country_name).make_soft()
                 return True
             if posture.lower() == "untested":
                 print "Changing posture to Untested"
-                self.map.get(country).remove_posture()
+                self.map.get(country_name).remove_posture()
                 return True
             print "Invalid posture value '{}'".format(posture)
             return False
 
-    def adjust_country_troops(self, country):
-        print "Adjusting troops for - ", country
-        if 'NATO' in self.map.get(country).markers:
-            print "NATO contributes 2 troops to count, actual troop cubes are ", self.map.get(country).troopcubes
+    def adjust_country_troops(self, country_name):
+        print "Adjusting troops for - ", country_name
+        if 'NATO' in self.map.get(country_name).markers:
+            print "NATO contributes 2 troops to count, actual troop cubes are ", self.map.get(country_name).troopcubes
         while True:
             troop_str = self.my_raw_input("Enter new troop count (0-15): ")
             if troop_str == "":
@@ -2598,9 +2560,9 @@ class Labyrinth(object):
                     print "Invalid troop cube value -", troops
                 else:
                     print "Changing troop cubes to", troops
-                    troop_change = troops - self.map.get(country).troopCubes
+                    troop_change = troops - self.map.get(country_name).troopCubes
                     self.troops -= troop_change
-                    self.map.get(country).troopCubes = troops
+                    self.map.get(country_name).troopCubes = troops
                     if self.troops < 0 or self.troops > 15:
                         print "WARNING! Troop track count is now ", self.troops
                     else:
@@ -2609,8 +2571,8 @@ class Labyrinth(object):
             except ValueError:
                 print "Invalid troop cube value -", troop_str
 
-    def adjust_country_active(self, country):
-        print "Adjusting active cells for - ", country
+    def adjust_country_active(self, country_name):
+        print "Adjusting active cells for - ", country_name
         while True:
             cell_str = self.my_raw_input("Enter new active cell count (0-15): ")
             if cell_str == "":
@@ -2621,9 +2583,9 @@ class Labyrinth(object):
                     print "Invalid active cell value -", cells
                 else:
                     print "Changing active cells to ", cells
-                    active_change = cells - self.map.get(country).activeCells
+                    active_change = cells - self.map.get(country_name).activeCells
                     self.cells -= active_change
-                    self.map.get(country).activeCells = cells
+                    self.map.get(country_name).activeCells = cells
                     if self.cells < 0 or self.cells > 15:
                         print "WARNING! Cell count on funding track is now ", self.cells
                     else:
@@ -2632,8 +2594,8 @@ class Labyrinth(object):
             except ValueError:
                 print "Invalid active cell value -", cell_str
 
-    def adjust_country_sleeper(self, country):
-        print "Adjusting sleeper cells for - ", country
+    def adjust_country_sleeper(self, country_name):
+        print "Adjusting sleeper cells for - ", country_name
         while True:
             cell_str = self.my_raw_input("Enter new sleeper cell count (0-15): ")
             if cell_str == "":
@@ -2644,9 +2606,9 @@ class Labyrinth(object):
                     print "Invalid sleeper cell value -", cells
                 else:
                     print "Changing sleeper cells to", cells
-                    sleeper_change = cells - self.map.get(country).sleeperCells
+                    sleeper_change = cells - self.map.get(country_name).sleeperCells
                     self.cells -= sleeper_change
-                    self.map.get(country).sleeperCells = cells
+                    self.map.get(country_name).sleeperCells = cells
                     if self.cells < 0 or self.cells > 15:
                         print "WARNING! Cell count on funding track is now ", self.cells
                     else:
@@ -2655,8 +2617,8 @@ class Labyrinth(object):
             except ValueError:
                 print "Invalid sleeper cell value -", cell_str
 
-    def adjust_country_cadre(self, country):
-        print "Adjusting cadre for - ", country
+    def adjust_country_cadre(self, country_name):
+        print "Adjusting cadre for - ", country_name
         while True:
             cadre_str = self.my_raw_input("Enter new cadre count (0-1): ")
             if cadre_str == "":
@@ -2667,13 +2629,13 @@ class Labyrinth(object):
                     print "Invalid cadre value -", cadres
                 else:
                     print "Changing cadre count to", cadres
-                    self.map.get(country).cadre = cadres
+                    self.map.get(country_name).cadre = cadres
                     return True
             except ValueError:
                 print "Invalid cadre value -", cadre_str
 
-    def adjust_country_aid(self, country):
-        print "Adjusting aid for - ", country
+    def adjust_country_aid(self, country_name):
+        print "Adjusting aid for - ", country_name
         while True:
             aid_str = self.my_raw_input("Enter new aid count (0-9): ")
             if aid_str == "":
@@ -2684,13 +2646,13 @@ class Labyrinth(object):
                     print "Invalid aid value -", aid
                 else:
                     print "Changing aid count to", aid
-                    self.map.get(country).aid = aid
+                    self.map.get(country_name).aid = aid
                     return True
             except ValueError:
                 print "Invalid aid value -", aid_str
 
-    def adjust_country_besieged(self, country):
-        print "Adjusting besieged for - ", country
+    def adjust_country_besieged(self, country_name):
+        print "Adjusting besieged for - ", country_name
         while True:
             user_input = self.my_raw_input("Enter new besieged count (0-1): ")
             if user_input == "":
@@ -2701,13 +2663,13 @@ class Labyrinth(object):
                     print "Invalid besieged value - ", besieged_count
                 else:
                     print "Changing besieged count to ", besieged_count
-                    self.map.get(country).besieged = besieged_count
+                    self.map.get(country_name).besieged = besieged_count
                     return True
             except ValueError:
                 print "Invalid besieged value - ", user_input
 
-    def adjust_country_regime(self, country):
-        print "Adjusting regime change for - ", country
+    def adjust_country_regime(self, country_name):
+        print "Adjusting regime change for - ", country_name
         while True:
             user_input = self.my_raw_input("Enter new regime change count (0-1): ")
             if user_input == "":
@@ -2718,13 +2680,13 @@ class Labyrinth(object):
                     print "Invalid regime change value - ", regime_change_count
                 else:
                     print "Changing regime change count to ", regime_change_count
-                    self.map.get(country).regimeChange = regime_change_count
+                    self.map.get(country_name).regimeChange = regime_change_count
                     return True
             except ValueError:
                 print "Invalid regime change value - ", user_input
 
-    def adjust_country_plots(self, country):
-        print "Adjusting plots for - ", country
+    def adjust_country_plots(self, country_name):
+        print "Adjusting plots for - ", country_name
         while True:
             plots_str = self.my_raw_input("Enter new plot count (0-9): ")
             if plots_str == "":
@@ -2735,17 +2697,17 @@ class Labyrinth(object):
                     print "Invalid plot value - ", plots
                 else:
                     print "Changing plot count to", plots
-                    self.map.get(country).plots = plots
+                    self.map.get(country_name).plots = plots
                     return True
             except ValueError:
                 print "Invalid plot value - ", plots_str
 
-    def adjust_country_marker(self, country):
-        print "Adjusting event markers for - ", country
-        if len(self.map.get(country).markers) == 0:
+    def adjust_country_marker(self, country_name):
+        print "Adjusting event markers for - ", country_name
+        if len(self.map.get(country_name).markers) == 0:
             print "There are no event markers in play"
         else:
-            print "Current markers in play: %s" % ", ".join(self.map.get(country).markers)
+            print "Current markers in play: %s" % ", ".join(self.map.get(country_name).markers)
         print ""
         print "Available country events are:"
         for validEvent in self.validCountryMarkers:
@@ -2755,34 +2717,34 @@ class Labyrinth(object):
             marker = self.my_raw_input("Enter marker to be added or removed: ")
             if marker == "":
                 return ""
-            if marker in self.map.get(country).markers:
-                self.map.get(country).markers.remove(marker)
+            if marker in self.map.get(country_name).markers:
+                self.map.get(country_name).markers.remove(marker)
                 print "Removed marker - ", marker
                 break
             elif marker in self.validCountryMarkers:
-                self.map.get(country).markers.append(marker)
+                self.map.get(country_name).markers.append(marker)
                 print "Added marker - ", marker
                 break
             else:
                 print "'%s' is not a valid marker" % marker
-        if self.map.get(country).markers:
-            print "Current events in play: %s" % ", ".join(self.map.get(country).markers)
+        if self.map.get(country_name).markers:
+            print "Current events in play: %s" % ", ".join(self.map.get(country_name).markers)
         else:
             print "There are now no events in play"
         print ""
         return True
 
-    def adjust_country(self, country):
-        print "Adjusting country - ", country
-        self.map.get(country).print_country()
-        if self.map.get(country).type == "Shia-Mix" or self.map.get(country).type == "Suni":
+    def adjust_country(self, country_name):
+        print "Adjusting country - ", country_name
+        self.map.get(country_name).print_country()
+        if self.map.get(country_name).type == "Shia-Mix" or self.map.get(country_name).type == "Suni":
             attributes = "governance", "alignment", "troops", "active", "sleeper", "cadre", "aid", "besieged",\
                              "regime", "plots", "marker"
-        elif self.map.get(country).name == "Philippines":
+        elif self.map.get(country_name).name == "Philippines":
             attributes = "posture", "troops", "active", "sleeper", "cadre", "plots", "marker"
-        elif self.map.get(country).type == "Non-Muslim":
+        elif self.map.get(country_name).type == "Non-Muslim":
             attributes = "posture", "active", "sleeper", "cadre", "plots", "marker"
-        elif self.map.get(country).type == "Iran":
+        elif self.map.get(country_name).type == "Iran":
             attributes = "active", "sleeper", "cadre", "plots", "marker"
         while True:
             print "Changeable attributes are: %s" % ", ".join(attributes)
@@ -2792,33 +2754,33 @@ class Labyrinth(object):
             if attribute in attributes:
                 adjust_success = False
                 if attribute == "governance":
-                    adjust_success = self.adjust_country_governance(country)
+                    adjust_success = self.adjust_country_governance(country_name)
                 elif attribute == "alignment":
-                    adjust_success = self.adjust_country_alignment(country)
+                    adjust_success = self.adjust_country_alignment(country_name)
                 elif attribute == "posture":
-                    adjust_success = self.adjust_country_posture(country)
+                    adjust_success = self.adjust_country_posture(country_name)
                 elif attribute == "troops":
-                    adjust_success = self.adjust_country_troops(country)
+                    adjust_success = self.adjust_country_troops(country_name)
                 elif attribute == "active":
-                    adjust_success = self.adjust_country_active(country)
+                    adjust_success = self.adjust_country_active(country_name)
                 elif attribute == "sleeper":
-                    adjust_success = self.adjust_country_sleeper(country)
+                    adjust_success = self.adjust_country_sleeper(country_name)
                 elif attribute == "cadre":
-                    adjust_success = self.adjust_country_cadre(country)
+                    adjust_success = self.adjust_country_cadre(country_name)
                 elif attribute == "aid":
-                    adjust_success = self.adjust_country_aid(country)
+                    adjust_success = self.adjust_country_aid(country_name)
                 elif attribute == "besieged":
-                    adjust_success = self.adjust_country_besieged(country)
+                    adjust_success = self.adjust_country_besieged(country_name)
                 elif attribute == "regime":
-                    adjust_success = self.adjust_country_regime(country)
+                    adjust_success = self.adjust_country_regime(country_name)
                 elif attribute == "plots":
-                    adjust_success = self.adjust_country_plots(country)
+                    adjust_success = self.adjust_country_plots(country_name)
                 elif attribute == "marker":
-                    adjust_success = self.adjust_country_marker(country)
+                    adjust_success = self.adjust_country_marker(country_name)
                 if adjust_success:
-                    self.map.get(country).print_country()
+                    self.map.get(country_name).print_country()
                 else:
-                    print country, "unchanged"
+                    print country_name, "unchanged"
             else:
                 print "Invalid attribute - ", attribute
 
@@ -3196,48 +3158,49 @@ class Labyrinth(object):
     def resolve_plots(self):
         """Resolves any active plots at the end of the US action phase."""
         found_plot = False
-        for country in self.map.country_names():
-            while self.map.get(country).plots > 0:
+        for country_name in self.map.country_names():
+            while self.map.get(country_name).plots > 0:
                 if not found_plot:
                     self.output_to_history("", False)
                     self.output_to_history("[[ Resolving Plots ]]", True)
                 found_plot = True
                 print ""
-                plot_type = self.get_plot_type_from_user("Enter Plot type from %s: " % country)
+                plot_type = self.get_plot_type_from_user("Enter Plot type from %s: " % country_name)
                 print ""
                 is_backlash = False
-                if self.backlashInPlay and (self.map.get(country).type != 'Non-Muslim'):
+                if self.backlashInPlay and (self.map.get(country_name).type != 'Non-Muslim'):
                     is_backlash = self.get_yes_no_from_user("Was this plot selected with backlash (y/n): ")
                 posture_roll = 0
                 us_prestige_rolls = []
                 schengen_countries = []
                 schengen_posture_rolls = []
                 gov_rolls = []
-                if country == "United States":
+                if country_name == "United States":
                     if plot_type != "WMD":
                         posture_roll = random.randint(1, 6)
                         us_prestige_rolls.append(random.randint(1, 6))
                         us_prestige_rolls.append(random.randint(1, 6))
                         us_prestige_rolls.append(random.randint(1, 6))
-                elif self.map.get(country).type != "Non-Muslim":
-                    if country != "Iran":
+                elif self.map.get(country_name).type != "Non-Muslim":
+                    if country_name != "Iran":
                         if plot_type == "WMD":
                             num_rolls = 3
                         else:
                             num_rolls = plot_type
                         for _ in range(num_rolls):
                             gov_rolls.append(random.randint(1, 6))
-                elif self.map.get(country).type == "Non-Muslim":
+                elif self.map.get(country_name).type == "Non-Muslim":
                     posture_roll = random.randint(1, 6)
-                    if self.map.get(country).schengen:
-                        schengen_choices = [c.name for c in self.get_countries() if c.name != country and c.schengen]
+                    if self.map.get(country_name).schengen:
+                        schengen_choices =\
+                            [c.name for c in self.get_countries() if c.name != country_name and c.schengen]
                         schengen_countries.append(random.choice(schengen_choices))
                         schengen_countries.append(schengen_countries[0])
                         while schengen_countries[0] == schengen_countries[1]:
                             schengen_countries[1] = random.choice(schengen_choices)
                         for _ in range(2):
                             schengen_posture_rolls.append(random.randint(1, 6))
-                self.resolve_plot(country, plot_type, posture_roll, us_prestige_rolls, schengen_countries,
+                self.resolve_plot(country_name, plot_type, posture_roll, us_prestige_rolls, schengen_countries,
                                   schengen_posture_rolls, gov_rolls, is_backlash)
         if not found_plot:
             self.output_to_history("", False)
@@ -3287,18 +3250,18 @@ class Labyrinth(object):
         islamist_resources = 0
         good_or_fair_countries = 0
         islamist_countries = 0
-        for country in self.map.country_names():
-            if self.map.get(country).type == "Shia-Mix" or self.map.get(country).type == "Suni":
-                if self.map.get(country).is_good():
+        for country_name in self.map.country_names():
+            if self.map.get(country_name).type == "Shia-Mix" or self.map.get(country_name).type == "Suni":
+                if self.map.get(country_name).is_good():
                     good_or_fair_countries += 1
-                    good_resources += self.country_resources_by_name(country)
-                elif self.map.get(country).is_fair():
+                    good_resources += self.country_resources_by_name(country_name)
+                elif self.map.get(country_name).is_fair():
                     good_or_fair_countries += 1
-                elif self.map.get(country).is_poor():
+                elif self.map.get(country_name).is_poor():
                     islamist_countries += 1
-                elif self.map.get(country).is_islamist_rule():
+                elif self.map.get(country_name).is_islamist_rule():
                     islamist_countries += 1
-                    islamist_resources += self.country_resources_by_name(country)
+                    islamist_resources += self.country_resources_by_name(country_name)
         self.output_to_history("---", False)
         self.output_to_history("Good Resources:     %d" % good_resources, False)
         self.output_to_history("Islamist Resources: %d" % islamist_resources, False)
