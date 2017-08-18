@@ -1031,10 +1031,10 @@ class Card(object):
                 app.change_prestige(3)
                 posture_roll = app.get_roll_from_user("Enter US Posture Roll or r to have program roll: ")
                 if posture_roll <= 4:
-                    app.set_posture("United States", "Soft")
+                    app.us().make_soft()
                     app.output_to_history("US Posture now Soft.", False)
                 else:
-                    app.set_posture("United States", "Hard")
+                    app.us().make_hard()
                     app.output_to_history("US Posture now Hard.", False)
                 while True:
                     posture_country = app.get_country_from_user(

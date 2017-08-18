@@ -1273,12 +1273,12 @@ class Labyrinth(object):
     def test_country(self, country_name):
         # Tests the named country, if untested
         country = self.map.get(country_name)
-        if country.type == "Non-Muslim" and country.posture == "":
+        if country.type == "Non-Muslim" and not country.posture:
             test_roll = random.randint(1, 6)
             if test_roll <= 4:
-                country.posture = "Soft"
+                country.make_soft()
             else:
-                country.posture = "Hard"
+                country.make_hard()
             self.output_to_history("%s tested, posture %s" % (country.name, country.posture), False)
         elif country.is_ungoverned():
             test_roll = random.randint(1, 6)
@@ -1663,34 +1663,34 @@ class Labyrinth(object):
         self.map.get(country).remove_plot_marker()
 
     def _resolve_plot_in_non_muslim_country(
-            self, country, plot_type, posture_roll, schengen_countries, schengen_posture_rolls):
-        if country == "Israel" and "Abbas" in self.markers:
+            self, country_name, plot_type, posture_roll, schengen_countries, schengen_posture_rolls):
+        if country_name == "Israel" and "Abbas" in self.markers:
             self.markers.remove("Abbas")
             self.output_to_history("Abbas no longer in play.", True)
-        if country == "India" and "Indo-Pakistani Talks" in self.markers:
+        if country_name == "India" and "Indo-Pakistani Talks" in self.markers:
             self.markers.remove("Indo-Pakistani Talks")
             self.output_to_history("Indo-Pakistani Talks no longer in play.", True)
         if plot_type == "WMD":
             self.funding = 9
         else:
-            if self.map.get(country).is_good():
+            if self.map.get(country_name).is_good():
                 self.change_funding(plot_type * 2)
             else:
                 self.change_funding(plot_type)
         self.output_to_history("Jihadist Funding now %d" % self.funding, False)
-        if country != "Israel":
+        if country_name != "Israel":
             if posture_roll <= 4:
-                self.map.get(country).posture = "Soft"
+                self.map.get(country_name).posture = "Soft"
             else:
-                self.map.get(country).posture = "Hard"
-            self.output_to_history("%s Posture now %s" % (country, self.map.get(country).posture), True)
-        if self.map.get(country).troops() > 0:
+                self.map.get(country_name).posture = "Hard"
+            self.output_to_history("%s Posture now %s" % (country_name, self.map.get(country_name).posture), True)
+        if self.map.get(country_name).troops() > 0:
             if plot_type == "WMD":
                 self.prestige = 1
             else:
                 self._reduce_prestige(1)
             self.output_to_history("Troops present so US Prestige now %d" % self.prestige, False)
-        if self.map.get(country).schengen:
+        if self.map.get(country_name).schengen:
             for i in range(len(schengen_countries)):
                 country = self.get_country(schengen_countries[i])
                 if schengen_posture_rolls[i] <= 4:
