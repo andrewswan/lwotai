@@ -1016,7 +1016,7 @@ class Card35(LabyrinthTestCase):
         app.card(35).playEvent("US", app)
         self.assertTrue(app.get_country("Turkey").governance_is_better_than(POOR))
         self.assertTrue(app.get_country("Turkey").is_governed())
-        self.assertTrue(not app.get_country("Turkey").is_unaligned())
+        self.assertTrue(app.get_country("Turkey").is_aligned())
         print "Say Hard"
         self.assertTrue(app.get_country("France").posture == "Hard")
         self.assertTrue(app.funding == 3)

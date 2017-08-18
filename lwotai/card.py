@@ -26,7 +26,7 @@ class Card(object):
             elif self.number == 2:  # Biometrics
                 return True
             elif self.number == 3:  # CTR
-                return app.us_posture() == "Soft"
+                return app.us().is_soft()
             elif self.number == 2:  # Biometrics
                 return True
             elif self.number == 4:  # Moro Talks
@@ -95,7 +95,7 @@ class Card(object):
                         return True
                 return False
             elif self.number == 32:  # Back Channel
-                if app.us_posture() == "Hard":
+                if app.us().is_hard():
                     return False
                 if app.num_adversary() <= 0:
                     return False
@@ -121,14 +121,14 @@ class Card(object):
                 pakistan = app.get_country('Pakistan')
                 return pakistan.is_good() or pakistan.is_fair()
             elif self.number == 37:  # Iraqi WMD
-                return app.us_posture() == "Hard" and app.get_country("Iraq").is_adversary()
+                return app.us().is_hard() and app.get_country("Iraq").is_adversary()
             elif self.number == 38:  # Libyan Deal
                 if app.get_country("Libya").is_poor():
                     if app.get_country("Iraq").is_ally() or app.get_country("Syria").is_ally():
                         return True
                 return False
             elif self.number == 39:  # Libyan WMD
-                return app.us_posture() == "Hard" and app.get_country("Libya").is_adversary() and\
+                return app.us().is_hard() and app.get_country("Libya").is_adversary() and\
                        "Libyan Deal" not in app.markers
             elif self.number == 40:  # Mass Turnout
                 return app.num_regime_change() > 0
@@ -139,7 +139,7 @@ class Card(object):
             elif self.number == 43:  # Patriot Act
                 return True
             elif self.number == 44:  # Renditions
-                return app.us_posture() == "Hard" and "Leak-Renditions" not in app.markers
+                return app.us().is_hard() and "Leak-Renditions" not in app.markers
             elif self.number == 45:  # Safer Now
                 if app.num_islamist_rule() > 0:
                     return False
@@ -223,7 +223,7 @@ class Card(object):
             elif self.number == 74:  # Schengen Visas
                 return True
             elif self.number == 75:  # Schroeder & Chirac
-                return app.us_posture() == "Hard"
+                return app.us().is_hard()
             elif self.number == 76:  # Abu Ghurayb
                 return app.contains_country(lambda c: c.regimeChange > 0 and c.total_cells(True) > 0)
             elif self.number == 77:  # Al Jazeera
@@ -325,7 +325,7 @@ class Card(object):
                 for country in possibles:
                     if app.get_country(country).total_cells(True) > 0:
                         if app.get_country(country).type == "Non-Muslim":
-                            if app.get_country(country).posture == "Hard":
+                            if app.get_country(country).is_hard():
                                 return True
                         else:
                             if app.get_country(country).is_ally():
@@ -872,7 +872,7 @@ class Card(object):
                 app.markers.append("Wiretapping")
                 app.output_to_history("Wiretapping in Play.", True)
             elif self.number == 32:  # Back Channel
-                if app.us_posture() == "Hard":
+                if app.us().is_hard():
                     return False
                 num_adversaries = app.num_adversary()
                 if num_adversaries <= 0:
@@ -1167,7 +1167,7 @@ class Card(object):
                     if app.get_posture("Caucasus") in [None, "", app.us_posture()]:
                         if app.gwot_penalty() == 0:
                             caucasus_posture = app.get_posture("Caucasus")
-                            if app.us_posture() == "Hard":
+                            if app.us().is_hard():
                                 app.set_posture("Caucasus", "Soft")
                             else:
                                 app.set_posture("Caucasus", "Hard")
@@ -1175,7 +1175,7 @@ class Card(object):
                                 target_caucasus = True
                             app.set_posture("Caucasus", caucasus_posture)
                     if target_caucasus:
-                        if app.us_posture() == "Hard":
+                        if app.us().is_hard():
                             app.set_posture("Caucasus", "Soft")
                         else:
                             app.set_posture("Caucasus", "Hard")
@@ -1274,7 +1274,7 @@ class Card(object):
                     app.output_to_history("%s Alignment shifted to %s." % (target.name, target.alignment()))
             elif self.number == 78:  # Axis of Evil
                 app.output_to_history("US discards any Iran, Hizballah, or Jaysh al-Mahdi cards from hand.", False)
-                if app.us_posture() == "Soft":
+                if app.us().is_soft():
                     app.set_posture("United States", "Hard")
                     app.output_to_history("US Posture now Hard.", False)
                 prestige_rolls = []
@@ -1447,7 +1447,7 @@ class Card(object):
             elif self.number == 101:  # Kosovo
                 app.change_prestige(1)
                 app.test_country("Serbia")
-                if app.us_posture() == "Soft":
+                if app.us().is_soft():
                     app.set_posture("Serbia", "Hard")
                 else:
                     app.set_posture("Serbia", "Soft")
@@ -1794,7 +1794,7 @@ class Card(object):
                     for country in possibles:
                         if app.get_country(country).total_cells(True) > 0:
                             if app.get_country(country).type == "Non-Muslim":
-                                if app.get_country(country).posture == "Hard":
+                                if app.get_country(country).is_hard():
                                     targets.append(country)
                             else:
                                 if app.get_country(country).is_ally():
@@ -1824,7 +1824,7 @@ class Card(object):
                     for country in possibles:
                         if app.get_country(country).total_cells(True) > 0:
                             if app.get_country(country).type == "Non-Muslim":
-                                if app.get_country(country).posture == "Hard":
+                                if app.get_country(country).is_hard():
                                     targets.append(country)
                             else:
                                 if app.get_country(country).is_ally():

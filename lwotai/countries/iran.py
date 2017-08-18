@@ -8,9 +8,18 @@ class Iran(Country):
     def __init__(self, app):
         super(Iran, self).__init__(app, "Iran", "Iran", None, FAIR, False, 0, False, 0)
 
+    def is_muslim(self):
+        return False  # Rule 4.4
+
     # ---------- Alignment ----------
 
+    def alignment(self):
+        return None
+
     def is_adversary(self):
+        return False
+
+    def is_aligned(self):
         return False
 
     def is_ally(self):
@@ -32,6 +41,15 @@ class Iran(Country):
 
     def improve_governance(self):
         raise
+
+    def is_fair(self):
+        return True
+
+    def is_good(self):
+        return False
+
+    def is_poor(self):
+        return 
 
     def worsen_governance(self):
         raise

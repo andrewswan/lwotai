@@ -308,9 +308,9 @@ class Labyrinth(object):
         world_position = 0
         for country_name in self.map.country_names():
             if self.map.get(country_name).type == "Non-Muslim" and self.map.get(country_name).name != "United States":
-                if self.map.get(country_name).posture == "Hard":
+                if self.map.get(country_name).is_hard():
                     world_position += 1
-                elif self.map.get(country_name).posture == "Soft":
+                elif self.map.get(country_name).is_soft():
                     world_position -= 1
         if world_position > 0:
             world_position_str = "Hard"
@@ -505,14 +505,11 @@ class Labyrinth(object):
 
     def toggle_us_posture(self):
         """Switches the US posture between Hard and Soft"""
-        if self.us_posture() == "Hard":
-            self.us().posture = "Soft"
-        else:
-            self.us().posture = "Hard"
+        self.us().toggle_posture()
         self.output_to_history("* Reassessment = US Posture now %s" % self.us_posture())
 
     def handle_regime_change(self, where, move_from, how_many, governance_roll, prestige_rolls):
-        if self.us_posture() == "Soft":
+        if self.us().is_soft():
             return
         if move_from == 'track':
             self.troops -= how_many
@@ -547,7 +544,7 @@ class Labyrinth(object):
             self.output_to_history("Libyan WMD no longer in play.", True)
 
     def handle_withdraw(self, move_from, move_to, how_many, prestige_rolls):
-        if self.us_posture() == "Hard":
+        if self.us().is_hard():
             return
         self.map.get(move_from).change_troops(-how_many)
         if move_to == "track":
@@ -681,7 +678,7 @@ class Labyrinth(object):
         """Returns the number of cells that can be disrupted in the given country"""
         if "Al-Anbar" in self.markers and target.name in ["Iraq", "Syria"]:
             return 1
-        elif target.troops() >= 2 or target.posture == "Hard":
+        elif target.troops() >= 2 or target.is_hard():
             return min(2, target.total_cells(False))
         else:
             return 1
@@ -1114,7 +1111,7 @@ class Labyrinth(object):
 
         # An unmarked non-Muslim country if US Posture is Hard, or a Soft non-Muslim country if US Posture is Soft.
         subdests = []
-        if self.us_posture() == "Hard":
+        if self.us().is_hard():
             for country in self.get_countries():
                 if country.type == "Non-Muslim" and not country.posture:
                     if is_radicalization or "Biometrics" not in self.lapsing or\
@@ -1122,7 +1119,7 @@ class Labyrinth(object):
                         subdests.append(country.name)
         else:
             for country in self.get_countries():
-                if country.name != "United States" and country.type == "Non-Muslim" and country.posture == "Soft":
+                if country.name != "United States" and country.type == "Non-Muslim" and country.is_soft():
                     if is_radicalization or "Biometrics" not in self.lapsing or\
                             self.adjacent_country_has_cell(country.name):
                         subdests.append(country.name)
@@ -1157,7 +1154,7 @@ class Labyrinth(object):
         Returns the names of countries that are valid travel
         destinations for the Schengen Visas event
         """
-        if self.us_posture() == "Hard":
+        if self.us().is_hard():
             candidates = self.names_of_countries(lambda c: c.schengen and c.posture == '')
         else:
             candidates = self.names_of_countries(lambda c: c.schengen and c.posture == 'Soft')
@@ -1868,12 +1865,12 @@ class Labyrinth(object):
         if posture_roll > 4:
             self.map.get(country).posture = "Hard"
             self.output_to_history("* War of Ideas in %s - Posture Hard" % country, False)
-            if self.us_posture() == "Hard":
+            if self.us().is_hard():
                 self.change_prestige(1)
         else:
             self.map.get(country).posture = "Soft"
             self.output_to_history("* War of Ideas in %s - Posture Soft" % country, False)
-            if self.us_posture() == "Soft":
+            if self.us().is_soft():
                 self.change_prestige(1)
 
     def execute_card_euro_islam(self, posture_str):
@@ -1966,11 +1963,11 @@ class Labyrinth(object):
                        country.sleeperCells, country.cadre, country.troops())
         for country_name in self.map.country_names():
             country = self.map.get(country_name)
-            if country.type == "Non-Muslim" and country_name != "United States" and country.posture == "Hard":
+            if country.type == "Non-Muslim" and country_name != "United States" and country.is_hard():
                 print "%s, Posture %s" % (country_name, country.posture)
         for country_name in self.map.country_names():
             country = self.map.get(country_name)
-            if country.type == "Non-Muslim" and country_name != "United States" and country.posture == "Soft":
+            if country.type == "Non-Muslim" and country_name != "United States" and country.is_soft():
                 print "%s, Posture %s" % (country_name, country.posture)
         for country_name in self.map.country_names():
             country = self.map.get(country_name)
@@ -2117,7 +2114,7 @@ class Labyrinth(object):
         for country in possibles:
             if self.map.get(country).total_cells(True) > 0:
                 if self.map.get(country).type == "Non-Muslim":
-                    if self.map.get(country).posture == "Hard":
+                    if self.map.get(country).is_hard():
                         self.map.get(country).print_country()
                 else:
                     if self.map.get(country).is_ally():
@@ -2209,7 +2206,7 @@ class Labyrinth(object):
         print "HARD POSTURE"
         hard = 0
         for country_name in self.map.country_names():
-            if self.map.get(country_name).posture == "Hard":
+            if self.map.get(country_name).is_hard():
                 hard += 1
                 self.map.get(country_name).print_country()
         if not hard:
@@ -2218,7 +2215,7 @@ class Labyrinth(object):
         print "SOFT POSTURE"
         soft = 0
         for country_name in self.map.country_names():
-            if self.map.get(country_name).posture == "Soft":
+            if self.map.get(country_name).is_soft():
                 soft += 1
                 self.map.get(country_name).print_country()
         if not soft:
@@ -2942,13 +2939,13 @@ class Labyrinth(object):
             if posture_roll > 4:
                 self.map.get(where).posture = "Hard"
                 self.output_to_history("* War of Ideas in %s - Posture Hard" % where)
-                if self.us_posture() == "Hard":
+                if self.us().is_hard():
                     self._increase_prestige(1)
                     self.output_to_history("US Prestige now %d" % self.prestige)
             else:
                 self.map.get(where).posture = "Soft"
                 self.output_to_history("* War of Ideas in %s - Posture Soft" % where)
-                if self.us_posture() == "Soft":
+                if self.us().is_soft():
                     self._increase_prestige(1)
                     self.output_to_history("US Prestige now %d" % self.prestige)
         else:  # Muslim
@@ -2978,7 +2975,7 @@ class Labyrinth(object):
         self.handle_alert(where)
 
     def change_regime(self):
-        if self.us_posture() == "Soft":
+        if self.us().is_soft():
             print "No Regime Change with US Posture Soft"
             print ""
             return
@@ -3045,7 +3042,7 @@ class Labyrinth(object):
             where, move_from, how_many, governance_roll, (pre_first_roll, pre_second_roll, pre_third_roll))
 
     def withdraw_troops(self):
-        if self.us_posture() == "Hard":
+        if self.us().is_hard():
             print "No Withdrawal with US Posture Hard"
             print ""
             return
@@ -3233,8 +3230,8 @@ class Labyrinth(object):
         else:
             self.output_to_history("No Islamist Rule - US Prestige stays at %d" % self.prestige, False)
         world_position = self.map.get_net_hard_countries()
-        if (self.us_posture() == "Hard" and world_position >= 3) or\
-                (self.us_posture() == "Soft" and world_position <= -3):
+        if (self.us().is_hard() and world_position >= 3) or\
+                (self.us().is_soft() and world_position <= -3):
             self._increase_prestige(1)
             self.output_to_history("GWOT World posture is 3 and matches US - US Prestige now %d" % self.prestige, False)
         for event in self.lapsing:

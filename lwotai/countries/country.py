@@ -47,10 +47,7 @@ class Country(object):
         return self.__alignment == NEUTRAL
 
     def is_aligned(self):
-        return self.__alignment is not None
-
-    def is_unaligned(self):
-        return self.__alignment is None
+        return self.__alignment
 
     def make_adversary(self):
         self.__alignment = ADVERSARY
@@ -112,6 +109,15 @@ class Country(object):
         """Sets a Non-Muslim country to Soft posture"""
         if self.type == "Non-Muslim":
             self.posture = "Soft"
+
+    def toggle_posture(self):
+        """Switches this country between Hard and Soft posture (error if no posture set)"""
+        if self.is_hard():
+            self.make_soft()
+        elif self.is_soft():
+            self.make_hard()
+        else:
+            raise Exception("%s has no posture" % self.name)
 
     def remove_posture(self):
         """Removes any posture from a Non-Muslim country"""
