@@ -1,5 +1,5 @@
 from labyrinth_test_case import LabyrinthTestCase
-from lwotai.country import Country
+from lwotai.countries.country import Country
 from lwotai.governance import FAIR
 from lwotai.labyrinth import Labyrinth
 

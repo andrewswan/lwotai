@@ -1,4 +1,5 @@
-from lwotai.country import Country
+from lwotai.countries.country import Country
+from lwotai.countries.iran import Iran
 from lwotai.governance import GOOD, FAIR
 
 
@@ -19,7 +20,7 @@ def _get_countries(app):
         Country(app, "Gulf States", "Shia-Mix", "", None, False, 0, True, 3),
         Country(app, "India", "Non-Muslim", "", GOOD, False, 0, False, 0),
         Country(app, "Indonesia/Malaysia", "Suni", "", None, False, 0, True, 3),
-        Country(app, "Iran", "Iran", None, FAIR, False, 0, False, 0),
+        Iran(app),
         Country(app, "Iraq", "Shia-Mix", "", None, False, 0, True, 3),
         Country(app, "Israel", "Non-Muslim", "Hard", GOOD, False, 0, False, 0),
         Country(app, "Italy", "Non-Muslim", "", GOOD, True, 0, False, 0),

@@ -362,7 +362,6 @@ class Card14(LabyrinthTestCase):
     def test_event(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.list_adversary_countries()
-        app.get_country("Iran").make_adversary()
         app.get_country("Iraq").make_adversary()
         app.list_adversary_countries()
 

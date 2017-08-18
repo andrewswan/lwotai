@@ -3232,13 +3232,7 @@ class Labyrinth(object):
             self.output_to_history("Islamist Rule - US Prestige now %d" % self.prestige, False)
         else:
             self.output_to_history("No Islamist Rule - US Prestige stays at %d" % self.prestige, False)
-        world_position = 0
-        for country in self.get_countries():
-            if not country.is_muslim() and country.type != "Iran" and country.name != "United States":
-                if country.posture == "Hard":
-                    world_position += 1
-                elif country.posture == "Soft":
-                    world_position -= 1
+        world_position = self.map.get_net_hard_countries()
         if (self.us_posture() == "Hard" and world_position >= 3) or\
                 (self.us_posture() == "Soft" and world_position <= -3):
             self._increase_prestige(1)
@@ -3246,22 +3240,10 @@ class Labyrinth(object):
         for event in self.lapsing:
             self.output_to_history("%s has Lapsed." % event, False)
         self.lapsing = []
-        good_resources = 0
-        islamist_resources = 0
-        good_or_fair_countries = 0
-        islamist_countries = 0
-        for country_name in self.map.country_names():
-            if self.map.get(country_name).type == "Shia-Mix" or self.map.get(country_name).type == "Suni":
-                if self.map.get(country_name).is_good():
-                    good_or_fair_countries += 1
-                    good_resources += self.country_resources_by_name(country_name)
-                elif self.map.get(country_name).is_fair():
-                    good_or_fair_countries += 1
-                elif self.map.get(country_name).is_poor():
-                    islamist_countries += 1
-                elif self.map.get(country_name).is_islamist_rule():
-                    islamist_countries += 1
-                    islamist_resources += self.country_resources_by_name(country_name)
+        good_resources = self.map.get_good_resources()
+        islamist_resources = self.map.get_islamist_rule_resources()
+        good_or_fair_countries = self._count_good_or_fair_muslim_countries()
+        islamist_countries = self._count_poor_or_islamist_rule_countries()
         self.output_to_history("---", False)
         self.output_to_history("Good Resources:     %d" % good_resources, False)
         self.output_to_history("Islamist Resources: %d" % islamist_resources, False)
@@ -3271,23 +3253,29 @@ class Labyrinth(object):
         self.turn += 1
         self.output_to_history("---", False)
         self.output_to_history("", False)
-        if self.funding >= 7:
-            jihadist_cards = 9
-        elif self.funding >= 4:
-            jihadist_cards = 8
-        else:
-            jihadist_cards = 7
-        if self.troops >= 10:
-            us_cards = 9
-        elif self.troops >= 5:
-            us_cards = 8
-        else:
-            us_cards = 7
+        jihadist_cards = self._get_jihadist_hand_limit()
+        us_cards = self._get_us_hand_limit()
         self.output_to_history("Jihadist draws %d cards." % jihadist_cards, False)
         self.output_to_history("US draws %d cards." % us_cards, False)
         self.output_to_history("---", False)
         self.output_to_history("", False)
         self.output_to_history("[[ %d (Turn %s) ]]" % (self.startYear + (self.turn - 1), self.turn), False)
+
+    def _get_jihadist_hand_limit(self):
+        """Returns the number of cards to deal to the Jihadist player"""
+        if self.funding >= 7:
+            return 9
+        elif self.funding >= 4:
+            return 8
+        return 7
+
+    def _get_us_hand_limit(self):
+        """Returns the number of cards to deal to the US player"""
+        if self.troops >= 10:
+            return 9
+        elif self.troops >= 5:
+            return 8
+        return 7
 
     def undo_last_turn(self):
         self.undo = self.get_yes_no_from_user("Undo to last card played? (y/n): ")
