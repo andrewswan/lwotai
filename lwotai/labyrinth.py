@@ -596,7 +596,7 @@ class Labyrinth(object):
         """Prompts the user to choose one of the given options for disrupting two cells, returns None if not valid"""
         prompt = "You can disrupt two cells. Enter one of %s for active or sleeper cells: " % options
         cell_types = self.my_raw_input(prompt)
-        if cell_types and cell_types.lower in options:
+        if cell_types and cell_types.lower() in options:
             return cell_types.lower()
         return None
 
