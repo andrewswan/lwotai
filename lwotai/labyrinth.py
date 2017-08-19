@@ -3113,7 +3113,7 @@ class Labyrinth(object):
             elif choice == "ops":
                 self.output_to_history("Played for Ops.", False)
                 if card_num == 120:
-                    print "When finished with Ops, enter u 120 again to play the event."
+                    print "When finished with Ops, enter 'us_card 120' again to play the event."
                 print self.get_us_prompt_to_spend_ops(card_num)
         else:
             if card.type == "Jihadist":
