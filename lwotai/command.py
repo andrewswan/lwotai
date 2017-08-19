@@ -33,6 +33,15 @@ class Command(Cmd):
     # The superclass expects these methods to be named "do_<command_name>" and take an argument.
     # The docstring for each command is what the user sees when they type "help <command_name>".
 
+    # The complete_<command_name> methods take four arguments:
+    #
+    # 1. 'text' is the string we are matching against, all returned matches must begin with it
+    # 2. 'line' is the current input line
+    # 3. 'begidx' is the beginning index in the line of the text being matched
+    # 4. 'endidx' is the end index in the line of the text being matched
+    #
+    # e.g. for the "alert" command: alert text = '', line = 'alert ', begidx = 6, endidx = 6
+
     def do_adjust(self, _):
         """Adjusts the game state - no validation is done, so be careful."""
         self.app.adjust_state()
