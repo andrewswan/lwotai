@@ -1680,9 +1680,9 @@ class Labyrinth(object):
         self.output_to_history("Jihadist Funding now %d" % self.funding, False)
         if country_name != "Israel":
             if posture_roll <= 4:
-                self.map.get(country_name).posture = "Soft"
+                self.map.get(country_name).make_soft()
             else:
-                self.map.get(country_name).posture = "Hard"
+                self.map.get(country_name).make_hard()
             self.output_to_history("%s Posture now %s" % (country_name, self.map.get(country_name).posture), True)
         if self.map.get(country_name).troops() > 0:
             if plot_type == "WMD":
@@ -1694,9 +1694,9 @@ class Labyrinth(object):
             for i in range(len(schengen_countries)):
                 country = self.get_country(schengen_countries[i])
                 if schengen_posture_rolls[i] <= 4:
-                    country.posture = "Soft"
+                    country.make_soft()
                 else:
-                    country.posture = "Hard"
+                    country.make_hard()
                 self.output_to_history("%s Posture now %s" % (schengen_countries[i], country.posture), False)
         self.output_to_history("", False)
 
@@ -1758,9 +1758,9 @@ class Labyrinth(object):
             self.change_prestige(min(us_prestige_rolls[1], us_prestige_rolls[2]) * prestige_multiplier)
             self.output_to_history("US Prestige now %d" % self.prestige, False)
             if posture_roll <= 4:
-                self.us().posture = "Soft"
+                self.us().make_soft()
             else:
-                self.us().posture = "Hard"
+                self.us().make_hard()
             self.output_to_history("US Posture now %s" % self.us_posture(), True)
 
     def event_puts_cell(self, card_number):
@@ -1863,12 +1863,12 @@ class Labyrinth(object):
 
     def execute_non_muslim_woi(self, country, posture_roll):
         if posture_roll > 4:
-            self.map.get(country).posture = "Hard"
+            self.map.get(country).make_hard()
             self.output_to_history("* War of Ideas in %s - Posture Hard" % country, False)
             if self.us().is_hard():
                 self.change_prestige(1)
         else:
-            self.map.get(country).posture = "Soft"
+            self.map.get(country).make_soft()
             self.output_to_history("* War of Ideas in %s - Posture Soft" % country, False)
             if self.us().is_soft():
                 self.change_prestige(1)
@@ -1898,10 +1898,10 @@ class Labyrinth(object):
 
     def execute_card_us_election(self, posture_roll):
         if posture_roll <= 4:
-            self.us().posture = "Soft"
+            self.us().make_soft()
             self.output_to_history("United States Posture now Soft.", False)
         else:
-            self.us().posture = "Hard"
+            self.us().make_hard()
             self.output_to_history("United States Posture now Hard.", False)
         if self.gwot_penalty() == 0:
             self.change_prestige(1)
@@ -2937,13 +2937,13 @@ class Labyrinth(object):
         if self.map.get(where).type == "Non-Muslim" and country_name != "United States":  # Non-Muslim
             posture_roll = self.get_roll_from_user("Enter Posture Roll or r to have program roll: ")
             if posture_roll > 4:
-                self.map.get(where).posture = "Hard"
+                self.map.get(where).make_hard()
                 self.output_to_history("* War of Ideas in %s - Posture Hard" % where)
                 if self.us().is_hard():
                     self._increase_prestige(1)
                     self.output_to_history("US Prestige now %d" % self.prestige)
             else:
-                self.map.get(where).posture = "Soft"
+                self.map.get(where).make_soft()
                 self.output_to_history("* War of Ideas in %s - Posture Soft" % where)
                 if self.us().is_soft():
                     self._increase_prestige(1)
