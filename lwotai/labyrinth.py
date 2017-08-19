@@ -85,7 +85,7 @@ class Labyrinth(object):
         print "Good Resources:     %d" % self.map.get_good_resources()
         print "Islamist Resources: %d" % self.map.get_islamist_rule_resources()
         print "---"
-        print "Good/Fair Muslim Countries:   %d" % self._count_good_or_fair_muslim_countries()
+        print "Fair/Good Muslim Countries:   %d" % self._count_good_or_fair_muslim_countries()
         print "Poor/Islamist Rule Countries: %d" % self._count_poor_or_islamist_rule_countries()
         print ""
         print "GWOT"
@@ -1835,7 +1835,7 @@ class Labyrinth(object):
                 self.handle_radicalization(unused_ops)
         else:
             self.debug_print("DEBUG: NO")
-            self.debug_print("DEBUG: Jihad possible in Good/Fair? [12]")
+            self.debug_print("DEBUG: Jihad possible in Fair/Good? [12]")
             country_list = self.minor_jihad_in_good_fair_choice(self.card(card_number).ops)
             if country_list:
                 self.debug_print("DEBUG: YES")
@@ -2230,7 +2230,7 @@ class Labyrinth(object):
         print "Good Resources:     %d" % good_resources
         print "Islamist Resources: %d" % islamist_resources
         print "---"
-        print "Good/Fair Countries:     %d" % good_or_fair_countries
+        print "Fair/Good Countries:     %d" % good_or_fair_countries
         print "Poor/Islamist Countries: %d" % poor_or_islamist_countries
         print ""
         print "GWOT"
@@ -2290,7 +2290,7 @@ class Labyrinth(object):
             "",
             "VICTORY",
             "Good Resources: %d        Islamist Resources: %d" % (good_resources, islamist_resources),
-            "Good/Fair Countries: %d   Poor/Islamist Countries: %d" % (
+            "Fair/Good Countries: %d   Poor/Islamist Countries: %d" % (
                 good_or_fair_countries, poor_or_islamist_countries),
             "",
             "GWOT",
@@ -3241,7 +3241,7 @@ class Labyrinth(object):
         self.output_to_history("Good Resources:     %d" % good_resources, False)
         self.output_to_history("Islamist Resources: %d" % islamist_resources, False)
         self.output_to_history("---", False)
-        self.output_to_history("Good/Fair Countries:     %d" % good_or_fair_countries, False)
+        self.output_to_history("Fair/Good Countries:     %d" % good_or_fair_countries, False)
         self.output_to_history("Poor/Islamist Countries: %d" % islamist_countries, False)
         self.turn += 1
         self.output_to_history("---", False)
