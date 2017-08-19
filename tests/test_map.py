@@ -114,3 +114,12 @@ class MapTest(LabyrinthTestCase):
         # Assert
         self.assertEqual(-3, net_hard_countries)  # should max out at -3
 
+    def test_getting_invalid_country_name_returns_none(self):
+        # Set up
+        game_map = self.create_test_map()
+
+        # Invoke
+        country = game_map.get("gdjgjhghjsdgjf")
+
+        # Assert
+        self.assertEqual(None, country)

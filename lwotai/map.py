@@ -106,8 +106,11 @@ class Map(object):
         return [country_name for country_name in self._map if partial_name.lower() in country_name.lower()]
 
     def get(self, country_name):
-        """Returns the Country with the given name"""
-        return self._map[country_name]
+        """Returns the Country with the given name, or None if it doesn't exist"""
+        try:
+            return self._map[country_name]
+        except KeyError:
+            return None
 
     def countries(self):
         """Returns all Countries on the map"""
