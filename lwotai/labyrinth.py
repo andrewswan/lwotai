@@ -1946,9 +1946,9 @@ class Labyrinth(object):
         print ""
         print "Disruptable Countries"
         print "---------------------"
-        for country in self.map.country_names():
-            if self.map.get(country).can_disrupt():
-                print self.map.get(country).get_disrupt_summary()
+        for country in self.get_countries():
+            if country.can_disrupt():
+                print country.get_disrupt_summary()
         print ""
 
     def list_woi_countries(self, _=None):
@@ -2885,7 +2885,7 @@ class Labyrinth(object):
 
     def disrupt_cells_or_cadre(self):
         """Performs a Disrupt operation for the US player."""
-        if not self.find_countries(lambda c: c.can_disrupt()):
+        if self.num_disruptable() == 0:
             print "No countries can be disrupted."
             return
         where = None
