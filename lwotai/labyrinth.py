@@ -1955,24 +1955,20 @@ class Labyrinth(object):
         print ""
         print "War of Ideas Eligible Countries"
         print "-------------------------------"
-        for country_name in self.map.country_names():
-            country = self.map.get(country_name)
-            if country.is_neutral() or country.is_ally() or country.is_ungoverned():
+        for country in self.get_countries():
+            if country.is_ally() or country.is_neutral() or country.is_ungoverned():
                 print "%s, %s %s - %d Active Cells, %d Sleeper Cells, %d Cadre, %d troops" %\
-                      (country_name, country.governance_str(), country.alignment(), country.activeCells,
+                      (country.name, country.governance_str(), country.alignment(), country.activeCells,
                        country.sleeperCells, country.cadre, country.troops())
-        for country_name in self.map.country_names():
-            country = self.map.get(country_name)
-            if country.type == "Non-Muslim" and country_name != "United States" and country.is_hard():
-                print "%s, Posture %s" % (country_name, country.posture)
-        for country_name in self.map.country_names():
-            country = self.map.get(country_name)
-            if country.type == "Non-Muslim" and country_name != "United States" and country.is_soft():
-                print "%s, Posture %s" % (country_name, country.posture)
-        for country_name in self.map.country_names():
-            country = self.map.get(country_name)
-            if country.type == "Non-Muslim" and country_name != "United States" and country.posture == "":
-                print "%s, Untested" % country_name
+        for country in self.get_countries():
+            if country.type == "Non-Muslim" and country.name != "United States" and country.is_hard():
+                print "%s, Posture %s" % (country.name, country.posture)
+        for country in self.get_countries():
+            if country.type == "Non-Muslim" and country.name != "United States" and country.is_soft():
+                print "%s, Posture %s" % (country.name, country.posture)
+        for country in self.get_countries():
+            if country.type == "Non-Muslim" and country.name != "United States" and not country.posture:
+                print "%s, Untested" % country.name
 
     def list_plot_countries(self, _=None):
         print ""
