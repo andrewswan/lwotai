@@ -27,7 +27,7 @@ CARDS = [
     Card(24, "US", "Predator", 2, False, False, False),
     Card(25, "US", "Predator", 2, False, False, False),
     Card(26, "US", "Quartet", 2, False, False, False),
-    Card(27, "US", "Sadam Captured", 2, True, True, False),
+    Card(27, "US", "Saddam Captured", 2, True, True, False),
     Card(28, "US", "Sharia", 2, False, False, False),
     Card(29, "US", "Tony Blair", 2, True, False, False),
     Card(30, "US", "UN Nation Building", 2, False, False, False),
