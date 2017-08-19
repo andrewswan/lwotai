@@ -176,16 +176,21 @@ class Labyrinth(object):
         return good_country
 
     def get_num_troops_from_user(self, prompt, maximum):
+        """Prompts the user for a number of troops, up to the given maximum.
+        Returns that number, or None if the user aborted."""
         while True:
+            troops_str = self.my_raw_input(prompt)
+            if troops_str == "":
+                return None
             try:
-                troops = int(self.my_raw_input(prompt))
+                troops = int(troops_str)
                 if 0 <= troops <= maximum:
                     return troops
                 else:
                     print "Not enough troops (max %d)." % maximum
                     print ""
             except ValueError:
-                print "Entry error"
+                print "Invalid number '%s'" % troops_str
                 print ""
 
     def get_card_num_from_user(self, prompt):
@@ -2815,52 +2820,13 @@ class Labyrinth(object):
         move_from = self._get_deploy_source()
         if not move_from:
             return
-        if move_from == "track":
-            available = self.troops
-        else:
-            available = self.get_country(move_from).troops
-        move_to = None
-        while not move_to:
-            user_input = self.get_country_from_user(
-                "To what country ('track' for Troop Track, ? for list): ", "track", self.list_deploy_options)
-            if user_input == "":
-                print ""
-                return
-            elif user_input == "track":
-                print "Deploying troops from %s to Troop Track" % move_from
-                print ""
-                move_to = user_input
-            else:
-                print "Deploying troops from %s to %s" % (move_from, user_input)
-                print ""
-                move_to = user_input
-        how_many = 0
-        while not how_many:
-            user_input = self.get_num_troops_from_user("Deploy how many troops (%d available)? " % available, available)
-            if user_input == "":
-                print ""
-                return
-            else:
-                how_many = user_input
-        if move_from == "track":
-            self.troops -= how_many
-            troops_left = self.troops
-        else:
-            if self.map.get(move_from).regimeChange:
-                if (self.map.get(move_from).troops() - how_many) < (5 + self.map.get(move_from).total_cells(True)):
-                    print "You cannot move that many troops from a Regime Change country."
-                    print ""
-                    return
-            self.map.get(move_from).change_troops(how_many * -1)
-            troops_left = self.map.get(move_from).troops()
-        if move_to == "track":
-            self.troops += how_many
-            troops_now = self.troops
-        else:
-            self.map.get(move_to).change_troops(how_many)
-            troops_now = self.map.get(move_to).troops()
-        self.output_to_history(
-            "* %d troops deployed from %s (%d) to %s (%d)" % (how_many, move_from, troops_left, move_to, troops_now))
+        move_to = self._get_deploy_destination(move_from)
+        if not move_to:
+            return
+        how_many = self._get_deploy_size(move_from)
+        if not how_many:
+            return
+        self._do_deploy(how_many, move_from, move_to)
 
     def _get_deploy_source(self):
         """Prompts the user for the location from which troops are deploying;
@@ -2881,12 +2847,55 @@ class Labyrinth(object):
             else:
                 country = self.get_country(user_input)
                 if country.troops() <= 0:
-                    print "There are no troops in %s." % user_input
+                    print "There are no troops in %s." % country.name
                 else:
-                    print "Deploy from %s: %d available" % (user_input, country.troops())
+                    print "Deploy from %s: %d available" % (country.name, country.troops())
                     print ""
-                    return user_input
+                    return country.name
             print ""
+
+    def _get_deploy_destination(self, move_from):
+        """Returns the location to which to deploy, or None if the user aborts"""
+        user_input = self.get_country_from_user(
+            "To what country ('track' for Troop Track, ? for list): ", "track", self.list_deploy_options)
+        if user_input == "":
+            print ""
+            return None
+        if user_input == "track":
+            print "Deploying troops from %s to Troop Track" % move_from
+            print ""
+            return user_input
+        print "Deploying troops from %s to %s" % (move_from, user_input)
+        print ""
+        return user_input
+
+    def _get_deploy_size(self, move_from):
+        """Prompts the user for the number of troops to deploy from the named location (country or track);
+        returns None if the user aborts"""
+        available = self.troops if move_from == "track" else self.get_country(move_from).troops
+        return self.get_num_troops_from_user("Deploy how many troops (%d available)? " % available, available)
+
+    def _do_deploy(self, how_many, move_from, move_to):
+        """Deploys the given number of troops from the first named country to the second named country"""
+        if move_from == "track":
+            self.troops -= how_many
+            troops_left = self.troops
+        else:
+            if self.map.get(move_from).regimeChange:
+                if (self.map.get(move_from).troops() - how_many) < (5 + self.map.get(move_from).total_cells(True)):
+                    print "You cannot move that many troops from a Regime Change country."
+                    print ""
+                    return
+            self.map.get(move_from).change_troops(how_many * -1)
+            troops_left = self.map.get(move_from).troops()
+        if move_to == "track":
+            self.troops += how_many
+            troops_now = self.troops
+        else:
+            self.map.get(move_to).change_troops(how_many)
+            troops_now = self.map.get(move_to).troops()
+        self.output_to_history(
+            "* %d troops deployed from %s (%d) to %s (%d)" % (how_many, move_from, troops_left, move_to, troops_now))
 
     def disrupt_cells_or_cadre(self):
         """Performs a Disrupt operation for the US player."""
