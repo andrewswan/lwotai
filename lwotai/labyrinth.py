@@ -1044,7 +1044,7 @@ class Labyrinth(object):
         return self.map.contains(predicate)
 
     def get_country(self, country_name):
-        """Returns the country with the given name (case-sensitive)"""
+        """Returns the country with the given name (case-sensitive), if it exists"""
         return self.map.get(country_name)
 
     def get_countries(self):
@@ -1924,9 +1924,9 @@ class Labyrinth(object):
             needed = 0
         if self.troops > needed:
             print "Troop Track: %d" % self.troops
-        for country in self.map.country_names():
-            if self.map.get(country).troops() > needed:
-                print "%s: %d" % (country, self.map.get(country).troops())
+        for country in self.get_countries():
+            if country.troops() > needed:
+                print "%s: %d" % (country.name, country.troops())
         print ""
 
     def _can_deploy_to(self, country_name):
@@ -2808,38 +2808,17 @@ class Labyrinth(object):
         print ""
 
     def deploy_troops(self):
-        """Deploys troops to a Muslim Ally; does not perform Regime Change"""
+        """Deploys troops to a Muslim Ally or the track; does not perform Regime Change"""
         if not self.find_countries(lambda c: self._can_deploy_to(c.name)):
             print "There are no Muslim Allies to deploy to."
             return
-        move_from = None
-        available = 0
-        while not move_from:
-            user_input = self.get_country_from_user("From what country (track for Troop Track) (? for list)?: ",
-                                                    "track", self.list_countries_with_troops)
-            if user_input == "":
-                print ""
-                return
-            elif user_input == "track":
-                if self.troops <= 0:
-                    print "There are no troops on the Troop Track."
-                    print ""
-                    return
-                else:
-                    print "Deploy from Troop Track - %d available" % self.troops
-                    print ""
-                    available = self.troops
-                    move_from = user_input
-            else:
-                if self.map.get(user_input).troops() <= 0:
-                    print "There are no troops in %s." % user_input
-                    print ""
-                    return
-                else:
-                    print "Deploy from %s = %d available" % (user_input, self.map.get(user_input).troops())
-                    print ""
-                    available = self.map.get(user_input).troops()
-                    move_from = user_input
+        move_from = self._get_deploy_source()
+        if not move_from:
+            return
+        if move_from == "track":
+            available = self.troops
+        else:
+            available = self.get_country(move_from).troops
         move_to = None
         while not move_to:
             user_input = self.get_country_from_user(
@@ -2882,6 +2861,32 @@ class Labyrinth(object):
             troops_now = self.map.get(move_to).troops()
         self.output_to_history(
             "* %d troops deployed from %s (%d) to %s (%d)" % (how_many, move_from, troops_left, move_to, troops_now))
+
+    def _get_deploy_source(self):
+        """Prompts the user for the location from which troops are deploying;
+        returns "track", a country name, or None if they abort """
+        while True:
+            user_input = self.get_country_from_user("From what country (track for Troop Track) (? for list)?: ",
+                                                    "track", self.list_countries_with_troops)
+            if user_input == "":
+                print ""
+                return None
+            elif user_input == "track":
+                if self.troops <= 0:
+                    print "There are no troops on the Troop Track."
+                else:
+                    print "Deploy from Troop Track - %d available" % self.troops
+                    print ""
+                    return "track"
+            else:
+                country = self.get_country(user_input)
+                if country.troops() <= 0:
+                    print "There are no troops in %s." % user_input
+                else:
+                    print "Deploy from %s: %d available" % (user_input, country.troops())
+                    print ""
+                    return user_input
+            print ""
 
     def disrupt_cells_or_cadre(self):
         """Performs a Disrupt operation for the US player."""
