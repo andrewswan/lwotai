@@ -42,6 +42,7 @@ def _create_game():
                                     "Potent: ...and Major Jihad if 3 or more cells than troops",
                                     "Infectious: ...and US plays all its cards (not enforced by program)",
                                     "Virulent: ...and Jihad failure does not remove cells"])
+    print ""
     ai_rolls = Utils.getUserYesNoResponse("Do you want the program to roll dice for you?")
     return Labyrinth(scenario_number, ideology_number, ai_rolls=ai_rolls)
 
