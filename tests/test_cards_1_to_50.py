@@ -455,7 +455,8 @@ class Card18(LabyrinthTestCase):
         self.assert_new_messages(app, history_before, [
             'Card played for Event.',
             'Examine Jihadist hand. Do not change order of cards.',
-            'Conduct a 1-value operation (Use commands: alert, deploy, disrupt, reassessment, regime, withdraw, or woi).',
+            'Conduct a 1-value operation (Use commands: alert, deploy, disrupt, reassessment, regime_change,'
+            ' withdraw, or war_of_ideas).',
             'You may now interrupt this action phase to play another card (Use the u command).'
         ])
 

@@ -668,7 +668,7 @@ class Card(object):
                 app.output_to_history("Shuffle Jihadist hand.", True)
             elif self.number == 18:  # Intel Community
                 app.output_to_history("Examine Jihadist hand. Do not change order of cards.", False)
-                app.output_to_history("Conduct a 1-value operation (Use commands: alert, deploy, disrupt, reassessment, regime, withdraw, or woi).", False)
+                app.output_to_history("Conduct a 1-value operation (Use commands: alert, deploy, disrupt, reassessment, regime_change, withdraw, or war_of_ideas).", False)
                 app.output_to_history("You may now interrupt this action phase to play another card (Use the u command).", True)
             elif self.number == 19:  # Kemalist Republic
                 app.output_to_history("Turkey now a Fair Ally.", False)
