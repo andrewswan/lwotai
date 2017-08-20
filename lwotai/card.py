@@ -1368,7 +1368,7 @@ class Card(object):
                 app.set_posture("United States", "Soft")
                 app.output_to_history("US Posture now Soft.", False)
                 app.output_to_history("US randomly discards two cards and Jihadist plays them.", False)
-                app.output_to_history("Do this using the j # command for each card.", True)
+                app.output_to_history("Do this using the 'jihadist_card' command for each card.", True)
             elif self.number == 91:  # Regional al-Qaeda
                 possibles = app.find_countries(lambda c: c.is_muslim() and c.is_ungoverned())
                 random.shuffle(possibles)
