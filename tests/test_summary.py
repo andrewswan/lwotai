@@ -18,7 +18,7 @@ class SummaryTest(LabyrinthTestCase):
             '',
             'VICTORY',
             'Good Resources: 0        Islamist Resources: 1',
-            'Good/Fair Countries: 3   Poor/Islamist Countries: 4',
+            'Fair/Good Countries: 3   Poor/Islamist Countries: 4',
             '',
             'GWOT',
             'US Posture: Hard    World Posture: Hard 1',
