@@ -2873,7 +2873,7 @@ class Labyrinth(object):
     def _get_deploy_size(self, move_from):
         """Prompts the user for the number of troops to deploy from the named location (country or track);
         returns None if the user aborts"""
-        available = self.troops if move_from == "track" else self.get_country(move_from).troops
+        available = self.troops if move_from == "track" else self.get_country(move_from).troops()
         return self.get_num_troops_from_user("Deploy how many troops (%d available)? " % available, available)
 
     def _do_deploy(self, how_many, move_from, move_to):
