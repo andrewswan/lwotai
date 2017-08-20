@@ -136,11 +136,12 @@ class Map(object):
         return self._get_resources(lambda c: c.is_islamist_rule())
 
     def get_net_hard_countries(self):
-        """Returns the net amount of hard countries in the world (not USA); a negative number means more are soft"""
+        """Returns the net amount of hard countries in the world (exc. USA); a negative number means more are soft"""
         net_hard_countries = 0
         for country in self.countries():
-            if country.is_hard() and country.name != "United States" and net_hard_countries < 3:
-                net_hard_countries += 1
-            elif country.is_soft() and net_hard_countries > -3:
-                net_hard_countries -= 1
+            if country.name != "United States":
+                if country.is_hard() and net_hard_countries < 3:
+                    net_hard_countries += 1
+                elif country.is_soft() and net_hard_countries > -3:
+                    net_hard_countries -= 1
         return net_hard_countries
