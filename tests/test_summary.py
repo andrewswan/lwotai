@@ -8,6 +8,7 @@ class SummaryTest(LabyrinthTestCase):
     def test_summary(self):
         # Set up
         app = Labyrinth(1, 1, self.set_up_test_scenario)
+        app.deploy_reserves(3)
 
         # Invoke
         summary = app.get_summary()
@@ -32,5 +33,7 @@ class SummaryTest(LabyrinthTestCase):
             '',
             'EVENTS',
             'Markers: None',
-            'Lapsing: None'
+            'Lapsing: None',
+            '',
+            'US Reserves: 2'
         ])

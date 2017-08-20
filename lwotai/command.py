@@ -50,6 +50,11 @@ class Command(Cmd):
         """Alerts a country to an active plot."""
         self.app.alert_plot()
 
+    def do_clear_reserves(self, _):
+        """Manually resets the US Reserves track to 0 Ops after use."""
+        self.app.us_reserves = 0
+        print "Reset the US Reserves track to 0 Ops."
+
     def do_deploy(self, _):
         """
         Move troops from the troop track or a country to a Muslim Ally.
@@ -88,12 +93,21 @@ class Command(Cmd):
         """Performs a Regime Change in a selected Islamist Rule country."""
         self.app.change_regime()
 
-    def do_reserves(self, _):
-        """
-        Allows the US player to add a card's Ops value to the US Reserves track. (6.3.3)
-        Remember to set this track to 0 when you use it or at end of turn, whichever comes first.
-        """
-        self.app.deploy_reserves()
+    def do_reserves(self, ops_str):
+        """Allows the US player to add the given Ops value to the US Reserves track. (6.3.3)"""
+        ops = None
+        if ops_str:
+            try:
+                ops = int(ops_str)
+            except ValueError:
+                print "Invalid ops value '%s'" % ops_str
+        if not ops:
+            card_number = Utils.prompt_for_card_number()
+            if not card_number:
+                return
+            ops = self.app.card(card_number).ops
+        self.app.deploy_reserves(ops)
+        print "Discard this card and set the US Reserves track to %d" % self.app.us_reserves
 
     def do_roll_back(self, _):
         """Rolls the game back to a chosen turn in the game."""

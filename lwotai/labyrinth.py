@@ -38,6 +38,7 @@ class Labyrinth(object):
         self.troops = 0
         self.turn = 1
         self.undo = False
+        self.us_reserves = 0
         self.validCountryMarkers = []
         self.validGlobalMarkers = []
         self.validLapsingMarkers = []
@@ -2122,10 +2123,10 @@ class Labyrinth(object):
                     if self.map.get(country).is_ally():
                         self.map.get(country).print_country()
 
-    @staticmethod
-    def deploy_reserves():
-        """Allows the US player to play a card for the Reserves action (6.3.3)."""
-        print "Discard this card and add its Ops value to the US Reserves track."
+    def deploy_reserves(self, ops):
+        """Allows the US player to add the given number of ops to the US Reserves track (6.3.3)."""
+        assert 1 <= ops <= 3
+        self.us_reserves = min(self.us_reserves + ops, 2)
 
     def show_status(self, country_name=None):
         """Shows the status of the given country, if any, otherwise the whole game."""
@@ -2311,7 +2312,9 @@ class Labyrinth(object):
             "",
             "EVENTS",
             markers,
-            lapsing
+            lapsing,
+            "",
+            "US Reserves: %d" % self.us_reserves
         ]
         return summary
 
@@ -3146,7 +3149,7 @@ class Labyrinth(object):
 
     def get_us_prompt_to_spend_ops(self, card_number):
         """Prompts the US player to spend the given card's Ops value"""
-        ops = self.card(card_number).ops
+        ops = min(self.card(card_number).ops + self.us_reserves, 3)
         operation_min_ops = {
             "alert": 3,
             "deploy": 1,
@@ -3159,7 +3162,8 @@ class Labyrinth(object):
         }
         valid_commands = [op for op in operation_min_ops if operation_min_ops[op] <= ops]
         available_commands = ", ".join(sorted(valid_commands))
-        return "%d Ops available. Use one of: %s" % (ops, available_commands)
+        reserves = " (with reserves)" if self.us_reserves > 0 else ""
+        return "%d Ops available%s. Use one of: %s" % (ops, reserves, available_commands)
 
     def resolve_plots(self):
         """Resolves any active plots at the end of the US action phase."""
@@ -3266,6 +3270,9 @@ class Labyrinth(object):
         self.output_to_history("---", False)
         self.output_to_history("", False)
         self.output_to_history("[[ %d (Turn %s) ]]" % (self.startYear + (self.turn - 1), self.turn), False)
+        if self.us_reserves > 0:
+            self.us_reserves = 0
+            self.output_to_history("US Reserves reset to 0")
 
     def _get_jihadist_hand_limit(self):
         """Returns the number of cards to deal to the Jihadist player"""
