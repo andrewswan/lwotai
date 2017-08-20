@@ -43,7 +43,7 @@ Version 1.20150131.1
 5. Added 'adjust' command for ideology, prestige, funding, event markers, lapsing markers and country data
 6. Additional changes for multiple aid markers when adding or removing
 7. In plot resolution, remove one aid for each successful roll
-8. In WOI roll adjustment, add 1 to modifiers for each aid marker
+8. In WoI roll adjustment, add 1 to modifiers for each aid marker
 9. Ignore "The door of Itjihad is closed" when checking playable if playing as US (reported by Dave Horn)
 10. Changed removeCell to remove sleeper then Sadr then active if playing as US; but active then sleeper then Sadr if Jihadist
 11. Fixed test for infectious ideology when setting difficulty

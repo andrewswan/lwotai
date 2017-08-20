@@ -794,7 +794,7 @@ class Card(object):
                     finished_picking = False
                     while not target_name:
                         country_name = app.get_country_from_user(
-                            "Choose Schengen country to make a WOI roll (done to stop rolling) (? for list)?: ", "done",
+                            "Choose Schengen country to make a WoI roll (done to stop rolling) (? for list)?: ", "done",
                             app.list_schengen_countries)
                         if country_name == "":
                             print ""

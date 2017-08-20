@@ -2,7 +2,7 @@ from labyrinth_test_case import LabyrinthTestCase
 from lwotai.labyrinth import Labyrinth
 
 
-class WOIRollModifiers(LabyrinthTestCase):
+class WoiRollModifiers(LabyrinthTestCase):
     """Test War of Ideas Roll Modifiers"""
 
     def test_prestige(self):
