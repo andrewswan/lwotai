@@ -603,7 +603,7 @@ class Card(object):
                         else:
                             print "%s is not an Adversary." % country_name
                             print ""
-                action_roll = app.get_roll_from_user("Enter Covert Action roll or r to have program roll: ")
+                action_roll = app.get_roll("covert action")
                 if action_roll >= 4:
                     app.map[target_country].make_neutral()
                     app.output_to_history("Covert Action successful, %s now Neutral." % target_country, False)
@@ -809,7 +809,7 @@ class Card(object):
                                 return
                             else:
                                 target_name = country_name
-                                posture_roll = app.get_roll_from_user("Enter Posture Roll or r to have program roll: ")
+                                posture_roll = app.get_roll("posture")
                                 app.execute_non_muslim_woi(target_name, posture_roll)
                     if finished_picking:
                         break
@@ -840,7 +840,7 @@ class Card(object):
                                 break
                 target_country.aid += 1
                 app.output_to_history("Aid added to %s." % target_country.name, False)
-                woi_roll = app.get_roll_from_user("Enter WOI Roll or r to have program roll: ")
+                woi_roll = app.get_roll("WoI")
                 modified_woi_roll = app.modified_woi_roll(woi_roll, target_country.name, False)
                 app.handle_muslim_woi(modified_woi_roll, target_country.name)
             elif self.number == 31:  # Wiretapping
@@ -1030,7 +1030,7 @@ class Card(object):
                 app.output_to_history("", False)
             elif self.number == 45:  # Safer Now
                 app.change_prestige(3)
-                posture_roll = app.get_roll_from_user("Enter US Posture Roll or r to have program roll: ")
+                posture_roll = app.get_roll("US Posture")
                 if posture_roll <= 4:
                     app.us().make_soft()
                     app.output_to_history("US Posture now Soft.", False)

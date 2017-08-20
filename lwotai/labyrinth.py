@@ -20,6 +20,7 @@ class Labyrinth(object):
         self.ideology = get_ideology(ideology_num)
         self.testUserInput = test_user_input
         self.randomizer = kwargs.get('randomizer', Randomizer())
+        self.ai_rolls = kwargs.get('ai_rolls', False)
         # Defaults
         self.backlashInPlay = False
         self.cells = 0
@@ -225,15 +226,15 @@ class Labyrinth(object):
                 print "Enter 1, 2, 3 or W for WMD."
                 print ""
 
-    def get_roll_from_user(self, prompt):
-        """Prompts the user to enter a d6 roll or type "roll" to have this program roll a d6 (returns int)"""
+    def get_roll(self, purpose):
+        """Either rolls a d6 or asks the user to do so, based on the provided preference"""
+        if self.ai_rolls:
+            ai_roll = random.randint(1, 6)
+            print "Auto %s roll: %d" % (purpose, ai_roll)
+            return ai_roll
         while True:
             try:
-                user_input = self.my_raw_input(prompt)
-                if self._matches(user_input, "roll"):
-                    roll = random.randint(1, 6)
-                    print "Roll: %d" % roll
-                    return roll
+                user_input = self.my_raw_input("Enter %s roll: " % purpose)
                 roll_num = int(user_input)
                 if 1 <= roll_num <= 6:
                     return roll_num
@@ -2945,7 +2946,7 @@ class Labyrinth(object):
                     print "Country not eligible for War of Ideas."
                     print ""
         if self.map.get(where).type == "Non-Muslim" and country_name != "United States":  # Non-Muslim
-            posture_roll = self.get_roll_from_user("Enter Posture Roll or r to have program roll: ")
+            posture_roll = self.get_roll("posture")
             if posture_roll > 4:
                 self.map.get(where).make_hard()
                 self.output_to_history("* War of Ideas in %s - Posture Hard" % where)
@@ -2960,7 +2961,7 @@ class Labyrinth(object):
                     self.output_to_history("US Prestige now %d" % self.prestige)
         else:  # Muslim
             self.test_country(where)
-            woi_roll = self.get_roll_from_user("Enter WoI roll or r to have program roll: ")
+            woi_roll = self.get_roll("WoI")
             modified_roll = self.modified_woi_roll(woi_roll, where)
             self.output_to_history("Modified Roll: %d" % modified_roll)
             self.handle_muslim_woi(modified_roll, where)
@@ -3043,11 +3044,10 @@ class Labyrinth(object):
                 print "At least 6 troops needed for Regime Change"
             else:
                 how_many = troops
-        governance_roll = self.get_roll_from_user("Enter Governance roll or r to have program roll: ")
-        pre_first_roll = self.get_roll_from_user(
-            "Enter first die (Raise/Drop) for Prestige roll or r to have program roll: ")
-        pre_second_roll = self.get_roll_from_user("Enter second die for Prestige roll or r to have program roll: ")
-        pre_third_roll = self.get_roll_from_user("Enter third die for Prestige roll or r to have program roll: ")
+        governance_roll = self.get_roll("governance")
+        pre_first_roll = self.get_roll("first (raise/drop) prestige")
+        pre_second_roll = self.get_roll("second (amount) prestige")
+        pre_third_roll = self.get_roll("third (amount) prestige")
         self.handle_regime_change(
             where, move_from, how_many, governance_roll, (pre_first_roll, pre_second_roll, pre_third_roll))
 
@@ -3093,10 +3093,9 @@ class Labyrinth(object):
                 return
             else:
                 how_many = troops
-        pre_first_roll = self.get_roll_from_user(
-            "Enter first die (Raise/Drop) for Prestige roll or r to have program roll: ")
-        pre_second_roll = self.get_roll_from_user("Enter second die for Prestige roll or r to have program roll: ")
-        pre_third_roll = self.get_roll_from_user("Enter third die for Prestige roll or r to have program roll: ")
+        pre_first_roll = self.get_roll("first (raise/drop) prestige")
+        pre_second_roll = self.get_roll("second (amount) prestige")
+        pre_third_roll = self.get_roll("third (amount) prestige")
         self.handle_withdraw(move_from, move_to, how_many, (pre_first_roll, pre_second_roll, pre_third_roll))
 
     def play_jihadist_card(self, card_number):
