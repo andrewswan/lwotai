@@ -870,7 +870,8 @@ class Card(object):
                             app.get_country(country).plots -= num
                             app.output_to_history("%d Plots remove(d) from %s." % (num, country), False)
                 app.markers.append("Wiretapping")
-                app.output_to_history("Wiretapping in Play.", True)
+                app.output_to_history("Draw a card.")
+                app.output_to_history("Wiretapping in Play.")
             elif self.number == 32:  # Back Channel
                 if app.us().is_hard():
                     return False
