@@ -285,10 +285,8 @@ class Country(object):
             return self.resources
 
     def troops(self):
-        troop_count = self.troopCubes
-        if "NATO" in self.markers:
-            troop_count += 2
-        return troop_count
+        """Returns the effective number of troops in this country (including NATO)"""
+        return self.troopCubes + 2 if "NATO" in self.markers else self.troopCubes
 
     def change_troops(self, delta):
         self.troopCubes += delta
