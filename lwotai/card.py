@@ -1364,7 +1364,7 @@ class Card(object):
             elif self.number in [87, 88, 89]:  # Martyrdom Operation
                 if app.execute_plot(1, False, [1], True) == 1:
                     app.output_to_history("No plots could be placed.")
-                    app.handle_radicalization(app.deck[str(self.number)].ops)
+                    app.handle_radicalization(app.card(self.number).ops)
             elif self.number == 90:  # Quagmire
                 app.set_posture("United States", "Soft")
                 app.output_to_history("US Posture now Soft.", False)
