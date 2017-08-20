@@ -45,7 +45,7 @@ class Utils(object):
     def getUserYesNoResponse(prompt):
         """Prompts the user for a yes/no answer (returns true or false)"""
         while True:
-            user_input = raw_input(prompt)
+            user_input = raw_input(prompt + " (y/n): ")
             if "yes".startswith(user_input.lower()):
                 return True
             elif "no".startswith(user_input.lower()):

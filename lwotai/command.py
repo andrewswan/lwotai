@@ -75,7 +75,7 @@ class Command(Cmd):
 
     def do_quit(self, _):
         """Quits the game and prompts you to save."""
-        if Utils.getUserYesNoResponse("Save? (y/n): "):
+        if Utils.getUserYesNoResponse("Save the game?"):
             print "Saving suspend file."
             self.saver.save_suspend_file(self.app)
         print "Exiting."

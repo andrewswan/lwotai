@@ -42,7 +42,7 @@ def _create_game():
                                     "Potent: ...and Major Jihad if 3 or more cells than troops",
                                     "Infectious: ...and US plays all its cards (not enforced by program)",
                                     "Virulent: ...and Jihad failure does not remove cells"])
-    ai_rolls = Utils.getUserYesNoResponse("Do you want me to roll dice for you?")
+    ai_rolls = Utils.getUserYesNoResponse("Do you want the program to roll dice for you?")
     return Labyrinth(scenario_number, ideology_number, ai_rolls=ai_rolls)
 
 
@@ -57,7 +57,7 @@ def main():
     saver.new_session()
     
     # Ask user if they want to continue previous game                    
-    if saver.suspended_game_exists() and Utils.getUserYesNoResponse("Resume suspended game? (y/n): "):
+    if saver.suspended_game_exists() and Utils.getUserYesNoResponse("Resume suspended game?"):
         app = saver.load_suspend_file()
     else:
         app = _create_game()
