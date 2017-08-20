@@ -1051,44 +1051,83 @@ class Card86(LabyrinthTestCase):
 class Card87(LabyrinthTestCase):
     """Martyrdom Operation"""
 
-    def test_playable(self):
+    def test_playable_if_non_islamist_rule_country_has_cell(self):
+        # Set up
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         iraq = app.get_country("Iraq")
-        self.assertFalse(app.deck.get(87).playable("Jihadist", app, False))
+        app.test_country("Iraq")
+        iraq.sleeperCells = 1
+        card87 = app.deck.get(87)
+
+        # Invoke and check
+        self.assertTrue(card87.playable("Jihadist", app, False))
+
+    def test_not_playable_if_only_islamist_rule_country_has_cell(self):
+        # Set up
+        app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
+        iraq = app.get_country("Iraq")
         app.test_country("Iraq")
         iraq.make_islamist_rule()
-        self.assertFalse(app.deck.get(87).playable("Jihadist", app, False))
         iraq.sleeperCells = 1
-        self.assertFalse(app.deck.get(87).playable("Jihadist", app, False))
-        iraq.make_poor()
-        self.assertTrue(app.deck.get(87).playable("Jihadist", app, False))
+        card87 = app.deck.get(87)
 
-    def test_puts_cell(self):
+        # Invoke and check
+        self.assertFalse(card87.playable("Jihadist", app, False))
+
+    def test_not_playable_if_no_country_has_cell(self):
+        # Set up
+        app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
+        app.test_country("Iraq")
+        iraq = app.get_country("Iraq")
+        iraq.make_islamist_rule()
+        card87 = app.deck.get(87)
+
+        # Invoke and check
+        self.assertFalse(card87.playable("Jihadist", app, False))
+
+    def test_does_not_put_cell(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         self.assertFalse(app.deck.get(87).puts_cell())
 
-    def test_event(self):
+    def test_event_places_two_plots_in_non_islamist_rule_country_with_cell(self):
+        # Set up
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         iraq = app.get_country("Iraq")
         app.test_country("Iraq")
         iraq.sleeperCells = 1
-        app.deck.get(87).playEvent("Jihadist", app)
-        self.assertTrue(iraq.sleeperCells == 0)
-        self.assertTrue(iraq.activeCells == 0)
-        self.assertTrue(iraq.plots == 2)
+        card87 = app.card(87)
 
+        # Invoke
+        card87.playEvent("Jihadist", app)
+
+        # Check
+        self.assertEqual(iraq.activeCells, 0)
+        self.assertEqual(iraq.sleeperCells, 0)
+        self.assertEqual(iraq.cadre, 1)
+        self.assertEqual(iraq.plots, 2)
+
+    def test_event_prefers_us_to_other_countries(self):
+        # Set up
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        iraq = app.get_country("Iraq")
         app.test_country("Iraq")
+        iraq = app.get_country("Iraq")
+        us = app.get_country("United States")
         iraq.sleeperCells = 1
-        app.get_country("United States").sleeperCells = 1
-        app.deck.get(87).playEvent("Jihadist", app)
-        self.assertTrue(iraq.sleeperCells == 1)
-        self.assertTrue(iraq.activeCells == 0)
-        self.assertTrue(iraq.plots == 0)
-        self.assertTrue(app.get_country("United States").sleeperCells == 0)
-        self.assertTrue(app.get_country("United States").activeCells == 0)
-        self.assertTrue(app.get_country("United States").plots == 2)
+        us.sleeperCells = 1
+        card87 = app.card(87)
+
+        # Invoke
+        card87.playEvent("Jihadist", app)
+
+        # Check
+        # -- Iraq unaffected
+        self.assertEqual(iraq.sleeperCells, 1)
+        self.assertEqual(iraq.activeCells, 0)
+        self.assertEqual(iraq.plots, 0)
+        # -- US plotted in
+        self.assertEqual(us.activeCells, 0)
+        self.assertEqual(us.sleeperCells, 0)
+        self.assertEqual(us.plots, 2)
 
 
 class Card88(LabyrinthTestCase):
