@@ -1,7 +1,5 @@
 # Game save files created by LWOTai
-suspend.lwot
-turn.*.lwot
-undo.lwot
+*.lwot
 # virtualenv
 venv
 # Temporary and binary files
