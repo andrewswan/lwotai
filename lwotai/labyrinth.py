@@ -296,9 +296,10 @@ class Labyrinth(object):
             self.output_to_history("-1 for Attempt to shift to Good", False)
 
         if use_gwot_penalty:
-            modified_roll += self.gwot_penalty()
-            if self.gwot_penalty() != 0:
-                self.output_to_history("-1 for GWOT Relations Penalty", False)
+            gwot_penalty = self.gwot_penalty()
+            modified_roll += gwot_penalty
+            if gwot_penalty:
+                self.output_to_history("%d for GWOT Relations Penalty" % gwot_penalty, False)
 
         if self.map.get(country_name).aid > 0:
             modified_roll += self.map.get(country_name).aid    # 20150131PS use number of aid markers rather than 1
@@ -312,27 +313,17 @@ class Labyrinth(object):
         return modified_roll
 
     def gwot_penalty(self):
-        world_position = 0
-        for country_name in self.map.country_names():
-            if self.map.get(country_name).type == "Non-Muslim" and self.map.get(country_name).name != "United States":
-                if self.map.get(country_name).is_hard():
-                    world_position += 1
-                elif self.map.get(country_name).is_soft():
-                    world_position -= 1
-        if world_position > 0:
-            world_position_str = "Hard"
-        elif world_position < 0:
-            world_position_str = "Soft"
+        """Returns the penalty to be added to a WoI roll, i.e. a number between 0 and -3"""
+        net_hard_countries = self.map.get_net_hard_countries()
+        if net_hard_countries > 0:
+            world_posture = "Hard"
+        elif net_hard_countries < 0:
+            world_posture = "Soft"
         else:
-            world_position_str = "Even"
-        if world_position > 3:
-            world_position = 3
-        elif world_position < -3:
-            world_position = -3
-        if self.us_posture() != world_position_str:
-            return -(abs(world_position))
-        else:
+            world_posture = "Even"
+        if self.us_posture() == world_posture:
             return 0
+        return -(abs(net_hard_countries))
 
     def change_prestige(self, delta, line_feed=True):
         """Changes US prestige by the given amount, then prints the new value"""
@@ -1433,55 +1424,55 @@ class Labyrinth(object):
         else:
             return self.travel_destinations(ops, is_radicalization)
 
-    def place_plots(self, country, roll_position, plot_rolls, is_martyrdom_operation=False, is_danish_cartoons=False,
-                    is_ksm=False):
-        if (self.map.get(country).total_cells(True)) > 0:
+    def place_plots(self, country_name, roll_position, plot_rolls, is_martyrdom_operation=False,
+                    is_danish_cartoons=False, is_ksm=False):
+        if (self.map.get(country_name).total_cells(True)) > 0:
             if is_martyrdom_operation:
-                self.remove_cell(country, "Jihadist")
-                self.output_to_history("Place 2 available plots in %s." % country, False)
-                self.map.get(country).plots += 2
+                self.remove_cell(country_name, "Jihadist")
+                self.output_to_history("Place 2 available plots in %s." % country_name, False)
+                self.map.get(country_name).plots += 2
                 roll_position = 1
             elif is_danish_cartoons:
                 if self.num_islamist_rule() > 0:
-                    self.output_to_history("Place any available plot in %s." % country, False)
+                    self.output_to_history("Place any available plot in %s." % country_name, False)
                 else:
-                    self.output_to_history("Place a Plot 1 in %s." % country, False)
-                self.map.get(country).plots += 1
+                    self.output_to_history("Place a Plot 1 in %s." % country_name, False)
+                self.map.get(country_name).plots += 1
                 roll_position = 1
             elif is_ksm:
-                if not self.map.get(country).is_islamist_rule():
-                    self.output_to_history("Place any available plot in %s." % country, False)
-                    self.map.get(country).plots += 1
+                if not self.map.get(country_name).is_islamist_rule():
+                    self.output_to_history("Place any available plot in %s." % country_name, False)
+                    self.map.get(country_name).plots += 1
                     roll_position = 1
             else:
                 ops_remaining = len(plot_rolls) - roll_position
-                cells_available = self.map.get(country).total_cells(True)
+                cells_available = self.map.get(country_name).total_cells(True)
                 plots_to_place = min(cells_available, ops_remaining)
-                self.output_to_history("--> %s plot attempt(s) in %s." % (plots_to_place, country), False)
+                self.output_to_history("--> %s plot attempt(s) in %s." % (plots_to_place, country_name), False)
                 successes = 0
                 failures = 0
                 for i in range(roll_position, roll_position + plots_to_place):
-                    if self.map.get(country).is_non_recruit_success(plot_rolls[i]):
+                    if self.map.get(country_name).is_non_recruit_success(plot_rolls[i]):
                         successes += 1
                     else:
                         failures += 1
                 self.output_to_history(
                     "Plot rolls: %d Successes rolled, %d Failures rolled" % (successes, failures), False)
-                for i in range(plots_to_place - self.map.get(country).num_active_cells()):
+                for i in range(plots_to_place - self.map.get(country_name).num_active_cells()):
                     self.output_to_history("Cell goes Active", False)
-                    self.map.get(country).sleeperCells -= 1
-                    self.map.get(country).activeCells += 1
+                    self.map.get(country_name).sleeperCells -= 1
+                    self.map.get(country_name).activeCells += 1
                 plots_placed = successes * self.ideology.plots_per_success()
-                self.map.get(country).plots += plots_placed
-                self.output_to_history("%d Plot(s) placed in %s." % (plots_placed, country), False)
-                if "Abu Sayyaf" in self.markers and country == "Philippines" and \
-                        self.map.get(country).troops() <= self.map.get(country).total_cells() and successes > 0:
+                self.map.get(country_name).plots += plots_placed
+                self.output_to_history("%d Plot(s) placed in %s." % (plots_placed, country_name), False)
+                if "Abu Sayyaf" in self.markers and country_name == "Philippines" and \
+                        self.map.get(country_name).troops() <= self.map.get(country_name).total_cells() and successes > 0:
                     self.output_to_history("Prestige loss due to Abu Sayyaf.", False)
                     self.change_prestige(-successes)
-                if "NEST" in self.markers and country == "Unites States":
+                if "NEST" in self.markers and country_name == "Unites States":
                     self.output_to_history(
                         "NEST in play. If jihadists have WMD, all plots in the US placed face up.", False)
-                self.output_to_history(self.map.get(country).summary(), True)
+                self.output_to_history(self.map.get(country_name).summary(), True)
                 roll_position += plots_to_place
         return roll_position
 
@@ -1568,7 +1559,7 @@ class Labyrinth(object):
             if roll_position == ops:
                 return 0
         # No GWOT Penalty
-        if self.gwot_penalty() >= 0:
+        if not self.gwot_penalty():
             self.debug_print("DEBUG: No GWOT Penalty")
             posture_dict = self.get_countries_with_us_posture_by_governance()
             roll_position = self.handle_plot_priorities(posture_dict, ops, roll_position, plot_rolls, is_ops,
