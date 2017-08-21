@@ -5,7 +5,10 @@ class Posture(object):
         self.__name = name
 
     def __eq__(self, o):
-        return o and self.__name == o.__name
+        try:
+            return self.__name == o.__name
+        except AttributeError:
+            return False
 
     def __ne__(self, o):
         return not self.__eq__(o)

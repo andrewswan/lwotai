@@ -147,7 +147,7 @@ class Country(object):
         if self._ought_to_have_been_tested():
             assert self.is_governed(), "Ungoverned country: %s" % self.print_country()
             if self.type == "Non-Muslim":
-                assert self.posture != "", "%s has no posture" % self.name
+                assert self.posture, "%s has no posture" % self.name
             elif self.type != "Iran":
                 assert self.is_aligned(), "%s is unaligned" % self.name
 
@@ -241,6 +241,10 @@ class Country(object):
 
     def governance_as_funding(self):
         return self.__governance.max_success_roll()
+
+    def get_posture(self):
+        """Returns the Posture of this country (might be None)"""
+        return self.posture
 
     def get_recruit_score(self, ops):
         if self.is_regime_change() and self.troops() - self.total_cells(True) >= 5:

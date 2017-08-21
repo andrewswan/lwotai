@@ -1053,7 +1053,7 @@ class Labyrinth(object):
 
     def get_posture(self, country_name):
         """Returns the given country's posture"""
-        return self.map.get(country_name).posture
+        return self.get_country(country_name).get_posture()
 
     def set_posture(self, country_name, posture):
         """Sets the posture of the named country"""
@@ -1112,7 +1112,7 @@ class Labyrinth(object):
         subdests = []
         if self.us().is_hard():
             for country in self.get_countries():
-                if country.type == "Non-Muslim" and not country.posture:
+                if country.type == "Non-Muslim" and not country.get_posture():
                     if is_radicalization or "Biometrics" not in self.lapsing or\
                             self.adjacent_country_has_cell(country.name):
                         subdests.append(country.name)
@@ -1154,7 +1154,7 @@ class Labyrinth(object):
         destinations for the Schengen Visas event
         """
         if self.us().is_hard():
-            candidates = self.names_of_countries(lambda c: c.schengen and not c.posture)
+            candidates = self.names_of_countries(lambda c: c.schengen and not c.get_posture())
         else:
             candidates = self.names_of_countries(lambda c: c.schengen and c.is_soft())
         if len(candidates) == 1:
@@ -1272,13 +1272,13 @@ class Labyrinth(object):
     def test_country(self, country_name):
         # Tests the named country, if untested
         country = self.map.get(country_name)
-        if country.type == "Non-Muslim" and not country.posture:
+        if country.type == "Non-Muslim" and not country.get_posture():
             test_roll = random.randint(1, 6)
             if test_roll <= 4:
                 country.make_soft()
             else:
                 country.make_hard()
-            self.output_to_history("%s tested, posture %s" % (country.name, country.posture), False)
+            self.output_to_history("%s tested, posture %s" % (country.name, country.get_posture()), False)
         elif country.is_ungoverned():
             test_roll = random.randint(1, 6)
             if test_roll <= 4:
@@ -1291,7 +1291,7 @@ class Labyrinth(object):
     def get_countries_with_us_posture_by_governance(self):
         countries_by_governance = {GOOD: [], FAIR: [], POOR: []}
         for country in self.map.country_names():
-            if (country != "United States") and (self.map.get(country).posture == self.us_posture()):
+            if (country != "United States") and (self.map.get(country).get_posture() == self.us_posture()):
                 if self.map.get(country).is_good():
                     countries_by_governance[GOOD].append(country)
                 elif self.map.get(country).is_fair():
@@ -1669,34 +1669,36 @@ class Labyrinth(object):
         if country_name == "India" and "Indo-Pakistani Talks" in self.markers:
             self.markers.remove("Indo-Pakistani Talks")
             self.output_to_history("Indo-Pakistani Talks no longer in play.", True)
+        target_country = self.map.get(country_name)
         if plot_type == "WMD":
             self.funding = 9
         else:
-            if self.map.get(country_name).is_good():
+            if target_country.is_good():
                 self.change_funding(plot_type * 2)
             else:
                 self.change_funding(plot_type)
         self.output_to_history("Jihadist Funding now %d" % self.funding, False)
-        if country_name != "Israel":
+        if target_country.name != "Israel":
             if posture_roll <= 4:
-                self.map.get(country_name).make_soft()
+                target_country.make_soft()
             else:
-                self.map.get(country_name).make_hard()
-            self.output_to_history("%s Posture now %s" % (country_name, self.map.get(country_name).posture), True)
-        if self.map.get(country_name).troops() > 0:
+                target_country.make_hard()
+            self.output_to_history("%s Posture now %s" % (country_name, target_country.get_posture()), True)
+        if target_country.troops() > 0:
             if plot_type == "WMD":
                 self.prestige = 1
             else:
                 self._reduce_prestige(1)
             self.output_to_history("Troops present so US Prestige now %d" % self.prestige, False)
-        if self.map.get(country_name).schengen:
+        if target_country.schengen:
             for i in range(len(schengen_countries)):
-                country = self.get_country(schengen_countries[i])
+                schengen_country = self.get_country(schengen_countries[i])
                 if schengen_posture_rolls[i] <= 4:
-                    country.make_soft()
+                    schengen_country.make_soft()
                 else:
-                    country.make_hard()
-                self.output_to_history("%s Posture now %s" % (schengen_countries[i], country.posture), False)
+                    schengen_country.make_hard()
+                self.output_to_history(
+                    "%s Posture now %s" % (schengen_countries[i], schengen_country.get_posture()), False)
         self.output_to_history("", False)
 
     def _resolve_plot_in_muslim_country(self, country, governance_rolls, is_backlash, plot_type):
@@ -1961,12 +1963,12 @@ class Labyrinth(object):
                        country.sleeperCells, country.cadre, country.troops())
         for country in self.get_countries():
             if country.type == "Non-Muslim" and country.name != "United States" and country.is_hard():
-                print "%s, Posture %s" % (country.name, country.posture)
+                print "%s, Posture %s" % (country.name, country.get_posture())
         for country in self.get_countries():
             if country.type == "Non-Muslim" and country.name != "United States" and country.is_soft():
-                print "%s, Posture %s" % (country.name, country.posture)
+                print "%s, Posture %s" % (country.name, country.get_posture())
         for country in self.get_countries():
-            if country.type == "Non-Muslim" and country.name != "United States" and not country.posture:
+            if country.type == "Non-Muslim" and country.name != "United States" and not country.get_posture():
                 print "%s, Untested" % country.name
 
     def list_plot_countries(self, _=None):
@@ -3215,7 +3217,7 @@ class Labyrinth(object):
 
     def us_posture(self):
         """Returns the US posture ('HARD' or 'SOFT' Posture)"""
-        return self.us().posture
+        return self.us().get_posture()
 
     def end_turn(self):
         """Performs end-of-turn activities."""
