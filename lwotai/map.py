@@ -141,8 +141,8 @@ class Map(object):
         net_hard_countries = 0
         for country in self.countries():
             if country.name != "United States":
-                if country.is_hard() and net_hard_countries < 3:
+                if country.is_hard():
                     net_hard_countries += 1
-                elif country.is_soft() and net_hard_countries > -3:
+                elif country.is_soft():
                     net_hard_countries -= 1
-        return net_hard_countries
+        return max(-3, min(net_hard_countries, 3))
