@@ -308,7 +308,7 @@ class Card62(LabyrinthTestCase):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         self.assertFalse(app.deck.get(62).puts_cell())
 
-    def test_event(self):
+    def test_event_removes_ctr_marker_from_russia(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("Russia").markers.append("CTR")
         app.get_country("Caucasus").posture = HARD
@@ -319,6 +319,7 @@ class Card62(LabyrinthTestCase):
         self.assertTrue(app.get_country("Caucasus").posture == HARD)
         self.assertTrue(app.get_country("Central Asia").is_ungoverned())
 
+    def test_event_changes_caucasus_posture_if_that_changes_world_posture(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("Caucasus").posture = HARD
         app.get_country("Spain").posture = SOFT
@@ -328,23 +329,42 @@ class Card62(LabyrinthTestCase):
         self.assertTrue(app.get_country("Caucasus").posture == SOFT)
         self.assertTrue(app.get_country("Central Asia").is_ungoverned())
 
+    def test_event_shifts_central_asia_from_neutral_to_adversary_if_caucasus_would_not_affect_world_posture(self):
+        # Set up
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        app.get_country("Caucasus").posture = HARD
-        app.get_country("Spain").posture = HARD
+        app.get_country("Caucasus").make_hard()
+        app.get_country("France").make_hard()
+        app.get_country("Germany").make_hard()
+        app.get_country("Italy").make_hard()
+        app.us().make_hard()
+        app.get_country("Central Asia").make_ungoverned()  # app should test it to Neutral
+
+        # Invoke
         app.deck.get(62).playEvent("Jihadist", app)
-        self.assertTrue("CTR" not in app.get_country("Russia").markers)
-        self.assertTrue(app.get_country("Caucasus").posture == HARD)
+
+        # Check
+        self.assertFalse("CTR" in app.get_country("Russia").markers)
+        self.assertEqual(app.get_country("Caucasus").get_posture(), HARD)
         self.assertTrue(app.get_country("Central Asia").is_governed())
         self.assertTrue(app.get_country("Central Asia").is_adversary())
 
+    def test_event_shifts_central_asia_from_ally_to_neutral_if_caucasus_would_not_affect_world_posture(self):
+        # Set up extreme hard world posture
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        app.get_country("Caucasus").posture = HARD
-        app.get_country("Spain").posture = HARD
-        app.test_country("Central Asia")
         app.get_country("Central Asia").make_ally()
+        app.get_country("Central Asia").make_fair()
+        app.get_country("Benelux").make_hard()
+        app.get_country("France").make_hard()
+        app.get_country("Israel").make_hard()
+        app.get_country("Italy").make_hard()
+        app.us().make_hard()
+        caucasus_posture_before = app.get_posture("Caucasus")
+
+        # Invoke
         app.deck.get(62).playEvent("Jihadist", app)
-        self.assertTrue("CTR" not in app.get_country("Russia").markers)
-        self.assertTrue(app.get_country("Caucasus").posture == HARD)
+
+        # Check
+        self.assertEqual(app.get_posture("Caucasus"), caucasus_posture_before)
         self.assertTrue(app.get_country("Central Asia").is_governed())
         self.assertTrue(app.get_country("Central Asia").is_neutral())
 

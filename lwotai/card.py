@@ -134,7 +134,7 @@ class Card(object):
             elif self.number == 40:  # Mass Turnout
                 return app.num_regime_change() > 0
             elif self.number == 41:  # NATO
-                return (app.num_regime_change() > 0) and (app.gwot_penalty() >= 0)
+                return not app.gwot_penalty() and app.num_regime_change() > 0
             elif self.number == 42:  # Pakistani Offensive
                 return (app.get_country("Pakistan").is_ally()) and ("FATA" in app.get_country("Pakistan").markers)
             elif self.number == 43:  # Patriot Act

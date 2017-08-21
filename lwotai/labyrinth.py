@@ -299,9 +299,9 @@ class Labyrinth(object):
 
         if use_gwot_penalty:
             gwot_penalty = self.gwot_penalty()
-            modified_roll += gwot_penalty
+            modified_roll -= gwot_penalty
             if gwot_penalty:
-                self.output_to_history("%d for GWOT Relations Penalty" % gwot_penalty, False)
+                self.output_to_history("-%d penalty for GWOT Relations" % gwot_penalty, False)
 
         if self.map.get(country_name).aid > 0:
             modified_roll += self.map.get(country_name).aid    # 20150131PS use number of aid markers rather than 1
@@ -315,7 +315,7 @@ class Labyrinth(object):
         return modified_roll
 
     def gwot_penalty(self):
-        """Returns the penalty to be added to a WoI roll, i.e. a number between 0 and -3"""
+        """Returns the penalty to be subtracted from a WoI roll, i.e. a number between 0 (no penalty) and 3"""
         net_hard_countries = self.map.get_net_hard_countries()
         if net_hard_countries > 0:
             world_posture = HARD
@@ -325,7 +325,7 @@ class Labyrinth(object):
             world_posture = None
         if self.us_posture() == world_posture:
             return 0
-        return -(abs(net_hard_countries))
+        return abs(net_hard_countries)
 
     def change_prestige(self, delta, line_feed=True):
         """Changes US prestige by the given amount, then prints the new value"""
@@ -1904,10 +1904,7 @@ class Labyrinth(object):
         else:
             self.us().make_hard()
             self.output_to_history("United States Posture now Hard.", False)
-        if self.gwot_penalty() == 0:
-            self.change_prestige(1)
-        else:
-            self.change_prestige(-1)
+        self.change_prestige(-1 if self.gwot_penalty() else 1)
 
     def list_countries_in_param(self, needed=None):
         print ""
