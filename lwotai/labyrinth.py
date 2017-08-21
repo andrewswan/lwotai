@@ -1154,9 +1154,9 @@ class Labyrinth(object):
         destinations for the Schengen Visas event
         """
         if self.us().is_hard():
-            candidates = self.names_of_countries(lambda c: c.schengen and c.posture == '')
+            candidates = self.names_of_countries(lambda c: c.schengen and not c.posture)
         else:
-            candidates = self.names_of_countries(lambda c: c.schengen and c.posture == 'Soft')
+            candidates = self.names_of_countries(lambda c: c.schengen and c.is_soft())
         if len(candidates) == 1:
             return [candidates[0], candidates[0]]  # yes, same one twice
         if len(candidates) > 1:
@@ -2522,22 +2522,22 @@ class Labyrinth(object):
         """Prompts the user to set the posture of the given country (returns true if successful)"""
         print "Adjusting posture for -", country_name
         while True:
-            posture = self.my_raw_input("Enter posture ('Hard', 'Soft', 'Untested'): ")
-            if posture == "":  # User aborted
+            posture_str = self.my_raw_input("Enter posture ('Hard', 'Soft', 'Untested'): ")
+            if posture_str == "":  # User aborted
                 return False
-            if posture.lower() == "hard":
+            if posture_str.lower() == "hard":
                 print "Changing posture to Hard"
                 self.get_country(country_name).make_hard()
                 return True
-            if posture.lower() == "soft":
+            if posture_str.lower() == "soft":
                 print "Changing posture to Soft"
                 self.get_country(country_name).make_soft()
                 return True
-            if posture.lower() == "untested":
+            if posture_str.lower() == "untested":
                 print "Changing posture to Untested"
                 self.get_country(country_name).remove_posture()
                 return True
-            print "Invalid posture value '{}'".format(posture)
+            print "Invalid posture value '%s'" % posture_str
             return False
 
     def adjust_country_troops(self, country_name):

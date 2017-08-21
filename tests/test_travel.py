@@ -161,7 +161,7 @@ class TravelTest(LabyrinthTestCase):
         dest = app.travel_destinations(3)
         self.assertEqual(dest, ["Afghanistan", "Jordan", "Philippines"])
 
-        app.get_country("Kenya/Tanzania").posture = ""
+        app.get_country("Kenya/Tanzania").posture = None
         phCount = 0
         ktCount = 0
         for i in range(100):
