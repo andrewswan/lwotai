@@ -114,6 +114,18 @@ class MapTest(LabyrinthTestCase):
         # Assert
         self.assertEqual(-3, net_hard_countries)  # should max out at -3
 
+    def test_get_net_hard_countries_when_more_are_hard(self):
+        # Set up
+        game_map = self.create_test_map()
+        for country_name in ["Benelux", "Canada", "China", "France", "Germany", "India", "Russia", "Scandinavia"]:
+            game_map.get(country_name).make_hard()
+
+        # Invoke
+        net_hard_countries = game_map.get_net_hard_countries()
+
+        # Assert
+        self.assertEqual(3, net_hard_countries)  # should be capped at 3
+
     def test_getting_invalid_country_name_returns_none(self):
         # Set up
         game_map = self.create_test_map()
