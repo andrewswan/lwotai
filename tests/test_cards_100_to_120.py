@@ -3,6 +3,7 @@ import unittest
 from labyrinth_test_case import LabyrinthTestCase
 from lwotai.governance import GOOD
 from lwotai.labyrinth import Labyrinth
+from postures.posture import SOFT, HARD
 
 
 class Card100(LabyrinthTestCase):
@@ -63,13 +64,13 @@ class Card101(LabyrinthTestCase):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.card(101).playEvent("US", app)
         self.assertEqual(app.prestige, 8)
-        self.assertEqual(app.get_posture("Serbia"), "Soft")
+        self.assertEqual(app.get_posture("Serbia"), SOFT)
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        app.set_posture("United States", "Soft")
+        app.set_posture("United States", SOFT)
         app.card(101).playEvent("Jihadist", app)
         self.assertEqual(app.prestige, 8)
-        self.assertEqual(app.get_posture("Serbia"), "Hard")
+        self.assertEqual(app.get_posture("Serbia"), HARD)
 
 
 class Card102(LabyrinthTestCase):
@@ -684,14 +685,14 @@ class Card115(LabyrinthTestCase):
         self.assertFalse(app.card(115).playable("Jihadist", app, False))
         app.test_country("India")
         app.get_country("India").sleeperCells = 1
-        app.set_posture("India", "Hard")
+        app.set_posture("India", HARD)
         self.assertTrue(app.card(115).playable("US", app, True))
         self.assertTrue(app.card(115).playable("Jihadist", app, False))
         app.get_country("India").sleeperCells = 0
         self.assertFalse(app.card(115).playable("US", app, True))
         self.assertFalse(app.card(115).playable("Jihadist", app, False))
         app.get_country("India").sleeperCells = 1
-        app.set_posture("India", "Soft")
+        app.set_posture("India", SOFT)
         self.assertFalse(app.card(115).playable("US", app, True))
         self.assertFalse(app.card(115).playable("Jihadist", app, False))
 
@@ -700,14 +701,14 @@ class Card115(LabyrinthTestCase):
         self.assertFalse(app.card(115).playable("Jihadist", app, False))
         app.test_country("Thailand")
         app.get_country("Thailand").sleeperCells = 1
-        app.set_posture("Thailand", "Hard")
+        app.set_posture("Thailand", HARD)
         self.assertTrue(app.card(115).playable("US", app, True))
         self.assertTrue(app.card(115).playable("Jihadist", app, False))
         app.get_country("Thailand").sleeperCells = 0
         self.assertFalse(app.card(115).playable("US", app, True))
         self.assertFalse(app.card(115).playable("Jihadist", app, False))
         app.get_country("Thailand").sleeperCells = 1
-        app.set_posture("Thailand", "Soft")
+        app.set_posture("Thailand", SOFT)
         self.assertFalse(app.card(115).playable("US", app, True))
         self.assertFalse(app.card(115).playable("Jihadist", app, False))
 
@@ -716,14 +717,14 @@ class Card115(LabyrinthTestCase):
         self.assertFalse(app.card(115).playable("Jihadist", app, False))
         app.test_country("Philippines")
         app.get_country("Philippines").sleeperCells = 1
-        app.set_posture("Philippines", "Hard")
+        app.set_posture("Philippines", HARD)
         self.assertTrue(app.card(115).playable("US", app, True))
         self.assertTrue(app.card(115).playable("Jihadist", app, False))
         app.get_country("Philippines").sleeperCells = 0
         self.assertFalse(app.card(115).playable("US", app, True))
         self.assertFalse(app.card(115).playable("Jihadist", app, False))
         app.get_country("Philippines").sleeperCells = 1
-        app.set_posture("Philippines", "Soft")
+        app.set_posture("Philippines", SOFT)
         self.assertFalse(app.card(115).playable("US", app, True))
         self.assertFalse(app.card(115).playable("Jihadist", app, False))
 
@@ -735,7 +736,7 @@ class Card115(LabyrinthTestCase):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.test_country("Philippines")
         app.get_country("Philippines").sleeperCells = 1
-        app.set_posture("Philippines", "Hard")
+        app.set_posture("Philippines", HARD)
         app.card(115).playEvent("US", app)
         self.assertEqual(app.get_country("Philippines").sleeperCells, 0)
 
@@ -745,7 +746,7 @@ class Card115(LabyrinthTestCase):
         app.get_country("Indonesia/Malaysia").make_ally()
         app.test_country("Philippines")
         app.get_country("Philippines").sleeperCells = 1
-        app.set_posture("Philippines", "Hard")
+        app.set_posture("Philippines", HARD)
         print "Choose Indonesia/Malaysia"
         app.card(115).playEvent("US", app)
         self.assertEqual(app.get_country("Indonesia/Malaysia").sleeperCells, 0)

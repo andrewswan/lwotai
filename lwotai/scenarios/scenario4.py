@@ -38,7 +38,7 @@ class Scenario4(Scenario):
         game.get_country("Pakistan").make_ally()
         game.get_country("Pakistan").sleeperCells = 1
         game.get_country("Pakistan").markers.append("FATA")
-        game.get_country("Philippines").posture = "Soft"
+        game.get_country("Philippines").make_soft()
         game.get_country("Philippines").troopCubes = 2
         game.get_country("Philippines").sleeperCells = 1
         game.get_country("Saudi Arabia").make_poor()
@@ -48,7 +48,7 @@ class Scenario4(Scenario):
         game.get_country("Syria").make_fair()
         game.get_country("Syria").make_adversary()
         game.get_country("Syria").sleeperCells = 1
-        game.get_country("United Kingdom").posture = "Hard"
+        game.get_country("United Kingdom").make_hard()
         game.markers.append("Abu Sayyaf")
         game.markers.append("Enhanced Measures")
         game.markers.append("NEST")

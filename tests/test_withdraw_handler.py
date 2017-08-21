@@ -1,5 +1,6 @@
 from labyrinth_test_case import LabyrinthTestCase
 from lwotai.labyrinth import Labyrinth
+from postures.posture import SOFT
 
 
 class WithdrawHandlerTest(LabyrinthTestCase):
@@ -7,7 +8,7 @@ class WithdrawHandlerTest(LabyrinthTestCase):
 
     def test_withdraw(self):
         app = Labyrinth(1, 1, self.set_up_test_scenario_2)
-        app.set_posture("United States", "Soft")
+        app.set_posture("United States", SOFT)
         self.assertTrue(app.get_country("Afghanistan").is_good())
         self.assertTrue(app.get_country("Afghanistan").is_ally())
         self.assertEqual(app.get_country("Afghanistan").troops(), 6)
@@ -28,7 +29,7 @@ class WithdrawHandlerTest(LabyrinthTestCase):
         self.assertEqual(app.troops, 3)
 
         app = Labyrinth(1, 1, self.set_up_test_scenario_2)
-        app.set_posture("United States", "Soft")
+        app.set_posture("United States", SOFT)
         self.assertTrue(app.get_country("Afghanistan").is_good())
         self.assertTrue(app.get_country("Afghanistan").is_ally())
         self.assertEqual(app.get_country("Afghanistan").troops(), 6)

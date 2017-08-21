@@ -1,5 +1,6 @@
 from labyrinth_test_case import LabyrinthTestCase
 from lwotai.labyrinth import Labyrinth
+from postures.posture import SOFT, HARD
 
 
 class RegimeChangeHandlerTest(LabyrinthTestCase):
@@ -7,7 +8,7 @@ class RegimeChangeHandlerTest(LabyrinthTestCase):
 
     def test_regime_change(self):
         app = Labyrinth(1, 1, self.set_up_test_scenario)
-        app.get_country("United States").posture = "Soft"
+        app.get_country("United States").posture = SOFT
         self.assertTrue(app.get_country("Afghanistan").is_islamist_rule())
         self.assertTrue(app.get_country("Afghanistan").is_adversary())
         self.assertEqual(app.get_country("Afghanistan").troops(), 0)
@@ -29,7 +30,7 @@ class RegimeChangeHandlerTest(LabyrinthTestCase):
         self.assertEqual(app.troops, 9)
 
         app = Labyrinth(1, 1, self.set_up_test_scenario)
-        app.get_country("United States").posture = "Hard"
+        app.get_country("United States").posture = HARD
         self.assertTrue(app.get_country("Afghanistan").is_islamist_rule())
         self.assertTrue(app.get_country("Afghanistan").is_adversary())
         self.assertEqual(app.get_country("Afghanistan").troops(), 0)
@@ -51,7 +52,7 @@ class RegimeChangeHandlerTest(LabyrinthTestCase):
         self.assertEqual(app.troops, 3)
 
         app = Labyrinth(1, 1, self.set_up_test_scenario)
-        app.get_country("United States").posture = "Hard"
+        app.get_country("United States").posture = HARD
         self.assertTrue(app.get_country("Afghanistan").is_islamist_rule())
         self.assertTrue(app.get_country("Afghanistan").is_adversary())
         self.assertEqual(app.get_country("Afghanistan").troops(), 0)
@@ -73,7 +74,7 @@ class RegimeChangeHandlerTest(LabyrinthTestCase):
         self.assertEqual(app.troops, 3)
 
         app = Labyrinth(1, 1, self.set_up_test_scenario)
-        app.get_country("United States").posture = "Hard"
+        app.get_country("United States").posture = HARD
         self.assertTrue(app.get_country("Afghanistan").is_islamist_rule())
         self.assertTrue(app.get_country("Afghanistan").is_adversary())
         self.assertEqual(app.get_country("Afghanistan").troops(), 0)
@@ -95,7 +96,7 @@ class RegimeChangeHandlerTest(LabyrinthTestCase):
         self.assertEqual(app.troops, 3)
 
         app = Labyrinth(1, 1, self.set_up_test_scenario)
-        app.get_country("United States").posture = "Hard"
+        app.get_country("United States").posture = HARD
         self.assertTrue(app.get_country("Afghanistan").is_islamist_rule())
         self.assertTrue(app.get_country("Afghanistan").is_adversary())
         self.assertEqual(app.get_country("Afghanistan").troops(), 0)
@@ -117,7 +118,7 @@ class RegimeChangeHandlerTest(LabyrinthTestCase):
         self.assertEqual(app.troops, 3)
 
         app = Labyrinth(1, 1, self.set_up_test_scenario)
-        app.get_country("United States").posture = "Hard"
+        app.get_country("United States").posture = HARD
         self.assertTrue(app.get_country("Afghanistan").is_islamist_rule())
         self.assertTrue(app.get_country("Afghanistan").is_adversary())
         self.assertEqual(app.get_country("Afghanistan").troops(), 0)
@@ -141,7 +142,7 @@ class RegimeChangeHandlerTest(LabyrinthTestCase):
         app = Labyrinth(1, 1, self.set_up_test_scenario)
         app.troops -= 8
         app.get_country("Pakistan").change_troops(8)
-        app.get_country("United States").posture = "Hard"
+        app.get_country("United States").posture = HARD
         self.assertTrue(app.get_country("Afghanistan").is_islamist_rule())
         self.assertTrue(app.get_country("Afghanistan").is_adversary())
         self.assertEqual(app.get_country("Afghanistan").troops(), 0)

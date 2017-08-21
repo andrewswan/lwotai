@@ -2,6 +2,7 @@ from lwotai.alignment import ALLY, NEUTRAL, ADVERSARY
 from lwotai.governance import GOOD, FAIR, POOR, ISLAMIST_RULE
 from lwotai.governance import Governance
 from lwotai.utils import Utils
+from postures.posture import HARD, SOFT
 
 
 class Country(object):
@@ -21,7 +22,7 @@ class Country(object):
         self.name = name
         self.oil = oil
         self.plots = 0
-        self.posture = posture
+        self.posture = Utils.require_none_or_one_of(posture, [HARD, SOFT])
         self.recruit = recruit
         self.regimeChange = 0
         self.resources = resources
@@ -65,7 +66,7 @@ class Country(object):
         return self.__governance == FAIR
 
     def is_hard(self):
-        return self.posture == "Hard"
+        return self.posture == HARD
 
     def is_poor(self):
         return self.__governance == POOR
@@ -77,7 +78,7 @@ class Country(object):
         return self.__governance is not None
 
     def is_soft(self):
-        return self.posture == "Soft"
+        return self.posture == SOFT
 
     def is_ungoverned(self):
         return not self.is_governed()
@@ -103,12 +104,17 @@ class Country(object):
     def make_hard(self):
         """Sets a Non-Muslim country to Hard posture"""
         if self.type == "Non-Muslim":
-            self.posture = "Hard"
+            self.set_posture(HARD)
 
     def make_soft(self):
         """Sets a Non-Muslim country to Soft posture"""
         if self.type == "Non-Muslim":
-            self.posture = "Soft"
+            self.set_posture(SOFT)
+
+    def set_posture(self, new_posture):
+        """Sets the posture of this (Non-Muslim) country"""
+        assert self.type == "Non-Muslim"
+        self.posture = Utils.require_none_or_one_of(new_posture, [HARD, SOFT])
 
     def toggle_posture(self):
         """Switches this country between Hard and Soft posture (error if no posture set)"""
@@ -120,9 +126,9 @@ class Country(object):
             raise Exception("%s has no posture" % self.name)
 
     def remove_posture(self):
-        """Removes any posture from a Non-Muslim country"""
-        if self.type == "Non-Muslim":
-            self.posture = ""
+        """Removes any posture from this (Non-Muslim) country"""
+        assert self.type == "Non-Muslim"
+        self.posture = None
 
     def remove_plot_marker(self):
         """Removes one plot marker from this country, if any are present; returns True if one was removed"""

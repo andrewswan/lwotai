@@ -9,6 +9,6 @@ class Scenario2(Scenario):
 
     def set_up(self, game):
         Scenario1().set_up(game)
-        game.map["United States"].posture = "Soft"
+        game.us().make_soft()
         print "Remove the 'Axis of Evil' card (78) from the game."
         print ""

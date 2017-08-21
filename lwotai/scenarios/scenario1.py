@@ -32,4 +32,4 @@ class Scenario1(Scenario):
         game.get_country("Somalia").besieged = 1
         game.get_country("Syria").make_fair()
         game.get_country("Syria").make_adversary()
-        game.get_country("United States").posture = "Hard"
+        game.us().make_hard()

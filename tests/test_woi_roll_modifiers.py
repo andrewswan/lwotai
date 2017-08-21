@@ -1,5 +1,6 @@
 from labyrinth_test_case import LabyrinthTestCase
 from lwotai.labyrinth import Labyrinth
+from postures.posture import SOFT, HARD
 
 
 class WoiRollModifiers(LabyrinthTestCase):
@@ -54,13 +55,13 @@ class WoiRollModifiers(LabyrinthTestCase):
         """GWOT Penalty"""
         app = Labyrinth(1, 1, self.set_up_test_scenario)
         self.assertEqual(app.modified_woi_roll(3, "Gulf States"), 3)
-        app.get_country("United States").posture = "Soft"
+        app.get_country("United States").posture = SOFT
         self.assertEqual(app.modified_woi_roll(3, "Gulf States"), 2)
-        app.get_country("Canada").posture = "Hard"
+        app.get_country("Canada").posture = HARD
         self.assertEqual(app.modified_woi_roll(3, "Gulf States"), 1)
-        app.get_country("France").posture = "Hard"
+        app.get_country("France").posture = HARD
         self.assertEqual(app.modified_woi_roll(3, "Gulf States"), 0)
-        app.get_country("Germany").posture = "Hard"
+        app.get_country("Germany").posture = HARD
         self.assertEqual(app.modified_woi_roll(3, "Gulf States"), 0)
 
     def test_adjacent_countries(self):

@@ -48,7 +48,7 @@ class LabyrinthTestCase(unittest.TestCase):
         app.map.get("Afghanistan").make_adversary()
         app.map.get("Afghanistan").sleeperCells = 4
         app.map.get("Somalia").besieged = 1
-        app.map.get("United States").posture = "Hard"
+        app.map.get("United States").make_hard()
 
     @staticmethod
     def set_up_test_scenario_2(app):
@@ -83,7 +83,7 @@ class LabyrinthTestCase(unittest.TestCase):
         app.map.get("Afghanistan").aid = 1
         app.map.get("Afghanistan").besieged = 0
         app.map.get("Somalia").besieged = 1
-        app.map.get("United States").posture = "Hard"
+        app.map.get("United States").make_hard()
 
     @staticmethod
     def set_up_test_scenario_3(app):
@@ -114,12 +114,12 @@ class LabyrinthTestCase(unittest.TestCase):
         app.map.get("Afghanistan").make_adversary()
         app.map.get("Afghanistan").sleeperCells = 4
         app.map.get("Somalia").besieged = 1
-        app.map.get("United States").posture = "Hard"
-        app.map.get("France").posture = "Hard"
+        app.map.get("United States").make_hard()
+        app.map.get("France").make_hard()
         app.map.get("France").cadre = 1
-        app.map.get("Spain").posture = "Soft"
+        app.map.get("Spain").make_soft()
         app.map.get("Spain").sleeperCells = 1
-        app.map.get("Germany").posture = "Hard"
+        app.map.get("Germany").make_hard()
         app.map.get("Germany").activeCells = 1
         app.map.get("Germany").sleeperCells = 1
 

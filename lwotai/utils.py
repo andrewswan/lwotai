@@ -16,6 +16,18 @@ class Utils(object):
         return Utils.require_type(value, required_type)
 
     @staticmethod
+    def require_none_or_one_of(value, allowed_values):
+        if value is None:
+            return value
+        return Utils.require_one_of(value, allowed_values)
+
+    @staticmethod
+    def require_one_of(value, allowed_values):
+        if value in allowed_values:
+            return value
+        raise AssertionError("'%s' not in %s" % (value, allowed_values))
+
+    @staticmethod
     def require_type(value, required_type):
         """
         Asserts that the given value is of the given type

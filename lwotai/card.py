@@ -1,6 +1,7 @@
 import random
 
 from lwotai.governance import GOOD, POOR, ISLAMIST_RULE
+from postures.posture import SOFT
 
 
 class Card(object):
@@ -112,7 +113,7 @@ class Card(object):
                         return False
                 return True
             elif self.number == 34:  # Enhanced Measures
-                if "Leak-Enhanced Measures" in app.markers or app.us_posture() == "Soft":
+                if "Leak-Enhanced Measures" in app.markers or app.us_posture() == SOFT:
                     return False
                 return app.num_disruptable() > 0
             elif self.number == 35:  # Hajib
@@ -917,7 +918,7 @@ class Card(object):
                 app.get_country("Turkey").improve_governance()
                 app.output_to_history("Turkey Governance now %s." % app.get_country("Turkey").governance_str(), False)
                 app.change_funding(-2)
-                posture = app.get_posture_from_user("Select Frances's Posture (hard or soft): ")
+                posture = app.get_posture_from_user("Select France's Posture (hard or soft): ")
                 app.set_posture("France", posture)
                 app.output_to_history(app.get_country("Turkey").summary(), False)
                 app.output_to_history(app.get_country("France").summary(), True)
@@ -1121,7 +1122,7 @@ class Card(object):
             elif self.number == 55:  # Uyghur Jihad
                 app.test_country("China")
                 if app.cells > 0:
-                    if app.get_posture("China") == "Soft":
+                    if app.get_posture("China") == SOFT:
                         app.place_cell("China")
                     else:
                         app.place_cell("Central Asia")
@@ -1165,21 +1166,21 @@ class Card(object):
                     app.output_to_history("CTR removed from Russia.", True)
                 else:
                     target_caucasus = False
-                    if app.get_posture("Caucasus") in [None, "", app.us_posture()]:
+                    if app.get_posture("Caucasus") in [None, app.us_posture()]:
                         if app.gwot_penalty() == 0:
                             caucasus_posture = app.get_posture("Caucasus")
                             if app.us().is_hard():
-                                app.set_posture("Caucasus", "Soft")
+                                app.get_country("Caucasus").make_soft()
                             else:
-                                app.set_posture("Caucasus", "Hard")
+                                app.get_country("Caucasus").make_hard()
                             if app.gwot_penalty() < 0:
                                 target_caucasus = True
                             app.set_posture("Caucasus", caucasus_posture)
                     if target_caucasus:
                         if app.us().is_hard():
-                            app.set_posture("Caucasus", "Soft")
+                            app.get_country("Caucasus").make_soft()
                         else:
-                            app.set_posture("Caucasus", "Hard")
+                            app.get_country("Caucasus").make_hard()
                         app.output_to_history("Caucasus posture now %s" % app.get_posture("Caucasus"), False)
                         app.output_to_history(app.get_country("Caucasus").summary(), True)
                     else:
@@ -1247,9 +1248,9 @@ class Card(object):
                     return
                 app.handle_travel(2, False, True)
             elif self.number == 75:  # Schroeder & Chirac
-                app.set_posture("Germany", "Soft")
+                app.set_posture("Germany", SOFT)
                 app.output_to_history("%s Posture now %s" % ("Germany", app.get_posture("Germany")), True)
-                app.set_posture("France", "Soft")
+                app.set_posture("France", SOFT)
                 app.output_to_history("%s Posture now %s" % ("France", app.get_posture("France")), True)
                 app.change_prestige(-1)
             elif self.number == 76:  # Abu Ghurayb
@@ -1276,7 +1277,7 @@ class Card(object):
             elif self.number == 78:  # Axis of Evil
                 app.output_to_history("US discards any Iran, Hizballah, or Jaysh al-Mahdi cards from hand.", False)
                 if app.us().is_soft():
-                    app.set_posture("United States", "Hard")
+                    app.us().make_hard()
                     app.output_to_history("US Posture now Hard.", False)
                 prestige_rolls = []
                 for i in range(3):
@@ -1344,9 +1345,9 @@ class Card(object):
                     prestige_multiplier = -1
                 app.change_prestige(min(us_prestige_rolls[1], us_prestige_rolls[2]) * prestige_multiplier, False)
                 if posture_roll <= 4:
-                    app.set_posture("United States", "Soft")
+                    app.us().make_soft()
                 else:
-                    app.set_posture("United States", "Hard")
+                    app.us().make_hard()
                 app.output_to_history("US Posture now %s" % app.us_posture(), True)
                 allies = app.minor_jihad_in_good_fair_choice(1, True)
                 if not allies:
@@ -1366,7 +1367,7 @@ class Card(object):
                     app.output_to_history("No plots could be placed.")
                     app.handle_radicalization(app.card(self.number).ops)
             elif self.number == 90:  # Quagmire
-                app.set_posture("United States", "Soft")
+                app.set_posture("United States", SOFT)
                 app.output_to_history("US Posture now Soft.", False)
                 app.output_to_history("US randomly discards two cards and Jihadist plays them.", False)
                 app.output_to_history("Do this using the 'jihadist_card' command for each card.", True)
@@ -1448,14 +1449,15 @@ class Card(object):
             elif self.number == 101:  # Kosovo
                 app.change_prestige(1)
                 app.test_country("Serbia")
+                serbia = app.get_country("Serbia")
                 if app.us().is_soft():
-                    app.set_posture("Serbia", "Hard")
+                    serbia.make_hard()
                 else:
-                    app.set_posture("Serbia", "Soft")
+                    serbia.make_soft()
                 app.output_to_history("Serbia Posture now %s." % app.get_posture("Serbia"), True)
             elif self.number == 102:  # Former Soviet Union
-                testRoll = random.randint(1, 6)
-                if testRoll <= 4:
+                test_roll = random.randint(1, 6)
+                if test_roll <= 4:
                     app.get_country("Central Asia").make_poor()
                 else:
                     app.get_country("Central Asia").make_fair()

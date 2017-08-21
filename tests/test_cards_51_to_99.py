@@ -2,6 +2,7 @@ import unittest
 
 from labyrinth_test_case import LabyrinthTestCase
 from lwotai.labyrinth import Labyrinth
+from postures.posture import SOFT, HARD
 
 
 class Card51(LabyrinthTestCase):
@@ -120,7 +121,7 @@ class Card55(LabyrinthTestCase):
             app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
             app.deck.get(55).playEvent("Jihadist", app)
             self.assertTrue(app.get_country("China").posture != "")
-            if app.get_country("China").posture == "Soft":
+            if app.get_country("China").posture == SOFT:
                 self.assertTrue(app.get_country("China").sleeperCells == 1)
             else:
                 self.assertTrue(app.get_country("Central Asia").is_governed())
@@ -310,40 +311,40 @@ class Card62(LabyrinthTestCase):
     def test_event(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("Russia").markers.append("CTR")
-        app.get_country("Caucasus").posture = "Hard"
-        app.get_country("Spain").posture = "Soft"
-        app.get_country("Germany").posture = "Soft"
+        app.get_country("Caucasus").posture = HARD
+        app.get_country("Spain").posture = SOFT
+        app.get_country("Germany").posture = SOFT
         app.deck.get(62).playEvent("Jihadist", app)
         self.assertTrue("CTR" not in app.get_country("Russia").markers)
-        self.assertTrue(app.get_country("Caucasus").posture == "Hard")
+        self.assertTrue(app.get_country("Caucasus").posture == HARD)
         self.assertTrue(app.get_country("Central Asia").is_ungoverned())
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        app.get_country("Caucasus").posture = "Hard"
-        app.get_country("Spain").posture = "Soft"
-        app.get_country("Germany").posture = "Soft"
+        app.get_country("Caucasus").posture = HARD
+        app.get_country("Spain").posture = SOFT
+        app.get_country("Germany").posture = SOFT
         app.deck.get(62).playEvent("Jihadist", app)
         self.assertTrue("CTR" not in app.get_country("Russia").markers)
-        self.assertTrue(app.get_country("Caucasus").posture == "Soft")
+        self.assertTrue(app.get_country("Caucasus").posture == SOFT)
         self.assertTrue(app.get_country("Central Asia").is_ungoverned())
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        app.get_country("Caucasus").posture = "Hard"
-        app.get_country("Spain").posture = "Hard"
+        app.get_country("Caucasus").posture = HARD
+        app.get_country("Spain").posture = HARD
         app.deck.get(62).playEvent("Jihadist", app)
         self.assertTrue("CTR" not in app.get_country("Russia").markers)
-        self.assertTrue(app.get_country("Caucasus").posture == "Hard")
+        self.assertTrue(app.get_country("Caucasus").posture == HARD)
         self.assertTrue(app.get_country("Central Asia").is_governed())
         self.assertTrue(app.get_country("Central Asia").is_adversary())
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        app.get_country("Caucasus").posture = "Hard"
-        app.get_country("Spain").posture = "Hard"
+        app.get_country("Caucasus").posture = HARD
+        app.get_country("Spain").posture = HARD
         app.test_country("Central Asia")
         app.get_country("Central Asia").make_ally()
         app.deck.get(62).playEvent("Jihadist", app)
         self.assertTrue("CTR" not in app.get_country("Russia").markers)
-        self.assertTrue(app.get_country("Caucasus").posture == "Hard")
+        self.assertTrue(app.get_country("Caucasus").posture == HARD)
         self.assertTrue(app.get_country("Central Asia").is_governed())
         self.assertTrue(app.get_country("Central Asia").is_neutral())
 
@@ -714,7 +715,7 @@ class Card75(LabyrinthTestCase):
     def test_playable(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         self.assertTrue(app.deck.get(75).playable("Jihadist", app, False))
-        app.get_country("United States").posture = "Soft"
+        app.get_country("United States").posture = SOFT
         self.assertFalse(app.deck.get(75).playable("Jihadist", app, False))
 
     def test_puts_cell(self):
@@ -724,8 +725,8 @@ class Card75(LabyrinthTestCase):
     def test_event(self):
         app = Labyrinth(1, 1, self.set_up_test_scenario)
         app.deck.get(75).playEvent("Jihadist", app)
-        self.assertTrue(app.get_country("Germany").posture == "Soft")
-        self.assertTrue(app.get_country("France").posture == "Soft")
+        self.assertTrue(app.get_country("Germany").posture == SOFT)
+        self.assertTrue(app.get_country("France").posture == SOFT)
         self.assertTrue(app.prestige == 6)
 
 
@@ -828,9 +829,9 @@ class Card78(LabyrinthTestCase):
     def test_event(self):
         for i in range(100):
             app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-            app.get_country("United States").posture = "Soft"
+            app.get_country("United States").posture = SOFT
             app.deck.get(78).playEvent("Jihadist", app)
-            self.assertTrue(app.get_country("United States").posture == "Hard")
+            self.assertTrue(app.get_country("United States").posture == HARD)
             self.assertTrue(app.prestige != 7)
 
 
@@ -1244,7 +1245,7 @@ class Card90(LabyrinthTestCase):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.test_country("Iraq")
         app.deck.get(90).playEvent("Jihadist", app)
-        self.assertTrue(app.get_country("United States").posture == "Soft")
+        self.assertTrue(app.get_country("United States").posture == SOFT)
 
 
 class Card91(LabyrinthTestCase):
@@ -1442,11 +1443,11 @@ class Card96(LabyrinthTestCase):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario, ["s", "h"])
         iraq = app.get_country("Iraq")
         app.deck.get(96).playEvent("US", app)
-        self.assertTrue(app.get_country("Scandinavia").posture == "Soft")
+        self.assertTrue(app.get_country("Scandinavia").posture == SOFT)
         app.test_country("Iraq")
         iraq.make_islamist_rule()
         app.deck.get(96).playEvent("Jihadist", app)
-        self.assertTrue(app.get_country("Scandinavia").posture == "Hard")
+        self.assertTrue(app.get_country("Scandinavia").posture == HARD)
 
 
 class Card97(LabyrinthTestCase):

@@ -9,6 +9,7 @@ from lwotai.map import Map
 from lwotai.randomizer import Randomizer
 from lwotai.scenarios.scenarios import get_scenario
 from lwotai.utils import Utils
+from postures.posture import HARD, SOFT
 
 
 class Labyrinth(object):
@@ -257,12 +258,13 @@ class Labyrinth(object):
                 print ""
 
     def get_posture_from_user(self, prompt):
+        """Prompts the user to pick a posture"""
         while True:
             posture = self.my_raw_input(prompt)
             if self._matches(posture, "hard"):
-                return "Hard"
+                return HARD
             elif self._matches(posture, "soft"):
-                return "Soft"
+                return SOFT
             else:
                 print "Enter h or s."
                 print ""
@@ -316,11 +318,11 @@ class Labyrinth(object):
         """Returns the penalty to be added to a WoI roll, i.e. a number between 0 and -3"""
         net_hard_countries = self.map.get_net_hard_countries()
         if net_hard_countries > 0:
-            world_posture = "Hard"
+            world_posture = HARD
         elif net_hard_countries < 0:
-            world_posture = "Soft"
+            world_posture = SOFT
         else:
-            world_posture = "Even"
+            world_posture = None
         if self.us_posture() == world_posture:
             return 0
         return -(abs(net_hard_countries))
@@ -1054,9 +1056,8 @@ class Labyrinth(object):
         return self.map.get(country_name).posture
 
     def set_posture(self, country_name, posture):
-        """Sets the posture of the given country"""
-        assert posture in ["Soft", "Hard"]  # This validation will be moved to Country class
-        self.map.get(country_name).posture = posture
+        """Sets the posture of the named country"""
+        self.get_country(country_name).set_posture(posture)
 
     def travel_destinations(self, ops, is_radicalization=False):
         dests = []
@@ -1871,8 +1872,8 @@ class Labyrinth(object):
             if self.us().is_soft():
                 self.change_prestige(1)
 
-    def execute_card_euro_islam(self, posture_str):
-        self.map.get("Benelux").posture = posture_str
+    def execute_card_euro_islam(self, new_posture):
+        self.get_country("Benelux").set_posture(new_posture)
         if self.num_islamist_rule() == 0:
             self.funding -= 1
             if self.funding < 1:
@@ -1880,11 +1881,11 @@ class Labyrinth(object):
             self.output_to_history("Jihadist Funding now %d" % self.funding, False)
         self.output_to_history(self.map.get("Benelux").summary(), True)
 
-    def execute_card_lets_roll(self, plot_country, posture_country, posture_str):
+    def execute_card_lets_roll(self, plot_country, posture_country, new_posture):
         self.map.get(plot_country).plots = max(0, self.map.get(plot_country).plots - 1)
         self.output_to_history("Plot removed from %s." % plot_country, False)
-        self.map.get(posture_country).posture = posture_str
-        self.output_to_history("%s Posture now %s." % (posture_country, posture_str), False)
+        self.get_country(posture_country).set_posture(new_posture)
+        self.output_to_history("%s Posture now %s." % (posture_country, new_posture), False)
         self.output_to_history(self.map.get(plot_country).summary(), False)
         self.output_to_history(self.map.get(posture_country).summary(), True)
 
@@ -2526,15 +2527,15 @@ class Labyrinth(object):
                 return False
             if posture.lower() == "hard":
                 print "Changing posture to Hard"
-                self.map.get(country_name).make_hard()
+                self.get_country(country_name).make_hard()
                 return True
             if posture.lower() == "soft":
                 print "Changing posture to Soft"
-                self.map.get(country_name).make_soft()
+                self.get_country(country_name).make_soft()
                 return True
             if posture.lower() == "untested":
                 print "Changing posture to Untested"
-                self.map.get(country_name).remove_posture()
+                self.get_country(country_name).remove_posture()
                 return True
             print "Invalid posture value '{}'".format(posture)
             return False
@@ -3213,7 +3214,7 @@ class Labyrinth(object):
         return self.map.get("United States")
 
     def us_posture(self):
-        """Returns the US posture ('Hard' or 'Soft')"""
+        """Returns the US posture ('HARD' or 'SOFT' Posture)"""
         return self.us().posture
 
     def end_turn(self):
