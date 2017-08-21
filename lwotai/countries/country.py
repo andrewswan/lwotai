@@ -112,7 +112,7 @@ class Country(object):
             self.set_posture(SOFT)
 
     def set_posture(self, new_posture):
-        """Sets the posture of this (Non-Muslim) country"""
+        """Sets or clears the posture of this (Non-Muslim) country"""
         assert self.type == "Non-Muslim"
         self.posture = Utils.require_none_or_one_of(new_posture, [HARD, SOFT])
 
