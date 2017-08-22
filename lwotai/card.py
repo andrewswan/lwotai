@@ -199,12 +199,13 @@ class Card(object):
             elif self.number == 64:  # Hariri Killed
                 return True
             elif self.number == 65:  # HEU
-                possibles = 0
-                if app.get_country("Russia").total_cells() > 0 and "CTR" not in app.get_country("Russia").markers:
-                    possibles += 1
-                if app.get_country("Central Asia").total_cells() > 0 and "CTR" not in app.get_country("Central Asia").markers:
-                    possibles += 1
-                return possibles > 0
+                russia = app.get_country("Russia")
+                if russia.total_cells() > 0 and "CTR" not in russia.markers:
+                    return True
+                central_asia = app.get_country("Central Asia")
+                if central_asia.total_cells() > 0 and "CTR" not in central_asia.markers:
+                    return True
+                return False
             elif self.number == 66:  # Homegrown
                 return True
             elif self.number == 67:  # Islamic Jihad Union
@@ -212,7 +213,8 @@ class Card(object):
             elif self.number == 68:  # Jemaah Islamiya
                 return True
             elif self.number == 69:  # Kazakh Strain
-                return app.get_country("Central Asia").total_cells() > 0 and "CTR" not in app.get_country("Central Asia").markers
+                central_asia = app.get_country("Central Asia")
+                return central_asia.total_cells() > 0 and "CTR" not in central_asia.markers
             elif self.number == 70:  # Lashkar-e-Tayyiba
                 return "Indo-Pakistani Talks" not in app.markers
             elif self.number == 71:  # Loose Nuke
