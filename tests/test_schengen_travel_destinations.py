@@ -3,7 +3,6 @@ from mockito import when, mock
 from labyrinth_test_case import LabyrinthTestCase
 from lwotai.labyrinth import Labyrinth
 from lwotai.postures.posture import HARD
-from lwotai.postures.posture import SOFT
 from lwotai.randomizer import Randomizer
 
 
@@ -15,9 +14,9 @@ class TravelDestinationsForSchengenVisasTest(LabyrinthTestCase):
         app.set_posture("United States", HARD)
         schengen_countries = self.schengen_countries(app)
         for schengen_country in schengen_countries[1:]:
-            schengen_country.posture = SOFT
+            schengen_country.make_soft()
         unmarked_country = schengen_countries[0]
-        unmarked_country.posture = None
+        unmarked_country.remove_posture()
 
         # Invoke
         destinations = app.travel_destinations_schengen_visas()
@@ -36,7 +35,7 @@ class TravelDestinationsForSchengenVisasTest(LabyrinthTestCase):
         when(mock_randomizer).pick(2, schengen_country_names).thenReturn(chosen_countries)
         app.set_posture("United States", HARD)
         for country in schengen_countries:
-            country.posture = None
+            country.remove_posture()
 
         # Invoke
         destinations = app.travel_destinations_schengen_visas()

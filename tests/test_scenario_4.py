@@ -8,4 +8,4 @@ class Scenario4Test(LabyrinthTestCase):
         app = Labyrinth(4, 1)
         for country in app.get_countries():
             if country.schengen:
-                self.assertTrue(country.posture)
+                self.assertTrue(country.get_posture())

@@ -1,6 +1,5 @@
 from labyrinth_test_case import LabyrinthTestCase
 from lwotai.labyrinth import Labyrinth
-from postures.posture import HARD, SOFT
 
 
 class TravelTest(LabyrinthTestCase):
@@ -95,24 +94,24 @@ class TravelTest(LabyrinthTestCase):
     def test_travel_fourth_box(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
 
-        app.get_country("United States").posture = HARD
+        app.get_country("United States").make_hard()
 
-        app.get_country("Canada").posture = HARD
-        app.get_country("United Kingdom").posture = HARD
-        app.get_country("Serbia").posture = HARD
-        app.get_country("India").posture = HARD
-        app.get_country("Scandinavia").posture = HARD
-        app.get_country("Eastern Europe").posture = HARD
-        app.get_country("Benelux").posture = HARD
-        app.get_country("Germany").posture = HARD
-        app.get_country("France").posture = HARD
-        app.get_country("Italy").posture = HARD
-        app.get_country("Spain").posture = HARD
-        app.get_country("Russia").posture = HARD
-        app.get_country("Caucasus").posture = HARD
-        app.get_country("China").posture = HARD
-        app.get_country("Kenya/Tanzania").posture = HARD
-        app.get_country("Thailand").posture = HARD
+        app.get_country("Canada").make_hard()
+        app.get_country("United Kingdom").make_hard()
+        app.get_country("Serbia").make_hard()
+        app.get_country("India").make_hard()
+        app.get_country("Scandinavia").make_hard()
+        app.get_country("Eastern Europe").make_hard()
+        app.get_country("Benelux").make_hard()
+        app.get_country("Germany").make_hard()
+        app.get_country("France").make_hard()
+        app.get_country("Italy").make_hard()
+        app.get_country("Spain").make_hard()
+        app.get_country("Russia").make_hard()
+        app.get_country("Caucasus").make_hard()
+        app.get_country("China").make_hard()
+        app.get_country("Kenya/Tanzania").make_hard()
+        app.get_country("Thailand").make_hard()
         dest = app.travel_destinations(1)
         self.assertEqual(dest, ["Philippines"])
 
@@ -137,23 +136,23 @@ class TravelTest(LabyrinthTestCase):
         dest = app.travel_destinations(3)
         self.assertEqual(dest, ["Gulf States", "Afghanistan", "Jordan"])
 
-        app.get_country("United States").posture = HARD
-        app.get_country("Canada").posture = HARD
-        app.get_country("United Kingdom").posture = HARD
-        app.get_country("Serbia").posture = HARD
-        app.get_country("India").posture = HARD
-        app.get_country("Scandinavia").posture = HARD
-        app.get_country("Eastern Europe").posture = HARD
-        app.get_country("Benelux").posture = HARD
-        app.get_country("Germany").posture = HARD
-        app.get_country("France").posture = HARD
-        app.get_country("Italy").posture = HARD
-        app.get_country("Spain").posture = HARD
-        app.get_country("Russia").posture = HARD
-        app.get_country("Caucasus").posture = HARD
-        app.get_country("China").posture = HARD
-        app.get_country("Kenya/Tanzania").posture = HARD
-        app.get_country("Thailand").posture = HARD
+        app.get_country("United States").make_hard()
+        app.get_country("Canada").make_hard()
+        app.get_country("United Kingdom").make_hard()
+        app.get_country("Serbia").make_hard()
+        app.get_country("India").make_hard()
+        app.get_country("Scandinavia").make_hard()
+        app.get_country("Eastern Europe").make_hard()
+        app.get_country("Benelux").make_hard()
+        app.get_country("Germany").make_hard()
+        app.get_country("France").make_hard()
+        app.get_country("Italy").make_hard()
+        app.get_country("Spain").make_hard()
+        app.get_country("Russia").make_hard()
+        app.get_country("Caucasus").make_hard()
+        app.get_country("China").make_hard()
+        app.get_country("Kenya/Tanzania").make_hard()
+        app.get_country("Thailand").make_hard()
         dest = app.travel_destinations(3)
         self.assertEqual(dest, ["Gulf States", "Afghanistan", "Jordan"])
 
@@ -161,7 +160,7 @@ class TravelTest(LabyrinthTestCase):
         dest = app.travel_destinations(3)
         self.assertEqual(dest, ["Afghanistan", "Jordan", "Philippines"])
 
-        app.get_country("Kenya/Tanzania").posture = None
+        app.get_country("Kenya/Tanzania").remove_posture()
         phCount = 0
         ktCount = 0
         for i in range(100):
@@ -175,12 +174,12 @@ class TravelTest(LabyrinthTestCase):
         self.assertTrue(phCount > 0)
         self.assertTrue(ktCount > 0)
 
-        app.get_country("United States").posture = SOFT
-        app.get_country("China").posture = SOFT
+        app.get_country("United States").make_soft()
+        app.get_country("China").make_soft()
         dest = app.travel_destinations(3)
         self.assertEqual(dest, ["Afghanistan", "Jordan", "China"])
 
-        app.get_country("Benelux").posture = SOFT
+        app.get_country("Benelux").make_soft()
         chinaCount = 0
         beneluxCount = 0
         for i in range(100):

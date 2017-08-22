@@ -22,7 +22,7 @@ class Country(object):
         self.name = name
         self.oil = oil
         self.plots = 0
-        self.posture = Utils.require_none_or_one_of(posture, [HARD, SOFT])
+        self.__posture = Utils.require_none_or_one_of(posture, [HARD, SOFT])
         self.recruit = recruit
         self.regimeChange = 0
         self.resources = resources
@@ -66,7 +66,7 @@ class Country(object):
         return self.__governance == FAIR
 
     def is_hard(self):
-        return self.posture == HARD
+        return self.__posture == HARD
 
     def is_poor(self):
         return self.__governance == POOR
@@ -78,7 +78,7 @@ class Country(object):
         return self.__governance is not None
 
     def is_soft(self):
-        return self.posture == SOFT
+        return self.__posture == SOFT
 
     def is_ungoverned(self):
         return not self.is_governed()
@@ -114,7 +114,7 @@ class Country(object):
     def set_posture(self, new_posture):
         """Sets or clears the posture of this (Non-Muslim) country"""
         assert self.type == "Non-Muslim"
-        self.posture = Utils.require_none_or_one_of(new_posture, [HARD, SOFT])
+        self.__posture = Utils.require_none_or_one_of(new_posture, [HARD, SOFT])
 
     def toggle_posture(self):
         """Switches this country between Hard and Soft posture (error if no posture set)"""
@@ -128,7 +128,7 @@ class Country(object):
     def remove_posture(self):
         """Removes any posture from this (Non-Muslim) country"""
         assert self.type == "Non-Muslim"
-        self.posture = None
+        self.__posture = None
 
     def remove_plot_marker(self):
         """Removes one plot marker from this country, if any are present; returns True if one was removed"""
@@ -147,7 +147,7 @@ class Country(object):
         if self._ought_to_have_been_tested():
             assert self.is_governed(), "Ungoverned country: %s" % self.print_country()
             if self.type == "Non-Muslim":
-                assert self.posture, "%s has no posture" % self.name
+                assert self.__posture, "%s has no posture" % self.name
             elif self.type != "Iran":
                 assert self.is_aligned(), "%s is unaligned" % self.name
 
@@ -223,7 +223,7 @@ class Country(object):
         posture_str = ""
         troops_str = ""
         if self.type == "Non-Muslim":
-            posture_str = ", Posture %s" % self.posture
+            posture_str = ", Posture %s" % self.__posture
         else:
             troops_str = ", Troops: %d" % self.troops()
         return "%s - %d Active Cells, %d Sleeper Cells, %d Cadre, Ops Reqd %d%s%s" %\
@@ -244,7 +244,7 @@ class Country(object):
 
     def get_posture(self):
         """Returns the Posture of this country (might be None)"""
-        return self.posture
+        return self.__posture
 
     def get_recruit_score(self, ops):
         if self.is_regime_change() and self.troops() - self.total_cells(True) >= 5:
@@ -339,11 +339,11 @@ class Country(object):
                     self.sleeperCells, self.cadre, self.aid, self.besieged, self.regimeChange, self.plots, markers_str)
         elif self.name == "Philippines":
             return "%s - Posture:%s\n   Troops:%d Active:%d Sleeper:%d Cadre:%d Plots:%d %s" %\
-                   (self.name, self.posture, self.troops(), self.activeCells, self.sleeperCells, self.cadre, self.plots,
-                    markers_str)
+                   (self.name, self.__posture, self.troops(), self.activeCells, self.sleeperCells, self.cadre,
+                    self.plots, markers_str)
         elif self.type == "Non-Muslim" and self.type != "United States":  # 20150131PS This is illogical but harmless
             return "%s - Posture:%s\n   Active:%d Sleeper:%d Cadre:%d Plots:%d %s" %\
-                   (self.name, self.posture, self.activeCells, self.sleeperCells, self.cadre, self.plots, markers_str)
+                   (self.name, self.__posture, self.activeCells, self.sleeperCells, self.cadre, self.plots, markers_str)
         elif self.type == "Iran":
             return "%s, %s\n   Active:%d Sleeper:%d Cadre:%d Plots:%d %s" %\
                    (self.name, self.governance_str(), self.activeCells, self.sleeperCells, self.cadre, self.plots,

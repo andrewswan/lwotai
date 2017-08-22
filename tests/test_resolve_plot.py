@@ -11,9 +11,9 @@ class ResolvePlotTest(LabyrinthTestCase):
         app.get_country("Germany").plots = 1
         app.resolve_plot("Germany", 1, 4, [], ["Spain", "Scandinavia"], [5, 4], [])
         self.assertEqual(app.funding, 7)
-        self.assertEqual(app.get_country("Germany").posture, SOFT)
-        self.assertEqual(app.get_country("Spain").posture, HARD)
-        self.assertEqual(app.get_country("Scandinavia").posture, SOFT)
+        self.assertEqual(app.get_country("Germany").get_posture(), SOFT)
+        self.assertEqual(app.get_country("Spain").get_posture(), HARD)
+        self.assertEqual(app.get_country("Scandinavia").get_posture(), SOFT)
         self.assertEqual(app.prestige, 7)
         self.assertEqual(app.get_country("Germany").plots, 0)
 
@@ -21,9 +21,9 @@ class ResolvePlotTest(LabyrinthTestCase):
         app.get_country("Germany").plots = 2
         app.resolve_plot("Germany", 1, 4, [], ["Spain", "Scandinavia"], [5, 4], [])
         self.assertEqual(app.funding, 7)
-        self.assertEqual(app.get_country("Germany").posture, SOFT)
-        self.assertEqual(app.get_country("Spain").posture, HARD)
-        self.assertEqual(app.get_country("Scandinavia").posture, SOFT)
+        self.assertEqual(app.get_country("Germany").get_posture(), SOFT)
+        self.assertEqual(app.get_country("Spain").get_posture(), HARD)
+        self.assertEqual(app.get_country("Scandinavia").get_posture(), SOFT)
         self.assertEqual(app.prestige, 7)
         self.assertEqual(app.get_country("Germany").plots, 1)
 
@@ -31,9 +31,9 @@ class ResolvePlotTest(LabyrinthTestCase):
         app.get_country("Germany").plots = 1
         app.resolve_plot("Germany", 2, 5, [], ["Spain", "Scandinavia"], [4, 5], [])
         self.assertEqual(app.funding, 9)
-        self.assertEqual(app.get_country("Germany").posture, HARD)
-        self.assertEqual(app.get_country("Spain").posture, SOFT)
-        self.assertEqual(app.get_country("Scandinavia").posture, HARD)
+        self.assertEqual(app.get_country("Germany").get_posture(), HARD)
+        self.assertEqual(app.get_country("Spain").get_posture(), SOFT)
+        self.assertEqual(app.get_country("Scandinavia").get_posture(), HARD)
         self.assertEqual(app.prestige, 7)
         self.assertEqual(app.get_country("Germany").plots, 0)
 
@@ -41,9 +41,9 @@ class ResolvePlotTest(LabyrinthTestCase):
         app.get_country("Canada").plots = 1
         app.resolve_plot("Canada", 2, 5, [], [], [], [])
         self.assertEqual(app.funding, 9)
-        self.assertEqual(app.get_country("Canada").posture, HARD)
-        self.assertEqual(app.get_country("Spain").posture, None)
-        self.assertEqual(app.get_country("Scandinavia").posture, None)
+        self.assertEqual(app.get_country("Canada").get_posture(), HARD)
+        self.assertEqual(app.get_country("Spain").get_posture(), None)
+        self.assertEqual(app.get_country("Scandinavia").get_posture(), None)
         self.assertEqual(app.prestige, 7)
         self.assertEqual(app.get_country("Canada").plots, 0)
 
@@ -51,9 +51,9 @@ class ResolvePlotTest(LabyrinthTestCase):
         app.get_country("Russia").plots = 1
         app.resolve_plot("Russia", 2, 4, [], [], [], [])
         self.assertEqual(app.funding, 7)
-        self.assertEqual(app.get_country("Russia").posture, SOFT)
-        self.assertEqual(app.get_country("Spain").posture, None)
-        self.assertEqual(app.get_country("Scandinavia").posture, None)
+        self.assertEqual(app.get_country("Russia").get_posture(), SOFT)
+        self.assertEqual(app.get_country("Spain").get_posture(), None)
+        self.assertEqual(app.get_country("Scandinavia").get_posture(), None)
         self.assertEqual(app.prestige, 7)
         self.assertEqual(app.get_country("Russia").plots, 0)
 
@@ -61,9 +61,9 @@ class ResolvePlotTest(LabyrinthTestCase):
         app.get_country("Germany").plots = 1
         app.resolve_plot("Germany", 1, 4, [], ["Spain", "Scandinavia"], [5, 4], [])
         self.assertEqual(app.funding, 7)
-        self.assertEqual(app.get_country("Germany").posture, SOFT)
-        self.assertEqual(app.get_country("Spain").posture, HARD)
-        self.assertEqual(app.get_country("Scandinavia").posture, SOFT)
+        self.assertEqual(app.get_country("Germany").get_posture(), SOFT)
+        self.assertEqual(app.get_country("Spain").get_posture(), HARD)
+        self.assertEqual(app.get_country("Scandinavia").get_posture(), SOFT)
         self.assertEqual(app.prestige, 7)
         self.assertEqual(app.get_country("Germany").plots, 0)
 
@@ -72,9 +72,9 @@ class ResolvePlotTest(LabyrinthTestCase):
         app.get_country("Germany").plots = 1
         app.resolve_plot("Germany", 3, 4, [], ["Spain", "Scandinavia"], [5, 4], [])
         self.assertEqual(app.funding, 7)
-        self.assertEqual(app.get_country("Germany").posture, SOFT)
-        self.assertEqual(app.get_country("Spain").posture, HARD)
-        self.assertEqual(app.get_country("Scandinavia").posture, SOFT)
+        self.assertEqual(app.get_country("Germany").get_posture(), SOFT)
+        self.assertEqual(app.get_country("Spain").get_posture(), HARD)
+        self.assertEqual(app.get_country("Scandinavia").get_posture(), SOFT)
         self.assertEqual(app.prestige, 7)
         self.assertEqual(app.get_country("Germany").plots, 0)
 
@@ -163,35 +163,35 @@ class ResolvePlotTest(LabyrinthTestCase):
     def test_resolve_us_plots(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("United States").plots = 1
-        app.get_country("United States").posture = HARD
+        app.get_country("United States").make_hard()
         app.resolve_plot("United States", 1, 4, [1, 6, 1], [], [], [])
         self.assertEqual(app.funding, 9)
-        self.assertEqual(app.get_country("United States").posture, SOFT)
+        self.assertEqual(app.get_country("United States").get_posture(), SOFT)
         self.assertEqual(app.prestige, 6)
         self.assertEqual(app.get_country("United States").plots, 0)
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("United States").plots = 1
-        app.get_country("United States").posture = SOFT
+        app.get_country("United States").make_soft()
         app.resolve_plot("United States", 2, 4, [5, 6, 1], [], [], [])
         self.assertEqual(app.funding, 9)
-        self.assertEqual(app.get_country("United States").posture, SOFT)
+        self.assertEqual(app.get_country("United States").get_posture(), SOFT)
         self.assertEqual(app.prestige, 8)
         self.assertEqual(app.get_country("United States").plots, 0)
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("United States").plots = 1
-        app.get_country("United States").posture = SOFT
+        app.get_country("United States").make_soft()
         app.resolve_plot("United States", 3, 5, [5, 6, 4], [], [], [])
         self.assertEqual(app.funding, 9)
-        self.assertEqual(app.get_country("United States").posture, HARD)
+        self.assertEqual(app.get_country("United States").get_posture(), HARD)
         self.assertEqual(app.prestige, 11)
         self.assertEqual(app.get_country("United States").plots, 0)
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         self.assertFalse(app.gameOver)
         app.get_country("United States").plots = 1
-        app.get_country("United States").posture = SOFT
+        app.get_country("United States").make_soft()
         app.resolve_plot("United States", "WMD", 0, [], [], [], [])
         self.assertEqual(app.get_country("United States").plots, 0)
         self.assertTrue(app.gameOver)

@@ -1,6 +1,5 @@
 from labyrinth_test_case import LabyrinthTestCase
 from lwotai.labyrinth import Labyrinth
-from postures.posture import SOFT
 
 
 class PlacePlotsTest(LabyrinthTestCase):
@@ -109,7 +108,7 @@ class PlacePlotsTest(LabyrinthTestCase):
         app.prestige = 3
         app.funding = 8
         app.get_country("Israel").sleeperCells = 1
-        app.get_country("Canada").posture = SOFT
+        app.get_country("Canada").make_soft()
         app.get_country("Canada").sleeperCells = 1
         app.get_country("Iraq").sleeperCells = 1
         app.get_country("Iraq").aid = 1
@@ -125,7 +124,7 @@ class PlacePlotsTest(LabyrinthTestCase):
         app.prestige = 3
         app.funding = 8
         app.get_country("Israel").sleeperCells = 1
-        app.get_country("Canada").posture = SOFT
+        app.get_country("Canada").make_soft()
         app.get_country("Canada").sleeperCells = 1
         app.get_country("Iraq").make_fair()
         app.get_country("Iraq").sleeperCells = 1
@@ -142,7 +141,7 @@ class PlacePlotsTest(LabyrinthTestCase):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.prestige = 3
         app.get_country("Israel").sleeperCells = 1
-        app.get_country("United States").posture = SOFT
+        app.get_country("United States").make_soft()
         app.get_country("Iraq").make_fair()
         app.get_country("Iraq").sleeperCells = 1
         app.get_country("Iraq").aid = 1
@@ -159,8 +158,8 @@ class PlacePlotsTest(LabyrinthTestCase):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.prestige = 3
         app.get_country("Israel").sleeperCells = 1
-        app.get_country("Spain").posture = SOFT
-        app.get_country("Canada").posture = SOFT
+        app.get_country("Spain").make_soft()
+        app.get_country("Canada").make_soft()
         app.get_country("Canada").sleeperCells = 1
         app.get_country("Iraq").make_fair()
         app.get_country("Iraq").sleeperCells = 1
@@ -179,8 +178,8 @@ class PlacePlotsTest(LabyrinthTestCase):
         app.prestige = 3
         app.funding = 9
         app.get_country("Israel").sleeperCells = 1
-        app.get_country("Spain").posture = SOFT
-        app.get_country("Canada").posture = SOFT
+        app.get_country("Spain").make_soft()
+        app.get_country("Canada").make_soft()
         app.get_country("Canada").sleeperCells = 1
         app.get_country("Iraq").make_fair()
         app.get_country("Iraq").sleeperCells = 1
@@ -198,8 +197,8 @@ class PlacePlotsTest(LabyrinthTestCase):
         app.prestige = 3
         app.funding = 8
         app.get_country("Israel").sleeperCells = 1
-        app.get_country("Spain").posture = SOFT
-        app.get_country("Canada").posture = SOFT
+        app.get_country("Spain").make_soft()
+        app.get_country("Canada").make_soft()
         app.get_country("Canada").sleeperCells = 0
         app.get_country("Iraq").make_fair()
         app.get_country("Iraq").sleeperCells = 1
@@ -217,8 +216,8 @@ class PlacePlotsTest(LabyrinthTestCase):
         app.prestige = 3
         app.funding = 8
         app.get_country("Israel").sleeperCells = 1
-        app.get_country("Spain").posture = SOFT
-        app.get_country("Canada").posture = SOFT
+        app.get_country("Spain").make_soft()
+        app.get_country("Canada").make_soft()
         app.get_country("Canada").sleeperCells = 1
         app.get_country("Iraq").make_fair()
         app.get_country("Iraq").sleeperCells = 1
@@ -236,8 +235,8 @@ class PlacePlotsTest(LabyrinthTestCase):
         app.prestige = 3
         app.funding = 8
         app.get_country("Israel").sleeperCells = 1
-        app.get_country("Spain").posture = SOFT
-        app.get_country("Canada").posture = SOFT
+        app.get_country("Spain").make_soft()
+        app.get_country("Canada").make_soft()
         app.get_country("Canada").sleeperCells = 1
         app.get_country("Iraq").make_fair()
         app.get_country("Iraq").sleeperCells = 1
@@ -255,7 +254,7 @@ class PlacePlotsTest(LabyrinthTestCase):
         app.prestige = 4
         app.markers = ["Abu Sayyaf"]
         app.get_country("Israel").sleeperCells = 1
-        app.get_country("Canada").posture = SOFT
+        app.get_country("Canada").make_soft()
         app.get_country("Canada").sleeperCells = 1
         app.get_country("Iraq").make_fair()
         app.get_country("Iraq").sleeperCells = 1
@@ -278,9 +277,9 @@ class PlacePlotsTest(LabyrinthTestCase):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.prestige = 3
         app.get_country("Israel").sleeperCells = 0
-        app.get_country("Canada").posture = SOFT
+        app.get_country("Canada").make_soft()
         app.get_country("Canada").sleeperCells = 1
-        app.get_country("Spain").posture = SOFT
+        app.get_country("Spain").make_soft()
         app.get_country("Spain").sleeperCells = 0
         app.get_country("Iraq").make_good()
         app.get_country("Iraq").sleeperCells = 1
@@ -296,9 +295,9 @@ class PlacePlotsTest(LabyrinthTestCase):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.prestige = 3
         app.get_country("Israel").sleeperCells = 0
-        app.get_country("Canada").posture = SOFT
+        app.get_country("Canada").make_soft()
         app.get_country("Canada").sleeperCells = 1
-        app.get_country("Spain").posture = SOFT
+        app.get_country("Spain").make_soft()
         app.get_country("Spain").sleeperCells = 0
         app.get_country("Iraq").make_good()
         app.get_country("Iraq").sleeperCells = 1
