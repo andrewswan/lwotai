@@ -22,7 +22,7 @@ class MajorJihadChoice(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 5
         app.get_country("Gulf States").activeCells = 4
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         self.assertEqual(app.major_jihad_choice(3), "Gulf States")    # 3 Ops
         self.assertEqual(app.major_jihad_choice(2), "Gulf States")    # 2 Ops
         self.assertEqual(app.major_jihad_choice(1), False)    # 1 Ops
@@ -34,7 +34,7 @@ class MajorJihadChoice(LabyrinthTestCase):
         self.assertEqual(app.major_jihad_choice(3), False)    # 3 Ops
         self.assertEqual(app.major_jihad_choice(2), False)    # 2 Ops
         self.assertEqual(app.major_jihad_choice(1), False)    # 1 Ops
-        app.get_country("Gulf States").besieged = 1
+        app.get_country("Gulf States").make_besieged()
         app.get_country("Gulf States").make_poor()
         self.assertEqual(app.major_jihad_choice(3), "Gulf States")    # 3 Ops
         self.assertEqual(app.major_jihad_choice(2), "Gulf States")    # 2 Ops
@@ -52,12 +52,12 @@ class MajorJihadChoice(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 5
         app.get_country("Gulf States").activeCells = 4
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Afghanistan").make_poor()
         app.get_country("Afghanistan").sleeperCells = 3
         app.get_country("Afghanistan").activeCells = 3
         app.get_country("Afghanistan").troopCubes = 1
-        app.get_country("Afghanistan").besieged = 0
+        app.get_country("Afghanistan").remove_besieged()
 
         self.assertEqual(app.major_jihad_choice(3), "Gulf States")  # 3 Ops
         self.assertEqual(app.major_jihad_choice(2), "Gulf States")  # 2 Ops
@@ -67,7 +67,7 @@ class MajorJihadChoice(LabyrinthTestCase):
         app.get_country("Saudi Arabia").sleeperCells = 5
         app.get_country("Saudi Arabia").activeCells = 4
         app.get_country("Saudi Arabia").troopCubes = 4
-        app.get_country("Saudi Arabia").besieged = 0
+        app.get_country("Saudi Arabia").remove_besieged()
 
         self.assertTrue(app.major_jihad_choice(3) in ["Gulf States", "Saudi Arabia"])  # 3 Ops
         self.assertTrue(app.major_jihad_choice(3) in ["Gulf States", "Saudi Arabia"])  # 3 Ops
@@ -84,7 +84,7 @@ class MajorJihadChoice(LabyrinthTestCase):
         app.get_country("Pakistan").sleeperCells = 5
         app.get_country("Pakistan").activeCells = 4
         app.get_country("Pakistan").troopCubes = 4
-        app.get_country("Pakistan").besieged = 0
+        app.get_country("Pakistan").remove_besieged()
 
         self.assertEqual(app.major_jihad_choice(3), "Pakistan")  # 3 Ops
         self.assertEqual(app.major_jihad_choice(2), "Pakistan")  # 2 Ops

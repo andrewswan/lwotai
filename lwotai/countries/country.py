@@ -15,7 +15,7 @@ class Country(object):
         self.activeCells = 0
         self.aid = 0
         self.app = app
-        self.besieged = 0
+        self.__besieged = False
         self.cadre = 0
         self.links = []
         self.markers = []
@@ -50,11 +50,21 @@ class Country(object):
     def is_aligned(self):
         return self.__alignment
 
+    def is_besieged(self):
+        """Indicates whether this country contains a Besieged Regime marker"""
+        return self.__besieged
+
     def make_adversary(self):
         self.__alignment = ADVERSARY
 
     def make_ally(self):
         self.__alignment = ALLY
+
+    def make_besieged(self):
+        self.__besieged = True
+
+    def remove_besieged(self):
+        self.__besieged = False
 
     def make_neutral(self):
         self.__alignment = NEUTRAL
@@ -158,7 +168,7 @@ class Country(object):
 
     def has_data(self):
         """Indicates whether this country contains anything not printed on the board"""
-        return self._ought_to_have_been_tested() or self.besieged > 0 or self.markers
+        return self._ought_to_have_been_tested() or self.is_besieged() or self.markers
 
     def is_non_recruit_success(self, roll):
         return self.is_governed() and self.__governance.is_success(roll)
@@ -172,7 +182,7 @@ class Country(object):
         if self.is_good():
             self.regimeChange = 0
             self.aid = 0
-            self.besieged = 0
+            self.remove_besieged()
 
     def worsen_governance(self):
         self.__governance = self.__governance.worsen()
@@ -196,7 +206,7 @@ class Country(object):
             return False
         if self.total_cells(True) - self.troops() < excess_cells_needed:
             return False
-        ops_needed_from_poor = 1 if self.besieged else 2
+        ops_needed_from_poor = 1 if self.is_besieged() else 2
         ops_needed = ops_needed_from_poor + self.__governance.levels_above_poor()
         return ops >= ops_needed
 
@@ -336,7 +346,8 @@ class Country(object):
             return "%s, %s %s, %d Resource(s)\n" \
                    "   Troops:%d Active:%d Sleeper:%d Cadre:%d Aid:%d Besieged:%d Reg Ch:%d Plots:%d %s" %\
                    (self.name, self.governance_str(), self.__alignment, resources, self.troops(), self.activeCells,
-                    self.sleeperCells, self.cadre, self.aid, self.besieged, self.regimeChange, self.plots, markers_str)
+                    self.sleeperCells, self.cadre, self.aid, self.is_besieged(), self.regimeChange, self.plots,
+                    markers_str)
         elif self.name == "Philippines":
             return "%s - Posture:%s\n   Troops:%d Active:%d Sleeper:%d Cadre:%d Plots:%d %s" %\
                    (self.name, self.__posture, self.troops(), self.activeCells, self.sleeperCells, self.cadre,

@@ -47,7 +47,7 @@ class LabyrinthTestCase(unittest.TestCase):
         app.map.get("Afghanistan").make_islamist_rule()
         app.map.get("Afghanistan").make_adversary()
         app.map.get("Afghanistan").sleeperCells = 4
-        app.map.get("Somalia").besieged = 1
+        app.map.get("Somalia").make_besieged()
         app.map.get("United States").make_hard()
 
     @staticmethod
@@ -81,8 +81,8 @@ class LabyrinthTestCase(unittest.TestCase):
         app.map.get("Afghanistan").regimeChange = 1
         app.map.get("Afghanistan").troopCubes = 6
         app.map.get("Afghanistan").aid = 1
-        app.map.get("Afghanistan").besieged = 0
-        app.map.get("Somalia").besieged = 1
+        app.map.get("Afghanistan").remove_besieged()
+        app.map.get("Somalia").make_besieged()
         app.map.get("United States").make_hard()
 
     @staticmethod
@@ -113,7 +113,7 @@ class LabyrinthTestCase(unittest.TestCase):
         app.map.get("Afghanistan").make_islamist_rule()
         app.map.get("Afghanistan").make_adversary()
         app.map.get("Afghanistan").sleeperCells = 4
-        app.map.get("Somalia").besieged = 1
+        app.map.get("Somalia").make_besieged()
         app.map.get("United States").make_hard()
         app.map.get("France").make_hard()
         app.map.get("France").cadre = 1

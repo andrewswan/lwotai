@@ -577,7 +577,7 @@ class Card113(LabyrinthTestCase):
         app.prestige = 6
         app.card(113).playEvent("US", app)
         self.assertTrue(app.get_country("Sudan").is_governed())
-        self.assertEqual(app.get_country("Sudan").besieged, 1)
+        self.assertEqual(app.get_country("Sudan").is_besieged(), True)
         self.assertTrue(app.get_country("Sudan").is_adversary())
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
@@ -586,7 +586,7 @@ class Card113(LabyrinthTestCase):
         app.get_country("Sudan").make_ally()
         app.card(113).playEvent("US", app)
         self.assertTrue(app.get_country("Sudan").is_governed())
-        self.assertEqual(app.get_country("Sudan").besieged, 1)
+        self.assertEqual(app.get_country("Sudan").is_besieged(), True)
         self.assertTrue(app.get_country("Sudan").is_neutral())
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
@@ -607,7 +607,7 @@ class Card113(LabyrinthTestCase):
         app.prestige = 6
         app.card(113).playEvent("Jihadist", app)
         self.assertTrue(app.get_country("Sudan").is_governed())
-        self.assertEqual(app.get_country("Sudan").besieged, 1)
+        self.assertEqual(app.get_country("Sudan").is_besieged(), True)
         self.assertTrue(app.get_country("Sudan").is_adversary())
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
@@ -616,7 +616,7 @@ class Card113(LabyrinthTestCase):
         app.get_country("Sudan").make_ally()
         app.card(113).playEvent("Jihadist", app)
         self.assertTrue(app.get_country("Sudan").is_governed())
-        self.assertEqual(app.get_country("Sudan").besieged, 1)
+        self.assertEqual(app.get_country("Sudan").is_besieged(), True)
         self.assertTrue(app.get_country("Sudan").is_neutral())
 
 
@@ -906,7 +906,7 @@ class Card119(LabyrinthTestCase):
         app.card(119).playEvent("Jihadist", app)
         self.assertTrue(app.get_country("Yemen").is_governed())
         self.assertTrue(app.get_country("Yemen").is_adversary())
-        self.assertEqual(app.get_country("Yemen").besieged, 1)
+        self.assertEqual(app.get_country("Yemen").is_besieged(), True)
 
 
 class Card120(LabyrinthTestCase):

@@ -445,7 +445,7 @@ class Labyrinth(object):
         return self.num_countries(lambda c: c.is_islamist_rule())
 
     def num_besieged(self):
-        return self.num_countries(lambda c: c.besieged > 0)
+        return self.num_countries(lambda c: c.is_besieged())
 
     def num_regime_change(self):
         return self.num_countries(lambda c: c.regimeChange > 0)
@@ -552,7 +552,7 @@ class Labyrinth(object):
         else:
             self.map.get(move_to).change_troops(how_many)
         self.map.get(move_from).aid = 0
-        self.map.get(move_from).besieged = 1
+        self.map.get(move_from).make_besieged()
         prestige_multiplier = 1
         if prestige_rolls[0] <= 4:
             prestige_multiplier = -1
@@ -700,7 +700,7 @@ class Labyrinth(object):
         successes = 0
         failures = 0
         target_country = self.map.get(country_name)
-        original_besieged = target_country.besieged
+        original_besieged = target_country.is_besieged()
         for roll in roll_list:
             if target_country.is_non_recruit_success(roll):
                 successes += 1
@@ -716,11 +716,11 @@ class Labyrinth(object):
             target_country.sleeperCells = 0
             target_country.activeCells += sleepers
             self.output_to_history("All cells go Active", False)
-            if ((failures >= 2 and target_country.besieged == 0) or
-                    (failures == 3 and target_country.besieged == 1)) and\
+            if ((failures >= 2 and not target_country.is_besieged()) or
+                    (failures == 3 and target_country.is_besieged())) and\
                     len(roll_list) == 3 and target_country.is_poor():
                 self.output_to_history("Major Jihad Failure", False)
-                target_country.besieged = 1
+                target_country.make_besieged()
                 self.output_to_history("Besieged Regime", False)
                 if target_country.is_adversary():
                     target_country.make_neutral()
@@ -737,17 +737,17 @@ class Labyrinth(object):
             target_country.worsen_governance()
             successes -= 1
             self.output_to_history("Governance to %s" % target_country.governance_str(), False)
-        if is_major_jihad and ((successes >= 2) or ((original_besieged > 0) and (successes >= 1))):  # Major Jihad
+        if is_major_jihad and ((successes >= 2) or (original_besieged and successes >= 1)):  # Major Jihad
             self.output_to_history("Islamist Revolution in %s" % country_name, False)
             target_country.make_islamist_rule()
             self.output_to_history("Governance to Islamist Rule", False)
             target_country.make_adversary()
             self.output_to_history("Alignment to Adversary", False)
             target_country.regimeChange = 0
-            if target_country.besieged > 0:
+            if target_country.is_besieged():
                 self.output_to_history("Besieged Regime marker removed.", False)
 
-            target_country.besieged = 0
+            target_country.remove_besieged()
             target_country.aid = 0
             self.funding = min(9, self.funding + self.country_resources_by_name(country_name))
             self.output_to_history("Funding now %d" % self.funding, False)
@@ -838,7 +838,7 @@ class Labyrinth(object):
                     country_scores[country_name] += 100000
                 if self.map.get(country_name).aid > 0:
                     country_scores[country_name] += 10000
-                if self.map.get(country_name).besieged > 0:
+                if self.map.get(country_name).is_besieged():
                     country_scores[country_name] += 1000
                 country_scores[country_name] += (self.country_resources_by_name(country_name) * 100)
                 country_scores[country_name] += random.randint(1, 99)
@@ -884,7 +884,7 @@ class Labyrinth(object):
         for country_name in country_scores:
             country = self.map.get(country_name)
             self.debug_print("c")
-            if country.besieged > 0:
+            if country.is_besieged():
                 country_scores[country_name] += 100000
             country_scores[country_name] += (1000 * (country.troops() + country.total_cells(True)))
             country_scores[country_name] += 100 * self.country_resources_by_name(country_name)
@@ -1066,7 +1066,7 @@ class Labyrinth(object):
             subdests = []
             for country in self.map.countries():
                 if (not country.is_islamist_rule()) and\
-                        (country.besieged > 0 or country.regimeChange > 0 or country.aid > 0):
+                        (country.is_besieged() or country.regimeChange > 0 or country.aid > 0):
                     if "Biometrics" in self.lapsing and not self.adjacent_country_has_cell(country.name):
                         continue
                     subdests.append(country.name)
@@ -2055,7 +2055,7 @@ class Labyrinth(object):
         print "Besieged Regimes"
         print "----------------"
         for country in self.map.country_names():
-            if self.map.get(country).besieged > 0:
+            if self.map.get(country).is_besieged():
                 self.map.get(country).print_country()
         print ""
 
@@ -2645,21 +2645,15 @@ class Labyrinth(object):
                 print "Invalid aid value -", aid_str
 
     def adjust_country_besieged(self, country_name):
-        print "Adjusting besieged for - ", country_name
-        while True:
-            user_input = self.my_raw_input("Enter new besieged count (0-1): ")
-            if user_input == "":
-                return False
-            try:
-                besieged_count = int(user_input)
-                if besieged_count < 0 or besieged_count > 1:
-                    print "Invalid besieged value - ", besieged_count
-                else:
-                    print "Changing besieged count to ", besieged_count
-                    self.map.get(country_name).besieged = besieged_count
-                    return True
-            except ValueError:
-                print "Invalid besieged value - ", user_input
+        """Changes whether the given country is a besieged regime"""
+        print "Adjusting besieged for %s" % country_name
+        country = self.get_country(country_name)
+        if country.is_besieged():
+            country.remove_besieged()
+            print "%s is no longer a besieged regime" % country_name
+        else:
+            country.make_besieged()
+            print "%s is now a besieged regime" % country_name
 
     def adjust_country_regime(self, country_name):
         print "Adjusting regime change for - ", country_name

@@ -9,7 +9,7 @@ class CountryImprovementTest(LabyrinthTestCase):
         # Set up
         country = Country(None, "Somewhere", "Sunni", None, FAIR, False, 0, False, 2)
         country.aid = 4
-        country.besieged = 1
+        country.make_besieged()
         country.regimeChange = 1
 
         # Invoke
@@ -18,5 +18,5 @@ class CountryImprovementTest(LabyrinthTestCase):
         # Assert
         self.assertTrue(country.is_good())
         self.assertEqual(0, country.aid)
-        self.assertEqual(0, country.besieged)
+        self.assertFalse(country.is_besieged())
         self.assertEqual(0, country.regimeChange)

@@ -36,7 +36,7 @@ class Scenario3(Scenario):
         game.map["Saudi Arabia"].make_poor()
         game.map["Saudi Arabia"].make_ally()
         game.map["Saudi Arabia"].troopCubes = 2
-        game.map["Somalia"].besieged = 1
+        game.map["Somalia"].make_besieged()
         game.map["Syria"].make_fair()
         game.map["Syria"].make_adversary()
         game.markers.append("Patriot Act")

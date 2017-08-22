@@ -33,7 +33,7 @@ class MinorJihadChoiceTest(LabyrinthTestCase):
         app.get_country("Jordan").activeCells = 1
         self.assertEqual(app.minor_jihad_in_good_fair_choice(1), [("Gulf States", 1)])
         # but the other is besieged
-        app.get_country("Jordan").besieged = 1
+        app.get_country("Jordan").make_besieged()
         self.assertEqual(app.minor_jihad_in_good_fair_choice(1), [("Jordan", 1)])
         # but the other has aid
         app.get_country("Gulf States").aid = 1
@@ -73,7 +73,7 @@ class MinorJihadChoiceTest(LabyrinthTestCase):
         app.get_country("Jordan").activeCells = 1
         self.assertEqual(app.minor_jihad_in_good_fair_choice(2), [("Gulf States", 1), ("Jordan", 1)])
         # but the other is besieged
-        app.get_country("Jordan").besieged = 1
+        app.get_country("Jordan").make_besieged()
         self.assertEqual(app.minor_jihad_in_good_fair_choice(2), [("Jordan", 1), ("Gulf States", 1)])
         # but the other has aid
         app.get_country("Gulf States").aid = 1
@@ -114,7 +114,7 @@ class MinorJihadChoiceTest(LabyrinthTestCase):
         app.get_country("Jordan").activeCells = 1
         self.assertEqual(app.minor_jihad_in_good_fair_choice(3), [("Gulf States", 1), ("Jordan", 1)])
         # but the other is besieged
-        app.get_country("Jordan").besieged = 1
+        app.get_country("Jordan").make_besieged()
         self.assertEqual(app.minor_jihad_in_good_fair_choice(3), [("Jordan", 1), ("Gulf States", 1)])
         # but the other has aid
         app.get_country("Gulf States").aid = 1
@@ -155,7 +155,7 @@ class MinorJihadChoiceTest(LabyrinthTestCase):
         app.get_country("Jordan").activeCells = 2
         self.assertEqual(app.minor_jihad_in_good_fair_choice(1), [("Gulf States", 1)])
         # but the other is besieged
-        app.get_country("Jordan").besieged = 1
+        app.get_country("Jordan").make_besieged()
         self.assertEqual(app.minor_jihad_in_good_fair_choice(1), [("Jordan", 1)])
         # but the other has aid
         app.get_country("Gulf States").aid = 1
@@ -196,7 +196,7 @@ class MinorJihadChoiceTest(LabyrinthTestCase):
         app.get_country("Jordan").activeCells = 2
         self.assertEqual(app.minor_jihad_in_good_fair_choice(2), [("Gulf States", 2)])
         # but the other is besieged
-        app.get_country("Jordan").besieged = 1
+        app.get_country("Jordan").make_besieged()
         self.assertEqual(app.minor_jihad_in_good_fair_choice(2), [("Jordan", 2)])
         # but the other has aid
         app.get_country("Gulf States").aid = 1
@@ -238,7 +238,7 @@ class MinorJihadChoiceTest(LabyrinthTestCase):
         app.get_country("Jordan").activeCells = 2
         self.assertEqual(app.minor_jihad_in_good_fair_choice(3), [("Gulf States", 2), ("Jordan", 1)])
         # but the other is besieged
-        app.get_country("Jordan").besieged = 1
+        app.get_country("Jordan").make_besieged()
         self.assertEqual(app.minor_jihad_in_good_fair_choice(3), [("Jordan", 2), ("Gulf States", 1)])
         # but the other has aid
         app.get_country("Gulf States").aid = 1
@@ -286,7 +286,7 @@ class MinorJihadChoiceTest(LabyrinthTestCase):
         app.get_country("Jordan").activeCells = 3
         self.assertEqual(app.minor_jihad_in_good_fair_choice(1), [("Gulf States", 1)])
         # but the other is besieged
-        app.get_country("Jordan").besieged = 1
+        app.get_country("Jordan").make_besieged()
         self.assertEqual(app.minor_jihad_in_good_fair_choice(1), [("Jordan", 1)])
         # but the other has aid
         app.get_country("Gulf States").aid = 1
@@ -327,7 +327,7 @@ class MinorJihadChoiceTest(LabyrinthTestCase):
         app.get_country("Jordan").activeCells = 3
         self.assertEqual(app.minor_jihad_in_good_fair_choice(2), [("Gulf States", 2)])
         # but the other is besieged
-        app.get_country("Jordan").besieged = 1
+        app.get_country("Jordan").make_besieged()
         self.assertEqual(app.minor_jihad_in_good_fair_choice(2), [("Jordan", 2)])
         # but the other has aid
         app.get_country("Gulf States").aid = 1
@@ -368,7 +368,7 @@ class MinorJihadChoiceTest(LabyrinthTestCase):
         app.get_country("Jordan").activeCells = 3
         self.assertEqual(app.minor_jihad_in_good_fair_choice(3), [("Gulf States", 3)])
         # but the other is besieged
-        app.get_country("Jordan").besieged = 1
+        app.get_country("Jordan").make_besieged()
         self.assertEqual(app.minor_jihad_in_good_fair_choice(3), [("Jordan", 3)])
         # but the other has aid
         app.get_country("Gulf States").aid = 1

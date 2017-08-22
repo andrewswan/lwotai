@@ -913,7 +913,7 @@ class Card81(LabyrinthTestCase):
         iraq.regimeChange = 1
         app.deck.get(81).playEvent("Jihadist", app)
         self.assertTrue(iraq.sleeperCells == 5)
-        self.assertTrue(iraq.besieged == 1)
+        self.assertTrue(iraq.is_besieged())
         self.assertTrue(iraq.aid == 0)
 
         app = Labyrinth(1, 1, self.set_up_test_scenario)
@@ -923,7 +923,7 @@ class Card81(LabyrinthTestCase):
         iraq.aid = 1
         app.deck.get(81).playEvent("Jihadist", app)
         self.assertTrue(iraq.sleeperCells == 5)
-        self.assertTrue(iraq.besieged == 0)
+        self.assertTrue(iraq.is_besieged() == False)
         self.assertTrue(iraq.aid == 0)
 
 
@@ -1351,7 +1351,7 @@ class Card93(LabyrinthTestCase):
         app.test_country("Afghanistan")
         app.test_country("Pakistan")
         app.deck.get(93).playEvent("Jihadist", app)
-        self.assertTrue(app.get_country("Afghanistan").besieged == 1)         
+        self.assertTrue(app.get_country("Afghanistan").is_besieged())
         self.assertTrue(app.get_country("Afghanistan").sleeperCells == 1)         
         self.assertTrue(app.get_country("Pakistan").sleeperCells == 1)         
         self.assertTrue(app.prestige == 6)
@@ -1361,7 +1361,7 @@ class Card93(LabyrinthTestCase):
         app.test_country("Pakistan")
         app.get_country("Afghanistan").make_islamist_rule()
         app.deck.get(93).playEvent("Jihadist", app)
-        self.assertTrue(app.get_country("Afghanistan").besieged == 1)         
+        self.assertTrue(app.get_country("Afghanistan").is_besieged())
         self.assertTrue(app.get_country("Afghanistan").sleeperCells == 1)         
         self.assertTrue(app.get_country("Pakistan").sleeperCells == 1)         
         self.assertTrue(app.prestige == 4)
@@ -1371,7 +1371,7 @@ class Card93(LabyrinthTestCase):
         app.test_country("Pakistan")
         app.get_country("Pakistan").make_islamist_rule()
         app.deck.get(93).playEvent("Jihadist", app)
-        self.assertTrue(app.get_country("Afghanistan").besieged == 1)         
+        self.assertTrue(app.get_country("Afghanistan").is_besieged())
         self.assertTrue(app.get_country("Afghanistan").sleeperCells == 1)         
         self.assertTrue(app.get_country("Pakistan").sleeperCells == 1)         
         self.assertTrue(app.prestige == 4)
@@ -1381,7 +1381,7 @@ class Card93(LabyrinthTestCase):
         app.test_country("Afghanistan")
         app.test_country("Pakistan")
         app.deck.get(93).playEvent("Jihadist", app)
-        self.assertTrue(app.get_country("Afghanistan").besieged == 1)         
+        self.assertTrue(app.get_country("Afghanistan").is_besieged())
         self.assertTrue(app.get_country("Afghanistan").sleeperCells == 1)         
         self.assertTrue(app.get_country("Pakistan").sleeperCells == 0)         
         self.assertTrue(app.prestige == 6)

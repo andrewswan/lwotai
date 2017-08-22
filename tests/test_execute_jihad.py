@@ -35,7 +35,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 5
         app.get_country("Gulf States").activeCells = 4
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 2
         app.execute_jihad("Gulf States", [3])  # Revolution fails
@@ -44,7 +44,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 4)  # lost no cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # one removed
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -55,7 +55,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 5
         app.get_country("Gulf States").activeCells = 4
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [4])  # Revolution fails
@@ -64,7 +64,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 3)  # lost one cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -75,7 +75,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 5
         app.get_country("Gulf States").activeCells = 4
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [3, 3])  # Islamist Revolution
@@ -84,7 +84,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 9)  # lost no cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 0)  # removed
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # removed
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # removed
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # removed
         self.assertTrue(app.get_country("Gulf States").is_adversary())  # due to revolution
         self.assertEqual(app.funding, 8)  # +3 from resources
         self.assertEqual(app.prestige, 1)  # to 1 due to troops present
@@ -95,7 +95,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 5
         app.get_country("Gulf States").activeCells = 4
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 3
         app.execute_jihad("Gulf States", [3, 4])  # Revolution fails
@@ -104,7 +104,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 8)  # lost one cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 2)  # one removed
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -115,7 +115,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 5
         app.get_country("Gulf States").activeCells = 4
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [4, 4])  # Revolution fails
@@ -124,7 +124,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 7)  # lost two cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -135,7 +135,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 5
         app.get_country("Gulf States").activeCells = 4
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 4
         funding_before = app.funding
@@ -146,7 +146,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 7)  # lost two cells to the two failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)
         self.assertEqual(app.get_country("Gulf States").aid, 3)  # one removed by success
-        self.assertEqual(app.get_country("Gulf States").besieged, 1)
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), True)
         self.assertTrue(app.get_country("Gulf States").is_ally())
         self.assertEqual(app.funding, funding_before)
         self.assertEqual(app.prestige, prestige_before)
@@ -157,7 +157,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 5
         app.get_country("Gulf States").activeCells = 4
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [4, 4, 4])  # Major failure
@@ -166,7 +166,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 6)  # lost three cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 1)  # major failure
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), True)  # major failure
         self.assertTrue(app.get_country("Gulf States").is_ally())  # major failure
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -178,7 +178,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 5
         app.get_country("Gulf States").activeCells = 4
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [3, 3, 4])  # Islamist Revolution
@@ -187,7 +187,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 8)  # lost one cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 0)  # removed
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # removed
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # removed
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # removed
         self.assertTrue(app.get_country("Gulf States").is_adversary())  # due to revolution
         self.assertEqual(app.funding, 8)  # +3 from resources
         self.assertEqual(app.prestige, 1)  # to 1 due to troops present
@@ -199,7 +199,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 5
         app.get_country("Gulf States").activeCells = 4
         app.get_country("Gulf States").troopCubes = 0
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [3, 3, 4])  # Islamist Revolution
@@ -208,7 +208,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 8)  # lost one cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 0)  # removed
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # removed
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # removed
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # removed
         self.assertTrue(app.get_country("Gulf States").is_adversary())  # due to revolution
         self.assertEqual(app.funding, 8)  # +3 from resources
         self.assertEqual(app.prestige, 7)  # unchanged, no troops
@@ -220,7 +220,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 5
         app.get_country("Gulf States").activeCells = 4
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [3, 3, 3])  # Islamist Revolution
@@ -229,7 +229,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 9)  # lost no cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 0)  # removed
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # removed
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # removed
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # removed
         self.assertTrue(app.get_country("Gulf States").is_adversary())  # due to revolution
         self.assertEqual(app.funding, 8)  # +3 from resources
         self.assertEqual(app.prestige, 1)  # to 1 due to troops present
@@ -241,7 +241,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 5
         app.get_country("Gulf States").activeCells = 4
         app.get_country("Gulf States").troopCubes = 0
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [3, 3, 3])  # Islamist Revolution
@@ -250,7 +250,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 9)  # lost no cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 0)  # removed
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # removed
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # removed
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # removed
         self.assertTrue(app.get_country("Gulf States").is_adversary())  # due to revolution
         self.assertEqual(app.funding, 8)  # +3 from resources
         self.assertEqual(app.prestige, 7)  # unchanged, no troops
@@ -264,7 +264,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 5
         app.get_country("Gulf States").activeCells = 4
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 1
+        app.get_country("Gulf States").make_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [3])  # Revolution in besieged
@@ -273,7 +273,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 9)  # lost no cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 0)  # removed
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # removed
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # removed
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # removed
         self.assertTrue(app.get_country("Gulf States").is_adversary())  # due to revolution
         self.assertEqual(app.funding, 8)  # +3 from resources
         self.assertEqual(app.prestige, 1)  # troops
@@ -284,7 +284,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 5
         app.get_country("Gulf States").activeCells = 4
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 1
+        app.get_country("Gulf States").make_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [4])  # Revolution fails in besieged
@@ -293,7 +293,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 8)  # lost one cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 1)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), True)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -304,7 +304,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 5
         app.get_country("Gulf States").activeCells = 4
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 1
+        app.get_country("Gulf States").make_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [3, 3])  # Revolution in besieged
@@ -313,7 +313,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 9)  # lost no cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 0)  # removed
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # removed
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # removed
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # removed
         self.assertTrue(app.get_country("Gulf States").is_adversary())  # due to revolution
         self.assertEqual(app.funding, 8)  # +3 from resources
         self.assertEqual(app.prestige, 1)  # troops
@@ -324,7 +324,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 5
         app.get_country("Gulf States").activeCells = 4
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 1
+        app.get_country("Gulf States").make_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [3, 4])  # Revolution in besieged
@@ -333,7 +333,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 8)  # lost one cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 0)  # removed
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # removed
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # removed
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # removed
         self.assertTrue(app.get_country("Gulf States").is_adversary())  # due to revolution
         self.assertEqual(app.funding, 8)  # +3 from resources
         self.assertEqual(app.prestige, 1)  # troops
@@ -344,7 +344,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 5
         app.get_country("Gulf States").activeCells = 4
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 1
+        app.get_country("Gulf States").make_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [4, 4])  # Revolution fails in besieged
@@ -353,7 +353,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 7)  # lost one cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 1)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), True)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -364,7 +364,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 5
         app.get_country("Gulf States").activeCells = 4
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 1
+        app.get_country("Gulf States").make_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [3, 3, 3])  # Revolution in besieged
@@ -373,7 +373,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 9)  # lost no cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 0)  # removed
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # removed
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # removed
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # removed
         self.assertTrue(app.get_country("Gulf States").is_adversary())  # due to revolution
         self.assertEqual(app.funding, 8)  # +3 from resources
         self.assertEqual(app.prestige, 1)  # troops
@@ -384,7 +384,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 5
         app.get_country("Gulf States").activeCells = 4
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 1
+        app.get_country("Gulf States").make_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [3, 3, 4])  # Revolution in besieged
@@ -393,7 +393,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 8)  # lost one cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 0)  # removed
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # removed
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # removed
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # removed
         self.assertTrue(app.get_country("Gulf States").is_adversary())  # due to revolution
         self.assertEqual(app.funding, 8)  # +3 from resources
         self.assertEqual(app.prestige, 1)  # troops
@@ -404,7 +404,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 5
         app.get_country("Gulf States").activeCells = 4
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 1
+        app.get_country("Gulf States").make_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [3, 4, 4])  # Revolution in besieged
@@ -413,7 +413,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 7)  # lost two cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 0)  # removed
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # removed
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # removed
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # removed
         self.assertTrue(app.get_country("Gulf States").is_adversary())  # due to revolution
         self.assertEqual(app.funding, 8)  # +3 from resources
         self.assertEqual(app.prestige, 1)  # troops
@@ -424,7 +424,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 5
         app.get_country("Gulf States").activeCells = 4
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 1
+        app.get_country("Gulf States").make_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [4, 4, 4])  # Major Failure in besieged
@@ -433,7 +433,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 6)  # lost three cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 1)  # major failure
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), True)  # major failure
         self.assertTrue(app.get_country("Gulf States").is_ally())  # major failure
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -447,7 +447,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 5
         app.get_country("Gulf States").activeCells = 4
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [2])  # Revolution fails
@@ -456,7 +456,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 4)  # lost no cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -467,7 +467,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 5
         app.get_country("Gulf States").activeCells = 4
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [3])  # Revolution fails
@@ -476,7 +476,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 3)  # lost one cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -487,7 +487,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 5
         app.get_country("Gulf States").activeCells = 4
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [2, 2])  # Revolution fails
@@ -496,7 +496,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 4)  # lost no cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -507,7 +507,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 5
         app.get_country("Gulf States").activeCells = 4
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [2, 3])  # Revolution fails
@@ -516,7 +516,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 3)  # lost one cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -527,7 +527,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 5
         app.get_country("Gulf States").activeCells = 4
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [3, 3])  # Revolution fails
@@ -536,7 +536,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 2)  # lost two cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -547,7 +547,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 5
         app.get_country("Gulf States").activeCells = 4
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [2, 2, 3])  # Revolution fails
@@ -556,7 +556,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 8)  # lost one cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -567,7 +567,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 5
         app.get_country("Gulf States").activeCells = 4
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [2, 3, 3])  # Revolution fails
@@ -576,7 +576,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 7)  # lost two cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -587,7 +587,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 5
         app.get_country("Gulf States").activeCells = 4
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [3, 3, 3])  # not Major failure
@@ -596,7 +596,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 6)  # lost three cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # not major failure
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # not major failure
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # not major failure
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -608,7 +608,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 5
         app.get_country("Gulf States").activeCells = 4
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [2, 2, 3])  # Islamist Revolution
@@ -617,7 +617,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 8)  # lost one cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -629,7 +629,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 5
         app.get_country("Gulf States").activeCells = 4
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [2, 2, 2])  # Islamist Revolution
@@ -638,7 +638,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 9)  # lost no cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 0)  # removed
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # removed
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # removed
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # removed
         self.assertTrue(app.get_country("Gulf States").is_adversary())  # due to revolution
         self.assertEqual(app.funding, 8)  # +3 from resources
         self.assertEqual(app.prestige, 1)  # to 1 due to troops present
@@ -650,7 +650,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 5
         app.get_country("Gulf States").activeCells = 4
         app.get_country("Gulf States").troopCubes = 0
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [2, 2, 2])  # Islamist Revolution
@@ -659,7 +659,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 9)  # lost no cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 0)  # removed
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # removed
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # removed
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # removed
         self.assertTrue(app.get_country("Gulf States").is_adversary())  # due to revolution
         self.assertEqual(app.funding, 8)  # +3 from resources
         self.assertEqual(app.prestige, 7)  # unchanged, no troops
@@ -674,7 +674,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         gulf_states.sleeperCells = 5
         gulf_states.activeCells = 4
         gulf_states.troopCubes = 4
-        gulf_states.besieged = 1
+        gulf_states.make_besieged()
         gulf_states.regimeChange = 1
         gulf_states.aid = 1
         app.execute_jihad("Gulf States", [2])  # Revolution fails
@@ -683,7 +683,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(gulf_states.activeCells, 4)  # lost no cells to the to failure rolls
         self.assertEqual(gulf_states.regimeChange, 1)  # still there
         self.assertEqual(gulf_states.aid, 0)  # still there
-        self.assertEqual(gulf_states.besieged, 1)  # need three fails to get a besieged regime
+        self.assertEqual(gulf_states.is_besieged(), True)  # need three fails to get a besieged regime
         self.assertTrue(gulf_states.is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -695,7 +695,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         gulf_states.sleeperCells = 5
         gulf_states.activeCells = 4
         gulf_states.troopCubes = 4
-        gulf_states.besieged = 1
+        gulf_states.make_besieged()
         gulf_states.regimeChange = 1
         gulf_states.aid = 1
         app.execute_jihad("Gulf States", [3])  # Revolution fails in besieged
@@ -704,7 +704,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(gulf_states.activeCells, 3)  # lost one cells to the to failure rolls
         self.assertEqual(gulf_states.regimeChange, 1)  # still there
         self.assertEqual(gulf_states.aid, 1)  # still there
-        self.assertEqual(gulf_states.besieged, 1)  # need three fails to get a besieged regime
+        self.assertEqual(gulf_states.is_besieged(), True)  # need three fails to get a besieged regime
         self.assertTrue(gulf_states.is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -716,7 +716,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         gulf_states.sleeperCells = 5
         gulf_states.activeCells = 4
         gulf_states.troopCubes = 0
-        gulf_states.besieged = 1
+        gulf_states.make_besieged()
         gulf_states.regimeChange = 1
         gulf_states.aid = 1
         app.execute_jihad("Gulf States", [2, 2])  # Revolution in besieged
@@ -725,7 +725,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(gulf_states.activeCells, 9)  # lost no cells to the to failure rolls
         self.assertEqual(gulf_states.regimeChange, 0)  # removed
         self.assertEqual(gulf_states.aid, 0)  # removed
-        self.assertEqual(gulf_states.besieged, 0)  # removed
+        self.assertEqual(gulf_states.is_besieged(), False)  # removed
         self.assertTrue(gulf_states.is_adversary())  # due to revolution
         self.assertEqual(app.funding, 8)  # +3 from resources
         self.assertEqual(app.prestige, 7)  # unchanged, no troops
@@ -737,7 +737,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         gulf_states.sleeperCells = 5
         gulf_states.activeCells = 4
         gulf_states.troopCubes = 4
-        gulf_states.besieged = 1
+        gulf_states.make_besieged()
         gulf_states.regimeChange = 1
         gulf_states.aid = 1
         app.execute_jihad("Gulf States", [2, 3])  # Revolution failed
@@ -746,7 +746,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(gulf_states.activeCells, 8)  # lost one cells to the to failure rolls
         self.assertEqual(gulf_states.regimeChange, 1)  # still there
         self.assertEqual(gulf_states.aid, 0)  # still there
-        self.assertEqual(gulf_states.besieged, 1)  # need three fails to get a besieged regime
+        self.assertEqual(gulf_states.is_besieged(), True)  # need three fails to get a besieged regime
         self.assertTrue(gulf_states.is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -758,7 +758,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         gulf_states.sleeperCells = 5
         gulf_states.activeCells = 4
         gulf_states.troopCubes = 4
-        gulf_states.besieged = 1
+        gulf_states.make_besieged()
         gulf_states.regimeChange = 1
         gulf_states.aid = 1
         app.execute_jihad("Gulf States", [3, 3])  # Revolution fails in besieged
@@ -767,7 +767,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(gulf_states.activeCells, 7)  # lost two cells to the to failure rolls
         self.assertEqual(gulf_states.regimeChange, 1)  # still there
         self.assertEqual(gulf_states.aid, 1)  # still there
-        self.assertEqual(gulf_states.besieged, 1)  # need three fails to get a besieged regime
+        self.assertEqual(gulf_states.is_besieged(), True)  # need three fails to get a besieged regime
         self.assertTrue(gulf_states.is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -779,7 +779,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         gulf_states.sleeperCells = 5
         gulf_states.activeCells = 4
         gulf_states.troopCubes = 4
-        gulf_states.besieged = 1
+        gulf_states.make_besieged()
         gulf_states.regimeChange = 1
         gulf_states.aid = 1
         app.execute_jihad("Gulf States", [2, 2, 2])  # Revolution in besieged
@@ -788,7 +788,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(gulf_states.activeCells, 9)  # lost no cells to the to failure rolls
         self.assertEqual(gulf_states.regimeChange, 0)  # removed
         self.assertEqual(gulf_states.aid, 0)  # removed
-        self.assertEqual(gulf_states.besieged, 0)  # removed
+        self.assertEqual(gulf_states.is_besieged(), False)  # removed
         self.assertTrue(gulf_states.is_adversary())  # due to revolution
         self.assertEqual(app.funding, 8)  # +3 from resources
         self.assertEqual(app.prestige, 1)  # troops
@@ -800,7 +800,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         gulf_states.sleeperCells = 5
         gulf_states.activeCells = 4
         gulf_states.troopCubes = 4
-        gulf_states.besieged = 1
+        gulf_states.make_besieged()
         gulf_states.regimeChange = 1
         gulf_states.aid = 1
         app.execute_jihad("Gulf States", [2, 2, 3])  # Revolution in besieged
@@ -809,7 +809,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(gulf_states.activeCells, 8)  # lost one cells to the to failure rolls
         self.assertEqual(gulf_states.regimeChange, 0)  # removed
         self.assertEqual(gulf_states.aid, 0)  # removed
-        self.assertEqual(gulf_states.besieged, 0)  # removed
+        self.assertEqual(gulf_states.is_besieged(), False)  # removed
         self.assertTrue(gulf_states.is_adversary())  # due to revolution
         self.assertEqual(app.funding, 8)  # +3 from resources
         self.assertEqual(app.prestige, 1)  # troops
@@ -821,7 +821,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         gulf_states.sleeperCells = 5
         gulf_states.activeCells = 4
         gulf_states.troopCubes = 4
-        gulf_states.besieged = 1
+        gulf_states.make_besieged()
         gulf_states.regimeChange = 1
         gulf_states.aid = 1
         app.execute_jihad("Gulf States", [2, 3, 3])  # Revolution fails
@@ -830,7 +830,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(gulf_states.activeCells, 7)  # lost two cells to the to failure rolls
         self.assertEqual(gulf_states.regimeChange, 1)  # still there
         self.assertEqual(gulf_states.aid, 0)  # still there
-        self.assertEqual(gulf_states.besieged, 1)  # need three fails to get a besieged regime
+        self.assertEqual(gulf_states.is_besieged(), True)  # need three fails to get a besieged regime
         self.assertTrue(gulf_states.is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -842,7 +842,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         gulf_states.sleeperCells = 5
         gulf_states.activeCells = 4
         gulf_states.troopCubes = 4
-        gulf_states.besieged = 1
+        gulf_states.make_besieged()
         gulf_states.regimeChange = 1
         gulf_states.aid = 1
         app.execute_jihad("Gulf States", [3, 3, 3])  # Not Major Failure in besieged
@@ -851,7 +851,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(gulf_states.activeCells, 6)  # lost three cells to the to failure rolls
         self.assertEqual(gulf_states.regimeChange, 1)  # still there
         self.assertEqual(gulf_states.aid, 1)  # still there
-        self.assertEqual(gulf_states.besieged, 1)  # major failure
+        self.assertEqual(gulf_states.is_besieged(), True)  # major failure
         self.assertTrue(gulf_states.is_neutral())  # major failure
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -865,7 +865,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 5
         app.get_country("Gulf States").activeCells = 4
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [1])  # Revolution fails
@@ -874,7 +874,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 4)  # lost no cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -885,7 +885,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 5
         app.get_country("Gulf States").activeCells = 4
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [2])  # Revolution fails
@@ -894,7 +894,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 3)  # lost one cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -905,7 +905,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 5
         app.get_country("Gulf States").activeCells = 4
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [1, 1])  # Revolution fails
@@ -914,7 +914,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 4)  # lost no cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -925,7 +925,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 5
         app.get_country("Gulf States").activeCells = 4
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [1, 2])  # Revolution fails
@@ -934,7 +934,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 3)  # lost one cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -945,7 +945,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 5
         app.get_country("Gulf States").activeCells = 4
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [2, 2])  # Revolution fails
@@ -954,7 +954,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 2)  # lost two cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -965,7 +965,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 5
         app.get_country("Gulf States").activeCells = 4
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [1, 1, 2])  # Revolution fails
@@ -974,7 +974,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 3)  # lost one cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -985,7 +985,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 5
         app.get_country("Gulf States").activeCells = 4
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [1, 2, 2])  # Revolution fails
@@ -994,7 +994,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 2)  # lost two cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -1005,7 +1005,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 5
         app.get_country("Gulf States").activeCells = 4
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [2, 2, 2])  # not Major failure
@@ -1014,7 +1014,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 1)  # lost three cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # not major failure
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # not major failure
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # not major failure
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -1025,7 +1025,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 5
         app.get_country("Gulf States").activeCells = 4
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [1, 2, 2])  # Revolution failed
@@ -1034,7 +1034,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 2)  # lost two cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -1045,7 +1045,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 5
         app.get_country("Gulf States").activeCells = 4
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [1, 1, 1])  # Revolution failed
@@ -1054,7 +1054,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 4)  # lost no cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -1069,7 +1069,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 5
         app.get_country("Gulf States").activeCells = 4
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 1
+        app.get_country("Gulf States").make_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [1])  # Revolution fails
@@ -1078,7 +1078,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 4)  # lost no cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 1)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), True)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -1089,7 +1089,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 5
         app.get_country("Gulf States").activeCells = 4
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 1
+        app.get_country("Gulf States").make_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [2])  # Revolution fails in besieged
@@ -1098,7 +1098,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 3)  # lost one cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 1)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), True)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -1109,7 +1109,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 5
         app.get_country("Gulf States").activeCells = 4
         app.get_country("Gulf States").troopCubes = 0
-        app.get_country("Gulf States").besieged = 1
+        app.get_country("Gulf States").make_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [1, 1])  # Revolution fails
@@ -1118,7 +1118,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 4)  # lost no cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 1)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), True)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -1129,7 +1129,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 5
         app.get_country("Gulf States").activeCells = 4
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 1
+        app.get_country("Gulf States").make_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [1, 2])  # Revolution failed
@@ -1138,7 +1138,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 3)  # lost one cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 1)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), True)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -1149,7 +1149,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 5
         app.get_country("Gulf States").activeCells = 4
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 1
+        app.get_country("Gulf States").make_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [2, 2])  # Revolution fails in besieged
@@ -1158,7 +1158,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 2)  # lost two cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 1)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), True)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -1169,7 +1169,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 5
         app.get_country("Gulf States").activeCells = 4
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 1
+        app.get_country("Gulf States").make_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [1, 1, 1])  # Revolution in besieged
@@ -1178,7 +1178,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 9)  # lost no cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 0)  # removed
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # removed
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # removed
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # removed
         self.assertTrue(app.get_country("Gulf States").is_adversary())  # due to revolution
         self.assertEqual(app.funding, 8)  # +3 from resources
         self.assertEqual(app.prestige, 1)  # troops
@@ -1189,7 +1189,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 5
         app.get_country("Gulf States").activeCells = 4
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 1
+        app.get_country("Gulf States").make_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [1, 1, 2])  # Revolution in besieged
@@ -1198,7 +1198,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 8)  # lost one cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 1)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), True)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -1209,7 +1209,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 5
         app.get_country("Gulf States").activeCells = 4
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 1
+        app.get_country("Gulf States").make_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [1, 2, 2])  # Revolution fails
@@ -1218,7 +1218,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 7)  # lost two cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 1)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), True)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -1229,7 +1229,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 5
         app.get_country("Gulf States").activeCells = 4
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 1
+        app.get_country("Gulf States").make_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [2, 2, 2])  # not Major Failure in besieged
@@ -1238,7 +1238,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 6)  # lost three cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 1)  # major failure
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), True)  # major failure
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # not major failure
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -1254,7 +1254,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 2
         app.execute_jihad("Gulf States", [3])  # Revolution fails
@@ -1263,7 +1263,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 3)  # lost no cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # reduced by each success
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -1274,7 +1274,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [4])  # Revolution fails
@@ -1283,7 +1283,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 2)  # lost one cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -1294,7 +1294,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 3
         app.execute_jihad("Gulf States", [3, 3])  # Islamist Revolution
@@ -1303,7 +1303,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 3)  # lost no cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # reduced by each success
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -1314,7 +1314,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 2
         app.execute_jihad("Gulf States", [3, 4])  # Revolution fails
@@ -1323,7 +1323,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 2)  # lost one cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # reduced by each success
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -1334,7 +1334,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [4, 4])  # Revolution fails
@@ -1343,7 +1343,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 1)  # lost two cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -1354,7 +1354,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 2
         app.execute_jihad("Gulf States", [3, 4, 4])  # Revolution fails
@@ -1363,7 +1363,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 1)  # lost two cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # reduced by each success
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -1374,7 +1374,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [4, 4, 4])  # Not Major failure
@@ -1383,7 +1383,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 0)  # lost three cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # not major failure
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # not major failure
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # not major failure
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -1395,7 +1395,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 3
         app.execute_jihad("Gulf States", [3, 3, 4])  # can't major jihad
@@ -1404,7 +1404,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 2)  # lost one cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # reduced by each success
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -1416,7 +1416,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 0
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 3
         app.execute_jihad("Gulf States", [3, 3, 4])  # can't major jihad
@@ -1425,7 +1425,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 2)  # lost one cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # reduced by each success
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -1437,7 +1437,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 4
         app.execute_jihad("Gulf States", [3, 3, 3])  # can't major jihad
@@ -1446,7 +1446,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 3)  # lost no cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # reduced by each success
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -1458,7 +1458,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 0
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 4
         app.execute_jihad("Gulf States", [3, 3, 3])  # can't major jihad
@@ -1467,7 +1467,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 3)  # lost no cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # reduced by each success
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -1481,7 +1481,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 1
+        app.get_country("Gulf States").make_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 2
         app.execute_jihad("Gulf States", [3])  # can't major jihad
@@ -1490,7 +1490,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 3)  # lost no cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # one removed
-        self.assertEqual(app.get_country("Gulf States").besieged, 1)  #
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), True)  #
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -1501,7 +1501,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 1
+        app.get_country("Gulf States").make_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [4])  # Revolution fails in besieged
@@ -1510,7 +1510,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 2)  # lost one cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 1)  #
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), True)  #
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -1521,7 +1521,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 1
+        app.get_country("Gulf States").make_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 3
         app.execute_jihad("Gulf States", [3, 3])  # can't major jihad
@@ -1530,7 +1530,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 3)  # lost no cells to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # two removed by successes
-        self.assertEqual(app.get_country("Gulf States").besieged, 1)  #
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), True)  #
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -1541,7 +1541,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 1
+        app.get_country("Gulf States").make_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 2
         app.execute_jihad("Gulf States", [3, 4])  # Revolution in besieged
@@ -1550,7 +1550,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 2)  # lost one cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # one removed by success
-        self.assertEqual(app.get_country("Gulf States").besieged, 1)  #
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), True)  #
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -1561,7 +1561,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 1
+        app.get_country("Gulf States").make_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [4, 4])  # Revolution fails in besieged
@@ -1570,7 +1570,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 1)  # lost two cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 1)  #
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), True)  #
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -1581,7 +1581,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 1
+        app.get_country("Gulf States").make_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 4
         app.execute_jihad("Gulf States", [3, 3, 3])  # can't major jihad
@@ -1590,7 +1590,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 3)  # lost no cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # reduced by each success
-        self.assertEqual(app.get_country("Gulf States").besieged, 1)  #
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), True)  #
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -1601,7 +1601,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 1
+        app.get_country("Gulf States").make_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 4
         app.execute_jihad("Gulf States", [3, 3, 4])  # Revolution in besieged
@@ -1610,7 +1610,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 2)  # lost one cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 2)  # reduced by each success
-        self.assertEqual(app.get_country("Gulf States").besieged, 1)  #
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), True)  #
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -1621,7 +1621,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 1
+        app.get_country("Gulf States").make_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 2
         app.execute_jihad("Gulf States", [3, 4, 4])  # Revolution in besieged
@@ -1630,7 +1630,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 1)  # lost two cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # reduced by each success
-        self.assertEqual(app.get_country("Gulf States").besieged, 1)  #
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), True)  #
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -1641,7 +1641,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 1
+        app.get_country("Gulf States").make_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [4, 4, 4])  # no major failure
@@ -1650,7 +1650,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 0)  # lost three cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 1)  #
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), True)  #
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -1664,7 +1664,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [2])  # Revolution fails
@@ -1673,7 +1673,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 3)  # lost no cells to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # gone
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -1684,7 +1684,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [3])  # Revolution fails
@@ -1693,7 +1693,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 2)  # lost one cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -1704,7 +1704,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [2, 2])  # Revolution fails
@@ -1713,7 +1713,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 3)  # lost no cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -1724,7 +1724,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [2, 3])  # Revolution fails
@@ -1733,7 +1733,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 2)  # lost one cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -1744,7 +1744,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [3, 3])  # Revolution fails
@@ -1753,7 +1753,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 1)  # lost two cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -1764,7 +1764,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [2, 2, 3])  # Revolution fails
@@ -1773,7 +1773,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 2)  # lost one cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -1784,7 +1784,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [2, 3, 3])  # Revolution fails
@@ -1793,7 +1793,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 1)  # lost two cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -1804,7 +1804,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [3, 3, 3])  # no Major failure
@@ -1813,7 +1813,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 0)  # lost three cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -1825,7 +1825,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [2, 2, 3])  # can't major jihad
@@ -1834,7 +1834,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 2)  # lost one cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -1846,7 +1846,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [2, 2, 2])  # can't major jihad
@@ -1855,7 +1855,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 3)  # lost no cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -1867,7 +1867,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 0
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [2, 2, 2])  # Islamist Revolution
@@ -1876,7 +1876,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 3)  # lost no cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -1891,7 +1891,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 1
+        app.get_country("Gulf States").make_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [2])  # Revolution fails
@@ -1900,7 +1900,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 3)  # lost no cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 1)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), True)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -1911,7 +1911,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 1
+        app.get_country("Gulf States").make_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [3])  # Revolution fails in besieged
@@ -1920,7 +1920,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 2)  # lost one cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 1)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), True)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -1931,7 +1931,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 0
-        app.get_country("Gulf States").besieged = 1
+        app.get_country("Gulf States").make_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [2, 2])  # Revolution in besieged
@@ -1940,7 +1940,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 3)  # lost no cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 1)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), True)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -1951,7 +1951,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 1
+        app.get_country("Gulf States").make_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [2, 3])  # Revolution failed
@@ -1960,7 +1960,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 2)  # lost one cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 1)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), True)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -1971,7 +1971,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 1
+        app.get_country("Gulf States").make_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [3, 3])  # Revolution fails in besieged
@@ -1980,7 +1980,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 1)  # lost two cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 1)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), True)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -1991,7 +1991,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 1
+        app.get_country("Gulf States").make_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [2, 2, 2])  # can't major jihad
@@ -2000,7 +2000,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 3)  # lost no cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 1)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), True)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -2011,7 +2011,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 1
+        app.get_country("Gulf States").make_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [2, 2, 3])  # can't major jihad
@@ -2020,7 +2020,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 2)  # lost one cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 1)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), True)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -2031,7 +2031,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 1
+        app.get_country("Gulf States").make_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [2, 3, 3])  # Revolution fails
@@ -2040,7 +2040,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 1)  # lost two cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 1)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), True)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -2051,7 +2051,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 1
+        app.get_country("Gulf States").make_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [3, 3, 3])  # no Failure in besieged
@@ -2060,7 +2060,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 0)  # lost three cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 1)  # major failure
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), True)  # major failure
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -2074,7 +2074,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [1])  # Revolution fails
@@ -2083,7 +2083,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 3)  # lost no cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -2094,7 +2094,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [2])  # Revolution fails
@@ -2103,7 +2103,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 2)  # lost one cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -2114,7 +2114,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [1, 1])  # Revolution fails
@@ -2123,7 +2123,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 3)  # lost no cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -2134,7 +2134,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [1, 2])  # Revolution fails
@@ -2143,7 +2143,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 2)  # lost one cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -2154,7 +2154,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [2, 2])  # Revolution fails
@@ -2163,7 +2163,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 1)  # lost two cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -2174,7 +2174,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [1, 1, 2])  # Revolution fails
@@ -2183,7 +2183,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 2)  # lost one cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -2194,7 +2194,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [1, 2, 2])  # Revolution fails
@@ -2203,7 +2203,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 1)  # lost two cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -2214,7 +2214,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [2, 2, 2])  # no Major failure
@@ -2223,7 +2223,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 0)  # lost three cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -2234,7 +2234,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [1, 2, 2])  # Revolution failed
@@ -2243,7 +2243,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 1)  # lost two cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -2254,7 +2254,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [1, 1, 1])  # Revolution failed
@@ -2263,7 +2263,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 3)  # lost no cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -2278,7 +2278,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 1
+        app.get_country("Gulf States").make_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [1])  # Revolution fails
@@ -2287,7 +2287,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 3)  # lost no cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 1)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), True)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -2298,7 +2298,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 1
+        app.get_country("Gulf States").make_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [2])  # Revolution fails in besieged
@@ -2307,7 +2307,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 2)  # lost one cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 1)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), True)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -2318,7 +2318,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 0
-        app.get_country("Gulf States").besieged = 1
+        app.get_country("Gulf States").make_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [1, 1])  # Revolution fails
@@ -2327,7 +2327,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 3)  # lost no cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 1)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), True)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -2338,7 +2338,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 1
+        app.get_country("Gulf States").make_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [1, 2])  # Revolution failed
@@ -2347,7 +2347,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 2)  # lost one cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 1)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), True)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -2358,7 +2358,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 1
+        app.get_country("Gulf States").make_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [2, 2])  # Revolution fails in besieged
@@ -2367,7 +2367,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 1)  # lost two cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 1)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), True)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -2378,7 +2378,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 1
+        app.get_country("Gulf States").make_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [1, 1, 1])  # Can't major jihad
@@ -2387,7 +2387,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 3)  # lost no cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 1)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), True)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -2398,7 +2398,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 1
+        app.get_country("Gulf States").make_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [1, 1, 2])  # can't major jihad
@@ -2407,7 +2407,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 2)  # lost one cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 1)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), True)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -2418,7 +2418,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 1
+        app.get_country("Gulf States").make_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [1, 2, 2])  # Revolution fails
@@ -2427,7 +2427,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 1)  # lost two cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 0)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 1)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), True)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -2438,7 +2438,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 1
+        app.get_country("Gulf States").make_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [2, 2, 2])  # no Major Failure in besieged
@@ -2447,7 +2447,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 0)  # lost three cells to the to failure rolls
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 1)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), True)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -2461,7 +2461,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 0
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 2
         app.execute_jihad("Gulf States", [3])
@@ -2470,7 +2470,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 1)  # sleeper goes active
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # reduced by each success
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -2481,7 +2481,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 0
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [4])
@@ -2490,7 +2490,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 0)
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -2502,7 +2502,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 2
         app.get_country("Gulf States").activeCells = 0
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 2
         app.execute_jihad("Gulf States", [3])
@@ -2511,7 +2511,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 1)  # sleeper goes active
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # reduced by each success
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -2522,7 +2522,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 2
         app.get_country("Gulf States").activeCells = 0
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [4])
@@ -2531,7 +2531,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 0)  # lose sleeper cell
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -2542,7 +2542,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 2
         app.get_country("Gulf States").activeCells = 0
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 3
         app.execute_jihad("Gulf States", [3, 3])
@@ -2551,7 +2551,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 2)
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # reduced by each success
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -2562,7 +2562,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 2
         app.get_country("Gulf States").activeCells = 0
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 2
         app.execute_jihad("Gulf States", [3, 4])
@@ -2571,7 +2571,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 1)
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # reduced by each success
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -2582,7 +2582,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 2
         app.get_country("Gulf States").activeCells = 0
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [4, 4])
@@ -2591,7 +2591,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 0)
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -2603,7 +2603,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 0
         app.get_country("Gulf States").activeCells = 2
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 2
         app.execute_jihad("Gulf States", [3])
@@ -2612,7 +2612,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 2)
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # reduced by each success
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -2623,7 +2623,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 0
         app.get_country("Gulf States").activeCells = 2
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [4])
@@ -2632,7 +2632,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 1)
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -2643,7 +2643,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 0
         app.get_country("Gulf States").activeCells = 2
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 3
         app.execute_jihad("Gulf States", [3, 3])
@@ -2652,7 +2652,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 2)
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # reduced by each success
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -2663,7 +2663,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 0
         app.get_country("Gulf States").activeCells = 2
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 2
         app.execute_jihad("Gulf States", [3, 4])
@@ -2672,7 +2672,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 1)
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # reduced by each success
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -2683,7 +2683,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 0
         app.get_country("Gulf States").activeCells = 2
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [4, 4])
@@ -2692,7 +2692,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 0)
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -2704,7 +2704,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 1
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 2
         app.execute_jihad("Gulf States", [3])
@@ -2713,7 +2713,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 1)
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # reduced by each success
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -2724,7 +2724,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 1
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [4])
@@ -2733,7 +2733,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 0)
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -2744,7 +2744,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 1
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 3
         app.execute_jihad("Gulf States", [3, 3])
@@ -2753,7 +2753,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 2)
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # reduced by each success
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -2764,7 +2764,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 1
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 2
         app.execute_jihad("Gulf States", [3, 4])
@@ -2773,7 +2773,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 1)
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # reduced by each success
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -2784,7 +2784,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 1
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [4, 4])
@@ -2793,7 +2793,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 0)
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -2805,7 +2805,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 3
         app.get_country("Gulf States").activeCells = 0
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 2
         app.execute_jihad("Gulf States", [3])
@@ -2814,7 +2814,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 1)
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # reduced by each success
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -2825,7 +2825,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 3
         app.get_country("Gulf States").activeCells = 0
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [4])
@@ -2834,7 +2834,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 0)
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -2845,7 +2845,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 3
         app.get_country("Gulf States").activeCells = 0
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 3
         app.execute_jihad("Gulf States", [3, 3])
@@ -2854,7 +2854,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 2)
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # reduced by each success
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -2865,7 +2865,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 3
         app.get_country("Gulf States").activeCells = 0
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 2
         app.execute_jihad("Gulf States", [3, 4])
@@ -2874,7 +2874,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 1)
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # reduced by each success
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -2885,7 +2885,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 3
         app.get_country("Gulf States").activeCells = 0
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [4, 4])
@@ -2894,7 +2894,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 0)
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -2905,7 +2905,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 3
         app.get_country("Gulf States").activeCells = 0
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 4
         app.execute_jihad("Gulf States", [3, 3, 3])
@@ -2914,7 +2914,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 3)
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # reduced by each success
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -2925,7 +2925,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 3
         app.get_country("Gulf States").activeCells = 0
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 3
         app.execute_jihad("Gulf States", [3, 3, 4])
@@ -2934,7 +2934,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 2)
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # reduced by each success
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -2945,7 +2945,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 3
         app.get_country("Gulf States").activeCells = 0
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 2
         app.execute_jihad("Gulf States", [3, 4, 4])
@@ -2954,7 +2954,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 1)
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # reduced by each success
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -2965,7 +2965,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 3
         app.get_country("Gulf States").activeCells = 0
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [4, 4, 4])
@@ -2974,7 +2974,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 0)
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -2986,7 +2986,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 2
         app.get_country("Gulf States").activeCells = 1
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 2
         app.execute_jihad("Gulf States", [3])
@@ -2995,7 +2995,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 1)
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # reduced by each success
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -3006,7 +3006,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 2
         app.get_country("Gulf States").activeCells = 1
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [4])
@@ -3015,7 +3015,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 0)
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -3026,7 +3026,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 2
         app.get_country("Gulf States").activeCells = 1
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 3
         app.execute_jihad("Gulf States", [3, 3])
@@ -3035,7 +3035,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 2)
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # reduced by each success
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -3046,7 +3046,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 2
         app.get_country("Gulf States").activeCells = 1
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 2
         app.execute_jihad("Gulf States", [3, 4])
@@ -3055,7 +3055,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 1)
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # reduced by each success
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -3066,7 +3066,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 2
         app.get_country("Gulf States").activeCells = 1
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [4, 4])
@@ -3075,7 +3075,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 0)
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -3086,7 +3086,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 2
         app.get_country("Gulf States").activeCells = 1
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 4
         app.execute_jihad("Gulf States", [3, 3, 3])
@@ -3095,7 +3095,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 3)
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # reduced by each success
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -3106,7 +3106,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 2
         app.get_country("Gulf States").activeCells = 1
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 3
         app.execute_jihad("Gulf States", [3, 3, 4])
@@ -3115,7 +3115,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 2)
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # reduced by each success
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -3126,7 +3126,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 2
         app.get_country("Gulf States").activeCells = 1
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 2
         app.execute_jihad("Gulf States", [3, 4, 4])
@@ -3135,7 +3135,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 1)
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # reduced by each success
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -3146,7 +3146,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 2
         app.get_country("Gulf States").activeCells = 1
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [4, 4, 4])
@@ -3155,7 +3155,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 0)
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -3167,7 +3167,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 2
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 2
         app.execute_jihad("Gulf States", [3])
@@ -3176,7 +3176,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 2)
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # reduced by each success
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -3187,7 +3187,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 2
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [4])
@@ -3196,7 +3196,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 1)
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -3207,7 +3207,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 2
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 3
         app.execute_jihad("Gulf States", [3, 3])
@@ -3216,7 +3216,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 2)
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # reduced by each success
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -3227,7 +3227,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 2
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 2
         app.execute_jihad("Gulf States", [3, 4])
@@ -3236,7 +3236,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 1)
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # reduced by each success
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -3247,7 +3247,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 2
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [4, 4])
@@ -3256,7 +3256,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 0)
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -3267,7 +3267,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 2
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 4
         app.execute_jihad("Gulf States", [3, 3, 3])
@@ -3276,7 +3276,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 3)
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # reduced by each success
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -3287,7 +3287,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 2
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 3
         app.execute_jihad("Gulf States", [3, 3, 4])
@@ -3296,7 +3296,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 2)
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # reduced by each success
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -3307,7 +3307,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 2
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 2
         app.execute_jihad("Gulf States", [3, 4, 4])
@@ -3316,7 +3316,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 1)
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # reduced by each success
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -3327,7 +3327,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 1
         app.get_country("Gulf States").activeCells = 2
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [4, 4, 4])
@@ -3336,7 +3336,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 0)
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -3348,7 +3348,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 0
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 2
         app.execute_jihad("Gulf States", [3])
@@ -3357,7 +3357,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 3)
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # reduced by each success
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -3368,7 +3368,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 0
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [4])
@@ -3377,7 +3377,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 2)
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -3388,7 +3388,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 0
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 3
         app.execute_jihad("Gulf States", [3, 3])
@@ -3397,7 +3397,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 3)
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # reduced by each success
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -3408,7 +3408,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 0
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 2
         app.execute_jihad("Gulf States", [3, 4])
@@ -3417,7 +3417,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 2)
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # reduced by each success
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -3428,7 +3428,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 0
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [4, 4])
@@ -3437,7 +3437,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 1)
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -3448,7 +3448,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 0
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 4
         app.execute_jihad("Gulf States", [3, 3, 3])
@@ -3457,7 +3457,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 3)
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # reduced by each success
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -3468,7 +3468,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 0
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 3
         app.execute_jihad("Gulf States", [3, 3, 4])
@@ -3477,7 +3477,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 2)
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # reduced by each success
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -3488,7 +3488,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 0
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 2
         app.execute_jihad("Gulf States", [3, 4, 4])
@@ -3497,7 +3497,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 1)
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # reduced by each success
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -3508,7 +3508,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").sleeperCells = 0
         app.get_country("Gulf States").activeCells = 3
         app.get_country("Gulf States").troopCubes = 4
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").regimeChange = 1
         app.get_country("Gulf States").aid = 1
         app.execute_jihad("Gulf States", [4, 4, 4])
@@ -3517,7 +3517,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Gulf States").activeCells, 0)
         self.assertEqual(app.get_country("Gulf States").regimeChange, 1)  # still there
         self.assertEqual(app.get_country("Gulf States").aid, 1)  # still there
-        self.assertEqual(app.get_country("Gulf States").besieged, 0)  # need three fails to get a besieged regime
+        self.assertEqual(app.get_country("Gulf States").is_besieged(), False)  # need three fails to get a besieged regime
         self.assertTrue(app.get_country("Gulf States").is_neutral())  # need three fails to move alignment
         self.assertEqual(app.funding, 5)
         self.assertEqual(app.prestige, 7)
@@ -3530,7 +3530,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         target_country.make_neutral()
         target_country.make_fair()
         target_country.aid = original_aid
-        target_country.besieged = 0
+        target_country.remove_besieged()
         target_country.activeCells = 2
         target_country.sleeperCells = 0
         target_country.regimeChange = 0
@@ -3552,7 +3552,7 @@ class ExecuteJihadTest(LabyrinthTestCase):
         target_country.make_ally()
         target_country.make_poor()
         target_country.aid = original_aid
-        target_country.besieged = 0
+        target_country.remove_besieged()
         target_country.activeCells = 0
         target_country.sleeperCells = original_sleepers
         target_country.regimeChange = 0

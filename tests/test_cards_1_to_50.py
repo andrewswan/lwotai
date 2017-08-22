@@ -51,7 +51,7 @@ class Card02(LabyrinthTestCase):
     def testTravelDestination(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("Gulf States").make_poor()
-        app.get_country("Gulf States").besieged = 1
+        app.get_country("Gulf States").make_besieged()
         dest = app.travel_destinations(1)
         self.assertEqual(dest, ["Gulf States"])
         app.card(2).playEvent("US", app)
@@ -65,7 +65,7 @@ class Card02(LabyrinthTestCase):
     def testTravelSource(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("Gulf States").make_poor()
-        app.get_country("Gulf States").besieged = 1
+        app.get_country("Gulf States").make_besieged()
         dest = app.travel_destinations(1)
         self.assertEqual(dest, ["Gulf States"])
         app.card(2).playEvent("US", app)
@@ -82,7 +82,7 @@ class Card02(LabyrinthTestCase):
     def testTravelToGood(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("Gulf States").make_good()
-        app.get_country("Gulf States").besieged = 1
+        app.get_country("Gulf States").make_besieged()
         dest = app.travel_destinations(1)
         self.assertEqual(dest, ["Gulf States"])
         app.card(2).playEvent("US", app)
@@ -667,14 +667,14 @@ class Card28(LabyrinthTestCase):
     def test_playable(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         self.assertFalse(app.card(28).playable("US", app, True))
-        app.get_country("Iraq").besieged = 1
+        app.get_country("Iraq").make_besieged()
         self.assertTrue(app.card(28).playable("US", app, True))
 
     def test_event(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        app.get_country("Iraq").besieged = 1
+        app.get_country("Iraq").make_besieged()
         app.card(28).playEvent("US", app)
-        self.assertTrue(app.get_country("Iraq").besieged == 0)
+        self.assertTrue(app.get_country("Iraq").is_besieged() == False)
 
 
 class Card29(LabyrinthTestCase):

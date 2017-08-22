@@ -767,7 +767,7 @@ class Card(object):
                 if num_besieged <= 0:
                     return False
                 elif num_besieged == 1:
-                    target_country = app.find_countries(lambda c: c.besieged > 0)[0]
+                    target_country = app.find_countries(lambda c: c.is_besieged())[0]
                 else:
                     while True:
                         country_name = app.get_country_from_user(
@@ -778,12 +778,12 @@ class Card(object):
                             return
                         else:
                             target_country = app.get_country(country_name)
-                            if target_country.besieged <= 0:
+                            if not target_country.is_besieged():
                                 print "%s is not a Besieged Regime." % country_name
                                 print ""
                             else:
                                 break
-                target_country.besieged = 0
+                target_country.remove_besieged()
                 app.output_to_history("%s is no longer a Besieged Regime." % target_country.name, False)
                 app.output_to_history(target_country.summary())
             elif self.number == 29:  # Tony Blair
@@ -1306,7 +1306,7 @@ class Card(object):
                     target.aid -= 1
                     app.output_to_history("Aid removed from %s" % target.name, False)
                 else:
-                    target.besieged = 1
+                    target.make_besieged()
                     app.output_to_history("%s to Besieged Regime" % target.name, False)
                 app.output_to_history(target.summary())
             elif self.number == 82:  # Jihadist Videos
@@ -1387,7 +1387,7 @@ class Card(object):
                 app.output_to_history("Jihadist Funding now 9.")
             elif self.number == 93:  # Taliban
                 app.test_country("Afghanistan")
-                app.get_country("Afghanistan").besieged = 1
+                app.get_country("Afghanistan").make_besieged()
                 app.output_to_history("Afghanistan is now a Besieged Regime.", False)
                 app.place_cells("Afghanistan", 1)
                 app.place_cells("Pakistan", 1)
@@ -1675,13 +1675,14 @@ class Card(object):
                             country_scores[country] = 0
                             if app.get_country(country).aid > 0:
                                 country_scores[country] += 10000
-                            if app.get_country(country).besieged > 0:
+                            if app.get_country(country).is_besieged():
                                 country_scores[country] += 1000
                             country_scores[country] += (app.country_resources_by_name(country) * 100)
                             country_scores[country] += random.randint(1, 99)
                         country_order = []
                         for country in country_scores:
-                            country_order.append((country_scores[country], (app.get_country(country).total_cells(True)), country))
+                            country_order.append(
+                                (country_scores[country], (app.get_country(country).total_cells(True)), country))
                         country_order.sort()
                         country_order.reverse()
                         target_name = country_order[0][2]
@@ -1770,7 +1771,7 @@ class Card(object):
                         app.get_country("Sudan").make_ally()
                         app.output_to_history("Sudan alignment improved.", False)
                 else:
-                    app.get_country("Sudan").besieged = 1
+                    app.get_country("Sudan").make_besieged()
                     app.output_to_history("Sudan now Besieged Regime.", False)
                     if app.get_country("Sudan").is_ally():
                         app.get_country("Sudan").make_neutral()
@@ -1875,7 +1876,7 @@ class Card(object):
                     elif app.get_country("Yemen").is_neutral():
                         app.get_country("Yemen").make_adversary()
                     app.output_to_history("Yemen Alignment worsened to %s." % app.get_country("Yemen").alignment(), False)
-                    app.get_country("Yemen").besieged = 1
+                    app.get_country("Yemen").make_besieged()
                     app.output_to_history("Yemen now Besieged Regime.", True)
             elif self.number == 120:  # US Election
                 app.execute_card_us_election(random.randint(1, 6))

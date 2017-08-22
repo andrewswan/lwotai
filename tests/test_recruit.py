@@ -26,7 +26,7 @@ class RecruitTest(LabyrinthTestCase):
         self.assertEqual(app.recruit_choice(1), "Gulf States")
         app.get_country("Iraq").troopCubes = 2
         self.assertEqual(app.recruit_choice(1), "Iraq")
-        app.get_country("Gulf States").besieged = 1
+        app.get_country("Gulf States").make_besieged()
         self.assertEqual(app.recruit_choice(1), "Gulf States")
         app.get_country("Russia").sleeperCells = 1
         self.assertEqual(app.recruit_choice(1), "Russia")

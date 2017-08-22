@@ -9,11 +9,11 @@ class TravelTest(LabyrinthTestCase):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
 
         app.get_country("Gulf States").make_poor()
-        app.get_country("Gulf States").besieged = 1
+        app.get_country("Gulf States").make_besieged()
         dest = app.travel_destinations(1)
         self.assertEqual(dest, ["Gulf States"])
 
-        app.get_country("Gulf States").besieged = 0
+        app.get_country("Gulf States").remove_besieged()
         app.get_country("Gulf States").aid = 1
         dest = app.travel_destinations(1)
         self.assertEqual(dest, ["Gulf States"])
@@ -25,7 +25,7 @@ class TravelTest(LabyrinthTestCase):
 
         app.get_country("Gulf States").make_islamist_rule()
         app.get_country("Afghanistan").make_poor()
-        app.get_country("Afghanistan").besieged = 1
+        app.get_country("Afghanistan").make_besieged()
         dest = app.travel_destinations(1)
         self.assertEqual(dest, ["Afghanistan"])
 
@@ -62,7 +62,7 @@ class TravelTest(LabyrinthTestCase):
         self.assertEqual(dest, ["Afghanistan"])
 
         app.get_country("Gulf States").make_poor()
-        app.get_country("Gulf States").besieged = 1
+        app.get_country("Gulf States").make_besieged()
         dest = app.travel_destinations(1)
         self.assertEqual(dest, ["Gulf States"])
 
@@ -120,7 +120,7 @@ class TravelTest(LabyrinthTestCase):
         dest = app.travel_destinations(3)
 
         app.get_country("Gulf States").make_poor()
-        app.get_country("Gulf States").besieged = 1
+        app.get_country("Gulf States").make_besieged()
         dest = app.travel_destinations(1)
         self.assertEqual(dest, ["Gulf States"])
 
@@ -196,7 +196,7 @@ class TravelTest(LabyrinthTestCase):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
 
         app.get_country("Gulf States").make_poor()
-        app.get_country("Gulf States").besieged = 1
+        app.get_country("Gulf States").make_besieged()
         dest = app.travel_destinations(1)
         self.assertEqual(dest, ["Gulf States"])
 
@@ -233,7 +233,7 @@ class TravelTest(LabyrinthTestCase):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
 
         app.get_country("Gulf States").make_poor()
-        app.get_country("Gulf States").besieged = 1
+        app.get_country("Gulf States").make_besieged()
 
         app.get_country("Afghanistan").make_poor()
         app.get_country("Afghanistan").troopCubes = 1

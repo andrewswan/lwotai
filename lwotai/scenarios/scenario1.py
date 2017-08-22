@@ -29,7 +29,7 @@ class Scenario1(Scenario):
         game.get_country("Saudi Arabia").make_poor()
         game.get_country("Saudi Arabia").make_ally()
         game.get_country("Saudi Arabia").troopCubes = 2
-        game.get_country("Somalia").besieged = 1
+        game.get_country("Somalia").make_besieged()
         game.get_country("Syria").make_fair()
         game.get_country("Syria").make_adversary()
         game.us().make_hard()
