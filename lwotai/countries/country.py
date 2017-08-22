@@ -8,7 +8,7 @@ from postures.posture import HARD, SOFT
 class Country(object):
     """A country on the map"""
 
-    def __init__(self, app, name, country_type, posture, governance, schengen, recruit, oil, resources,
+    def __init__(self, app, name, country_type, posture, governance, schengen, recruit, oil_producing, resources,
                  schengen_link=False):
         self.__alignment = None
         self.__governance = governance
@@ -20,7 +20,7 @@ class Country(object):
         self.links = []
         self.markers = []
         self.name = name
-        self.oil = oil
+        self.__oil_producing = oil_producing
         self.plots = 0
         self.__posture = Utils.require_none_or_one_of(posture, [HARD, SOFT])
         self.recruit = recruit
@@ -305,7 +305,7 @@ class Country(object):
         Returns the amount of resources produced by this country,
         given how many oil price spikes are in effect.
         """
-        if self.oil:
+        if self.__oil_producing:
             return self.resources + oil_price_spikes
         else:
             return self.resources
