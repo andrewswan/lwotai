@@ -24,7 +24,7 @@ class Country(object):
         self.plots = 0
         self.__posture = Utils.require_none_or_one_of(posture, [HARD, SOFT])
         self.recruit = recruit
-        self.regimeChange = 0
+        self.__regime_change = False
         self.resources = resources
         self.schengen = schengen
         self.schengenLink = schengen_link
@@ -87,6 +87,9 @@ class Country(object):
     def is_governed(self):
         return self.__governance is not None
 
+    def is_regime_change(self):
+        return self.__regime_change
+
     def is_soft(self):
         return self.__posture == SOFT
 
@@ -101,6 +104,9 @@ class Country(object):
 
     def make_poor(self):
         self.__governance = POOR
+
+    def make_regime_change(self):
+        self.__regime_change = True
 
     def make_islamist_rule(self):
         self.__governance = ISLAMIST_RULE
@@ -120,6 +126,9 @@ class Country(object):
         """Sets a Non-Muslim country to Soft posture"""
         if self.type == "Non-Muslim":
             self.set_posture(SOFT)
+
+    def remove_regime_change(self):
+        self.__regime_change = False
 
     def set_posture(self, new_posture):
         """Sets or clears the posture of this (Non-Muslim) country"""
@@ -164,7 +173,7 @@ class Country(object):
     def _ought_to_have_been_tested(self):
         """Indicates whether this country ought to have been tested by now"""
         return self.sleeperCells > 0 or self.activeCells > 0 or self.troopCubes > 0 or self.aid > 0 or\
-            self.regimeChange > 0 or self.cadre > 0 or self.plots > 0
+            self.is_regime_change() or self.cadre > 0 or self.plots > 0
 
     def has_data(self):
         """Indicates whether this country contains anything not printed on the board"""
@@ -180,9 +189,9 @@ class Country(object):
     def improve_governance(self):
         self.__governance = self.__governance.improve()
         if self.is_good():
-            self.regimeChange = 0
             self.aid = 0
             self.remove_besieged()
+            self.remove_regime_change()
 
     def worsen_governance(self):
         self.__governance = self.__governance.worsen()
@@ -218,9 +227,6 @@ class Country(object):
         return (self.total_cells(True) > 0 or
                 self.has_cadre() or
                 (madrassas and self.governance_is_worse_than(FAIR)))
-
-    def is_regime_change(self):
-        return self.regimeChange > 0
 
     def can_disrupt(self):
         """Indicates whether the US can conduct a Disrupt operation in this country"""
@@ -339,14 +345,14 @@ class Country(object):
     def summary(self):
         """Returns a textual summary of this Country"""
         markers_str = ""
-        if len(self.markers) != 0:
+        if self.markers:
             markers_str = "\n   Markers: %s" % ", ".join(self.markers)
         if self.is_muslim():
             resources = self.get_resources(self.app.oil_price_spikes())
             return "%s, %s %s, %d Resource(s)\n" \
-                   "   Troops:%d Active:%d Sleeper:%d Cadre:%d Aid:%d Besieged:%d Reg Ch:%d Plots:%d %s" %\
+                   "   Troops:%d Active:%d Sleeper:%d Cadre:%d Aid:%d Besieged:%d Reg Ch:%s Plots:%d %s" %\
                    (self.name, self.governance_str(), self.__alignment, resources, self.troops(), self.activeCells,
-                    self.sleeperCells, self.cadre, self.aid, self.is_besieged(), self.regimeChange, self.plots,
+                    self.sleeperCells, self.cadre, self.aid, self.is_besieged(), self.is_regime_change(), self.plots,
                     markers_str)
         elif self.name == "Philippines":
             return "%s - Posture:%s\n   Troops:%d Active:%d Sleeper:%d Cadre:%d Plots:%d %s" %\

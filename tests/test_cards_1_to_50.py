@@ -702,7 +702,7 @@ class Card30(LabyrinthTestCase):
     def test_playable(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         self.assertFalse(app.card(30).playable("US", app, True))
-        app.get_country("Iraq").regimeChange = 1
+        app.get_country("Iraq").make_regime_change()
         self.assertTrue(app.card(30).playable("US", app, True))
         app.markers.append("Vieira de Mello Slain")
         self.assertFalse(app.card(30).playable("US", app, True))
@@ -714,8 +714,8 @@ class Card30(LabyrinthTestCase):
         app.get_country("France").make_soft()
         app.get_country("Germany").make_soft()
         app.get_country("Canada").make_soft()
-        # app.get_country("Iraq").regimeChange = 1
-        app.get_country("Pakistan").regimeChange = 1
+        # app.get_country("Iraq").make_regime_change()
+        app.get_country("Pakistan").make_regime_change()
         app.get_country("Pakistan").make_poor()
         app.get_country("Pakistan").make_ally()
         app.card(30).playEvent("US", app)
@@ -728,10 +728,10 @@ class Card30(LabyrinthTestCase):
         app.get_country("France").make_soft()
         app.get_country("Germany").make_soft()
         app.get_country("Canada").make_soft()
-        app.get_country("Iraq").regimeChange = 1
+        app.get_country("Iraq").make_regime_change()
         app.get_country("Iraq").make_poor()
         app.get_country("Iraq").make_ally()
-        app.get_country("Pakistan").regimeChange = 1
+        app.get_country("Pakistan").make_regime_change()
         app.get_country("Pakistan").make_poor()
         app.get_country("Pakistan").make_ally()
         app.card(30).playEvent("US", app)
@@ -1135,39 +1135,39 @@ class Card40(LabyrinthTestCase):
         app.get_country("Libya").make_poor()
         app.get_country("Libya").make_adversary()
         self.assertFalse(app.card(40).playable("US", app, True))
-        app.get_country("Libya").regimeChange = 1
+        app.get_country("Libya").make_regime_change()
         self.assertTrue(app.card(40).playable("US", app, True))
 
     def test_event(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("Libya").make_poor()
         app.get_country("Libya").make_adversary()
-        app.get_country("Libya").regimeChange = 1
+        app.get_country("Libya").make_regime_change()
         app.card(40).playEvent("US", app)
         self.assertTrue(app.get_country("Libya").is_fair())
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("Libya").make_fair()
         app.get_country("Libya").make_adversary()
-        app.get_country("Libya").regimeChange = 1
+        app.get_country("Libya").make_regime_change()
         app.get_country("Libya").aid = 1
         app.card(40).playEvent("US", app)
         self.assertTrue(app.get_country("Libya").is_good())
-        self.assertTrue(app.get_country("Libya").regimeChange == 0)
+        self.assertFalse(app.get_country("Libya").is_regime_change())
         self.assertTrue(app.get_country("Libya").aid == 0)
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario, ["Iraq"])
         app.get_country("Libya").make_fair()
         app.get_country("Libya").make_adversary()
-        app.get_country("Libya").regimeChange = 1
+        app.get_country("Libya").make_regime_change()
         app.get_country("Libya").aid = 1
         app.get_country("Iraq").make_fair()
         app.get_country("Iraq").make_adversary()
-        app.get_country("Iraq").regimeChange = 1
+        app.get_country("Iraq").make_regime_change()
         app.get_country("Iraq").aid = 1
         app.card(40).playEvent("US", app)
         self.assertTrue(app.get_country("Iraq").is_good())
-        self.assertTrue(app.get_country("Iraq").regimeChange == 0)
+        self.assertFalse(app.get_country("Iraq").is_regime_change())
         self.assertTrue(app.get_country("Iraq").aid == 0)
 
 
@@ -1179,7 +1179,7 @@ class Card41(LabyrinthTestCase):
         self.assertFalse(app.card(41).playable("US", app, True))
         app.get_country("Libya").make_poor()
         app.get_country("Libya").make_ally()
-        app.get_country("Libya").regimeChange = 1
+        app.get_country("Libya").make_regime_change()
         self.assertTrue(app.card(41).playable("US", app, True))
         app.get_country("Canada").make_soft()
         self.assertTrue(app.card(41).playable("US", app, True))
@@ -1190,14 +1190,14 @@ class Card41(LabyrinthTestCase):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario, ["Libya", "track", "3"])
         app.get_country("Libya").make_poor()
         app.get_country("Libya").make_ally()
-        app.get_country("Libya").regimeChange = 1
+        app.get_country("Libya").make_regime_change()
         app.get_country("Libya").change_troops(2)
         app.card(41).playEvent("US", app)
         self.assertTrue(app.get_country("Libya").aid == 1)
         self.assertTrue(app.get_country("Libya").troops() == 4)
         self.assertTrue("NATO" in app.get_country("Libya").markers)
 
-        app.get_country("Libya").regimeChange = 0
+        app.get_country("Libya").remove_regime_change()
         print "Deploy 3 from Libya to track:"
         app.deploy_troops()
         self.assertTrue(app.get_country("Libya").troops() == 0)
@@ -1206,11 +1206,11 @@ class Card41(LabyrinthTestCase):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario, ["Iraq"])
         app.get_country("Libya").make_fair()
         app.get_country("Libya").make_adversary()
-        app.get_country("Libya").regimeChange = 1
+        app.get_country("Libya").make_regime_change()
         app.get_country("Libya").aid = 1
         app.get_country("Iraq").make_fair()
         app.get_country("Iraq").make_adversary()
-        app.get_country("Iraq").regimeChange = 1
+        app.get_country("Iraq").make_regime_change()
         app.get_country("Iraq").aid = 0
         app.card(41).playEvent("US", app)
         self.assertEqual(app.get_country("Iraq").aid, 1)
@@ -1354,7 +1354,7 @@ class Card46(LabyrinthTestCase):
         self.assertFalse(app.card(46).playable("US", app, True))
         app.get_country("Iraq").make_fair()
         app.get_country("Iraq").make_ally()
-        app.get_country("Iraq").regimeChange = 1
+        app.get_country("Iraq").make_regime_change()
         self.assertFalse(app.card(46).playable("US", app, True))
         app.get_country("Iraq").cadre = 1
         self.assertFalse(app.card(46).playable("US", app, True))
@@ -1368,7 +1368,7 @@ class Card46(LabyrinthTestCase):
         self.assertFalse(app.card(46).playable("US", app, True))
         app.get_country("Syria").make_fair()
         app.get_country("Syria").make_ally()
-        app.get_country("Syria").regimeChange = 1
+        app.get_country("Syria").make_regime_change()
         self.assertFalse(app.card(46).playable("US", app, True))
         app.get_country("Syria").cadre = 1
         self.assertFalse(app.card(46).playable("US", app, True))
@@ -1382,7 +1382,7 @@ class Card46(LabyrinthTestCase):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("Iraq").make_poor()
         app.get_country("Iraq").make_ally()
-        app.get_country("Iraq").regimeChange = 1
+        app.get_country("Iraq").make_regime_change()
         app.get_country("Iraq").sleeperCells = 1
         app.card(46).playEvent("US", app)
         self.assertTrue(app.get_country("Iraq").is_fair())
@@ -1392,11 +1392,11 @@ class Card46(LabyrinthTestCase):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("Iraq").make_fair()
         app.get_country("Iraq").make_ally()
-        app.get_country("Iraq").regimeChange = 1
+        app.get_country("Iraq").make_regime_change()
         app.get_country("Iraq").sleeperCells = 1
         app.get_country("Syria").make_fair()
         app.get_country("Syria").make_ally()
-        app.get_country("Syria").regimeChange = 1
+        app.get_country("Syria").make_regime_change()
         app.get_country("Syria").sleeperCells = 1
         app.card(46).playEvent("US", app)
         self.assertTrue(app.get_country("Iraq").is_good())
@@ -1404,11 +1404,11 @@ class Card46(LabyrinthTestCase):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario, ["Lebanon"])
         app.get_country("Iraq").make_fair()
         app.get_country("Iraq").make_ally()
-        app.get_country("Iraq").regimeChange = 1
+        app.get_country("Iraq").make_regime_change()
         app.get_country("Iraq").sleeperCells = 1
         app.get_country("Lebanon").make_fair()
         app.get_country("Lebanon").make_ally()
-        app.get_country("Lebanon").regimeChange = 1
+        app.get_country("Lebanon").make_regime_change()
         app.get_country("Lebanon").sleeperCells = 1
         print "Choose Lebanon"
         app.card(46).playEvent("US", app)

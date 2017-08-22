@@ -14,7 +14,7 @@ class HandleJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").activeCells = 4
         app.get_country("Gulf States").troopCubes = 4
         app.get_country("Gulf States").remove_besieged()
-        app.get_country("Gulf States").regimeChange = 1
+        app.get_country("Gulf States").make_regime_change()
         app.get_country("Gulf States").aid = 1
         ops_left = app.handle_jihad("Gulf States", 1)
         self.assertEqual(ops_left, 0)
@@ -26,7 +26,7 @@ class HandleJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").activeCells = 4
         app.get_country("Gulf States").troopCubes = 4
         app.get_country("Gulf States").remove_besieged()
-        app.get_country("Gulf States").regimeChange = 1
+        app.get_country("Gulf States").make_regime_change()
         app.get_country("Gulf States").aid = 1
         ops_left = app.handle_jihad("Gulf States", 2)
         self.assertEqual(ops_left, 0)
@@ -38,7 +38,7 @@ class HandleJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").activeCells = 4
         app.get_country("Gulf States").troopCubes = 4
         app.get_country("Gulf States").remove_besieged()
-        app.get_country("Gulf States").regimeChange = 1
+        app.get_country("Gulf States").make_regime_change()
         app.get_country("Gulf States").aid = 1
         ops_left = app.handle_jihad("Gulf States", 3)
         self.assertEqual(ops_left, 0)
@@ -51,7 +51,7 @@ class HandleJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").activeCells = 1
         app.get_country("Gulf States").troopCubes = 4
         app.get_country("Gulf States").remove_besieged()
-        app.get_country("Gulf States").regimeChange = 1
+        app.get_country("Gulf States").make_regime_change()
         app.get_country("Gulf States").aid = 1
         ops_left = app.handle_jihad("Gulf States", 1)
         self.assertEqual(ops_left, 0)
@@ -63,7 +63,7 @@ class HandleJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").activeCells = 1
         app.get_country("Gulf States").troopCubes = 4
         app.get_country("Gulf States").remove_besieged()
-        app.get_country("Gulf States").regimeChange = 1
+        app.get_country("Gulf States").make_regime_change()
         app.get_country("Gulf States").aid = 1
         ops_left = app.handle_jihad("Gulf States", 2)
         self.assertEqual(ops_left, 1)
@@ -74,7 +74,7 @@ class HandleJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").activeCells = 1
         app.get_country("Gulf States").troopCubes = 4
         app.get_country("Gulf States").remove_besieged()
-        app.get_country("Gulf States").regimeChange = 1
+        app.get_country("Gulf States").make_regime_change()
         app.get_country("Gulf States").aid = 1
         ops_left = app.handle_jihad("Gulf States", 3)
         self.assertEqual(ops_left, 2)
@@ -87,7 +87,7 @@ class HandleJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").activeCells = 2
         app.get_country("Gulf States").troopCubes = 4
         app.get_country("Gulf States").remove_besieged()
-        app.get_country("Gulf States").regimeChange = 1
+        app.get_country("Gulf States").make_regime_change()
         app.get_country("Gulf States").aid = 1
         ops_left = app.handle_jihad("Gulf States", 1)
         self.assertEqual(ops_left, 0)
@@ -99,7 +99,7 @@ class HandleJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").activeCells = 2
         app.get_country("Gulf States").troopCubes = 4
         app.get_country("Gulf States").remove_besieged()
-        app.get_country("Gulf States").regimeChange = 1
+        app.get_country("Gulf States").make_regime_change()
         app.get_country("Gulf States").aid = 1
         ops_left = app.handle_jihad("Gulf States", 2)
         self.assertEqual(ops_left, 0)
@@ -110,7 +110,7 @@ class HandleJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").activeCells = 2
         app.get_country("Gulf States").troopCubes = 4
         app.get_country("Gulf States").remove_besieged()
-        app.get_country("Gulf States").regimeChange = 1
+        app.get_country("Gulf States").make_regime_change()
         app.get_country("Gulf States").aid = 1
         ops_left = app.handle_jihad("Gulf States", 3)
         self.assertEqual(ops_left, 1)
@@ -123,7 +123,7 @@ class HandleJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").activeCells = 2
         app.get_country("Gulf States").troopCubes = 4
         app.get_country("Gulf States").remove_besieged()
-        app.get_country("Gulf States").regimeChange = 1
+        app.get_country("Gulf States").make_regime_change()
         app.get_country("Gulf States").aid = 1
         ops_left = app.handle_jihad("Gulf States", 1)
         self.assertEqual(ops_left, 0)
@@ -135,7 +135,7 @@ class HandleJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").activeCells = 2
         app.get_country("Gulf States").troopCubes = 4
         app.get_country("Gulf States").remove_besieged()
-        app.get_country("Gulf States").regimeChange = 1
+        app.get_country("Gulf States").make_regime_change()
         app.get_country("Gulf States").aid = 1
         ops_left = app.handle_jihad("Gulf States", 2)
         self.assertEqual(ops_left, 0)
@@ -146,7 +146,7 @@ class HandleJihadTest(LabyrinthTestCase):
         app.get_country("Gulf States").activeCells = 2
         app.get_country("Gulf States").troopCubes = 4
         app.get_country("Gulf States").remove_besieged()
-        app.get_country("Gulf States").regimeChange = 1
+        app.get_country("Gulf States").make_regime_change()
         app.get_country("Gulf States").aid = 1
         ops_left = app.handle_jihad("Gulf States", 3)
         self.assertEqual(ops_left, 0)

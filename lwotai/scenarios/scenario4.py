@@ -17,7 +17,7 @@ class Scenario4(Scenario):
         game.get_country("Afghanistan").make_ally()
         game.get_country("Afghanistan").sleeperCells = 1
         game.get_country("Afghanistan").troopCubes = 5
-        game.get_country("Afghanistan").regimeChange = 1
+        game.get_country("Afghanistan").make_regime_change()
         game.get_country("Central Asia").make_fair()
         game.get_country("Central Asia").make_neutral()
         game.get_country("Gulf States").make_fair()
@@ -31,7 +31,7 @@ class Scenario4(Scenario):
         game.get_country("Iraq").make_ally()
         game.get_country("Iraq").troopCubes = 6
         game.get_country("Iraq").sleeperCells = 3
-        game.get_country("Iraq").regimeChange = 1
+        game.get_country("Iraq").make_regime_change()
         game.get_country("Libya").make_poor()
         game.get_country("Libya").make_adversary()
         game.get_country("Pakistan").make_fair()

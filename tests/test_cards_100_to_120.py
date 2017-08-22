@@ -361,7 +361,7 @@ class Card109(LabyrinthTestCase):
         app.get_country("Pakistan").activeCells = 2
         self.assertFalse(app.card(109).playable("US", app, True))
         self.assertFalse(app.card(109).playable("Jihadist", app, False))
-        app.get_country("Pakistan").regimeChange = 1
+        app.get_country("Pakistan").make_regime_change()
         self.assertTrue(app.card(109).playable("US", app, True))
         self.assertTrue(app.card(109).playable("Jihadist", app, False))
 
@@ -373,7 +373,7 @@ class Card109(LabyrinthTestCase):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.test_country("Pakistan")
         app.get_country("Pakistan").sleeperCells = 2
-        app.get_country("Pakistan").regimeChange = 1
+        app.get_country("Pakistan").make_regime_change()
         app.card(109).playEvent("US", app)
         self.assertCells(app, "Pakistan", 0, True)
         self.assertTrue(app.prestige != 7)
@@ -381,7 +381,7 @@ class Card109(LabyrinthTestCase):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.test_country("Pakistan")
         app.get_country("Pakistan").sleeperCells = 2
-        app.get_country("Pakistan").regimeChange = 1
+        app.get_country("Pakistan").make_regime_change()
         app.card(109).playEvent("Jihadist", app)
         self.assertCells(app, "Pakistan", 0, True)
         self.assertTrue(app.prestige != 7)
@@ -389,10 +389,10 @@ class Card109(LabyrinthTestCase):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario, ["Iraq"])
         app.test_country("Pakistan")
         app.get_country("Pakistan").sleeperCells = 2
-        app.get_country("Pakistan").regimeChange = 1
+        app.get_country("Pakistan").make_regime_change()
         app.test_country("Iraq")
         app.get_country("Iraq").sleeperCells = 2
-        app.get_country("Iraq").regimeChange = 1
+        app.get_country("Iraq").make_regime_change()
         print "Choose Iraq"
         app.card(109).playEvent("US", app)
         self.assertCells(app, "Iraq", 0, True)

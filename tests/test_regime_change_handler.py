@@ -13,7 +13,7 @@ class RegimeChangeHandlerTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Afghanistan").troops(), 0)
         self.assertEqual(app.get_country("Afghanistan").sleeperCells, 4)
         self.assertEqual(app.get_country("Afghanistan").activeCells, 0)
-        self.assertEqual(app.get_country("Afghanistan").regimeChange, 0)
+        self.assertFalse(app.get_country("Afghanistan").is_regime_change())
         self.assertEqual(app.prestige, 7)
         self.assertEqual(app.troops, 9)
         gov_roll = 4
@@ -24,7 +24,7 @@ class RegimeChangeHandlerTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Afghanistan").troops(), 0)
         self.assertEqual(app.get_country("Afghanistan").sleeperCells, 4)
         self.assertEqual(app.get_country("Afghanistan").activeCells, 0)
-        self.assertEqual(app.get_country("Afghanistan").regimeChange, 0)
+        self.assertFalse(app.get_country("Afghanistan").is_regime_change())
         self.assertEqual(app.prestige, 7)
         self.assertEqual(app.troops, 9)
 
@@ -35,7 +35,7 @@ class RegimeChangeHandlerTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Afghanistan").troops(), 0)
         self.assertEqual(app.get_country("Afghanistan").sleeperCells, 4)
         self.assertEqual(app.get_country("Afghanistan").activeCells, 0)
-        self.assertEqual(app.get_country("Afghanistan").regimeChange, 0)
+        self.assertFalse(app.get_country("Afghanistan").is_regime_change())
         self.assertEqual(app.prestige, 7)
         self.assertEqual(app.troops, 9)
         gov_roll = 4
@@ -46,7 +46,7 @@ class RegimeChangeHandlerTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Afghanistan").troops(), 6)
         self.assertEqual(app.get_country("Afghanistan").sleeperCells, 0)
         self.assertEqual(app.get_country("Afghanistan").activeCells, 4)
-        self.assertEqual(app.get_country("Afghanistan").regimeChange, 1)
+        self.assertTrue(app.get_country("Afghanistan").is_regime_change())
         self.assertEqual(app.prestige, 5)
         self.assertEqual(app.troops, 3)
 
@@ -57,7 +57,7 @@ class RegimeChangeHandlerTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Afghanistan").troops(), 0)
         self.assertEqual(app.get_country("Afghanistan").sleeperCells, 4)
         self.assertEqual(app.get_country("Afghanistan").activeCells, 0)
-        self.assertEqual(app.get_country("Afghanistan").regimeChange, 0)
+        self.assertFalse(app.get_country("Afghanistan").is_regime_change())
         self.assertEqual(app.prestige, 7)
         self.assertEqual(app.troops, 9)
         gov_roll = 5
@@ -68,7 +68,7 @@ class RegimeChangeHandlerTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Afghanistan").troops(), 6)
         self.assertEqual(app.get_country("Afghanistan").sleeperCells, 0)
         self.assertEqual(app.get_country("Afghanistan").activeCells, 4)
-        self.assertEqual(app.get_country("Afghanistan").regimeChange, 1)
+        self.assertTrue(app.get_country("Afghanistan").is_regime_change())
         self.assertEqual(app.prestige, 5)
         self.assertEqual(app.troops, 3)
 
@@ -79,7 +79,7 @@ class RegimeChangeHandlerTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Afghanistan").troops(), 0)
         self.assertEqual(app.get_country("Afghanistan").sleeperCells, 4)
         self.assertEqual(app.get_country("Afghanistan").activeCells, 0)
-        self.assertEqual(app.get_country("Afghanistan").regimeChange, 0)
+        self.assertFalse(app.get_country("Afghanistan").is_regime_change())
         self.assertEqual(app.prestige, 7)
         self.assertEqual(app.troops, 9)
         gov_roll = 5
@@ -90,7 +90,7 @@ class RegimeChangeHandlerTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Afghanistan").troops(), 6)
         self.assertEqual(app.get_country("Afghanistan").sleeperCells, 0)
         self.assertEqual(app.get_country("Afghanistan").activeCells, 4)
-        self.assertEqual(app.get_country("Afghanistan").regimeChange, 1)
+        self.assertTrue(app.get_country("Afghanistan").is_regime_change())
         self.assertEqual(app.prestige, 9)
         self.assertEqual(app.troops, 3)
 
@@ -101,7 +101,7 @@ class RegimeChangeHandlerTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Afghanistan").troops(), 0)
         self.assertEqual(app.get_country("Afghanistan").sleeperCells, 4)
         self.assertEqual(app.get_country("Afghanistan").activeCells, 0)
-        self.assertEqual(app.get_country("Afghanistan").regimeChange, 0)
+        self.assertFalse(app.get_country("Afghanistan").is_regime_change())
         self.assertEqual(app.prestige, 7)
         self.assertEqual(app.troops, 9)
         gov_roll = 5
@@ -112,7 +112,7 @@ class RegimeChangeHandlerTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Afghanistan").troops(), 6)
         self.assertEqual(app.get_country("Afghanistan").sleeperCells, 0)
         self.assertEqual(app.get_country("Afghanistan").activeCells, 4)
-        self.assertEqual(app.get_country("Afghanistan").regimeChange, 1)
+        self.assertTrue(app.get_country("Afghanistan").is_regime_change())
         self.assertEqual(app.prestige, 2)
         self.assertEqual(app.troops, 3)
 
@@ -123,7 +123,7 @@ class RegimeChangeHandlerTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Afghanistan").troops(), 0)
         self.assertEqual(app.get_country("Afghanistan").sleeperCells, 4)
         self.assertEqual(app.get_country("Afghanistan").activeCells, 0)
-        self.assertEqual(app.get_country("Afghanistan").regimeChange, 0)
+        self.assertFalse(app.get_country("Afghanistan").is_regime_change())
         self.assertEqual(app.prestige, 7)
         self.assertEqual(app.troops, 9)
         gov_roll = 5
@@ -134,7 +134,7 @@ class RegimeChangeHandlerTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Afghanistan").troops(), 6)
         self.assertEqual(app.get_country("Afghanistan").sleeperCells, 0)
         self.assertEqual(app.get_country("Afghanistan").activeCells, 4)
-        self.assertEqual(app.get_country("Afghanistan").regimeChange, 1)
+        self.assertTrue(app.get_country("Afghanistan").is_regime_change())
         self.assertEqual(app.prestige, 12)
         self.assertEqual(app.troops, 3)
 
@@ -147,7 +147,7 @@ class RegimeChangeHandlerTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Afghanistan").troops(), 0)
         self.assertEqual(app.get_country("Afghanistan").sleeperCells, 4)
         self.assertEqual(app.get_country("Afghanistan").activeCells, 0)
-        self.assertEqual(app.get_country("Afghanistan").regimeChange, 0)
+        self.assertFalse(app.get_country("Afghanistan").is_regime_change())
         self.assertEqual(app.prestige, 7)
         self.assertEqual(app.troops, 1)
         self.assertEqual(app.get_country("Pakistan").troops(), 10)
@@ -159,7 +159,7 @@ class RegimeChangeHandlerTest(LabyrinthTestCase):
         self.assertEqual(app.get_country("Afghanistan").troops(), 7)
         self.assertEqual(app.get_country("Afghanistan").sleeperCells, 0)
         self.assertEqual(app.get_country("Afghanistan").activeCells, 4)
-        self.assertEqual(app.get_country("Afghanistan").regimeChange, 1)
+        self.assertTrue(app.get_country("Afghanistan").is_regime_change())
         self.assertEqual(app.prestige, 12)
         self.assertEqual(app.troops, 1)
         self.assertEqual(app.get_country("Pakistan").troops(), 3)

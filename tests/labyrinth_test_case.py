@@ -78,7 +78,7 @@ class LabyrinthTestCase(unittest.TestCase):
         app.map.get("Afghanistan").make_good()
         app.map.get("Afghanistan").make_ally()
         app.map.get("Afghanistan").activeCells = 4
-        app.map.get("Afghanistan").regimeChange = 1
+        app.map.get("Afghanistan").make_regime_change()
         app.map.get("Afghanistan").troopCubes = 6
         app.map.get("Afghanistan").aid = 1
         app.map.get("Afghanistan").remove_besieged()

@@ -37,7 +37,7 @@ class RecruitTest(LabyrinthTestCase):
         self.assertEqual(app.recruit_choice(1), "Philippines")
         app.get_country("Iraq").activeCells = 5
         self.assertEqual(app.recruit_choice(3), "Iraq")
-        app.get_country("Gulf States").regimeChange = 1
+        app.get_country("Gulf States").make_regime_change()
         app.get_country("Gulf States").activeCells = 1
         app.get_country("Gulf States").troopCubes = 5
         self.assertEqual(app.recruit_choice(3), "Iraq")
@@ -292,7 +292,7 @@ class RecruitTest(LabyrinthTestCase):
         app.cells = 15
         app.funding = 9
         app.get_country("Iraq").make_fair()
-        app.get_country("Iraq").regimeChange = 1
+        app.get_country("Iraq").make_regime_change()
         unused_ops = app.execute_recruit("Iraq", 1, [6])
         self.assertEqual(unused_ops, 0)
         self.assertEqual(app.get_country("Iraq").sleeperCells, 1)

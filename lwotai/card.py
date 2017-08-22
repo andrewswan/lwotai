@@ -150,7 +150,7 @@ class Card(object):
                 return True
             elif self.number == 46:  # Sistani
                 for country in app.get_countries():
-                    if country.type == "Shia-Mix" and country.regimeChange > 0 and country.total_cells(True) > 0:
+                    if country.type == "Shia-Mix" and country.is_regime_change() and country.total_cells(True) > 0:
                         return True
                 return False
             elif self.number == 47:  # The door of Itjihad was closed
@@ -171,7 +171,7 @@ class Card(object):
             elif self.number == 51:  # FREs
                 return app.get_country("Iraq").troops() > 0
             elif self.number == 52:  # IDEs
-                return app.contains_country(lambda c: c.regimeChange > 0 and c.total_cells(True) > 0)
+                return app.contains_country(lambda c: c.is_regime_change() and c.total_cells(True) > 0)
             elif self.number == 53:  # Madrassas
                 return app.get_yes_no_from_user("Is this the 1st card of the Jihadist Action Phase? (y/n): ")
             elif self.number == 54:  # Moqtada al-Sadr
@@ -179,7 +179,7 @@ class Card(object):
             elif self.number == 55:  # Uyghur Jihad
                 return True
             elif self.number == 56:  # Vieira de Mello Slain
-                return app.contains_country(lambda c: c.regimeChange > 0 and c.total_cells() > 0)
+                return app.contains_country(lambda c: c.is_regime_change() and c.total_cells() > 0)
             elif self.number == 57:  # Abu Sayyaf
                 return "Moro Talks" not in app.markers
             elif self.number == 58:  # Al-Anbar
@@ -226,7 +226,7 @@ class Card(object):
             elif self.number == 75:  # Schroeder & Chirac
                 return app.us().is_hard()
             elif self.number == 76:  # Abu Ghurayb
-                return app.contains_country(lambda c: c.regimeChange > 0 and c.total_cells(True) > 0)
+                return app.contains_country(lambda c: c.is_regime_change() and c.total_cells(True) > 0)
             elif self.number == 77:  # Al Jazeera
                 if app.get_country("Saudi Arabia").troops() > 0:
                     return True
@@ -250,7 +250,7 @@ class Card(object):
             elif self.number in [87, 88, 89]:  # Martyrdom Operation
                 return app.contains_country(lambda c: not c.is_islamist_rule() and c.total_cells(True) > 0)
             elif self.number == 90:  # Quagmire
-                valid_target = app.contains_country(lambda c: c.regimeChange > 0 and c.total_cells(True) > 0)
+                valid_target = app.contains_country(lambda c: c.is_regime_change() and c.total_cells(True) > 0)
                 return valid_target and app.prestige < 7
             elif self.number == 91:  # Regional al-Qaeda
                 targets = app.find_countries(lambda c: c.is_muslim() and c.is_ungoverned())
@@ -293,7 +293,7 @@ class Card(object):
             elif self.number == 108:  # Musharraf
                 return "Benazir Bhutto" not in app.markers and app.get_country("Pakistan").total_cells() > 0
             elif self.number == 109:  # Tora Bora
-                return app.contains_country(lambda c: c.regimeChange > 0 and c.total_cells() >= 2)
+                return app.contains_country(lambda c: c.is_regime_change() and c.total_cells() >= 2)
             elif self.number == 110:  # Zarqawi
                 return app.get_country("Iraq").troops() > 0 or app.get_country("Syria").troops() > 0 or \
                     app.get_country("Lebanon").troops() > 0 or app.get_country("Jordan").troops() > 0
@@ -657,8 +657,9 @@ class Card(object):
                             app.remove_cell("Russia", side)    # 20150131PS added side
                             app.output_to_history(app.get_country("Russia").summary(), True)
                         else:
-                            isRussia = app.get_yes_no_from_user("There are cells in both Russia and Central Asia. Do you want to remove a cell in Russia? (y/n): ")
-                            if isRussia:
+                            is_russia = app.get_yes_no_from_user("There are cells in both Russia and Central Asia."
+                                                                 " Do you want to remove a cell in Russia? (y/n): ")
+                            if is_russia:
                                 app.remove_cell("Russia", side)    # 20150131PS added side
                                 app.output_to_history(app.get_country("Russia").summary(), True)
                             else:
@@ -822,7 +823,7 @@ class Card(object):
                 target_country = None
                 if num_regime_change == 1:
                     for country in app.get_countries():
-                        if country.regimeChange > 0:
+                        if country.is_regime_change():
                             target_country = country
                             break
                 else:
@@ -834,11 +835,11 @@ class Card(object):
                             return
                         else:
                             target_country = app.get_country(country_name)
-                            if target_country.regimeChange <= 0:
+                            if target_country.is_regime_change():
+                                break
+                            else:
                                 print "%s is not a Regime Change country." % country_name
                                 print ""
-                            else:
-                                break
                 target_country.aid += 1
                 app.output_to_history("Aid added to %s." % target_country.name, False)
                 woi_roll = app.get_roll("WoI")
@@ -971,7 +972,7 @@ class Card(object):
                 if num_regime_change <= 0:
                     return False
                 elif num_regime_change == 1:
-                    target_country = app.find_countries(lambda c: c.regimeChange > 0)[0]
+                    target_country = app.find_countries(lambda c: c.is_regime_change())[0]
                 else:
                     while True:
                         country_name = app.get_country_from_user(
@@ -982,11 +983,11 @@ class Card(object):
                             return
                         else:
                             target_country = app.get_country(country_name)
-                            if target_country.regimeChange <= 0:
+                            if target_country.is_regime_change():
+                                break
+                            else:
                                 print "%s is not a Regime Change country." % country_name
                                 print ""
-                            else:
-                                break
                 app.improve_governance(target_country.name)
                 app.output_to_history("%s Governance improved." % target_country.name, False)
                 app.output_to_history(target_country.summary())
@@ -995,7 +996,7 @@ class Card(object):
                 if num_regime_change <= 0:
                     return False
                 elif num_regime_change == 1:
-                    target_country = app.find_countries(lambda c: c.regimeChange > 0)[0]
+                    target_country = app.find_countries(lambda c: c.is_regime_change())[0]
                 else:
                     while True:
                         country_name = app.get_country_from_user(
@@ -1006,11 +1007,11 @@ class Card(object):
                             return
                         else:
                             target_country = app.get_country(country_name)
-                            if target_country.regimeChange <= 0:
+                            if target_country.is_regime_change():
+                                break
+                            else:
                                 print "%s is not a Regime Change country." % country_name
                                 print ""
-                            else:
-                                break
                 target_country.markers.append("NATO")
                 app.output_to_history("NATO added in %s" % target_country.name, False)
                 target_country.aid += 1
@@ -1057,7 +1058,7 @@ class Card(object):
                             break
             elif self.number == 46:  # Sistani
                 target_countries = [c.name for c in app.get_countries() if
-                                    c.type == "Shia-Mix" and c.regimeChange > 0 and c.total_cells(True) > 0]
+                                    c.type == "Shia-Mix" and c.is_regime_change() and c.total_cells(True) > 0]
                 target_name = None
                 if len(target_countries) == 1:
                     target_name = target_countries[0]
@@ -1297,7 +1298,7 @@ class Card(object):
                     app.output_to_history("FATA marker added in Pakistan", True)
                 app.place_cells("Pakistan", 1)
             elif self.number == 81:  # Foreign Fighters
-                possibles = app.find_countries(lambda c: c.regimeChange > 0)
+                possibles = app.find_countries(lambda c: c.is_regime_change())
                 if not possibles:
                     return False
                 target = random.choice(possibles)
@@ -1696,7 +1697,7 @@ class Card(object):
                 app.output_to_history("Pakistan now Poor Ally.", False)
                 app.output_to_history(app.get_country("Pakistan").summary(), True)
             elif self.number == 109:  # Tora Bora
-                possibles = [c.name for c in app.get_countries() if c.regimeChange > 0 and c.total_cells() >= 2]
+                possibles = [c.name for c in app.get_countries() if c.is_regime_change() and c.total_cells() >= 2]
                 target_name = None
                 if len(possibles) == 0:
                     return False

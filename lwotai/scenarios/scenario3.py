@@ -15,38 +15,36 @@ class Scenario3(Scenario):
         game.startYear = 2002
         game.troops = 5
         game.turn = 1
-        game.map["Afghanistan"].make_poor()
-        game.map["Afghanistan"].make_ally()
-        game.map["Afghanistan"].sleeperCells = 1
-        game.map["Afghanistan"].troopCubes = 6
-        game.map["Afghanistan"].regimeChange = 1
-        game.map["Central Asia"].make_poor()
-        game.map["Central Asia"].make_ally()
-        game.map["Gulf States"].make_fair()
-        game.map["Gulf States"].make_ally()
-        game.map["Gulf States"].troopCubes = 2
-        game.map["Iraq"].make_poor()
-        game.map["Iraq"].make_adversary()
-        game.map["Libya"].make_poor()
-        game.map["Libya"].make_adversary()
-        game.map["Pakistan"].make_poor()
-        game.map["Pakistan"].make_ally()
-        game.map["Pakistan"].sleeperCells = 1
-        game.map["Pakistan"].markers.append("FATA")
-        game.map["Saudi Arabia"].make_poor()
-        game.map["Saudi Arabia"].make_ally()
-        game.map["Saudi Arabia"].troopCubes = 2
-        game.map["Somalia"].make_besieged()
-        game.map["Syria"].make_fair()
-        game.map["Syria"].make_adversary()
+        game.get_country("Afghanistan").make_poor()
+        game.get_country("Afghanistan").make_ally()
+        game.get_country("Afghanistan").sleeperCells = 1
+        game.get_country("Afghanistan").troopCubes = 6
+        game.get_country("Afghanistan").make_regime_change()
+        game.get_country("Central Asia").make_poor()
+        game.get_country("Central Asia").make_ally()
+        game.get_country("Gulf States").make_fair()
+        game.get_country("Gulf States").make_ally()
+        game.get_country("Gulf States").troopCubes = 2
+        game.get_country("Iraq").make_poor()
+        game.get_country("Iraq").make_adversary()
+        game.get_country("Libya").make_poor()
+        game.get_country("Libya").make_adversary()
+        game.get_country("Pakistan").make_poor()
+        game.get_country("Pakistan").make_ally()
+        game.get_country("Pakistan").sleeperCells = 1
+        game.get_country("Pakistan").markers.append("FATA")
+        game.get_country("Saudi Arabia").make_poor()
+        game.get_country("Saudi Arabia").make_ally()
+        game.get_country("Saudi Arabia").troopCubes = 2
+        game.get_country("Somalia").make_besieged()
+        game.get_country("Syria").make_fair()
+        game.get_country("Syria").make_adversary()
         game.markers.append("Patriot Act")
-        possibles = []
-        for country in game.map:
-            if country != "United States":
-                possibles.append(country)
-        random.shuffle(possibles)
+        non_us_countries = game.find_countries(lambda c: c.name != "United States")
+        random.shuffle(non_us_countries)
         for i in range(3):
-            game.test_country(possibles[i])
-            game.place_cells(possibles[i], 1)
+            country_name = non_us_countries[i].name
+            game.test_country(country_name)
+            game.place_cells(country_name, 1)
         print "Remove the 'Patriot Act' and 'Tora Bora' cards (43 and 109) from the game."
         print ""

@@ -448,7 +448,7 @@ class Labyrinth(object):
         return self.num_countries(lambda c: c.is_besieged())
 
     def num_regime_change(self):
-        return self.num_countries(lambda c: c.regimeChange > 0)
+        return self.num_countries(lambda c: c.is_regime_change())
 
     def num_adversary(self):
         return self.num_countries(lambda c: c.is_adversary())
@@ -524,7 +524,7 @@ class Labyrinth(object):
             self.map.get(where).make_poor()
         else:
             self.map.get(where).make_fair()
-        self.map.get(where).regimeChange = 1
+        self.map.get(where).make_regime_change()
         prestige_multiplier = 1
         if prestige_rolls[0] <= 4:
             prestige_multiplier = -1
@@ -743,10 +743,9 @@ class Labyrinth(object):
             self.output_to_history("Governance to Islamist Rule", False)
             target_country.make_adversary()
             self.output_to_history("Alignment to Adversary", False)
-            target_country.regimeChange = 0
+            target_country.remove_regime_change()
             if target_country.is_besieged():
                 self.output_to_history("Besieged Regime marker removed.", False)
-
             target_country.remove_besieged()
             target_country.aid = 0
             self.funding = min(9, self.funding + self.country_resources_by_name(country_name))
@@ -910,8 +909,8 @@ class Labyrinth(object):
         cells_requested = ops * self.ideology.recruits_per_success()
         cells = self.num_cells_available(is_madrassas or is_jihadist_videos)
         cells_to_recruit = min(cells_requested, cells)
-        if self.map.get(country_name).regimeChange or self.map.get(country_name).is_islamist_rule():
-            if self.map.get(country_name).regimeChange:
+        if self.map.get(country_name).is_regime_change() or self.map.get(country_name).is_islamist_rule():
+            if self.map.get(country_name).is_regime_change():
                 self.output_to_history("Recruit to Regime Change country automatically successful.", False)
             else:
                 self.output_to_history("Recruit to Islamist Rule country automatically successful.", False)
@@ -920,7 +919,7 @@ class Labyrinth(object):
 
             if cells_to_recruit == 0 and is_jihadist_videos:
                 self.map.get(country_name).cadre = 1
-                self.output_to_history("No cells available to recruit.  Cadre added.", False)
+                self.output_to_history("No cells available to recruit. Cadre added.", False)
                 self.output_to_history(self.map.get(country_name).summary(), True)
                 return ops - 1
             else:
@@ -1066,7 +1065,7 @@ class Labyrinth(object):
             subdests = []
             for country in self.map.countries():
                 if (not country.is_islamist_rule()) and\
-                        (country.is_besieged() or country.regimeChange > 0 or country.aid > 0):
+                        (country.is_besieged() or country.is_regime_change() or country.aid > 0):
                     if "Biometrics" in self.lapsing and not self.adjacent_country_has_cell(country.name):
                         continue
                     subdests.append(country.name)
@@ -1205,7 +1204,7 @@ class Labyrinth(object):
     def travel_source_box_two(self, i, destinations, sources, is_radicalization=False):
         possibles = []
         for country in self.get_countries():
-            if country.regimeChange > 0:
+            if country.is_regime_change():
                 num_times_is_source = sources.count(country.name)
                 if ((country.sleeperCells + country.activeCells) - num_times_is_source) > country.troops():
                     if is_radicalization or "Biometrics" not in self.lapsing or\
@@ -1467,7 +1466,8 @@ class Labyrinth(object):
                 self.map.get(country_name).plots += plots_placed
                 self.output_to_history("%d Plot(s) placed in %s." % (plots_placed, country_name), False)
                 if "Abu Sayyaf" in self.markers and country_name == "Philippines" and \
-                        self.map.get(country_name).troops() <= self.map.get(country_name).total_cells() and successes > 0:
+                        self.map.get(country_name).troops() <= self.map.get(country_name).total_cells() and\
+                        successes > 0:
                     self.output_to_history("Prestige loss due to Abu Sayyaf.", False)
                     self.change_prestige(-successes)
                 if "NEST" in self.markers and country_name == "Unites States":
@@ -1991,7 +1991,7 @@ class Labyrinth(object):
         print "Regime Change Countries"
         print "-----------------------"
         for country in self.map.country_names():
-            if self.map.get(country).regimeChange > 0:
+            if self.map.get(country).is_regime_change():
                 self.map.get(country).print_country()
         print ""
 
@@ -2000,7 +2000,7 @@ class Labyrinth(object):
         print "Regime Change Countries with Two Cells"
         print "--------------------------------------"
         for country in self.map.country_names():
-            if self.map.get(country).regimeChange > 0:
+            if self.map.get(country).is_regime_change():
                 if self.map.get(country).total_cells() >= 2:
                     self.map.get(country).print_country()
         print ""
@@ -2065,7 +2065,7 @@ class Labyrinth(object):
         print "-------------------------------------------"
         for country in self.map.country_names():
             if self.map.get(country).type == "Shia-Mix":
-                if self.map.get(country).regimeChange > 0:
+                if self.map.get(country).is_regime_change():
                     if (self.map.get(country).total_cells(True)) > 0:
                         self.map.get(country).print_country()
         print ""
@@ -2654,23 +2654,18 @@ class Labyrinth(object):
         else:
             country.make_besieged()
             print "%s is now a besieged regime" % country_name
+        return True
 
     def adjust_country_regime(self, country_name):
         print "Adjusting regime change for - ", country_name
-        while True:
-            user_input = self.my_raw_input("Enter new regime change count (0-1): ")
-            if user_input == "":
-                return False
-            try:
-                regime_change_count = int(user_input)
-                if regime_change_count < 0 or regime_change_count > 1:
-                    print "Invalid regime change value - ", regime_change_count
-                else:
-                    print "Changing regime change count to ", regime_change_count
-                    self.map.get(country_name).regimeChange = regime_change_count
-                    return True
-            except ValueError:
-                print "Invalid regime change value - ", user_input
+        country = self.get_country(country_name)
+        if country.is_regime_change():
+            country.remove_regime_change()
+            print "%s is no longer a Regime Change country" % country_name
+        else:
+            country.make_regime_change()
+            print "%s is now a Regime Change country" % country_name
+        return True
 
     def adjust_country_plots(self, country_name):
         print "Adjusting plots for - ", country_name
@@ -2870,7 +2865,7 @@ class Labyrinth(object):
             self.troops -= how_many
             troops_left = self.troops
         else:
-            if self.map.get(move_from).regimeChange:
+            if self.map.get(move_from).is_regime_change():
                 if (self.map.get(move_from).troops() - how_many) < (5 + self.map.get(move_from).total_cells(True)):
                     print "You cannot move that many troops from a Regime Change country."
                     print ""
@@ -2903,7 +2898,7 @@ class Labyrinth(object):
                 if country.sleeperCells + country.activeCells <= 0 and country.cadre <= 0:
                     print "There are no cells or cadre in %s." % country_name
                     print ""
-                elif "FATA" in country.markers and country.regimeChange == 0:
+                elif "FATA" in country.markers and not country.is_regime_change():
                     print "No disrupt allowed due to FATA."
                     print ""
                 elif country.troops() > 0 or country.type == "Non-Muslim" or country.is_ally():
@@ -3052,7 +3047,7 @@ class Labyrinth(object):
             if country_name == "":
                 print ""
                 return
-            elif self.map.get(country_name).regimeChange > 0:
+            elif self.map.get(country_name).is_regime_change():
                 move_from = country_name
                 available = self.map.get(country_name).troops()
             else:
