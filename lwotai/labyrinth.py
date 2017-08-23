@@ -1271,44 +1271,33 @@ class Labyrinth(object):
     def test_country(self, country_name):
         # Tests the named country, if untested
         country = self.map.get(country_name)
-        if country.is_non_muslim() and not country.get_posture():
-            test_roll = random.randint(1, 6)
-            if test_roll <= 4:
-                country.make_soft()
-            else:
-                country.make_hard()
-            self.output_to_history("%s tested, posture %s" % (country.name, country.get_posture()), False)
-        elif country.is_ungoverned():
-            test_roll = random.randint(1, 6)
-            if test_roll <= 4:
-                country.make_poor()
-            else:
-                country.make_fair()
-            country.make_neutral()
-            self.output_to_history("%s tested, governance %s" % (country.name, country.governance_str()), False)
+        test_roll = random.randint(1, 6)
+        country.test(test_roll)
 
     def get_countries_with_us_posture_by_governance(self):
+        """Returns a dict of governance -> names of countries with US posture and that governance"""
         countries_by_governance = {GOOD: [], FAIR: [], POOR: []}
-        for country in self.map.country_names():
-            if (country != "United States") and (self.map.get(country).get_posture() == self.us_posture()):
-                if self.map.get(country).is_good():
-                    countries_by_governance[GOOD].append(country)
-                elif self.map.get(country).is_fair():
-                    countries_by_governance[FAIR].append(country)
-                elif self.map.get(country).is_poor():
-                    countries_by_governance[POOR].append(country)
+        for country in self.get_countries():
+            if country.name != "United States" and country.get_posture() == self.us_posture():
+                if country.is_good():
+                    countries_by_governance[GOOD].append(country.name)
+                elif country.is_fair():
+                    countries_by_governance[FAIR].append(country.name)
+                elif country.is_poor():
+                    countries_by_governance[POOR].append(country.name)
         return countries_by_governance
 
     def get_countries_with_troops_by_governance(self):
+        """Returns a dict of governance -> names of countries with troops and that governance"""
         countries_by_governance = {GOOD: [], FAIR: [], POOR: []}
-        for country in self.map.country_names():
-            if self.map.get(country).troops() > 0:
-                if self.map.get(country).is_good():
-                    countries_by_governance[GOOD].append(country)
-                elif self.map.get(country).is_fair():
-                    countries_by_governance[FAIR].append(country)
-                elif self.map.get(country).is_poor():
-                    countries_by_governance[POOR].append(country)
+        for country in self.get_countries():
+            if country.troops() > 0:
+                if country.is_good():
+                    countries_by_governance[GOOD].append(country.name)
+                elif country.is_fair():
+                    countries_by_governance[FAIR].append(country.name)
+                elif country.is_poor():
+                    countries_by_governance[POOR].append(country.name)
         return countries_by_governance
 
     def get_countries_with_aid_by_governance(self):

@@ -1,21 +1,19 @@
 from lwotai.alignment import ALLY, NEUTRAL, ADVERSARY
-from lwotai.countries.types import CountryType, NON_MUSLIM, SUNNI, SHIA_MIX
+from lwotai.countries.types import CountryType, SHIA_MIX
 from lwotai.governance import GOOD, FAIR, POOR, ISLAMIST_RULE
 from lwotai.governance import Governance
 from lwotai.utils import Utils
-from postures.posture import HARD, SOFT
 
 
 class Country(object):
     """A country on the map"""
 
-    def __init__(self, app, name, country_type, posture, governance, schengen, recruit, oil_producing, resources,
+    def __init__(self, app, name, country_type, governance, schengen, recruit, oil_producing, resources,
                  schengen_link=False):
         self.__alignment = None
         self.__besieged = False
         self.__governance = governance
         self.__oil_producing = oil_producing
-        self.__posture = Utils.require_none_or_one_of(posture, [HARD, SOFT])
         self.__regime_change = False
         self.__type = Utils.require_type(country_type, CountryType)
         self.activeCells = 0
@@ -52,7 +50,7 @@ class Country(object):
         return self.__alignment
 
     def is_besieged(self):
-        """Indicates whether this country contains a Besieged Regime marker"""
+        """Indicates whether this country is a Besieged Regime"""
         return self.__besieged
 
     def make_adversary(self):
@@ -77,7 +75,7 @@ class Country(object):
         return self.__governance == FAIR
 
     def is_hard(self):
-        return self.__posture == HARD
+        return False
 
     def is_poor(self):
         return self.__governance == POOR
@@ -98,7 +96,7 @@ class Country(object):
         return self.__type == SHIA_MIX
 
     def is_soft(self):
-        return self.__posture == SOFT
+        return False
 
     def is_ungoverned(self):
         return not self.is_governed()
@@ -124,37 +122,8 @@ class Country(object):
     def make_governance(self, governance):
         self.__governance = Utils.require_type_or_none(governance, Governance)
 
-    def make_hard(self):
-        """Sets a Non-Muslim country to Hard posture"""
-        if self.is_non_muslim():
-            self.set_posture(HARD)
-
-    def make_soft(self):
-        """Sets a Non-Muslim country to Soft posture"""
-        if self.is_non_muslim():
-            self.set_posture(SOFT)
-
     def remove_regime_change(self):
         self.__regime_change = False
-
-    def set_posture(self, new_posture):
-        """Sets or clears the posture of this (Non-Muslim) country"""
-        assert self.is_non_muslim()
-        self.__posture = Utils.require_none_or_one_of(new_posture, [HARD, SOFT])
-
-    def toggle_posture(self):
-        """Switches this country between Hard and Soft posture (error if no posture set)"""
-        if self.is_hard():
-            self.make_soft()
-        elif self.is_soft():
-            self.make_hard()
-        else:
-            raise Exception("%s has no posture" % self.name)
-
-    def remove_posture(self):
-        """Removes any posture from this (Non-Muslim) country"""
-        assert self.is_non_muslim()
-        self.__posture = None
 
     def remove_plot_marker(self):
         """Removes one plot marker from this country, if any are present; returns True if one was removed"""
@@ -172,9 +141,7 @@ class Country(object):
     def check_is_tested(self):
         if self._ought_to_have_been_tested():
             assert self.is_governed(), "Ungoverned country: %s" % self.print_country()
-            if self.is_non_muslim():
-                assert self.__posture, "%s has no posture" % self.name
-            elif self.is_muslim():
+            if self.is_muslim():
                 assert self.is_aligned(), "%s is unaligned" % self.name
 
     def _ought_to_have_been_tested(self):
@@ -188,7 +155,7 @@ class Country(object):
 
     def is_non_muslim(self):
         """Indicates whether this country is Non-Muslim (which is not the opposite of Muslim)"""
-        return self.__type == NON_MUSLIM
+        return False  # Overridden in NonMuslimCountry class
 
     def is_non_recruit_success(self, roll):
         return self.is_governed() and self.__governance.is_success(roll)
@@ -215,7 +182,7 @@ class Country(object):
 
     def is_muslim(self):
         """Indicates whether this country is Muslim (does not include Iran)"""
-        return self.__type in [SHIA_MIX, SUNNI]
+        return True
 
     def is_major_jihad_possible(self, ops, excess_cells_needed, bhutto_in_play):
         if self.is_islamist_rule():
@@ -232,7 +199,7 @@ class Country(object):
 
     def can_have_posture(self):
         """Indicates whether this country can have a posture (excludes the US)"""
-        return not self.is_muslim() and self.name not in ["Iran", "United States"]
+        return False
 
     def can_recruit(self, madrassas):
         return (self.total_cells(True) > 0 or
@@ -247,15 +214,9 @@ class Country(object):
         )
 
     def get_disrupt_summary(self):
-        posture_str = ""
-        troops_str = ""
-        if self.is_non_muslim():
-            posture_str = ", Posture %s" % self.__posture
-        else:
-            troops_str = ", Troops: %d" % self.troops()
-        return "%s - %d Active Cells, %d Sleeper Cells, %d Cadre, Ops Reqd %d%s%s" % \
-               (self.name, self.activeCells, self.sleeperCells, self.cadre, self.__governance.min_us_ops(), troops_str,
-                posture_str)
+        return "%s - %d Active Cells, %d Sleeper Cells, %d Cadre, Ops Reqd %d, Troops: %d" %\
+               (self.name, self.activeCells, self.sleeperCells, self.cadre, self.__governance.min_us_ops(),
+                self.troops())
 
     def max_recruit_roll(self, recruit_override=None):
         if recruit_override:
@@ -271,7 +232,7 @@ class Country(object):
 
     def get_posture(self):
         """Returns the Posture of this country (might be None)"""
-        return self.__posture
+        return None
 
     def get_recruit_score(self, ops):
         if self.is_regime_change() and self.troops() - self.total_cells(True) >= 5:
@@ -321,6 +282,16 @@ class Country(object):
         else:
             return self.resources
 
+    def test(self, test_roll):
+        """Tests this (Muslim) country's governance, if as yet untested, using the given roll"""
+        if self.is_ungoverned():
+            if test_roll <= 4:
+                self.make_poor()
+            else:
+                self.make_fair()
+            self.make_neutral()
+            self.app.output_to_history("%s tested, governance %s" % (self.name, self.governance_str()), False)
+
     def troops(self):
         """Returns the effective number of troops in this country (including NATO)"""
         return self.troopCubes + 2 if "NATO" in self.markers else self.troopCubes
@@ -347,22 +318,13 @@ class Country(object):
         markers_str = ""
         if self.markers:
             markers_str = "\n   Markers: %s" % ", ".join(self.markers)
-        if self.is_muslim():
-            resources = self.get_resources(self.app.oil_price_spikes())
-            return "%s, %s %s, %d Resource(s)\n" \
-                   "   Troops:%d Active:%d Sleeper:%d Cadre:%d Aid:%d Besieged:%d Reg Ch:%s Plots:%d %s" %\
-                   (self.name, self.governance_str(), self.__alignment, resources, self.troops(), self.activeCells,
-                    self.sleeperCells, self.cadre, self.aid, self.is_besieged(), self.is_regime_change(), self.plots,
-                    markers_str)
-        elif self.name == "Philippines":
-            return "%s - Posture:%s\n   Troops:%d Active:%d Sleeper:%d Cadre:%d Plots:%d %s" %\
-                   (self.name, self.__posture, self.troops(), self.activeCells, self.sleeperCells, self.cadre,
-                    self.plots, markers_str)
-        elif self.is_non_muslim():
-            return "%s - Posture:%s\n   Active:%d Sleeper:%d Cadre:%d Plots:%d%s" %\
-                   (self.name, self.__posture, self.activeCells, self.sleeperCells, self.cadre, self.plots, markers_str)
-        else:
-            raise  # Iran handled by subclass
+        assert self.is_muslim(), "Type is %s" % self.__type
+        resources = self.get_resources(self.app.oil_price_spikes())
+        return "%s, %s %s, %d Resource(s)\n" \
+               "   Troops:%d Active:%d Sleeper:%d Cadre:%d Aid:%d Besieged:%d Reg Ch:%s Plots:%d %s" %\
+               (self.name, self.governance_str(), self.__alignment, resources, self.troops(), self.activeCells,
+                self.sleeperCells, self.cadre, self.aid, self.is_besieged(), self.is_regime_change(), self.plots,
+                markers_str)
 
     def print_country(self):
         """Prints a textual summary of this Country"""

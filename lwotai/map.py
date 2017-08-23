@@ -32,25 +32,25 @@ def _get_countries(app):
         NonMuslimCountry(app, "United Kingdom", None, GOOD, False, 3, schengen_link=True),
         NonMuslimCountry(app, "United States",  HARD, GOOD, False, schengen_link=True),
         # Shia-Mix
-        Country(app, "Afghanistan", SHIA_MIX, None, None, False, 0, False, 1),
-        Country(app, "Gulf States", SHIA_MIX, None, None, False, 0, True, 3),
-        Country(app, "Iraq", SHIA_MIX, None, None, False, 0, True, 3),
-        Country(app, "Lebanon", SHIA_MIX, None, None, False, 0, False, 1, schengen_link=True),
-        Country(app, "Pakistan", SHIA_MIX, None, None, False, 0, False, 2),
-        Country(app, "Saudi Arabia", SHIA_MIX, None, None, False, 0, True, 3),
-        Country(app, "Turkey", SHIA_MIX, None, None, False, 0, False, 2, schengen_link=True),
-        Country(app, "Yemen", SHIA_MIX, None, None, False, 0, False, 1),
+        Country(app, "Afghanistan", SHIA_MIX, None, False, 0, False, 1),
+        Country(app, "Gulf States", SHIA_MIX, None, False, 0, True, 3),
+        Country(app, "Iraq", SHIA_MIX, None, False, 0, True, 3),
+        Country(app, "Lebanon", SHIA_MIX, None, False, 0, False, 1, schengen_link=True),
+        Country(app, "Pakistan", SHIA_MIX, None, False, 0, False, 2),
+        Country(app, "Saudi Arabia", SHIA_MIX, None, False, 0, True, 3),
+        Country(app, "Turkey", SHIA_MIX, None, False, 0, False, 2, schengen_link=True),
+        Country(app, "Yemen", SHIA_MIX, None, False, 0, False, 1),
         # Sunni
-        Country(app, "Algeria/Tunisia", SUNNI, None, None, False, 0, True, 2, schengen_link=True),
-        Country(app, "Central Asia", SUNNI, None, None, False, 0, False, 2),
-        Country(app, "Egypt", SUNNI, None, None, False, 0, False, 3),
-        Country(app, "Indonesia/Malaysia", SUNNI, None, None, False, 0, True, 3),
-        Country(app, "Jordan", SUNNI, None, None, False, 0, False, 1),
-        Country(app, "Libya", SUNNI, None, None, False, 0, True, 1, schengen_link=True),
-        Country(app, "Morocco", SUNNI, None, None, False, 0, False, 2, schengen_link=True),
-        Country(app, "Somalia", SUNNI, None, None, False, 0, False, 1),
-        Country(app, "Sudan", SUNNI, None, None, False, 0, True, 1),
-        Country(app, "Syria", SUNNI, None, None, False, 0, False, 2)
+        Country(app, "Algeria/Tunisia", SUNNI, None, False, 0, True, 2, schengen_link=True),
+        Country(app, "Central Asia", SUNNI, None, False, 0, False, 2),
+        Country(app, "Egypt", SUNNI, None, False, 0, False, 3),
+        Country(app, "Indonesia/Malaysia", SUNNI, None, False, 0, True, 3),
+        Country(app, "Jordan", SUNNI, None, False, 0, False, 1),
+        Country(app, "Libya", SUNNI, None, False, 0, True, 1, schengen_link=True),
+        Country(app, "Morocco", SUNNI, None, False, 0, False, 2, schengen_link=True),
+        Country(app, "Somalia", SUNNI, None, False, 0, False, 1),
+        Country(app, "Sudan", SUNNI, None, False, 0, True, 1),
+        Country(app, "Syria", SUNNI, None, False, 0, False, 2)
     ]
 
 

@@ -27,3 +27,14 @@ class IranTest(LabyrinthTestCase):
 
         # Check
         self.assertFalse(result)
+
+    def test_is_not_schengen(self):
+        # Set up
+        app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
+        iran = Iran(app)
+
+        # Invoke
+        schengen = iran.schengen
+
+        # Check
+        self.assertFalse(schengen)

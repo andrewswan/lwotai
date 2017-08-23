@@ -14,7 +14,7 @@ class CountrySummary(LabyrinthTestCase):
         summary = israel.summary()
 
         # Check
-        self.assertEqual(summary, "Israel - Posture:Hard\n   Active:0 Sleeper:0 Cadre:0 Plots:2")
+        self.assertEqual(summary, "Israel - Posture: Hard\n    Plots: 2")
 
     def test_iran_with_nothing_in_it(self):
         # Set up

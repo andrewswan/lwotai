@@ -1,3 +1,4 @@
+from countries.non_muslim import NonMuslimCountry
 from lwotai.countries.types import SHIA_MIX, NON_MUSLIM
 from labyrinth_test_case import LabyrinthTestCase
 from lwotai.countries.country import Country
@@ -49,7 +50,7 @@ class DisruptTest(LabyrinthTestCase):
 
     def test_can_disrupt_in_non_muslim_country_with_no_troops(self):
         # Set up
-        country = Country(None, "Somewhere", NON_MUSLIM, None, FAIR, False, 0, False, 0)
+        country = NonMuslimCountry(None, "Somewhere", None, FAIR, False)
         country.cadre = 1
         country.troopCubes = 0
 

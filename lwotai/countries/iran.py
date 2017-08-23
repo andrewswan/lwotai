@@ -7,7 +7,10 @@ class Iran(Country):
     """Special class for the country of Iran"""
 
     def __init__(self, app):
-        super(Iran, self).__init__(app, "Iran", IRAN, None, FAIR, False, 0, False, 0)
+        super(Iran, self).__init__(app, "Iran", IRAN, FAIR, False, 0, False, 0)
+
+    def is_major_jihad_possible(self, ops, excess_cells_needed, bhutto_in_play):
+        return False
 
     def is_muslim(self):
         return False  # Rule 4.4
@@ -39,7 +42,7 @@ class Iran(Country):
         raise
 
     def make_neutral(self):
-        raise
+        raise Exception("Cannot make Iran neutral")
 
     # ---------- Governance ----------
 
@@ -53,7 +56,12 @@ class Iran(Country):
         return False
 
     def is_poor(self):
-        return 
+        return
+
+    @staticmethod
+    def test(roll):
+        """Tests this country using the given roll"""
+        pass
 
     def worsen_governance(self):
         raise
