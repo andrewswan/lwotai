@@ -135,3 +135,14 @@ class MapTest(LabyrinthTestCase):
 
         # Assert
         self.assertEqual(None, country)
+
+    def test_us_links_to_schengen_area(self):
+        # Set up
+        game_map = self.create_test_map()
+        us = game_map.get("United States")
+
+        # Invoke
+        schengen_link = us.schengenLink
+
+        # Check
+        self.assertTrue(schengen_link)
