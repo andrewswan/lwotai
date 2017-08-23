@@ -2044,19 +2044,18 @@ class Labyrinth(object):
         print ""
         print "Muslim Countries with Cells"
         print "---------------------------"
-        for country in self.map.country_names():
-            if self.map.get(country).total_cells(True) > 0:
-                if self.map.get(country).type == "Shia-Mix" or self.map.get(country).type == "Suni":
-                    self.map.get(country).print_country()
+        for country in self.get_countries():
+            if country.total_cells(True) > 0 and country.is_muslim():
+                country.print_country()
         print ""
 
     def list_besieged_countries(self, _=None):
         print ""
         print "Besieged Regimes"
         print "----------------"
-        for country in self.map.country_names():
-            if self.map.get(country).is_besieged():
-                self.map.get(country).print_country()
+        for country in self.get_countries():
+            if country.is_besieged():
+                country.print_country()
         print ""
 
     def list_shia_mix_regime_change_countries_with_cells(self, _=None):
@@ -2718,15 +2717,16 @@ class Labyrinth(object):
 
     def adjust_country(self, country_name):
         print "Adjusting country - ", country_name
-        self.map.get(country_name).print_country()
-        if self.map.get(country_name).type == "Shia-Mix" or self.map.get(country_name).type == "Suni":
+        country = self.map.get(country_name)
+        country.print_country()
+        if country.is_muslim():
             attributes = "governance", "alignment", "troops", "active", "sleeper", "cadre", "aid", "besieged",\
                              "regime", "plots", "marker"
-        elif self.map.get(country_name).name == "Philippines":
+        elif country.name == "Philippines":
             attributes = "posture", "troops", "active", "sleeper", "cadre", "plots", "marker"
-        elif self.map.get(country_name).type == "Non-Muslim":
+        elif country.type == "Non-Muslim":
             attributes = "posture", "active", "sleeper", "cadre", "plots", "marker"
-        elif self.map.get(country_name).type == "Iran":
+        elif country.is_iran():
             attributes = "active", "sleeper", "cadre", "plots", "marker"
         while True:
             print "Changeable attributes are: %s" % ", ".join(attributes)
@@ -2760,7 +2760,7 @@ class Labyrinth(object):
                 elif attribute == "marker":
                     adjust_success = self.adjust_country_marker(country_name)
                 if adjust_success:
-                    self.map.get(country_name).print_country()
+                    country.print_country()
                 else:
                     print country_name, "unchanged"
             else:
