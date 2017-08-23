@@ -25,6 +25,9 @@ class Iran(Country):
     def is_ally(self):
         return False
 
+    def is_iran(self):
+        return True
+
     def is_neutral(self):
         return False
 

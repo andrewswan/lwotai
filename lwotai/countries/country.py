@@ -81,6 +81,9 @@ class Country(object):
     def is_poor(self):
         return self.__governance == POOR
 
+    def is_iran(self):
+        return False
+
     def is_islamist_rule(self):
         return self.__governance == ISLAMIST_RULE
 
@@ -330,17 +333,6 @@ class Country(object):
     def has_cadre(self):
         """Indicates whether this country contains any cadre"""
         return self.cadre > 0
-
-    @staticmethod
-    def type_pretty(country_type):
-        if country_type == "Non-Muslim":
-            return "NM"
-        elif country_type == "Suni":
-            return "SU"
-        elif country_type == "Shia-Mix":
-            return "SM"
-        else:
-            return "IR"
 
     def summary(self):
         """Returns a textual summary of this Country"""
