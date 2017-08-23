@@ -361,10 +361,8 @@ class Country(object):
         elif self.is_non_muslim():
             return "%s - Posture:%s\n   Active:%d Sleeper:%d Cadre:%d Plots:%d%s" %\
                    (self.name, self.__posture, self.activeCells, self.sleeperCells, self.cadre, self.plots, markers_str)
-        elif self.is_iran():
-            return "%s, %s\n   Active:%d Sleeper:%d Cadre:%d Plots:%d %s" %\
-                   (self.name, self.governance_str(), self.activeCells, self.sleeperCells, self.cadre, self.plots,
-                    markers_str)
+        else:
+            raise  # Iran handled by subclass
 
     def print_country(self):
         """Prints a textual summary of this Country"""

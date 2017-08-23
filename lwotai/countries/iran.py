@@ -71,3 +71,21 @@ class Iran(Country):
 
     def make_soft(self):
         raise
+
+    def summary(self):
+        """Returns a textual summary of this Country"""
+        summary = "Iran, Fair"
+        item_strings = []
+        if self.activeCells:
+            item_strings.append("Active: %d" % self.activeCells)
+        if self.sleeperCells:
+            item_strings.append("Sleeper: %d" % self.sleeperCells)
+        if self.cadre:
+            item_strings.append("Cadre: %d" % self.cadre)
+        if self.plots:
+            item_strings.append("Plots: %d" % self.plots)
+        if self.markers:
+            item_strings.append("Markers: %s" % ", ".join(self.markers))
+        if item_strings:
+            summary += "\n    " + ", ".join(item_strings)
+        return summary
