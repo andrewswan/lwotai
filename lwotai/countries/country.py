@@ -1,4 +1,5 @@
 from lwotai.alignment import ALLY, NEUTRAL, ADVERSARY
+from lwotai.countries.types import CountryType, NON_MUSLIM, SUNNI, SHIA_MIX
 from lwotai.governance import GOOD, FAIR, POOR, ISLAMIST_RULE
 from lwotai.governance import Governance
 from lwotai.utils import Utils
@@ -11,26 +12,26 @@ class Country(object):
     def __init__(self, app, name, country_type, posture, governance, schengen, recruit, oil_producing, resources,
                  schengen_link=False):
         self.__alignment = None
+        self.__besieged = False
         self.__governance = governance
+        self.__oil_producing = oil_producing
+        self.__posture = Utils.require_none_or_one_of(posture, [HARD, SOFT])
+        self.__regime_change = False
+        self.__type = Utils.require_type(country_type, CountryType)
         self.activeCells = 0
         self.aid = 0
         self.app = app
-        self.__besieged = False
         self.cadre = 0
         self.links = []
         self.markers = []
         self.name = name
-        self.__oil_producing = oil_producing
         self.plots = 0
-        self.__posture = Utils.require_none_or_one_of(posture, [HARD, SOFT])
         self.recruit = recruit
-        self.__regime_change = False
         self.resources = resources
         self.schengen = schengen
         self.schengenLink = schengen_link
         self.sleeperCells = 0
         self.troopCubes = 0
-        self.type = country_type
 
     def __repr__(self):
         return self.name
@@ -93,6 +94,9 @@ class Country(object):
     def is_regime_change(self):
         return self.__regime_change
 
+    def is_shia_mix(self):
+        return self.__type == SHIA_MIX
+
     def is_soft(self):
         return self.__posture == SOFT
 
@@ -122,12 +126,12 @@ class Country(object):
 
     def make_hard(self):
         """Sets a Non-Muslim country to Hard posture"""
-        if self.type == "Non-Muslim":
+        if self.is_non_muslim():
             self.set_posture(HARD)
 
     def make_soft(self):
         """Sets a Non-Muslim country to Soft posture"""
-        if self.type == "Non-Muslim":
+        if self.is_non_muslim():
             self.set_posture(SOFT)
 
     def remove_regime_change(self):
@@ -135,7 +139,7 @@ class Country(object):
 
     def set_posture(self, new_posture):
         """Sets or clears the posture of this (Non-Muslim) country"""
-        assert self.type == "Non-Muslim"
+        assert self.is_non_muslim()
         self.__posture = Utils.require_none_or_one_of(new_posture, [HARD, SOFT])
 
     def toggle_posture(self):
@@ -149,7 +153,7 @@ class Country(object):
 
     def remove_posture(self):
         """Removes any posture from this (Non-Muslim) country"""
-        assert self.type == "Non-Muslim"
+        assert self.is_non_muslim()
         self.__posture = None
 
     def remove_plot_marker(self):
@@ -168,19 +172,23 @@ class Country(object):
     def check_is_tested(self):
         if self._ought_to_have_been_tested():
             assert self.is_governed(), "Ungoverned country: %s" % self.print_country()
-            if self.type == "Non-Muslim":
+            if self.is_non_muslim():
                 assert self.__posture, "%s has no posture" % self.name
-            elif self.type != "Iran":
+            elif self.is_muslim():
                 assert self.is_aligned(), "%s is unaligned" % self.name
 
     def _ought_to_have_been_tested(self):
         """Indicates whether this country ought to have been tested by now"""
-        return self.sleeperCells > 0 or self.activeCells > 0 or self.troopCubes > 0 or self.aid > 0 or\
+        return self.sleeperCells > 0 or self.activeCells > 0 or self.troopCubes > 0 or self.aid > 0 or \
             self.is_regime_change() or self.cadre > 0 or self.plots > 0
 
     def has_data(self):
         """Indicates whether this country contains anything not printed on the board"""
         return self._ought_to_have_been_tested() or self.is_besieged() or self.markers
+
+    def is_non_muslim(self):
+        """Indicates whether this country is Non-Muslim (which is not the opposite of Muslim)"""
+        return self.__type == NON_MUSLIM
 
     def is_non_recruit_success(self, roll):
         return self.is_governed() and self.__governance.is_success(roll)
@@ -207,7 +215,7 @@ class Country(object):
 
     def is_muslim(self):
         """Indicates whether this country is Muslim (does not include Iran)"""
-        return self.type in ["Shia-Mix", "Suni"]
+        return self.__type in [SHIA_MIX, SUNNI]
 
     def is_major_jihad_possible(self, ops, excess_cells_needed, bhutto_in_play):
         if self.is_islamist_rule():
@@ -235,17 +243,17 @@ class Country(object):
         """Indicates whether the US can conduct a Disrupt operation in this country"""
         return (
             (self.total_cells() > 0 or self.has_cadre()) and
-            (self.is_ally() or self.troops() >= 2 or self.type == "Non-Muslim")
+            (self.is_ally() or self.troops() >= 2 or self.is_non_muslim())
         )
 
     def get_disrupt_summary(self):
         posture_str = ""
         troops_str = ""
-        if self.type == "Non-Muslim":
+        if self.is_non_muslim():
             posture_str = ", Posture %s" % self.__posture
         else:
             troops_str = ", Troops: %d" % self.troops()
-        return "%s - %d Active Cells, %d Sleeper Cells, %d Cadre, Ops Reqd %d%s%s" %\
+        return "%s - %d Active Cells, %d Sleeper Cells, %d Cadre, Ops Reqd %d%s%s" % \
                (self.name, self.activeCells, self.sleeperCells, self.cadre, self.__governance.min_us_ops(), troops_str,
                 posture_str)
 
@@ -350,10 +358,10 @@ class Country(object):
             return "%s - Posture:%s\n   Troops:%d Active:%d Sleeper:%d Cadre:%d Plots:%d %s" %\
                    (self.name, self.__posture, self.troops(), self.activeCells, self.sleeperCells, self.cadre,
                     self.plots, markers_str)
-        elif self.type == "Non-Muslim" and self.type != "United States":  # 20150131PS This is illogical but harmless
-            return "%s - Posture:%s\n   Active:%d Sleeper:%d Cadre:%d Plots:%d %s" %\
+        elif self.is_non_muslim():
+            return "%s - Posture:%s\n   Active:%d Sleeper:%d Cadre:%d Plots:%d%s" %\
                    (self.name, self.__posture, self.activeCells, self.sleeperCells, self.cadre, self.plots, markers_str)
-        elif self.type == "Iran":
+        elif self.is_iran():
             return "%s, %s\n   Active:%d Sleeper:%d Cadre:%d Plots:%d %s" %\
                    (self.name, self.governance_str(), self.activeCells, self.sleeperCells, self.cadre, self.plots,
                     markers_str)

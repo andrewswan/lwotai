@@ -26,13 +26,13 @@ class AdjustCountryPosture(LabyrinthTestCase):
 
     def _assert_adjust_posture(self, user_input, expected_posture, expected_successful=True):
         # Set up
-        non_muslim_country = "France"  # Only these have a posture
         app = Labyrinth(1, 1, self.set_up_test_scenario, test_user_input=[user_input])
-        self.assertEqual(app.get_country(non_muslim_country).get_posture(), None)  # means "Untested"
+        country = app.get_country("France")  # Only non-muslim countries have a posture
+        self.assertEqual(country.get_posture(), None)  # means "Untested"
 
         # Invoke
-        successful = app.adjust_country_posture(non_muslim_country)
+        successful = app.adjust_country_posture(country.name)
 
         # Check
         self.assertEqual(successful, expected_successful)
-        self.assertEqual(app.get_country(non_muslim_country).get_posture(), expected_posture)
+        self.assertEqual(country.get_posture(), expected_posture)

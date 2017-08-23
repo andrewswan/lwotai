@@ -23,7 +23,7 @@ class Card(object):
             return False
         elif self.type == "US" and side == "US":
             if self.number == 1:  # Backlash
-                return app.contains_country(lambda c: c.type != "Non-Muslim" and c.plots > 0)
+                return app.contains_country(lambda c: c.plots > 0 and not c.is_non_muslim())
             elif self.number == 2:  # Biometrics
                 return True
             elif self.number == 3:  # CTR
@@ -150,7 +150,7 @@ class Card(object):
                 return True
             elif self.number == 46:  # Sistani
                 for country in app.get_countries():
-                    if country.type == "Shia-Mix" and country.is_regime_change() and country.total_cells(True) > 0:
+                    if country.is_shia_mix() and country.is_regime_change() and country.total_cells(True) > 0:
                         return True
                 return False
             elif self.number == 47:  # The door of Itjihad was closed
@@ -289,7 +289,7 @@ class Card(object):
             elif self.number == 104 or self.number == 105:  # Iran
                 return True
             elif self.number == 106:  # Jaysh al-Mahdi
-                return app.contains_country(lambda c: c.type == "Shia-Mix" and c.troops() > 0 and c.total_cells() > 0)
+                return app.contains_country(lambda c: c.is_shia_mix() and c.troops() > 0 and c.total_cells() > 0)
             elif self.number == 107:  # Kurdistan
                 return True
             elif self.number == 108:  # Musharraf
@@ -327,7 +327,7 @@ class Card(object):
                     possibles.append(country.name)
                 for country in possibles:
                     if app.get_country(country).total_cells(True) > 0:
-                        if app.get_country(country).type == "Non-Muslim":
+                        if app.get_country(country).is_non_muslim():
                             if app.get_country(country).is_hard():
                                 return True
                         else:
@@ -335,7 +335,7 @@ class Card(object):
                                 return True
             elif self.number == 116:  # KSM
                 if side == "US":
-                    return app.contains_country(lambda c: c.plots > 0 and (c.type == "Non-Muslim" or c.is_ally()))
+                    return app.contains_country(lambda c: c.plots > 0 and (c.is_non_muslim() or c.is_ally()))
                 else:
                     return True
             elif self.number in [117, 118]:  # Oil Price Spike
@@ -495,8 +495,9 @@ class Card(object):
         elif self.type == "US" and side == "US":
             if self.number == 1:  # Backlash
                 for country in app.get_countries():
-                    if country.type != "Non-Muslim" and country.plots > 0:
-                        app.output_to_history("Plot in Muslim country found. Select the plot during plot phase. Backlash in play")
+                    if country.plots > 0 and not country.is_non_muslim():
+                        app.output_to_history(
+                            "Plot in Muslim country found. Select the plot during plot phase. Backlash in play")
                         app.backlashInPlay = True
                         return True
                 return False
@@ -736,10 +737,10 @@ class Card(object):
                         if country.total_cells(True) == 0:
                             print "%s has no cells." % country_name
                             print ""
-                        elif country.type == "Iran":
+                        elif country.is_iran():
                             print "Iran is not allowed."
                             print ""
-                        elif country.type == "Non-Muslim":
+                        elif country.is_non_muslim():
                             print "Choose a Muslim country."
                             print ""
                         else:
@@ -1060,7 +1061,7 @@ class Card(object):
                             break
             elif self.number == 46:  # Sistani
                 target_countries = [c.name for c in app.get_countries() if
-                                    c.type == "Shia-Mix" and c.is_regime_change() and c.total_cells(True) > 0]
+                                    c.is_shia_mix() and c.is_regime_change() and c.total_cells(True) > 0]
                 target_name = None
                 if len(target_countries) == 1:
                     target_name = target_countries[0]
@@ -1364,7 +1365,7 @@ class Card(object):
             elif self.number == 86:  # Lebanon War
                 app.output_to_history("US discards a random card.", False)
                 app.change_prestige(-1, False)
-                possibles = app.find_countries(lambda c: c.type == "Shia-Mix")
+                possibles = app.find_countries(lambda c: c.is_shia_mix())
                 target = random.choice(possibles)
                 app.place_cells(target.name, 1)
             elif self.number in [87, 88, 89]:  # Martyrdom Operation
@@ -1486,13 +1487,13 @@ class Card(object):
                                 three_away.append(subCountryObj.name)
                     possibles = []
                     for country in one_away:
-                        if country not in possibles and app.get_country(country).total_cells(True) > 0 and app.get_country(country).type == "Shia-Mix":
+                        if country not in possibles and app.get_country(country).total_cells(True) > 0 and app.get_country(country).is_shia_mix():
                             possibles.append(country)
                     for country in two_away:
-                        if country not in possibles and app.get_country(country).total_cells(True) > 0 and app.get_country(country).type == "Shia-Mix":
+                        if country not in possibles and app.get_country(country).total_cells(True) > 0 and app.get_country(country).is_shia_mix():
                             possibles.append(country)
                     for country in three_away:
-                        if country not in possibles and app.get_country(country).total_cells(True) > 0 and app.get_country(country).type == "Shia-Mix":
+                        if country not in possibles and app.get_country(country).total_cells(True) > 0 and app.get_country(country).is_shia_mix():
                             possibles.append(country)
                     if len(possibles) <= 0:
                         app.output_to_history("No Shia-Mix countries with cells within 3 countries of Lebanon.", True)
@@ -1535,7 +1536,7 @@ class Card(object):
                         if country_name == "":
                             print ""
                         else:
-                            if app.get_country(country_name).type == "Shia-Mix":
+                            if app.get_country(country_name).is_shia_mix():
                                 target_name = country_name
                             else:
                                 print "%s is not a Shia-Mix country." % country_name
@@ -1560,7 +1561,7 @@ class Card(object):
                     app.remove_cell(target_name, side)    # 20150131PS added side
                     app.output_to_history(app.get_country(target_name).summary(), True)
                 else:
-                    possibles = [country.name for country in app.get_countries() if country.type == "Shia-Mix"]
+                    possibles = [country.name for country in app.get_countries() if country.is_shia_mix()]
                     target_name = random.choice(possibles)
                     app.test_country(target_name)
                     tested = target_name
@@ -1604,7 +1605,7 @@ class Card(object):
                 if side == "US":
                     target_name = None
                     possibles = [country.name for country in app.map.countries() if
-                                 country.type == "Shia-Mix" and country.troops() > 0 and country.total_cells() > 0]
+                                 country.is_shia_mix() and country.troops() > 0 and country.total_cells() > 0]
                     if len(possibles) == 1:
                         target_name = possibles[0]
                     while not target_name:
@@ -1623,7 +1624,7 @@ class Card(object):
                     app.remove_cell(target_name, side)    # 20150131PS added side
                     app.output_to_history(app.get_country(target_name).summary(), True)
                 else:   # jihadist play
-                    possibles = [country.name for country in app.get_countries() if country.type == "Shia-Mix"]
+                    possibles = [country.name for country in app.get_countries() if country.is_shia_mix()]
                     target_name = random.choice(possibles)
                     app.test_country(target_name)
                     tested = target_name
@@ -1802,7 +1803,7 @@ class Card(object):
                         possibles.append(countryObj.name)
                     for country in possibles:
                         if app.get_country(country).total_cells(True) > 0:
-                            if app.get_country(country).type == "Non-Muslim":
+                            if app.get_country(country).is_non_muslim():
                                 if app.get_country(country).is_hard():
                                     targets.append(country)
                             else:
@@ -1832,7 +1833,7 @@ class Card(object):
                         possibles.append(countryObj.name)
                     for country in possibles:
                         if app.get_country(country).total_cells(True) > 0:
-                            if app.get_country(country).type == "Non-Muslim":
+                            if app.get_country(country).is_non_muslim():
                                 if app.get_country(country).is_hard():
                                     targets.append(country)
                             else:
@@ -1845,7 +1846,7 @@ class Card(object):
                 if side == "US":
                     for country in app.get_countries():
                         if country.plots > 0:
-                            if country.is_ally() or country.type == "Non-Muslim":
+                            if country.is_ally() or country.is_non_muslim():
                                 num_plots = country.plots
                                 country.plots = 0
                                 app.output_to_history("%d Plots removed from %s." % (num_plots, country.name), False)
