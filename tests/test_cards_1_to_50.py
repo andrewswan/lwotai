@@ -919,10 +919,6 @@ class Card33(LabyrinthTestCase):
         self.assertFalse(app.card(33).playable("US", app, True))
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        app.get_country("India").make_islamist_rule()
-        self.assertFalse(app.card(33).playable("US", app, True))
-
-        app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("Gulf States").make_islamist_rule()
         self.assertFalse(app.card(33).playable("US", app, True))
 

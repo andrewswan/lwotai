@@ -1,7 +1,7 @@
+from countries.muslim import MuslimCountry
 from countries.non_muslim import NonMuslimCountry
-from lwotai.countries.types import SHIA_MIX, NON_MUSLIM
 from labyrinth_test_case import LabyrinthTestCase
-from lwotai.countries.country import Country
+from lwotai.countries.types import SHIA_MIX
 from lwotai.governance import FAIR
 from lwotai.labyrinth import Labyrinth
 
@@ -10,7 +10,7 @@ class DisruptTest(LabyrinthTestCase):
 
     def test_cannot_disrupt_in_neutral_muslim_country_with_no_troops(self):
         # Set up
-        country = Country(None, "Somewhere", SHIA_MIX, None, FAIR, False, 0, False, 0)
+        country = MuslimCountry(None, "Somewhere", SHIA_MIX, False, 0, False)
         country.cadre = 1
         country.make_neutral()
         country.troopCubes = 0
@@ -20,7 +20,7 @@ class DisruptTest(LabyrinthTestCase):
 
     def test_cannot_disrupt_in_neutral_muslim_country_with_one_troop(self):
         # Set up
-        country = Country(None, "Somewhere", SHIA_MIX, None, FAIR, False, 0, False, 0)
+        country = MuslimCountry(None, "Somewhere", SHIA_MIX, False, 0, False)
         country.cadre = 1
         country.make_neutral()
         country.troopCubes = 1
@@ -30,7 +30,7 @@ class DisruptTest(LabyrinthTestCase):
 
     def test_can_disrupt_in_neutral_muslim_country_with_two_troops(self):
         # Set up
-        country = Country(None, "Somewhere", SHIA_MIX, None, FAIR, False, 0, False, 0)
+        country = MuslimCountry(None, "Somewhere", SHIA_MIX, False, 0, False)
         country.cadre = 1
         country.make_neutral()
         country.troopCubes = 2
@@ -40,9 +40,10 @@ class DisruptTest(LabyrinthTestCase):
 
     def test_can_disrupt_in_allied_muslim_country_with_no_troops(self):
         # Set up
-        country = Country(None, "Somewhere", SHIA_MIX, None, FAIR, False, 0, False, 0)
+        country = MuslimCountry(None, "Somewhere", SHIA_MIX, False, 0, False)
         country.cadre = 1
         country.make_ally()
+        country.make_fair()
         country.troopCubes = 0
 
         # Invoke & assert

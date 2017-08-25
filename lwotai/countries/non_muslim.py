@@ -1,18 +1,13 @@
-from lwotai.postures.posture import HARD, SOFT
-
-from lwotai.utils import Utils
-
-from lwotai.countries.types import NON_MUSLIM
-
 from lwotai.countries.country import Country
+from lwotai.postures.posture import HARD, SOFT
+from lwotai.utils import Utils
 
 
 class NonMuslimCountry(Country):
     """Does not include Iran"""
 
     def __init__(self, app, name, posture, governance, schengen, recruit=0, schengen_link=False):
-        super(NonMuslimCountry, self).__init__(
-            app, name, NON_MUSLIM, governance, schengen, recruit, False, 0, schengen_link)
+        super(NonMuslimCountry, self).__init__(app, name, governance, schengen, recruit, False, 0, schengen_link)
         self.__posture = Utils.require_none_or_one_of(posture, [HARD, SOFT])
 
     def can_have_posture(self):

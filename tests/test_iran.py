@@ -38,3 +38,10 @@ class IranTest(LabyrinthTestCase):
 
         # Check
         self.assertFalse(schengen)
+
+    def test_can_check_is_tested(self):
+        # Set up
+        iran = Iran(None)
+
+        # Invoke
+        iran.check_is_tested()

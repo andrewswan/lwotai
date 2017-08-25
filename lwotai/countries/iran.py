@@ -1,4 +1,3 @@
-from lwotai.countries.types import IRAN
 from lwotai.countries.country import Country
 from lwotai.governance import FAIR
 
@@ -7,13 +6,16 @@ class Iran(Country):
     """Special class for the country of Iran"""
 
     def __init__(self, app):
-        super(Iran, self).__init__(app, "Iran", IRAN, FAIR, False, 0, False, 0)
+        super(Iran, self).__init__(app, "Iran", FAIR, False, 0, False, 0)
 
     def is_major_jihad_possible(self, ops, excess_cells_needed, bhutto_in_play):
         return False
 
     def is_muslim(self):
         return False  # Rule 4.4
+
+    def is_shia_mix(self):
+        return False
 
     # ---------- Alignment ----------
 
