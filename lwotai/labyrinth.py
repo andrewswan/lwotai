@@ -1,6 +1,6 @@
 import random
 
-from lwotai.cards import CARDS
+from lwotai.deck import CARDS
 from lwotai.deck import Deck
 from lwotai.governance import GOOD, FAIR, POOR
 from lwotai.governance import governance_with_level
