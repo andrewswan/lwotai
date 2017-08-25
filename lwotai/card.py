@@ -1,7 +1,7 @@
 import random
 
 from lwotai.governance import GOOD, POOR, ISLAMIST_RULE
-from postures.posture import SOFT
+from lwotai.postures.posture import SOFT
 
 
 class Card(object):
