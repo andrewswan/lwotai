@@ -1584,11 +1584,13 @@ class Labyrinth(object):
     def place_cell(self, country_name):
         """Places a cell from the funding track into the given country"""
         country = self.map.get(country_name)
-        country.cadre = 0
         country.sleeperCells += 1
         self.cells -= 1
         self.test_country(country_name)
-        self.output_to_history("--> Sleeper Cell placed in %s." % country_name, True)
+        self.output_to_history("--> Sleeper Cell placed in %s." % country_name)
+        if country.cadre:
+            country.cadre = 0
+            self.output_to_history("--> Cadre removed from %s." % country_name)
         self.output_to_history(self.map.get(country_name).summary(), True)
 
     def handle_radicalization(self, ops):
