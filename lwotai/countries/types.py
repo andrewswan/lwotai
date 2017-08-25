@@ -8,7 +8,7 @@ class CountryType(object):
         self.__name = Utils.require_type(name, str)
 
     def __repr__(self):
-        return super(CountryType, self).__repr__()
+        return self.__name
 
     def __eq__(self, o):
         try:
