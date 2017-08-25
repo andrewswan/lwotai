@@ -10,10 +10,19 @@ class MuslimCountry(Country):
 
     def __init__(self, app, name, country_type, oil_producing, resources, schengen_link=False):
         super(MuslimCountry, self).__init__(app, name, None, False, 0, oil_producing, resources, schengen_link)
+        self.__aid = 0
         self.__alignment = None
         self.__besieged = False
         self.__regime_change = False
         self.__type = Utils.require_one_of(country_type, [SHIA_MIX, SUNNI])
+
+    def _ought_to_have_been_tested(self):
+        return super(MuslimCountry, self)._ought_to_have_been_tested() or self.__aid or self.__regime_change
+
+    def add_aid(self, aid_to_add):
+        """Adds the given number of Aid markers to this country"""
+        assert aid_to_add >= 0, "Cannot add %d aid" % aid_to_add
+        self.__aid += aid_to_add
 
     def alignment(self):
         return self.__alignment
@@ -23,10 +32,14 @@ class MuslimCountry(Country):
             assert self.is_governed(), "Ungoverned country: %s" % self.print_country()
             assert self.is_aligned(), "%s is unaligned" % self.name
 
+    def get_aid(self):
+        """Returns the number of Aid markers in this country (0 or more)"""
+        return self.__aid
+
     def improve_governance(self):
         self.set_governance(self.get_governance().improve())
         if self.is_good():
-            self.aid = 0
+            self.__aid = 0
             self.remove_besieged()
             self.remove_regime_change()
 
@@ -107,13 +120,17 @@ class MuslimCountry(Country):
 
     def reduce_aid_by(self, aid_lost):
         """Reduces the level of aid by the given amount, but not below zero"""
-        self.aid = max(self.aid - aid_lost, 0)
+        self.__aid = max(self.__aid - aid_lost, 0)
 
     def remove_besieged(self):
         self.__besieged = False
 
     def remove_regime_change(self):
         self.__regime_change = False
+
+    def set_aid(self, aid):
+        """Sets the number of Aid markers in this country (to 0 or more)"""
+        self.__aid = max(0, aid)
 
     def summary(self):
         """Returns a textual summary of this Country"""
@@ -129,8 +146,8 @@ class MuslimCountry(Country):
             item_strings.append("Sleeper: %d" % self.sleeperCells)
         if self.cadre:
             item_strings.append("Cadre: %d" % self.cadre)
-        if self.aid:
-            item_strings.append("Aid: %d" % self.aid)
+        if self.__aid:
+            item_strings.append("Aid: %d" % self.__aid)
         if self.is_besieged():
             item_strings.append("Besieged Regime")
         if self.is_regime_change():

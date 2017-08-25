@@ -10,7 +10,6 @@ class Country(object):
         self.__governance = governance
         self.__oil_producing = oil_producing
         self.activeCells = 0
-        self.aid = 0
         self.app = app
         self.cadre = 0
         self.links = []
@@ -29,6 +28,9 @@ class Country(object):
 
     def alignment(self):
         return None
+
+    def get_aid(self):
+        return 0
 
     def is_adversary(self):
         return False
@@ -97,8 +99,7 @@ class Country(object):
 
     def _ought_to_have_been_tested(self):
         """Indicates whether this country ought to have been tested by now"""
-        return self.sleeperCells > 0 or self.activeCells > 0 or self.troopCubes > 0 or self.aid > 0 or \
-            self.is_regime_change() or self.cadre > 0 or self.plots > 0
+        return self.sleeperCells > 0 or self.activeCells > 0 or self.troopCubes > 0 or self.cadre > 0 or self.plots > 0
 
     def has_data(self):
         """Indicates whether this country contains anything not printed on the board"""

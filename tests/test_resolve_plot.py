@@ -81,49 +81,49 @@ class ResolvePlotTest(LabyrinthTestCase):
     def test_resolve_muslim_iran_plots(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("Iraq").make_fair()
-        app.get_country("Iraq").aid = 1
+        app.get_country("Iraq").set_aid(1)
         app.get_country("Iraq").plots = 1
         app.resolve_plot("Iraq", 1, 0, [], [], [], [3])
         self.assertEqual(app.funding, 6)
         self.assertTrue(app.get_country("Iraq").is_fair())
-        self.assertEqual(app.get_country("Iraq").aid, 1)
+        self.assertEqual(app.get_country("Iraq").get_aid(), 1)
         app.resolve_plot("Iraq", 1, 0, [], [], [], [2])
         self.assertEqual(app.funding, 7)
         self.assertTrue(app.get_country("Iraq").is_poor())
-        self.assertEqual(app.get_country("Iraq").aid, 0)
+        self.assertEqual(app.get_country("Iraq").get_aid(), 0)
         self.assertEqual(app.prestige, 7)
         self.assertEqual(app.get_country("Iraq").plots, 0)
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("Iraq").make_good()
-        app.get_country("Iraq").aid = 1
+        app.get_country("Iraq").set_aid(1)
         app.get_country("Iraq").plots = 1
         app.resolve_plot("Iraq", 3, 0, [], [], [], [3, 1, 2])
         self.assertEqual(app.funding, 7)
         self.assertTrue(app.get_country("Iraq").is_fair())
-        self.assertEqual(app.get_country("Iraq").aid, 0)
+        self.assertEqual(app.get_country("Iraq").get_aid(), 0)
         self.assertEqual(app.prestige, 7)
         self.assertEqual(app.get_country("Iraq").plots, 0)
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("Iraq").make_good()
-        app.get_country("Iraq").aid = 1
+        app.get_country("Iraq").set_aid(1)
         app.get_country("Iraq").plots = 1
         app.resolve_plot("Iraq", "WMD", 0, [], [], [], [3, 1, 2])
         self.assertEqual(app.funding, 7)
         self.assertTrue(app.get_country("Iraq").is_fair())
-        self.assertEqual(app.get_country("Iraq").aid, 0)
+        self.assertEqual(app.get_country("Iraq").get_aid(), 0)
         self.assertEqual(app.prestige, 7)
         self.assertEqual(app.get_country("Iraq").plots, 0)
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("Iraq").make_poor()
-        app.get_country("Iraq").aid = 0
+        app.get_country("Iraq").set_aid(0)
         app.get_country("Iraq").plots = 1
         app.resolve_plot("Iraq", 3, 0, [], [], [], [3, 3, 3])
         self.assertEqual(app.funding, 6)
         self.assertTrue(app.get_country("Iraq").is_poor())
-        self.assertEqual(app.get_country("Iraq").aid, 0)
+        self.assertEqual(app.get_country("Iraq").get_aid(), 0)
         self.assertEqual(app.prestige, 7)
         self.assertEqual(app.get_country("Iraq").plots, 0)
 
@@ -132,31 +132,31 @@ class ResolvePlotTest(LabyrinthTestCase):
         app.resolve_plot("Iran", 3, 0, [], [], [], [3, 3, 3])
         self.assertEqual(app.funding, 6)
         self.assertTrue(app.get_country("Iran").is_fair())
-        self.assertEqual(app.get_country("Iran").aid, 0)
+        self.assertEqual(app.get_country("Iran").get_aid(), 0)
         self.assertEqual(app.prestige, 7)
         self.assertEqual(app.get_country("Iran").plots, 0)
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("Iraq").make_poor()
-        app.get_country("Iraq").aid = 0
+        app.get_country("Iraq").set_aid(0)
         app.get_country("Iraq").plots = 1
         app.get_country("Iraq").troopCubes = 1
         app.resolve_plot("Iraq", 3, 0, [], [], [], [3, 3, 3])
         self.assertEqual(app.funding, 6)
         self.assertTrue(app.get_country("Iraq").is_poor())
-        self.assertEqual(app.get_country("Iraq").aid, 0)
+        self.assertEqual(app.get_country("Iraq").get_aid(), 0)
         self.assertEqual(app.prestige, 6)
         self.assertEqual(app.get_country("Iraq").plots, 0)
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("Iraq").make_poor()
-        app.get_country("Iraq").aid = 0
+        app.get_country("Iraq").set_aid(0)
         app.get_country("Iraq").plots = 1
         app.get_country("Iraq").troopCubes = 1
         app.resolve_plot("Iraq", "WMD", 0, [], [], [], [3, 3, 3])
         self.assertEqual(app.funding, 6)
         self.assertTrue(app.get_country("Iraq").is_poor())
-        self.assertEqual(app.get_country("Iraq").aid, 0)
+        self.assertEqual(app.get_country("Iraq").get_aid(), 0)
         self.assertEqual(app.prestige, 1)
         self.assertEqual(app.get_country("Iraq").plots, 0)
 
@@ -199,49 +199,49 @@ class ResolvePlotTest(LabyrinthTestCase):
     def test_resolve_muslim_iran_plots_with_backlash(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("Iraq").make_fair()
-        app.get_country("Iraq").aid = 1
+        app.get_country("Iraq").set_aid(1)
         app.get_country("Iraq").plots = 1
         app.resolve_plot("Iraq", 1, 0, [], [], [], [3], True)
         self.assertEqual(app.funding, 4)
         self.assertTrue(app.get_country("Iraq").is_fair())
-        self.assertEqual(app.get_country("Iraq").aid, 1)
+        self.assertEqual(app.get_country("Iraq").get_aid(), 1)
         app.resolve_plot("Iraq", 1, 0, [], [], [], [2], True)
         self.assertEqual(app.funding, 3)
         self.assertTrue(app.get_country("Iraq").is_poor())
-        self.assertEqual(app.get_country("Iraq").aid, 0)
+        self.assertEqual(app.get_country("Iraq").get_aid(), 0)
         self.assertEqual(app.prestige, 7)
         self.assertEqual(app.get_country("Iraq").plots, 0)
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("Iraq").make_good()
-        app.get_country("Iraq").aid = 1
+        app.get_country("Iraq").set_aid(1)
         app.get_country("Iraq").plots = 1
         app.resolve_plot("Iraq", 3, 0, [], [], [], [3, 1, 2], True)
         self.assertEqual(app.funding, 3)
         self.assertTrue(app.get_country("Iraq").is_fair())
-        self.assertEqual(app.get_country("Iraq").aid, 0)
+        self.assertEqual(app.get_country("Iraq").get_aid(), 0)
         self.assertEqual(app.prestige, 7)
         self.assertEqual(app.get_country("Iraq").plots, 0)
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("Iraq").make_good()
-        app.get_country("Iraq").aid = 1
+        app.get_country("Iraq").set_aid(1)
         app.get_country("Iraq").plots = 1
         app.resolve_plot("Iraq", "WMD", 0, [], [], [], [3, 1, 2], True)
         self.assertEqual(app.funding, 1)
         self.assertTrue(app.get_country("Iraq").is_fair())
-        self.assertEqual(app.get_country("Iraq").aid, 0)
+        self.assertEqual(app.get_country("Iraq").get_aid(), 0)
         self.assertEqual(app.prestige, 7)
         self.assertEqual(app.get_country("Iraq").plots, 0)
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("Iraq").make_poor()
-        app.get_country("Iraq").aid = 0
+        app.get_country("Iraq").set_aid(0)
         app.get_country("Iraq").plots = 1
         app.resolve_plot("Iraq", 3, 0, [], [], [], [3, 3, 3], True)
         self.assertEqual(app.funding, 4)
         self.assertTrue(app.get_country("Iraq").is_poor())
-        self.assertEqual(app.get_country("Iraq").aid, 0)
+        self.assertEqual(app.get_country("Iraq").get_aid(), 0)
         self.assertEqual(app.prestige, 7)
         self.assertEqual(app.get_country("Iraq").plots, 0)
 
@@ -250,30 +250,30 @@ class ResolvePlotTest(LabyrinthTestCase):
         app.resolve_plot("Iran", 3, 0, [], [], [], [3, 3, 3], True)
         self.assertEqual(app.funding, 4)
         self.assertTrue(app.get_country("Iran").is_fair())
-        self.assertEqual(app.get_country("Iran").aid, 0)
+        self.assertEqual(app.get_country("Iran").get_aid(), 0)
         self.assertEqual(app.prestige, 7)
         self.assertEqual(app.get_country("Iran").plots, 0)
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("Iraq").make_poor()
-        app.get_country("Iraq").aid = 0
+        app.get_country("Iraq").set_aid(0)
         app.get_country("Iraq").plots = 1
         app.get_country("Iraq").troopCubes = 1
         app.resolve_plot("Iraq", 3, 0, [], [], [], [3, 3, 3], True)
         self.assertEqual(app.funding, 4)
         self.assertTrue(app.get_country("Iraq").is_poor())
-        self.assertEqual(app.get_country("Iraq").aid, 0)
+        self.assertEqual(app.get_country("Iraq").get_aid(), 0)
         self.assertEqual(app.prestige, 6)
         self.assertEqual(app.get_country("Iraq").plots, 0)
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("Iraq").make_poor()
-        app.get_country("Iraq").aid = 0
+        app.get_country("Iraq").set_aid(0)
         app.get_country("Iraq").plots = 1
         app.get_country("Iraq").troopCubes = 1
         app.resolve_plot("Iraq", "WMD", 0, [], [], [], [3, 3, 3], True)
         self.assertEqual(app.funding, 1)
         self.assertTrue(app.get_country("Iraq").is_poor())
-        self.assertEqual(app.get_country("Iraq").aid, 0)
+        self.assertEqual(app.get_country("Iraq").get_aid(), 0)
         self.assertEqual(app.prestige, 1)
         self.assertEqual(app.get_country("Iraq").plots, 0)

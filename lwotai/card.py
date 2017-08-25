@@ -572,18 +572,18 @@ class Card(object):
                     app.markers.append("Anbar Awakening")
                     app.output_to_history("Anbar Awakening in play.", False)
                     if app.get_country("Iraq").troops() == 0:
-                        app.get_country("Syria").aid += 1 #20150131PS changed to add rather than set to 1
+                        app.get_country("Syria").add_aid(1) #20150131PS changed to add rather than set to 1
                         app.output_to_history("Aid in Syria.", False)
                     elif app.get_country("Syria").troops() == 0:
-                        app.get_country("Iraq").aid += 1    #20150131PS changed to add rather than set to 1
+                        app.get_country("Iraq").add_aid(1)    #20150131PS changed to add rather than set to 1
                         app.output_to_history("Aid in Iraq.", False)
                     else:
                         print "There are troops in both Iraq and Syria."
                         if app.get_yes_no_from_user("Do you want to add the Aid to Iraq? (y/n): "):
-                            app.get_country("Iraq").aid += 1
+                            app.get_country("Iraq").add_aid(1)
                             app.output_to_history("Aid in Iraq.", False)
                         else:
-                            app.get_country("Syria").aid += 1
+                            app.get_country("Syria").add_aid(1)
                             app.output_to_history("Aid in Syria.", False)
                     app.change_prestige(1, False)
                     print ""
@@ -764,7 +764,7 @@ class Card(object):
                 if app.get_country("Iraq").troops() == 0:
                     return False
                 app.markers.append("Saddam Captured")
-                app.get_country("Iraq").aid += 1
+                app.get_country("Iraq").add_aid(1)
                 app.output_to_history("Aid added in Iraq", False)
                 app.change_prestige(1)
                 app.output_to_history(app.get_country("Iraq").summary(), True)
@@ -845,7 +845,7 @@ class Card(object):
                             else:
                                 print "%s is not a Regime Change country." % country_name
                                 print ""
-                target_country.aid += 1
+                target_country.add_aid(1)
                 app.output_to_history("Aid added to %s." % target_country.name, False)
                 woi_roll = app.get_roll("WoI")
                 modified_woi_roll = app.modified_woi_roll(woi_roll, target_country.name, False)
@@ -901,7 +901,7 @@ class Card(object):
                             else:
                                 adversary.make_neutral()
                                 app.output_to_history("%s now Neutral" % country_name, False)
-                                adversary.aid += 1
+                                adversary.add_aid(1)
                                 app.output_to_history("Aid added to %s." % country_name, False)
                                 app.output_to_history(adversary.summary())
                                 break
@@ -1019,7 +1019,7 @@ class Card(object):
                                 print ""
                 target_country.markers.append("NATO")
                 app.output_to_history("NATO added in %s" % target_country.name, False)
-                target_country.aid += 1
+                target_country.add_aid(1)
                 app.output_to_history("Aid added in %s" % target_country.name, False)
                 app.output_to_history(target_country.summary())
             elif self.number == 42:  # Pakistani Offensive
@@ -1308,8 +1308,8 @@ class Card(object):
                     return False
                 target = random.choice(possibles)
                 app.place_cells(target.name, 5)
-                if target.aid > 0:
-                    target.aid -= 1
+                if target.get_aid() > 0:
+                    target.reduce_aid_by(1)
                     app.output_to_history("Aid removed from %s" % target.name, False)
                 else:
                     target.make_besieged()
@@ -1660,7 +1660,7 @@ class Card(object):
             elif self.number == 107:  # Kurdistan
                 if side == "US":
                     app.test_country("Iraq")
-                    app.get_country("Iraq").aid += 1
+                    app.get_country("Iraq").add_aid(1)
                     app.output_to_history("Aid added to Iraq.", False)
                     app.output_to_history(app.get_country("Iraq").summary(), True)
                 else:
@@ -1679,7 +1679,7 @@ class Card(object):
                         country_scores = {}
                         for country in possibles:
                             country_scores[country] = 0
-                            if app.get_country(country).aid > 0:
+                            if app.get_country(country).get_aid() > 0:
                                 country_scores[country] += 10000
                             if app.get_country(country).is_besieged():
                                 country_scores[country] += 1000
@@ -1768,7 +1768,7 @@ class Card(object):
             elif self.number == 113:  # Darfur
                 app.test_country("Sudan")
                 if app.prestige >= 7:
-                    app.get_country("Sudan").aid += 1
+                    app.get_country("Sudan").add_aid(1)
                     app.output_to_history("Aid added to Sudan.", False)
                     if app.get_country("Sudan").is_adversary():
                         app.get_country("Sudan").make_neutral()
@@ -1874,7 +1874,7 @@ class Card(object):
                         elif app.get_country("Yemen").is_neutral():
                             app.get_country("Yemen").make_ally()
                         app.output_to_history("Yemen Alignment improved to %s." % app.get_country("Yemen").alignment(), False)
-                        app.get_country("Yemen").aid += 1
+                        app.get_country("Yemen").add_aid(1)
                         app.output_to_history("Aid added to Yemen.", True)
                 else:
                     if app.get_country("Yemen").is_ally():

@@ -37,7 +37,7 @@ class WoiRollModifiers(LabyrinthTestCase):
         """Aid"""
         app = Labyrinth(1, 1, self.set_up_test_scenario)
         self.assertEqual(app.modified_woi_roll(3, "Gulf States"), 3)
-        app.get_country("Gulf States").aid = 1
+        app.get_country("Gulf States").set_aid(1)
         self.assertEqual(app.modified_woi_roll(3, "Gulf States"), 4)
 
     def test_to_good(self):

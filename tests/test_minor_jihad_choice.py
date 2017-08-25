@@ -36,7 +36,7 @@ class MinorJihadChoiceTest(LabyrinthTestCase):
         app.get_country("Jordan").make_besieged()
         self.assertEqual(app.minor_jihad_in_good_fair_choice(1), [("Jordan", 1)])
         # but the other has aid
-        app.get_country("Gulf States").aid = 1
+        app.get_country("Gulf States").set_aid(1)
         self.assertEqual(app.minor_jihad_in_good_fair_choice(1), [("Gulf States", 1)])
         # but yet another is Pakistan    
         app.get_country("Pakistan").make_good()
@@ -76,7 +76,7 @@ class MinorJihadChoiceTest(LabyrinthTestCase):
         app.get_country("Jordan").make_besieged()
         self.assertEqual(app.minor_jihad_in_good_fair_choice(2), [("Jordan", 1), ("Gulf States", 1)])
         # but the other has aid
-        app.get_country("Gulf States").aid = 1
+        app.get_country("Gulf States").set_aid(1)
         self.assertEqual(app.minor_jihad_in_good_fair_choice(2), [("Gulf States", 1), ("Jordan", 1)])
         # but yet another is Pakistan    
         app.get_country("Pakistan").make_good()
@@ -117,7 +117,7 @@ class MinorJihadChoiceTest(LabyrinthTestCase):
         app.get_country("Jordan").make_besieged()
         self.assertEqual(app.minor_jihad_in_good_fair_choice(3), [("Jordan", 1), ("Gulf States", 1)])
         # but the other has aid
-        app.get_country("Gulf States").aid = 1
+        app.get_country("Gulf States").set_aid(1)
         self.assertEqual(app.minor_jihad_in_good_fair_choice(3), [("Gulf States", 1), ("Jordan", 1)])
         # but yet another is Pakistan    
         app.get_country("Pakistan").make_good()
@@ -158,7 +158,7 @@ class MinorJihadChoiceTest(LabyrinthTestCase):
         app.get_country("Jordan").make_besieged()
         self.assertEqual(app.minor_jihad_in_good_fair_choice(1), [("Jordan", 1)])
         # but the other has aid
-        app.get_country("Gulf States").aid = 1
+        app.get_country("Gulf States").set_aid(1)
         self.assertEqual(app.minor_jihad_in_good_fair_choice(1), [("Gulf States", 1)])
         # but yet another is Pakistan    
         app.get_country("Pakistan").make_good()
@@ -199,7 +199,7 @@ class MinorJihadChoiceTest(LabyrinthTestCase):
         app.get_country("Jordan").make_besieged()
         self.assertEqual(app.minor_jihad_in_good_fair_choice(2), [("Jordan", 2)])
         # but the other has aid
-        app.get_country("Gulf States").aid = 1
+        app.get_country("Gulf States").set_aid(1)
         self.assertEqual(app.minor_jihad_in_good_fair_choice(2), [("Gulf States", 2)])
         # but yet another is Pakistan    
         app.get_country("Pakistan").make_good()
@@ -241,7 +241,7 @@ class MinorJihadChoiceTest(LabyrinthTestCase):
         app.get_country("Jordan").make_besieged()
         self.assertEqual(app.minor_jihad_in_good_fair_choice(3), [("Jordan", 2), ("Gulf States", 1)])
         # but the other has aid
-        app.get_country("Gulf States").aid = 1
+        app.get_country("Gulf States").set_aid(1)
         self.assertEqual(app.minor_jihad_in_good_fair_choice(3), [("Gulf States", 2), ("Jordan", 1)])
         # but yet another is Pakistan    
         app.get_country("Pakistan").make_good()
@@ -289,7 +289,7 @@ class MinorJihadChoiceTest(LabyrinthTestCase):
         app.get_country("Jordan").make_besieged()
         self.assertEqual(app.minor_jihad_in_good_fair_choice(1), [("Jordan", 1)])
         # but the other has aid
-        app.get_country("Gulf States").aid = 1
+        app.get_country("Gulf States").set_aid(1)
         self.assertEqual(app.minor_jihad_in_good_fair_choice(1), [("Gulf States", 1)])
         # but yet another is Pakistan    
         app.get_country("Pakistan").make_good()
@@ -330,7 +330,7 @@ class MinorJihadChoiceTest(LabyrinthTestCase):
         app.get_country("Jordan").make_besieged()
         self.assertEqual(app.minor_jihad_in_good_fair_choice(2), [("Jordan", 2)])
         # but the other has aid
-        app.get_country("Gulf States").aid = 1
+        app.get_country("Gulf States").set_aid(1)
         self.assertEqual(app.minor_jihad_in_good_fair_choice(2), [("Gulf States", 2)])
         # but yet another is Pakistan    
         app.get_country("Pakistan").make_good()
@@ -371,7 +371,7 @@ class MinorJihadChoiceTest(LabyrinthTestCase):
         app.get_country("Jordan").make_besieged()
         self.assertEqual(app.minor_jihad_in_good_fair_choice(3), [("Jordan", 3)])
         # but the other has aid
-        app.get_country("Gulf States").aid = 1
+        app.get_country("Gulf States").set_aid(1)
         self.assertEqual(app.minor_jihad_in_good_fair_choice(3), [("Gulf States", 3)])
         # but yet another is Pakistan    
         app.get_country("Pakistan").make_good()

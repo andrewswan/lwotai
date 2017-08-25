@@ -4,7 +4,7 @@ from lwotai.cards import CARDS
 from lwotai.deck import Deck
 from lwotai.governance import GOOD, FAIR, POOR
 from lwotai.governance import governance_with_level
-from lwotai.ideologies.ideologies import get_ideology, IDEOLOGIES, choose_ideology
+from lwotai.ideologies.ideologies import get_ideology, choose_ideology
 from lwotai.map import Map
 from lwotai.postures.posture import HARD, SOFT
 from lwotai.randomizer import Randomizer
@@ -293,7 +293,8 @@ class Labyrinth(object):
             modified_roll += 2
             self.output_to_history("+2 for Prestige", False)
 
-        if self.map.get(country_name).is_ally() and self.map.get(country_name).is_fair():
+        country = self.map.get(country_name)
+        if country.is_ally() and country.is_fair():
             modified_roll -= 1
             self.output_to_history("-1 for Attempt to shift to Good", False)
 
@@ -303,11 +304,11 @@ class Labyrinth(object):
             if gwot_penalty:
                 self.output_to_history("-%d penalty for GWOT Relations" % gwot_penalty, False)
 
-        if self.map.get(country_name).aid > 0:
-            modified_roll += self.map.get(country_name).aid    # 20150131PS use number of aid markers rather than 1
-            self.output_to_history("+%s for Aid" % self.map.get(country_name).aid, False)
+        if country.get_aid() > 0:
+            modified_roll += country.get_aid()  # 20150131PS use number of aid markers rather than 1
+            self.output_to_history("+%s for Aid" % country.get_aid(), False)
 
-        for adj in self.map.get(country_name).links:
+        for adj in country.links:
             if adj.is_ally() and adj.is_good():
                 modified_roll += 1
                 self.output_to_history("+1 for Adjacent Good Ally", False)
@@ -483,8 +484,8 @@ class Labyrinth(object):
         if roll <= 3:
             self.output_to_history("* WoI in %s failed." % country_name)
         elif roll == 4:
-            if self.map.get(country_name).aid == 0:        # 20150131PS check for existing aid marker
-                self.map.get(country_name).aid = 1
+            if self.map.get(country_name).get_aid() == 0:        # 20150131PS check for existing aid marker
+                self.map.get(country_name).set_aid(1)
                 self.output_to_history("* WoI in %s adds Aid." % country_name, False)
                 self.output_to_history(self.map.get(country_name).summary(), True)
         else:
@@ -551,7 +552,7 @@ class Labyrinth(object):
             self.troops += how_many
         else:
             self.map.get(move_to).change_troops(how_many)
-        self.map.get(move_from).aid = 0
+        self.map.get(move_from).set_aid(0)
         self.map.get(move_from).make_besieged()
         prestige_multiplier = 1
         if prestige_rolls[0] <= 4:
@@ -747,7 +748,8 @@ class Labyrinth(object):
             if target_country.is_besieged():
                 self.output_to_history("Besieged Regime marker removed.", False)
             target_country.remove_besieged()
-            target_country.aid = 0
+            target_country.set_aid(0)
+            self.output_to_history("All Aid removed.", False)
             self.funding = min(9, self.funding + self.country_resources_by_name(country_name))
             self.output_to_history("Funding now %d" % self.funding, False)
             if target_country.troops() > 0:
@@ -835,7 +837,7 @@ class Labyrinth(object):
                     country_scores[country_name] = 1000000
                 if country_name == "Pakistan":
                     country_scores[country_name] += 100000
-                if self.map.get(country_name).aid > 0:
+                if self.map.get(country_name).get_aid() > 0:
                     country_scores[country_name] += 10000
                 if self.map.get(country_name).is_besieged():
                     country_scores[country_name] += 1000
@@ -1065,7 +1067,7 @@ class Labyrinth(object):
             subdests = []
             for country in self.map.countries():
                 if (not country.is_islamist_rule()) and\
-                        (country.is_besieged() or country.is_regime_change() or country.aid > 0):
+                        (country.is_besieged() or country.is_regime_change() or country.get_aid() > 0):
                     if "Biometrics" in self.lapsing and not self.adjacent_country_has_cell(country.name):
                         continue
                     subdests.append(country.name)
@@ -1302,14 +1304,15 @@ class Labyrinth(object):
 
     def get_countries_with_aid_by_governance(self):
         countries_by_governance = {GOOD: [], FAIR: [], POOR: []}
-        for country in self.map.country_names():
-            if self.map.get(country).aid > 0:
-                if self.map.get(country).is_good():
-                    countries_by_governance[GOOD].append(country)
-                elif self.map.get(country).is_fair():
-                    countries_by_governance[FAIR].append(country)
-                elif self.map.get(country).is_poor():
-                    countries_by_governance[POOR].append(country)
+        for country_name in self.map.country_names():
+            country = self.map.get(country_name)
+            if country.get_aid() > 0:
+                if country.is_good():
+                    countries_by_governance[GOOD].append(country_name)
+                elif country.is_fair():
+                    countries_by_governance[FAIR].append(country_name)
+                elif country.is_poor():
+                    countries_by_governance[POOR].append(country_name)
         return countries_by_governance
 
     def get_non_muslim_countries_by_governance(self):
@@ -1690,9 +1693,10 @@ class Labyrinth(object):
                     "%s Posture now %s" % (schengen_countries[i], schengen_country.get_posture()), False)
         self.output_to_history("", False)
 
-    def _resolve_plot_in_muslim_country(self, country, governance_rolls, is_backlash, plot_type):
+    def _resolve_plot_in_muslim_country(self, country_name, governance_rolls, is_backlash, plot_type):
+        country = self.map.get(country_name)
         if not is_backlash:
-            if self.map.get(country).is_good():
+            if country.is_good():
                 self.change_funding(2)
             else:
                 self.change_funding(1)
@@ -1702,38 +1706,36 @@ class Labyrinth(object):
                 self.funding = 1
             else:
                 self.funding -= 1
-                if self.map.get(country).is_good():
+                if country.is_good():
                     self.funding -= 1
                 if self.funding < 1:
                     self.funding = 1
             self.output_to_history("BACKLASH: Jihadist Funding now %d" % self.funding, False)
-        if self.map.get(country).troops() > 0:
+        if country.troops() > 0:
             if plot_type == "WMD":
                 self.prestige = 1
             else:
                 self._reduce_prestige(1)
             self.output_to_history("Troops present so US Prestige now %d" % self.prestige, False)
-        if country != "Iran":
+        if country.name != "Iran":
             successes = 0
             failures = 0
             for roll in governance_rolls:
-                if self.map.get(country).is_non_recruit_success(roll):
+                if country.is_non_recruit_success(roll):
                     successes += 1
                 else:
                     failures += 1
             self.output_to_history("Governance rolls: %d Successes rolled, %d Failures rolled" % (successes, failures),
                                    False)
-            if self.map.get(country).aid and successes > 0:
-                self.map.get(country).aid -= successes  # 20150131PS remove 1 aid for each success
-                if self.map.get(country).aid < 0:
-                    self.map.get(country).aid = 0
-                self.output_to_history("Aid removed.", False)
-            if self.map.get(country).is_poor() and successes > 0:
-                self.output_to_history("Governance stays at %s" % self.map.get(country).governance_str(), True)
-            while successes > 0 and self.map.get(country).governance_is_better_than(POOR):
-                self.worsen_governance(country)
+            if country.get_aid() > 0 and successes > 0:
+                country.reduce_aid_by(successes)
+                self.output_to_history("Aid removed, now %d." % country.get_aid(), False)
+            if country.is_poor() and successes > 0:
+                self.output_to_history("Governance stays at %s" % country.governance_str(), True)
+            while successes > 0 and country.governance_is_better_than(POOR):
+                self.worsen_governance(country_name)
                 successes -= 1
-                self.output_to_history("Governance to %s" % self.map.get(country).governance_str(), True)
+                self.output_to_history("Governance to %s" % country.governance_str(), True)
 
     def _resolve_plot_in_us(self, plot_type, posture_roll, us_prestige_rolls):
         if plot_type == "WMD":
@@ -2608,7 +2610,7 @@ class Labyrinth(object):
                     print "Invalid aid value -", aid
                 else:
                     print "Changing aid count to", aid
-                    self.map.get(country_name).aid = aid
+                    self.map.get(country_name).set_aid(aid)
                     return True
             except ValueError:
                 print "Invalid aid value -", aid_str

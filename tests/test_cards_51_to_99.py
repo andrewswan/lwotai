@@ -914,17 +914,17 @@ class Card81(LabyrinthTestCase):
         app.deck.get(81).playEvent("Jihadist", app)
         self.assertTrue(iraq.sleeperCells == 5)
         self.assertTrue(iraq.is_besieged())
-        self.assertTrue(iraq.aid == 0)
+        self.assertTrue(iraq.get_aid() == 0)
 
         app = Labyrinth(1, 1, self.set_up_test_scenario)
         iraq = app.get_country("Iraq")
         app.test_country("Iraq")
         iraq.make_regime_change()
-        iraq.aid = 1
+        iraq.set_aid(1)
         app.deck.get(81).playEvent("Jihadist", app)
         self.assertTrue(iraq.sleeperCells == 5)
         self.assertTrue(iraq.is_besieged() == False)
-        self.assertTrue(iraq.aid == 0)
+        self.assertTrue(iraq.get_aid() == 0)
 
 
 class Card82(LabyrinthTestCase):

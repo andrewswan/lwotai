@@ -286,7 +286,7 @@ class Card107(LabyrinthTestCase):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.test_country("Iraq")
         app.card(107).playEvent("US", app)
-        self.assertEqual(app.get_country("Iraq").aid, 1)
+        self.assertEqual(app.get_country("Iraq").get_aid(), 1)
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.card(107).playEvent("Jihadist", app)
@@ -304,7 +304,7 @@ class Card107(LabyrinthTestCase):
         app.get_country("Iraq").make_fair()
         app.test_country("Turkey")
         app.get_country("Turkey").make_fair()
-        app.get_country("Turkey").aid = 1
+        app.get_country("Turkey").set_aid(1)
         app.card(107).playEvent("Jihadist", app)
         self.assertTrue(app.get_country("Turkey").is_poor())
         self.assertTrue(app.get_country("Iraq").is_fair())
@@ -562,7 +562,7 @@ class Card113(LabyrinthTestCase):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.card(113).playEvent("US", app)
         self.assertTrue(app.get_country("Sudan").is_governed())
-        self.assertEqual(app.get_country("Sudan").aid, 1)
+        self.assertEqual(app.get_country("Sudan").get_aid(), 1)
         self.assertTrue(app.get_country("Sudan").is_ally())
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
@@ -570,7 +570,7 @@ class Card113(LabyrinthTestCase):
         app.get_country("Sudan").make_adversary()
         app.card(113).playEvent("US", app)
         self.assertTrue(app.get_country("Sudan").is_governed())
-        self.assertEqual(app.get_country("Sudan").aid, 1)
+        self.assertEqual(app.get_country("Sudan").get_aid(), 1)
         self.assertTrue(app.get_country("Sudan").is_neutral())
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
@@ -592,7 +592,7 @@ class Card113(LabyrinthTestCase):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.card(113).playEvent("Jihadist", app)
         self.assertTrue(app.get_country("Sudan").is_governed())
-        self.assertEqual(app.get_country("Sudan").aid, 1)
+        self.assertEqual(app.get_country("Sudan").get_aid(), 1)
         self.assertTrue(app.get_country("Sudan").is_ally())
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
@@ -600,7 +600,7 @@ class Card113(LabyrinthTestCase):
         app.get_country("Sudan").make_adversary()
         app.card(113).playEvent("Jihadist", app)
         self.assertTrue(app.get_country("Sudan").is_governed())
-        self.assertEqual(app.get_country("Sudan").aid, 1)
+        self.assertEqual(app.get_country("Sudan").get_aid(), 1)
         self.assertTrue(app.get_country("Sudan").is_neutral())
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
@@ -892,7 +892,7 @@ class Card119(LabyrinthTestCase):
         app.card(119).playEvent("US", app)
         self.assertTrue(app.get_country("Yemen").is_governed())
         self.assertTrue(app.get_country("Yemen").is_ally())
-        self.assertEqual(app.get_country("Yemen").aid, 1)
+        self.assertEqual(app.get_country("Yemen").get_aid(), 1)
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("Yemen").make_islamist_rule()
@@ -900,7 +900,7 @@ class Card119(LabyrinthTestCase):
         app.card(119).playEvent("US", app)
         self.assertTrue(app.get_country("Yemen").is_governed())
         self.assertTrue(app.get_country("Yemen").is_neutral())
-        self.assertEqual(app.get_country("Yemen").aid, 0)
+        self.assertEqual(app.get_country("Yemen").get_aid(), 0)
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.card(119).playEvent("Jihadist", app)
