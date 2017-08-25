@@ -1523,7 +1523,7 @@ class Labyrinth(object):
     def execute_plot(self, ops, is_ops, plot_rolls, is_martyrdom_operation=False, is_danish_cartoons=False,
                      is_ksm=False):
         if not is_martyrdom_operation and not is_danish_cartoons and not is_ksm:
-            self.output_to_history("* Jihadists Plotting", False)
+            self.output_to_history("* Jihadists attempting to Plot...", False)
         # In US
         self.debug_print("DEBUG: In US")
         roll_position = self.place_plots(
@@ -2998,7 +2998,7 @@ class Labyrinth(object):
             else:
                 how_many = troops
         governance_roll = self.get_roll("governance")
-        pre_first_roll = self.get_roll("first (raise/drop) prestige")
+        pre_first_roll = self.get_roll("first (drop/raise) prestige")
         pre_second_roll = self.get_roll("second (amount) prestige")
         pre_third_roll = self.get_roll("third (amount) prestige")
         self.handle_regime_change(
@@ -3046,7 +3046,7 @@ class Labyrinth(object):
                 return
             else:
                 how_many = troops
-        pre_first_roll = self.get_roll("first (raise/drop) prestige")
+        pre_first_roll = self.get_roll("first (drop/raise) prestige")
         pre_second_roll = self.get_roll("second (amount) prestige")
         pre_third_roll = self.get_roll("third (amount) prestige")
         self.handle_withdraw(move_from, move_to, how_many, (pre_first_roll, pre_second_roll, pre_third_roll))
