@@ -11,7 +11,7 @@ class Attractive(Coherent):
         return "Attractive"
 
     def difference(self):
-        return "Each Recruit success places two available cells (modifies 8.2.1)."
+        return "as above, plus each Recruit success places two available cells (modifies 8.2.1)"
 
     def ops_to_recruit(self, cells):
         return (cells / 2) + (cells % 2)

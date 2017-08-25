@@ -59,7 +59,7 @@ class Labyrinth(object):
 
     def _print_game_start_messages(self):
         self.output_to_history(self.scenario.name, False)
-        self.output_to_history("Jihadist Ideology: " + self.ideology.name(), False)
+        self.output_to_history("Jihadist Ideology: %s" % self.ideology, False)
         print ""
         self.output_to_history("Game Start")
         self.output_to_history("")
@@ -2268,7 +2268,7 @@ class Labyrinth(object):
             lapsing = "Lapsing: None"
 
         summary = [
-            "Jihadist Ideology: %s" % self.ideology.name(),
+            "Jihadist Ideology: %s" % self.ideology,
             "",
             "VICTORY",
             "Good Resources: %d        Islamist Resources: %d" % (good_resources, islamist_resources),
@@ -2338,7 +2338,7 @@ class Labyrinth(object):
         while True:
             print "Possible ideologies are:"
             for (index, ideology) in enumerate(IDEOLOGIES):
-                print "(%d) %s (%s)" % (index, ideology.name, ideology.difference())
+                print "(%d) %s (%s)" % (index + 1, ideology, ideology.difference())
             input_str = self.my_raw_input("Enter new ideology (1-%d): " % len(IDEOLOGIES))
             if input_str == "":
                 return ""

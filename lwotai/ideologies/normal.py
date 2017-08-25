@@ -3,12 +3,15 @@ from lwotai.ideologies.ideology import Ideology
 
 class Normal(Ideology):
 
+    def __repr__(self):
+        return self.name()
+
     def name(self):
         return "Normal"
 
     def difference(self):
         """Returns a description of the difference between this and the previous ideology, if any"""
-        return ""
+        return "baseline"
 
     def excess_cells_for_major_jihad(self):
         """

@@ -7,7 +7,7 @@ class Virulent(Infectious):
         return "Virulent"
 
     def difference(self):
-        return "The above, plus failed Jihad rolls do not remove cells (modifies 8.4.3)."
+        return "as above, plus failed Jihad rolls do not remove cells (modifies 8.4.3)"
 
     def failed_jihad_rolls_remove_cells(self):
         return False
