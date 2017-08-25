@@ -148,7 +148,7 @@ class Card04(LabyrinthTestCase):
 
     def test_event(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertTrue(app.get_country("Philippines").get_posture() == None)
+        self.assertEqual(app.get_country("Philippines").get_posture(), None)
         self.assertTrue(app.funding == 5)
         app.card(4).playEvent("US", app)
         self.assertTrue("Moro Talks" in app.markers)
@@ -157,7 +157,7 @@ class Card04(LabyrinthTestCase):
 
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.funding = 1
-        self.assertTrue(app.get_country("Philippines").get_posture() == None)
+        self.assertEqual(app.get_country("Philippines").get_posture(), None)
         self.assertTrue(app.funding == 1)
         app.card(4).playEvent("US", app)
         self.assertTrue(app.get_country("Philippines").is_soft() or app.get_country("Philippines").is_hard())
@@ -681,7 +681,7 @@ class Card28(LabyrinthTestCase):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.get_country("Iraq").make_besieged()
         app.card(28).playEvent("US", app)
-        self.assertTrue(app.get_country("Iraq").is_besieged() == False)
+        self.assertFalse(app.get_country("Iraq").is_besieged())
 
 
 class Card29(LabyrinthTestCase):
