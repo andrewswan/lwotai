@@ -19,11 +19,11 @@ Thanks to Dave Horn for implementing the Save and Undo system.
 
 Thanks to Peter Shaw for implementing the Adjust system and for a bunch of bug fixes and cleanup.
 """
-
 from lwotai.command import Command
+from lwotai.ideologies.ideologies import choose_ideology
 from lwotai.labyrinth import Labyrinth
-from lwotai.scenarios.scenarios import scenario_names
 from lwotai.saver import Saver
+from lwotai.scenarios.scenarios import scenario_names
 from lwotai.utils import Utils
 
 # Please observe semantic versioning (see http://semver.org) when changing this version number.
@@ -35,13 +35,7 @@ def _create_game():
     print ""
     scenario_number = Utils.choose_option("Choose Scenario", scenario_names())
     print ""
-    ideology_number = Utils.choose_option("Choose Jihadist Ideology",
-                                   ["Normal",
-                                    "Coherent: Plot success places 2 Plots",
-                                    "Attractive: ...and Recruit success places 2 cells",
-                                    "Potent: ...and Major Jihad if 3 or more cells than troops",
-                                    "Infectious: ...and US plays all its cards (not enforced by program)",
-                                    "Virulent: ...and Jihad failure does not remove cells"])
+    ideology_number = choose_ideology()
     print ""
     ai_rolls = Utils.getUserYesNoResponse("Do you want the program to roll dice for you?")
     return Labyrinth(scenario_number, ideology_number, ai_rolls=ai_rolls)

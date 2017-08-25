@@ -4,12 +4,12 @@ from lwotai.cards import CARDS
 from lwotai.deck import Deck
 from lwotai.governance import GOOD, FAIR, POOR
 from lwotai.governance import governance_with_level
-from lwotai.ideologies.ideologies import get_ideology, IDEOLOGIES
+from lwotai.ideologies.ideologies import get_ideology, IDEOLOGIES, choose_ideology
 from lwotai.map import Map
+from lwotai.postures.posture import HARD, SOFT
 from lwotai.randomizer import Randomizer
 from lwotai.scenarios.scenarios import get_scenario
 from lwotai.utils import Utils
-from postures.posture import HARD, SOFT
 
 
 class Labyrinth(object):
@@ -2334,26 +2334,9 @@ class Labyrinth(object):
             else:
                 return possible[0]
 
-    def get_adjust_ideology(self):
-        while True:
-            print "Possible ideologies are:"
-            for (index, ideology) in enumerate(IDEOLOGIES):
-                print "(%d) %s (%s)" % (index + 1, ideology, ideology.difference())
-            input_str = self.my_raw_input("Enter new ideology (1-%d): " % len(IDEOLOGIES))
-            if input_str == "":
-                return ""
-            try:
-                input_int = int(input_str)
-                if input_int < 1 or input_int > len(IDEOLOGIES):
-                    print "Invalid ideology number '%d'" % input_int
-                else:
-                    return input_int
-            except ValueError:
-                print "Invalid ideology number '%s'" % input_str
-
     def adjust_ideology(self):
         print "Adjusting ideology"
-        new_ideology_number = self.get_adjust_ideology()
+        new_ideology_number = choose_ideology()
         if new_ideology_number:
             self.ideology = get_ideology(new_ideology_number)
         else:
