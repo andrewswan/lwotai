@@ -1587,7 +1587,7 @@ class Card(object):
                         target_name = good_countries[0]
                     else:
                         fair_countries = [country.name for country in app.map.countries() if
-                                 country.is_muslim() and country.is_fair()]
+                                          country.is_muslim() and country.is_fair()]
                         if len(fair_countries) > 1:
                             distances = []
                             for country in fair_countries:
