@@ -146,22 +146,27 @@ class Card04(LabyrinthTestCase):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         self.assertTrue(app.card(4).playable("US", app, True))
 
-    def test_event(self):
+    def _assertEvent(self, funding_before, expected_funding_after):
+        # Set up
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         self.assertEqual(app.get_country("Philippines").get_posture(), None)
-        self.assertTrue(app.funding == 5)
-        app.card(4).playEvent("US", app)
-        self.assertTrue("Moro Talks" in app.markers)
-        self.assertTrue(app.get_country("Philippines").is_soft() or app.get_country("Philippines").is_hard())
-        self.assertTrue(app.funding == 4)
+        app.funding = funding_before
+        app.markers.append("Abu Sayyaf")
 
-        app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        app.funding = 1
-        self.assertEqual(app.get_country("Philippines").get_posture(), None)
-        self.assertTrue(app.funding == 1)
+        # Invoke
         app.card(4).playEvent("US", app)
-        self.assertTrue(app.get_country("Philippines").is_soft() or app.get_country("Philippines").is_hard())
-        self.assertTrue(app.funding == 1)
+
+        # Check
+        self.assertIn("Moro Talks", app.markers)
+        self.assertNotIn("Abu Sayyaf", app.markers, "Moro Talks should block Abu Sayyaf")
+        self.assertTrue(app.get_country("Philippines").get_posture())
+        self.assertEqual(app.funding, expected_funding_after)
+
+    def test_event_lowers_funding_if_above_1(self):
+        self._assertEvent(5, 4)
+
+    def test_event_does_not_lower_funding_if_already_at_1(self):
+        self._assertEvent(1, 1)
 
 
 class Card05(LabyrinthTestCase):

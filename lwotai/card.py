@@ -513,6 +513,7 @@ class Card(object):
                     app.output_to_history("CTR Marker added in Central Asia", True)    # 20150616PS
             elif self.number == 4:  # Moro Talks
                 app.markers.append("Moro Talks")
+                app.markers.remove("Abu Sayyaf")
                 app.output_to_history("Moro Talks in play.", False)
                 app.test_country("Philippines")
                 app.change_funding(-1)
