@@ -2126,7 +2126,7 @@ class Labyrinth(object):
         print "FAIR GOVERNANCE"
         any_fair = False
         for country in self.get_countries():
-            if not country.is_non_muslim() and country.is_fair():
+            if country.is_muslim() and country.is_fair():
                 any_fair = True
                 country.print_country()
         if not any_fair:
