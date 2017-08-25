@@ -588,10 +588,10 @@ class Labyrinth(object):
                     self._disrupt_one_cell(target)
                 else:
                     self._disrupt_two_cells(target)
-            if target.troops() >= 2:
-                self._increase_prestige(1)
-                self.output_to_history("US Prestige now %d." % self.prestige, False)
-            self.output_to_history(target.summary(), True)
+        if target.troops() >= 2:
+            self._increase_prestige(1)
+            self.output_to_history("US Prestige now %d." % self.prestige, False)
+        self.output_to_history(target.summary(), True)
 
     def _get_two_cell_types(self, options):
         """Prompts the user to choose one of the given options for disrupting two cells, returns None if not valid"""
@@ -670,10 +670,6 @@ class Labyrinth(object):
         if target.total_cells(False) <= 0:
             self.output_to_history("Cadre added in %s." % target.name, False)
             target.cadre = 1
-        if target.troops() >= 2:
-            self._increase_prestige(1)
-            self.output_to_history("US Prestige now %d." % self.prestige, False)
-        self.output_to_history(target.summary(), True)
 
     def _get_number_of_cells_to_disrupt(self, target):
         """Returns the number of cells that can be disrupted in the given country"""

@@ -71,3 +71,16 @@ class DisruptTest(LabyrinthTestCase):
 
         # Invoke & assert
         self.assertEqual(app.num_disruptable(), 3)
+
+    def test_troops_disrupting_cadre_increases_prestige(self):
+        # Set up
+        app = Labyrinth(1, 1, test_user_input=["Egypt"])
+        prestige_before = app.prestige
+        app.get_country("Egypt").cadre = 1
+        app.get_country("Egypt").troopCubes = 2
+
+        # Invoke
+        app.disrupt_cells_or_cadre()
+
+        # Check
+        self.assertEqual(app.prestige, prestige_before + 1)
