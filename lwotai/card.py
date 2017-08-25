@@ -1493,15 +1493,18 @@ class Card(object):
                             if subCountryObj.name not in three_away and subCountryObj.name not in two_away and subCountryObj.name not in one_away and subCountryObj.name != "Lebanon":
                                 three_away.append(subCountryObj.name)
                     possibles = []
-                    for country in one_away:
-                        if country not in possibles and app.get_country(country).total_cells(True) > 0 and app.get_country(country).is_shia_mix():
-                            possibles.append(country)
-                    for country in two_away:
-                        if country not in possibles and app.get_country(country).total_cells(True) > 0 and app.get_country(country).is_shia_mix():
-                            possibles.append(country)
-                    for country in three_away:
-                        if country not in possibles and app.get_country(country).total_cells(True) > 0 and app.get_country(country).is_shia_mix():
-                            possibles.append(country)
+                    for country_name in one_away:
+                        country = app.get_country(country_name)
+                        if country_name not in possibles and country.total_cells(True) > 0 and country.is_shia_mix():
+                            possibles.append(country_name)
+                    for country_name in two_away:
+                        country = app.get_country(country_name)
+                        if country_name not in possibles and country.total_cells(True) > 0 and country.is_shia_mix():
+                            possibles.append(country_name)
+                    for country_name in three_away:
+                        country = app.get_country(country_name)
+                        if country_name not in possibles and country.total_cells(True) > 0 and country.is_shia_mix():
+                            possibles.append(country_name)
                     if len(possibles) <= 0:
                         app.output_to_history("No Shia-Mix countries with cells within 3 countries of Lebanon.", True)
                         target_name = None
@@ -1673,7 +1676,8 @@ class Card(object):
                     possibles = []
                     if app.get_country("Turkey").governance_is_better_than(POOR):
                         possibles.append("Turkey")
-                    if app.get_country("Iraq").is_governed() and app.get_country("Iraq").governance_is_better_than(POOR):
+                    iraq = app.get_country("Iraq")
+                    if iraq.is_governed() and iraq.governance_is_better_than(POOR):
                         possibles.append("Iraq")
                     if len(possibles) == 0:
                         app.output_to_history("Iraq and Turkey cannot have governance worsened.", True)
@@ -1717,7 +1721,9 @@ class Card(object):
                     if side == "US":
                         app.output_to_history("US draws one card.", False)
                         while not target_name:
-                            country_name = app.get_country_from_user("Choose a Regime Change country with at least 2 troops. (? for list)?: ", "XXX", app.list_regime_change_with_two_cells)
+                            country_name = app.get_country_from_user(
+                                "Choose a Regime Change country with at least 2 troops. (? for list)?: ", "XXX",
+                                app.list_regime_change_with_two_cells)
                             if country_name == "":
                                 print ""
                             else:
@@ -1793,7 +1799,8 @@ class Card(object):
                 app.output_to_history(app.get_country("Sudan").summary(), True)
             elif self.number == 114:  # GTMO
                 app.lapsing.append("GTMO")
-                app.output_to_history("GTMO in play. No recruit operations or Detainee Release the rest of this turn.", False)
+                app.output_to_history(
+                    "GTMO in play. No recruit operations or Detainee Release the rest of this turn.", False)
                 prestige_rolls = []
                 for i in range(3):
                     prestige_rolls.append(random.randint(1, 6))
@@ -1827,7 +1834,8 @@ class Card(object):
                                 print ""
                             else:
                                 if country_name not in targets:
-                                    print "%s is not Indonesia or an adjacent country that has a cell and is Ally or Hard." % country_name
+                                    print "%s is not Indonesia or an adjacent country that has a cell and is Ally or" \
+                                          " Hard." % country_name
                                     print ""
                                 else:
                                     target_name = country_name
@@ -1863,13 +1871,17 @@ class Card(object):
                         app.output_to_history("No plots could be placed.", True)
             elif self.number == 117 or self.number == 118:  # Oil Price Spike
                 app.lapsing.append("Oil Price Spike")
-                app.output_to_history("Oil Price Spike in play. Add +1 to the resources of each Oil Exporter country for the turn.", False)
+                app.output_to_history(
+                    "Oil Price Spike in play. Add +1 to the resources of each Oil Exporter country for the turn.",
+                    False)
                 if side == "US":
                     app.output_to_history(
                         "Select, reveal, and draw a card other than Oil Price Spike from the discard pile or a box.")
                 else:
                     if app.get_yes_no_from_user("Are there any Jihadist event cards in the discard pile? "):
-                        app.output_to_history("Draw from the Discard Pile randomly among the highest-value Jihadist-associated event cards. Put the card on top of the Jihadist hand.", True)
+                        app.output_to_history("Draw from the Discard Pile randomly among the highest-value"
+                                              " Jihadist-associated event cards. Put the card on top of the Jihadist"
+                                              " hand.")
             elif self.number == 119:  # Saleh
                 app.test_country("Yemen")
                 if side == "US":
@@ -1878,7 +1890,8 @@ class Card(object):
                             app.get_country("Yemen").make_neutral()
                         elif app.get_country("Yemen").is_neutral():
                             app.get_country("Yemen").make_ally()
-                        app.output_to_history("Yemen Alignment improved to %s." % app.get_country("Yemen").alignment(), False)
+                        app.output_to_history(
+                            "Yemen Alignment improved to %s." % app.get_country("Yemen").alignment(), False)
                         app.get_country("Yemen").add_aid(1)
                         app.output_to_history("Aid added to Yemen.", True)
                 else:
@@ -1886,7 +1899,8 @@ class Card(object):
                         app.get_country("Yemen").make_neutral()
                     elif app.get_country("Yemen").is_neutral():
                         app.get_country("Yemen").make_adversary()
-                    app.output_to_history("Yemen Alignment worsened to %s." % app.get_country("Yemen").alignment(), False)
+                    app.output_to_history(
+                        "Yemen Alignment worsened to %s." % app.get_country("Yemen").alignment(), False)
                     app.get_country("Yemen").make_besieged()
                     app.output_to_history("Yemen now Besieged Regime.", True)
             elif self.number == 120:  # US Election
@@ -1897,4 +1911,3 @@ class Card(object):
             app.output_to_history("Place marker for card.", True)
         if self.lapsing:
             app.output_to_history("Place card in Lapsing.", True)
-
