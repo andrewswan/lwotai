@@ -1,7 +1,7 @@
 import random
 
-from lwotai.deck import CARDS
-from lwotai.deck import Deck
+from lwotai.cards.deck import CARDS
+from lwotai.cards.deck import Deck
 from lwotai.governance import GOOD, FAIR, POOR
 from lwotai.governance import governance_with_level
 from lwotai.ideologies.ideologies import get_ideology, choose_ideology
