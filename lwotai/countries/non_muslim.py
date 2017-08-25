@@ -22,7 +22,7 @@ class NonMuslimCountry(Country):
 
     def get_disrupt_summary(self):
         return "%s - %d Active Cells, %d Sleeper Cells, %d Cadre, Ops Reqd %d, Posture %s" %\
-               (self.name, self.activeCells, self.sleeperCells, self.cadre, self.__governance.min_us_ops(),
+               (self.name, self.activeCells, self.sleeperCells, self.cadre, self.get_governance().min_us_ops(),
                 self.__posture)
 
     def get_posture(self):
