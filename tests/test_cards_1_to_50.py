@@ -230,11 +230,18 @@ class Card08and09and10(LabyrinthTestCase):
         self.assertTrue(app.card(10).playable("US", app, True))
 
     def test_event(self):
-        app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        app.list_countries_with_cell_and_adjacent_troops()
-        app.get_country("Iran").sleeperCells = 1
-        app.get_country("Iraq").troopCubes = 1
-        app.list_countries_with_cell_and_adjacent_troops()
+        # Set up
+        target_country = "Iran"
+        app = Labyrinth(1, 1, self.set_up_blank_test_scenario, [target_country])
+        iran = app.get_country(target_country)
+        iran.sleeperCells = 1
+        app.get_country("Iraq").troopCubes = 1  # Adjacent to Iran
+
+        # Invoke
+        app.card(8).playEvent("US", app)
+
+        # Check
+        self.assertEqual(0, iran.sleeperCells)
 
 
 class Card11(LabyrinthTestCase):

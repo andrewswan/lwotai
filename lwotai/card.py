@@ -524,32 +524,34 @@ class Card(object):
                     app.change_funding(-2)
                 else:
                     return False
-            elif self.number == 8 or self.number == 9 or self.number == 10:  # Special Forces
+            elif self.number in [8, 9, 10]:  # Special Forces
                 while True:
-                    country_name = app.get_country_from_user("Remove a cell from which country that has troops or is adjacent" +
-                                                   " to a country with troops (? for list)?: ",  "XXX",
-                                                             app.list_countries_with_cell_and_adjacent_troops)
-                    if country_name == "":
+                    target_country_name = app.get_country_from_user(
+                        "Remove a cell from which country that has troops or is adjacent to a country with troops"
+                        " (? for list)?: ", "XXX", app.list_countries_with_cell_and_adjacent_troops)
+                    if target_country_name == "":
                         print ""
                         return
                     else:
-                        if app.map[country_name].total_cells(True) <= 0:
-                            print "There are no cells in %s" % country_name
+                        target_country = app.get_country(target_country_name)
+                        if target_country.total_cells(True) <= 0:
+                            print "There are no cells in %s" % target_country_name
                             print ""
                         else:
-                            foundTroops = False
-                            for country in app.map:
-                                if country == country_name or app.is_adjacent(country_name, country):
-                                    if app.get_country(country).troops() > 0:
-                                        foundTroops = True
+                            found_troops = False
+                            for other_country_name in app.map.country_names():
+                                if other_country_name == target_country.name or\
+                                        app.is_adjacent(target_country_name, other_country_name):
+                                    if app.get_country(other_country_name).troops() > 0:
+                                        found_troops = True
                                         break
-                            if not foundTroops:
-                                print "Neither this or any adjacent country have troops."
-                                print ""
-                            else:
-                                app.remove_cell(country_name, side)    # 20150131PS added side
-                                app.output_to_history(app.map[country_name].summary(), True)
+                            if found_troops:
+                                app.remove_cell(target_country_name, side)    # 20150131PS added side
+                                app.output_to_history(target_country.summary(), True)
                                 break
+                            else:
+                                print "Neither this or any adjacent country has troops."
+                                print ""
             elif self.number == 11:  # Abbas
                 islamist_rule_adjacent_to_israel =\
                     app.contains_country(lambda c: app.is_adjacent(c.name, "Israel") and c.is_islamist_rule())
@@ -602,16 +604,16 @@ class Card(object):
                         if country_name == "":
                             print ""
                             return
-                        elif app.map[country_name].is_adversary():
+                        elif app.get_country(country_name).is_adversary():
                             target_country = country_name
                         else:
                             print "%s is not an Adversary." % country_name
                             print ""
                 action_roll = app.get_roll("covert action")
                 if action_roll >= 4:
-                    app.map[target_country].make_neutral()
+                    app.get_country(target_country).make_neutral()
                     app.output_to_history("Covert Action successful, %s now Neutral." % target_country, False)
-                    app.output_to_history(app.map[target_country].summary(), True)
+                    app.output_to_history(app.get_country(target_country).summary(), True)
                 else:
                     app.output_to_history("Covert Action fails.", True)
             elif self.number == 15:  # Ethiopia Strikes
@@ -808,7 +810,7 @@ class Card(object):
                             finished_picking = True
                             break
                         else:
-                            if not app.map[country_name].schengen:
+                            if not app.get_country(country_name).schengen:
                                 print "%s is not a Schengen country." % country_name
                                 print ""
                                 return
