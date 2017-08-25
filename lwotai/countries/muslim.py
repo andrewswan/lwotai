@@ -118,7 +118,7 @@ class MuslimCountry(Country):
     def summary(self):
         """Returns a textual summary of this Country"""
         resources = self.get_resources(self.app.oil_price_spikes())
-        summary = "%s, %s %s, %d Resource(s)" % (self.name, self.governance_str(), self.__alignment, resources)
+        summary = "%s, %s %s, %d Resource(s)\n    " % (self.name, self.governance_str(), self.__alignment, resources)
         item_strings = []
         if self.troopCubes:
             # We don't include NATO here, that's a marker
@@ -132,15 +132,17 @@ class MuslimCountry(Country):
         if self.aid:
             item_strings.append("Aid: %d" % self.aid)
         if self.is_besieged():
-            item_strings.append("Besieged: Yes")
+            item_strings.append("Besieged Regime")
         if self.is_regime_change():
-            item_strings.append("Regime Change: Yes")
+            item_strings.append("Regime Change")
         if self.plots:
             item_strings.append("Plots: %d" % self.plots)
         if self.markers:
             item_strings.append("Markers: %s" % ", ".join(self.markers))
         if item_strings:
-            summary += "\n    " + ", ".join(item_strings)
+            summary += ", ".join(item_strings)
+        else:
+            summary += "Empty"
         return summary
 
     def test(self, test_roll):

@@ -73,7 +73,7 @@ class NonMuslimCountry(Country):
 
     def summary(self):
         """Returns a textual summary of this Country"""
-        summary = "%s - Posture: %s" % (self.name, self.__posture)
+        summary = "%s - Posture: %s\n    " % (self.name, self.__posture)
         item_strings = []
         if self.activeCells:
             item_strings.append("Active: %d" % self.activeCells)
@@ -89,7 +89,9 @@ class NonMuslimCountry(Country):
         if self.markers:
             item_strings.append("Markers: %s" % ", ".join(self.markers))
         if item_strings:
-            summary += "\n    " + ", ".join(item_strings)
+            summary += ", ".join(item_strings)
+        else:
+            summary += "Empty"
         return summary
 
     def test(self, test_roll):
