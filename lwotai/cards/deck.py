@@ -1,24 +1,6 @@
 from lwotai.cards.card import Card
 
 
-class Deck(object):
-    """The deck of cards in the game"""
-
-    def __init__(self, cards):
-        self.cards = {}
-        # Store the given list of cards in a dict, indexed by their number
-        for card in cards:
-            self.cards[card.number] = card
-
-    def get(self, card_number):
-        """Returns the card with the given number"""
-        assert isinstance(card_number, int)
-        card = self.cards[card_number]
-        if not card:
-            raise ValueError("Invalid card number %d" % card_number)
-        return card
-
-
 CARDS = [
     Card(1, "US", "Backlash", 1, False, False, False),
     Card(2, "US", "Biometrics", 1, False, False, True),
@@ -141,3 +123,24 @@ CARDS = [
     Card(119, "Unassociated", "Saleh", 3, False, False, False),
     Card(120, "Unassociated", "US Election", 3, False, False, False)
 ]
+
+
+class Deck(object):
+    """The deck of cards in the game"""
+
+    def __init__(self):
+        self.cards = {}
+        # Store the given list of cards in a dict, indexed by their number
+        for card in CARDS:
+            self.cards[card.number] = card
+
+    def __len__(self):
+        return len(self.cards)
+
+    def get(self, card_number):
+        """Returns the card with the given number"""
+        assert isinstance(card_number, int)
+        card = self.cards[card_number]
+        if not card:
+            raise ValueError("Invalid card number %d" % card_number)
+        return card

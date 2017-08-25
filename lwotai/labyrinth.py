@@ -1,6 +1,5 @@
 import random
 
-from lwotai.cards.deck import CARDS
 from lwotai.cards.deck import Deck
 from lwotai.governance import GOOD, FAIR, POOR
 from lwotai.governance import governance_with_level
@@ -25,7 +24,7 @@ class Labyrinth(object):
         # Defaults
         self.backlashInPlay = False
         self.cells = 0
-        self.deck = Deck(CARDS)
+        self.deck = Deck()
         self.funding = 0
         self.gameOver = False
         self.history = []
