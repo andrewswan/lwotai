@@ -1,4 +1,3 @@
-from lwotai.countries.country import Country
 from lwotai.countries.iran import Iran
 from lwotai.countries.muslim import MuslimCountry
 from lwotai.countries.non_muslim import NonMuslimCountry
