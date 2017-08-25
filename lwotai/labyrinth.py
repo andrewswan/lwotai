@@ -707,10 +707,10 @@ class Labyrinth(object):
                 successes += 1
             else:
                 failures += 1
-        target_country.reduce_aid_by(successes)  # Same for major and minor
+        aid_removed = target_country.reduce_aid_by(successes)
+        self.output_to_history("Jihad operation. %d Successes rolled, %d Failures rolled, %d Aid removed." %
+                               (successes, failures, aid_removed), False)
         is_major_jihad = country_name in self.major_jihad_possible(len(roll_list))
-        self.output_to_history(
-            "Jihad operation. %d Successes rolled, %d Failures rolled" % (successes, failures), False)
         if is_major_jihad:  # all cells go active
             self.output_to_history("* Major Jihad attempt in %s" % country_name, False)
             sleepers = target_country.sleeperCells

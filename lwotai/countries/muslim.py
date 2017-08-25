@@ -118,9 +118,12 @@ class MuslimCountry(Country):
     def make_ungoverned(self):
         self.set_governance(None)
 
-    def reduce_aid_by(self, aid_lost):
-        """Reduces the level of aid by the given amount, but not below zero"""
-        self.__aid = max(self.__aid - aid_lost, 0)
+    def reduce_aid_by(self, aid_to_lose):
+        """Reduces the level of aid by the given amount, if possible; returns the amount actually removed"""
+        assert aid_to_lose >= 0, "%d must not be negative" % aid_to_lose
+        aid_actually_removed = min(aid_to_lose, self.__aid)
+        self.__aid -= aid_actually_removed
+        return aid_actually_removed
 
     def remove_besieged(self):
         self.__besieged = False

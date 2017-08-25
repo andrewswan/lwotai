@@ -1310,7 +1310,7 @@ class Card(object):
                 app.place_cells(target.name, 5)
                 if target.get_aid() > 0:
                     target.reduce_aid_by(1)
-                    app.output_to_history("Aid removed from %s" % target.name, False)
+                    app.output_to_history("One Aid removed from %s" % target.name, False)
                 else:
                     target.make_besieged()
                     app.output_to_history("%s to Besieged Regime" % target.name, False)
