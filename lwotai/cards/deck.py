@@ -1,4 +1,4 @@
-from lwotai.card import Card
+from lwotai.cards.card import Card
 
 
 class Deck(object):
