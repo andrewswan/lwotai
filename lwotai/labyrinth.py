@@ -1803,7 +1803,7 @@ class Labyrinth(object):
 
     def ai_flow_chart_play_event(self, card_number):
         self.debug_print("Play Event [6]")
-        self.card(card_number).playEvent("Jihadist", self)
+        self.card(card_number).play_event("Jihadist", self)
         self.debug_print("Unassociated Event? [8]")
         if self.card(card_number).type == "Unassociated":
             self.debug_print("DEBUG: YES")
@@ -3073,7 +3073,7 @@ class Labyrinth(object):
                 choice = self.get_event_or_ops_from_user("Play card for Event or Ops (enter e or o): ")
             if choice == "event":
                 self.output_to_history("Played for Event.", False)
-                card.playEvent("US", self)
+                card.play_event("US", self)
                 if card_num == 120:
                     print self.get_us_prompt_to_spend_ops(card_num)
             elif choice == "ops":
@@ -3088,7 +3088,7 @@ class Labyrinth(object):
                     play_event_first = self.get_yes_no_from_user(
                         "Do you want to play the Jihadist event before using the Ops? (y/n): ")
                     if play_event_first:
-                        card.playEvent("Jihadist", self)
+                        card.play_event("Jihadist", self)
                     else:
                         print "Use the Ops now then enter u <card #> again to play the event"
                     print self.get_us_prompt_to_spend_ops(card_num)

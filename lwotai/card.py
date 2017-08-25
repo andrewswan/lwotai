@@ -246,7 +246,8 @@ class Card(object):
             elif self.number == 83:  # Kashmir
                 return "Indo-Pakistani Talks" not in app.markers
             elif self.number in [84, 85]:  # Leak
-                return ("Enhanced Measures" in app.markers) or ("Renditions" in app.markers) or ("Wiretapping" in app.markers)
+                return ("Enhanced Measures" in app.markers) or ("Renditions" in app.markers) or ("Wiretapping" in
+                                                                                                 app.markers)
             elif self.number == 86:  # Lebanon War
                 return True
             elif self.number in [87, 88, 89]:  # Martyrdom Operation
@@ -486,7 +487,7 @@ class Card(object):
             return False
         return False
 
-    def playEvent(self, side, app):
+    def play_event(self, side, app):
         app.output_to_history("Card played for Event.", True)
         if self.type == "US" and side == "Jihadist":
             return False
@@ -573,10 +574,10 @@ class Card(object):
                     app.markers.append("Anbar Awakening")
                     app.output_to_history("Anbar Awakening in play.", False)
                     if app.get_country("Iraq").troops() == 0:
-                        app.get_country("Syria").add_aid(1) #20150131PS changed to add rather than set to 1
+                        app.get_country("Syria").add_aid(1)  # 20150131PS changed to add rather than set to 1
                         app.output_to_history("Aid in Syria.", False)
                     elif app.get_country("Syria").troops() == 0:
-                        app.get_country("Iraq").add_aid(1)    #20150131PS changed to add rather than set to 1
+                        app.get_country("Iraq").add_aid(1)  # 20150131PS changed to add rather than set to 1
                         app.output_to_history("Aid in Iraq.", False)
                     else:
                         print "There are troops in both Iraq and Syria."
@@ -649,17 +650,18 @@ class Card(object):
                 app.execute_card_euro_islam(posture)
             elif self.number == 17:  # FSB
                 app.output_to_history("Examine Jihadist hand for Loose Nukes, HEU, or Kazakh Strain.", False)
-                hasThem = app.get_yes_no_from_user("Does the Jihadist hand have Loose Nukes, HEU, or Kazakh Strain? (y/n): ")
-                if hasThem:
+                has_wmd_card = app.get_yes_no_from_user(
+                    "Does the Jihadist hand have Loose Nukes, HEU, or Kazakh Strain? (y/n): ")
+                if has_wmd_card:
                     app.output_to_history("Discard Loose Nukes, HEU, or Kazakh Strain from the Jihadist hand.", False)
                 else:
-                    russiaCells = app.get_country("Russia").total_cells(True)
-                    cenAsiaCells = app.get_country("Central Asia").total_cells(True)
-                    if russiaCells > 0 or cenAsiaCells > 0:
-                        if russiaCells == 0:
+                    russia_cells = app.get_country("Russia").total_cells(True)
+                    central_asia_cells = app.get_country("Central Asia").total_cells(True)
+                    if russia_cells > 0 or central_asia_cells > 0:
+                        if russia_cells == 0:
                             app.remove_cell("Central Asia", side)    # 20150131PS added side
                             app.output_to_history(app.get_country("Central Asia").summary(), True)
-                        elif cenAsiaCells == 0:
+                        elif central_asia_cells == 0:
                             app.remove_cell("Russia", side)    # 20150131PS added side
                             app.output_to_history(app.get_country("Russia").summary(), True)
                         else:
@@ -676,8 +678,10 @@ class Card(object):
                 app.output_to_history("Shuffle Jihadist hand.", True)
             elif self.number == 18:  # Intel Community
                 app.output_to_history("Examine Jihadist hand. Do not change order of cards.", False)
-                app.output_to_history("Conduct a 1-value operation (Use commands: alert, deploy, disrupt, reassessment, regime_change, withdraw, or war_of_ideas).", False)
-                app.output_to_history("You may now interrupt this action phase to play another card (Use the u command).", True)
+                app.output_to_history("Conduct a 1-value operation (Use commands: alert, deploy, disrupt, reassessment,"
+                                      " regime_change, withdraw, or war_of_ideas).", False)
+                app.output_to_history(
+                    "You may now interrupt this action phase to play another card (Use the u command).", True)
             elif self.number == 19:  # Kemalist Republic
                 app.output_to_history("Turkey now a Fair Ally.", False)
                 app.get_country("Turkey").make_fair()
