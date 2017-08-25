@@ -8,9 +8,6 @@ class Iran(Country):
     def __init__(self, app):
         super(Iran, self).__init__(app, "Iran", FAIR, False, 0, False, 0)
 
-    def is_major_jihad_possible(self, ops, excess_cells_needed, bhutto_in_play):
-        return False
-
     def is_muslim(self):
         return False  # Rule 4.4
 
@@ -37,19 +34,23 @@ class Iran(Country):
     def is_neutral(self):
         return False
 
-    def make_adversary(self):
-        raise
+    @staticmethod
+    def make_adversary():
+        raise Exception("Not in Iran")
 
-    def make_ally(self):
-        raise
+    @staticmethod
+    def make_ally():
+        raise Exception("Not in Iran")
 
-    def make_neutral(self):
-        raise Exception("Cannot make Iran neutral")
+    @staticmethod
+    def make_neutral():
+        raise Exception("Not in Iran")
 
     # ---------- Governance ----------
 
-    def improve_governance(self):
-        raise
+    @staticmethod
+    def improve_governance():
+        raise Exception("Not in Iran")
 
     def is_fair(self):
         return True
@@ -65,8 +66,9 @@ class Iran(Country):
         """Tests this country using the given roll"""
         pass
 
-    def worsen_governance(self):
-        raise
+    @staticmethod
+    def worsen_governance():
+        raise Exception("Not in Iran")
 
     # ---------- Posture ----------
 
@@ -76,11 +78,13 @@ class Iran(Country):
     def is_soft(self):
         return False
 
-    def make_hard(self):
-        raise
+    @staticmethod
+    def make_hard():
+        raise Exception("Not in Iran")
 
-    def make_soft(self):
-        raise
+    @staticmethod
+    def make_soft():
+        raise Exception("Not in Iran")
 
     def summary(self):
         """Returns a textual summary of this Country"""

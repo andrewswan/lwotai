@@ -122,7 +122,7 @@ class Country(object):
     def governance_is_worse_than(self, governance):
         return self.__governance is not None and self.__governance.is_worse_than(governance)
 
-    def is_major_jihad_possible(self, ops, excess_cells_needed, bhutto_in_play):
+    def is_major_jihad_possible(self, _ignored_1, _ignored_2, _ignored_3):
         return False
 
     def can_disrupt(self):

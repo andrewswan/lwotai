@@ -39,9 +39,37 @@ class IranTest(LabyrinthTestCase):
         # Check
         self.assertFalse(schengen)
 
-    def test_can_check_is_tested(self):
+    @staticmethod
+    def test_can_check_is_tested():
         # Set up
         iran = Iran(None)
 
         # Invoke
         iran.check_is_tested()
+
+    def test_major_jihad_is_not_possible(self):
+        # Set up
+        app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
+        iran = Iran(app)
+        iran.sleeperCells = 5
+        iran.change_troops(-999)
+
+        # Invoke
+        major_jihad_possible = iran.is_major_jihad_possible(3, 5, False)
+
+        # Check
+        self.assertFalse(major_jihad_possible)
+
+    def test_cannot_be_made_hard(self):
+        # Set up
+        app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
+        iran = Iran(app)
+
+        # Invoke
+        try:
+            iran.make_hard()
+            self.fail("Should have raised an Exception")
+        except Exception as e:
+            # Check
+            self.assertEqual("Not in Iran", e.message)
+

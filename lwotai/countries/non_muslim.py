@@ -31,9 +31,6 @@ class NonMuslimCountry(Country):
     def is_hard(self):
         return self.__posture == HARD
 
-    def is_major_jihad_possible(self, ops, excess_cells_needed, bhutto_in_play):
-        return False
-
     def is_muslim(self):
         return False
 
