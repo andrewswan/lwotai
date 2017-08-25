@@ -427,4 +427,4 @@ overgeneral-exceptions=Exception
 [HAKUCHO]
 
 # Suppresses certain levels of message (C = convention, W = warning, E = error)
-disable=C
+disable=C,R
