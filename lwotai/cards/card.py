@@ -27,7 +27,7 @@ class Card(object):
             elif self.number == 2:  # Biometrics
                 raise Exception("Has subclass")
             elif self.number == 3:  # CTR
-                return app.us().is_soft()
+                raise Exception("Has subclass")
             elif self.number == 2:  # Biometrics
                 return True
             elif self.number == 4:  # Moro Talks
@@ -498,12 +498,8 @@ class Card(object):
                 raise Exception("Has subclass")
             elif self.number == 2:  # Biometrics
                 raise Exception("Has subclass")
-            elif self.number == 3:  # CTR    20150616PS
-                app.get_country("Russia").markers.append("CTR")    # 20150616PS
-                app.output_to_history("CTR Marker added Russia", True)    # 20150616PS
-                if (app.get_country("Central Asia").is_ally()) or (app.get_country("Central Asia").is_neutral()):
-                    app.get_country("Central Asia").markers.append("CTR")    # 20150616PS
-                    app.output_to_history("CTR Marker added in Central Asia", True)    # 20150616PS
+            elif self.number == 3:  # CTR
+                raise Exception("Has subclass")
             elif self.number == 4:  # Moro Talks
                 app.markers.append("Moro Talks")
                 app.markers.remove("Abu Sayyaf")
