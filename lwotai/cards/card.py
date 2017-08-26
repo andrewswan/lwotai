@@ -35,13 +35,7 @@ class Card(object):
             elif self.number in [6, 7]:  # Sanctions
                 raise Exception("Has subclass")
             elif self.number in [8, 9, 10]:  # Special Forces
-                for country in app.get_countries():
-                    if country.total_cells(True) > 0:
-                        for subCountry in app.get_countries():
-                            if country.name == subCountry.name or app.is_adjacent(subCountry.name, country.name):
-                                if subCountry.troops() > 0:
-                                    return True
-                return False
+                raise Exception("Has subclass")
             elif self.number == 11:  # Abbas
                 return True
             elif self.number == 12:  # Al-Azhar
@@ -505,33 +499,7 @@ class Card(object):
             elif self.number in [6, 7]:  # Sanctions
                 raise Exception("Has subclass")
             elif self.number in [8, 9, 10]:  # Special Forces
-                while True:
-                    target_country_name = app.get_country_from_user(
-                        "Remove a cell from which country that has troops or is adjacent to a country with troops"
-                        " (? for list)?: ", "XXX", app.list_countries_with_cell_and_adjacent_troops)
-                    if target_country_name == "":
-                        print ""
-                        return
-                    else:
-                        target_country = app.get_country(target_country_name)
-                        if target_country.total_cells(True) <= 0:
-                            print "There are no cells in %s" % target_country_name
-                            print ""
-                        else:
-                            found_troops = False
-                            for other_country_name in app.map.country_names():
-                                if other_country_name == target_country.name or\
-                                        app.is_adjacent(target_country_name, other_country_name):
-                                    if app.get_country(other_country_name).troops() > 0:
-                                        found_troops = True
-                                        break
-                            if found_troops:
-                                app.remove_cell(target_country_name, side)    # 20150131PS added side
-                                app.output_to_history(target_country.summary(), True)
-                                break
-                            else:
-                                print "Neither this or any adjacent country has troops."
-                                print ""
+                raise Exception("Has subclass")
             elif self.number == 11:  # Abbas
                 islamist_rule_adjacent_to_israel =\
                     app.contains_country(lambda c: app.is_adjacent(c.name, "Israel") and c.is_islamist_rule())
