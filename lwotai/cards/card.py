@@ -31,7 +31,7 @@ class Card(object):
             elif self.number == 4:  # Moro Talks
                 raise Exception("Has subclass")
             elif self.number == 5:  # NEST
-                return True
+                raise Exception("Has subclass")
             elif self.number in [6, 7]:  # Sanctions
                 return "Patriot Act" in app.markers
             elif self.number in [8, 9, 10]:  # Special Forces
@@ -501,8 +501,7 @@ class Card(object):
             elif self.number == 4:  # Moro Talks
                 raise Exception("Has subclass")
             elif self.number == 5:  # NEST
-                app.markers.append("NEST")
-                app.output_to_history("NEST in play. If jihadists have WMD, all plots in the US placed face up.", True)
+                raise Exception("Has subclass")
             elif self.number in [6, 7]:  # Sanctions
                 if "Patriot Act" in app.markers:
                     app.change_funding(-2)
