@@ -172,7 +172,7 @@ class MapTest(LabyrinthTestCase):
         game_map = self.create_test_map()
 
         # Invoke
-        country = game_map.get_random_shia_mix_country(rolls)
+        country = game_map.look_up_shia_mix_country(rolls)
 
         # Check
         self.assertIsInstance(country, str)

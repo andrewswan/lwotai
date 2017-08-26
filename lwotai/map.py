@@ -154,7 +154,7 @@ class Map(object):
                     net_hard_countries -= 1
         return max(-3, min(net_hard_countries, 3))
 
-    def get_random_shia_mix_country(self, rolls):
+    def look_up_shia_mix_country(self, rolls):
         """Choose a country from the AI's Shia-Mix table, using the given rolls"""
         assert len(rolls) == 3, "Expected 3 rolls but got %s" % rolls
         return self._shia_mix_table[sum(rolls)]

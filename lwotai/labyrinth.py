@@ -230,7 +230,7 @@ class Labyrinth(object):
     def get_random_shia_mix_country(self):
         """Returns the name of a Shia-Mix country rolled up on the AI chart"""
         rolls = self.randomizer.roll_d6(3)
-        return self.map.get_random_shia_mix_country(rolls)
+        return self.map.look_up_shia_mix_country(rolls)
 
     def get_roll(self, purpose):
         """Either rolls a d6 or asks the user to do so, based on the provided preference"""
