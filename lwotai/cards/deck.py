@@ -1,8 +1,8 @@
 from lwotai.cards.card import Card
-
+from lwotai.cards.card1 import Card1
 
 CARDS = [
-    Card(1, "US", "Backlash", 1, False, False, False),
+    Card1(),
     Card(2, "US", "Biometrics", 1, False, False, True),
     Card(3, "US", "CTR", 1, False, True, False),
     Card(4, "US", "Moro Talks", 1, True, True, False),

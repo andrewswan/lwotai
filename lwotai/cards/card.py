@@ -23,7 +23,7 @@ class Card(object):
             return False
         elif self.type == "US" and side == "US":
             if self.number == 1:  # Backlash
-                return app.contains_country(lambda c: c.plots > 0 and not c.is_non_muslim())
+                raise Exception("Has subclass")
             elif self.number == 2:  # Biometrics
                 return True
             elif self.number == 3:  # CTR
@@ -495,13 +495,7 @@ class Card(object):
             return False
         elif self.type == "US" and side == "US":
             if self.number == 1:  # Backlash
-                for country in app.get_countries():
-                    if country.plots > 0 and not country.is_non_muslim():
-                        app.output_to_history(
-                            "Plot in Muslim country found. Select the plot during plot phase. Backlash in play")
-                        app.backlashInPlay = True
-                        return True
-                return False
+                raise Exception("Has subclass")
             elif self.number == 2:  # Biometrics
                 app.lapsing.append("Biometrics")
                 app.output_to_history("Biometrics in play. This turn, travel to adjacent Good countries must roll to"
