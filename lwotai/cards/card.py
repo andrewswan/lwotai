@@ -33,7 +33,7 @@ class Card(object):
             elif self.number == 5:  # NEST
                 raise Exception("Has subclass")
             elif self.number in [6, 7]:  # Sanctions
-                return "Patriot Act" in app.markers
+                raise Exception("Has subclass")
             elif self.number in [8, 9, 10]:  # Special Forces
                 for country in app.get_countries():
                     if country.total_cells(True) > 0:
@@ -503,10 +503,7 @@ class Card(object):
             elif self.number == 5:  # NEST
                 raise Exception("Has subclass")
             elif self.number in [6, 7]:  # Sanctions
-                if "Patriot Act" in app.markers:
-                    app.change_funding(-2)
-                else:
-                    return False
+                raise Exception("Has subclass")
             elif self.number in [8, 9, 10]:  # Special Forces
                 while True:
                     target_country_name = app.get_country_from_user(
