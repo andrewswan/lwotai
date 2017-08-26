@@ -39,7 +39,7 @@ class Card(object):
             elif self.number == 11:  # Abbas
                 raise Exception("Has subclass")
             elif self.number == 12:  # Al-Azhar
-                return True
+                raise Exception("Has subclass")
             elif self.number == 13:  # Anbar Awakening
                 return (app.get_country("Iraq").troops() > 0) or (app.get_country("Syria").troops() > 0)
             elif self.number == 14:  # Covert Action
@@ -503,12 +503,7 @@ class Card(object):
             elif self.number == 11:  # Abbas
                 raise Exception("Has subclass")
             elif self.number == 12:  # Al-Azhar
-                app.test_country("Egypt")
-                numIR = app.num_islamist_rule()
-                if numIR <= 0:
-                    app.change_funding(-4, True)
-                else:
-                    app.change_funding(-2, True)
+                raise Exception("Has subclass")
             elif self.number == 13:  # Anbar Awakening
                 if (app.get_country("Iraq").troops() > 0) or (app.get_country("Syria").troops() > 0):
                     app.markers.append("Anbar Awakening")
