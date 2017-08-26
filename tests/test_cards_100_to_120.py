@@ -1,5 +1,9 @@
 import unittest
 
+from mockito import mock, when
+
+from lwotai.randomizer import Randomizer
+
 from labyrinth_test_case import LabyrinthTestCase
 from lwotai.governance import GOOD
 from lwotai.labyrinth import Labyrinth
@@ -210,64 +214,222 @@ class Card105(LabyrinthTestCase):
 class Card106(LabyrinthTestCase):
     """Jaysh al-Mahdi"""
 
-    def test_playable(self):
+    def test_not_playable_by_us_if_no_shia_mix_countries_have_cells(self):
+        # Set up
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        self.assertFalse(app.card(106).playable("US", app, True))
-        self.assertFalse(app.card(106).playable("Jihadist", app, False))
-        app.test_country("Iraq")
-        app.get_country("Iraq").sleeperCells = 1
-        self.assertFalse(app.card(106).playable("US", app, True))
-        self.assertFalse(app.card(106).playable("Jihadist", app, False))
-        app.get_country("Iraq").troopCubes = 1
-        self.assertTrue(app.card(106).playable("US", app, True))
-        self.assertTrue(app.card(106).playable("Jihadist", app, False))
-        app.get_country("Iraq").sleeperCells = 0
-        self.assertFalse(app.card(106).playable("US", app, True))
-        self.assertFalse(app.card(106).playable("Jihadist", app, False))
+        iraq = app.get_country("Iraq")
+        iraq.cadre = 1
+        iraq.change_troops(2)
+        iraq.make_good()
+
+        # Invoke
+        playable = app.card(106).playable("US", app, None)
+
+        # Check
+        self.assertFalse(playable)
+
+    def test_not_playable_by_us_if_no_shia_mix_countries_have_troops(self):
+        # Set up
+        app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
+        iraq = app.get_country("Iraq")
+        iraq.sleeperCells = 2  # Should only need one
+        iraq.make_good()
+
+        # Invoke
+        playable = app.card(106).playable("US", app, None)
+
+        # Check
+        self.assertFalse(playable)
+
+    def test_playable_by_us_if_poor_shia_mix_country_has_cells_and_troops(self):
+        # Set up
+        app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
+        iraq = app.get_country("Iraq")
+        iraq.make_poor()
+        iraq.sleeperCells = 1
+        iraq.troopCubes = 1
+
+        # Invoke
+        playable = app.card(106).playable("US", app, None)
+
+        # Check
+        self.assertTrue(playable)
+
+    def test_not_playable_by_jihadist_if_itjihad_in_effect(self):
+        # Set up
+        app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
+        app.lapsing.append("The door of Itjihad was closed")
+        iraq = app.get_country("Iraq")
+        iraq.make_good()
+        iraq.change_troops(2)  # Should only need one
+        iraq.sleeperCells = 2  # Should only need one
+
+        # Invoke
+        playable = app.card(106).playable("Jihadist", app, False)
+
+        # Check
+        self.assertFalse(playable)
+
+    def test_playable_by_jihadist_if_itjihad_not_in_effect(self):
+        # Set up
+        app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
+        app.lapsing = []
+        iraq = app.get_country("Iraq")
+        iraq.make_good()
+        iraq.change_troops(1)
+        iraq.sleeperCells = 1
+
+        # Invoke
+        playable = app.card(106).playable("Jihadist", app, False)
+
+        # Check
+        self.assertTrue(playable)
+
+    def test_playable_by_jihadist_even_when_only_poor_countries_are_eligible(self):
+        """Event can't worsen Poor governance, but Jihadist plays it anyway, per 9.4.1"""
+        # Set up
+        app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
+        iraq = app.get_country("Iraq")
+        iraq.make_poor()
+        iraq.troopCubes = 2
+        iraq.sleeperCells = 2
+
+        # Invoke
+        playable = app.card(106).playable("Jihadist", app, None)
+
+        # Check
+        self.assertTrue(playable)
 
     def test_puts_cell(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         self.assertFalse(app.card(106).puts_cell())
 
-    def test_event(self):
+    def test_us_event_removes_two_of_three_sleeper_cells_from_shia_mix_country_with_troops(self):
+        # Set up
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.test_country("Iraq")
         app.get_country("Iraq").sleeperCells = 3
         app.get_country("Iraq").troopCubes = 1
+
+        # Invoke
         app.card(106).play_event("US", app)
+
+        # Check
         self.assertEqual(app.get_country("Iraq").sleeperCells, 1)
 
-        app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        app.test_country("Iraq")
-        app.get_country("Iraq").sleeperCells = 2
-        app.get_country("Iraq").troopCubes = 1
-        app.card(106).play_event("US", app)
-        self.assertEqual(app.get_country("Iraq").sleeperCells, 0)
-
+    def test_us_event_removes_only_sleeper_cell_from_shia_mix_country_with_troops(self):
+        # Set up
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.test_country("Iraq")
         app.get_country("Iraq").sleeperCells = 1
         app.get_country("Iraq").troopCubes = 1
+
+        # Invoke
         app.card(106).play_event("US", app)
+
+        # Check
         self.assertEqual(app.get_country("Iraq").sleeperCells, 0)
 
+    def test_us_event_removes_two_sleeper_cells_when_two_shia_mix_countries_are_eligible(self):
+        # Set up
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario, ["Lebanon"])
         app.test_country("Iraq")
         app.get_country("Iraq").sleeperCells = 2
         app.get_country("Iraq").troopCubes = 1
-        app.get_country("Lebanon").sleeperCells = 2
-        app.get_country("Lebanon").troopCubes = 1
-        print "Choose Lebanon"
-        app.card(106).play_event("US", app)
-        self.assertEqual(app.get_country("Lebanon").sleeperCells, 0)
+        lebanon = app.get_country("Lebanon")
+        lebanon.sleeperCells = 3
+        lebanon.troopCubes = 1
 
-        print "HERE"
-        app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        app.test_country("Iraq")
-        app.get_country("Iraq").make_fair()
-        app.get_country("Iraq").sleeperCells = 2
-        app.get_country("Iraq").troopCubes = 1
+        # Invoke
+        app.card(106).play_event("US", app)
+
+        # Check
+        self.assertEqual(lebanon.sleeperCells, 1)
+
+    def test_jihadist_event_worsens_governance_of_shia_mix_country_from_good_to_fair(self):
+        # Set up
+        mock_randomizer = mock(Randomizer())
+        when(mock_randomizer).roll_d6(3).thenReturn([6, 6, 2])  # Pakistan
+        when(mock_randomizer).roll_d6(1).thenReturn(6)  # Pakistan tests to Fair
+        app = Labyrinth(1, 1, randomizer=mock_randomizer)
+        # Make Iraq the only "good" target
+        iraq = app.get_country("Iraq")
+        iraq.make_good()
+        iraq.make_neutral()
+        iraq.sleeperCells = 1
+        iraq.troopCubes = 1
+        # Make Gulf States a "fair" target but closer to search origin in Pakistan
+        gulf_states = app.get_country("Gulf States")
+        gulf_states.make_fair()
+        gulf_states.make_ally()
+        gulf_states.sleeperCells = 2
+        gulf_states.troopCubes = 2
+
+        # Invoke
         app.card(106).play_event("Jihadist", app)
+
+        # Check
+        self.assertTrue(iraq.is_fair(), iraq.summary())
+
+    def test_jihadist_event_ignores_closer_good_country_without_troops(self):
+        # Set up
+        mock_randomizer = mock(Randomizer())
+        when(mock_randomizer).roll_d6(3).thenReturn([6, 6, 2])  # Pakistan
+        when(mock_randomizer).roll_d6(1).thenReturn(6)  # Pakistan tests to Fair
+        app = Labyrinth(1, 1, randomizer=mock_randomizer)
+        # Make Iraq a "good" target
+        iraq = app.get_country("Iraq")
+        iraq.make_good()
+        iraq.make_neutral()
+        iraq.sleeperCells = 1
+        iraq.troopCubes = 1
+        # Make Gulf States a closer "good" target to Pakistan, but with no troops
+        gulf_states = app.get_country("Gulf States")
+        gulf_states.make_good()
+        gulf_states.make_ally()
+        gulf_states.activeCells = 2
+        gulf_states.sleeperCells = 2
+        gulf_states.troopCubes = 0
+
+        # Invoke
+        app.card(106).play_event("Jihadist", app)
+
+        # Check
+        self.assertTrue(iraq.is_fair(), iraq.summary())
+
+    def test_jihadist_event_worsens_governance_of_shia_mix_country_from_fair_to_poor(self):
+        # Set up
+        mock_randomizer = mock(Randomizer())
+        when(mock_randomizer).roll_d6(3).thenReturn([6, 6, 2])  # Pakistan
+        when(mock_randomizer).roll_d6(1).thenReturn(6)  # Pakistan tests to Fair
+        app = Labyrinth(1, 1, randomizer=mock_randomizer)
+        # Make Iraq the only valid target
+        iraq = app.get_country("Iraq")
+        iraq.make_fair()
+        iraq.make_neutral()
+        iraq.sleeperCells = 1
+        iraq.troopCubes = 1
+
+        # Invoke
+        app.card(106).play_event("Jihadist", app)
+
+        # Check
+        self.assertTrue(iraq.is_poor(), iraq.summary())
+
+    def test_jihadist_event_does_not_worsen_governance_of_shia_mix_country_from_poor_to_islamist_rule(self):
+        # Set up
+        app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
+        iraq = app.get_country("Iraq")
+        app.test_country(iraq.name)
+        iraq.make_poor()
+        iraq.sleeperCells = 1
+        iraq.troopCubes = 1
+
+        # Invoke
+        app.card(106).play_event("Jihadist", app)
+
+        # Check
+        self.assertTrue(iraq.is_poor())
 
 
 class Card107(LabyrinthTestCase):

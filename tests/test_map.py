@@ -1,3 +1,5 @@
+from lwotai.countries.country import Country
+
 from labyrinth_test_case import LabyrinthTestCase
 from lwotai.map import Map
 
@@ -146,3 +148,32 @@ class MapTest(LabyrinthTestCase):
 
         # Check
         self.assertTrue(schengen_link)
+
+    def test_pick_random_shia_mix_country(self):
+        self._assert_random_shia_mix_country("Turkey", [1, 1, 1])
+        self._assert_random_shia_mix_country("Turkey", [1, 2, 1])
+        self._assert_random_shia_mix_country("Saudi Arabia", [1, 2, 2])
+        self._assert_random_shia_mix_country("Saudi Arabia", [3, 2, 1])
+        self._assert_random_shia_mix_country("Lebanon", [3, 2, 2])
+        self._assert_random_shia_mix_country("Lebanon", [4, 1, 3])
+        self._assert_random_shia_mix_country("Yemen", [4, 2, 3])
+        self._assert_random_shia_mix_country("Yemen", [6, 1, 3])
+        self._assert_random_shia_mix_country("Iraq", [5, 3, 3])
+        self._assert_random_shia_mix_country("Iraq", [5, 3, 4])
+        self._assert_random_shia_mix_country("Pakistan", [6, 3, 4])
+        self._assert_random_shia_mix_country("Pakistan", [6, 2, 6])
+        self._assert_random_shia_mix_country("Gulf States", [6, 3, 6])
+        self._assert_random_shia_mix_country("Gulf States", [6, 5, 5])
+        self._assert_random_shia_mix_country("Afghanistan", [6, 5, 6])
+        self._assert_random_shia_mix_country("Afghanistan", [6, 6, 6])
+
+    def _assert_random_shia_mix_country(self, expected_name, rolls):
+        # Set up
+        game_map = self.create_test_map()
+
+        # Invoke
+        country = game_map.get_random_shia_mix_country(rolls)
+
+        # Check
+        self.assertIsInstance(country, str)
+        self.assertEqual(expected_name, country)

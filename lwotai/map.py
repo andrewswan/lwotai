@@ -94,6 +94,7 @@ class Map(object):
         self._link_country("United Kingdom", "Canada", "United States")
         self._link_country("United States", "Canada", "Philippines", "United Kingdom")
         self._link_country("Yemen", "Saudi Arabia", "Somalia")
+        self._shia_mix_table = self._get_shia_mix_table()
 
     def _link_country(self, country, *other_countries):
         """Links the first named country to the other named countries"""
@@ -152,3 +153,29 @@ class Map(object):
                 elif country.is_soft():
                     net_hard_countries -= 1
         return max(-3, min(net_hard_countries, 3))
+
+    def get_random_shia_mix_country(self, rolls):
+        """Choose a country from the AI's Shia-Mix table, using the given rolls"""
+        assert len(rolls) == 3, "Expected 3 rolls but got %s" % rolls
+        return self._shia_mix_table[sum(rolls)]
+
+    @staticmethod
+    def _get_shia_mix_table():
+        return {
+            3: "Turkey",
+            4: "Turkey",
+            5: "Saudi Arabia",
+            6: "Saudi Arabia",
+            7: "Lebanon",
+            8: "Lebanon",
+            9: "Yemen",
+            10: "Yemen",
+            11: "Iraq",
+            12: "Iraq",
+            13: "Pakistan",
+            14: "Pakistan",
+            15: "Gulf States",
+            16: "Gulf States",
+            17: "Afghanistan",
+            18: "Afghanistan"
+        }

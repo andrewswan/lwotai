@@ -227,6 +227,11 @@ class Labyrinth(object):
                 print "Enter 1, 2, 3 or W for WMD."
                 print ""
 
+    def get_random_shia_mix_country(self):
+        """Returns the name of a Shia-Mix country rolled up on the AI chart"""
+        rolls = self.randomizer.roll_d6(3)
+        return self.map.get_random_shia_mix_country(rolls)
+
     def get_roll(self, purpose):
         """Either rolls a d6 or asks the user to do so, based on the provided preference"""
         if self.ai_rolls:
@@ -1268,7 +1273,7 @@ class Labyrinth(object):
     def test_country(self, country_name):
         # Tests the named country, if untested
         country = self.map.get(country_name)
-        test_roll = random.randint(1, 6)
+        test_roll = self.randomizer.roll_d6(1)
         country.test(test_roll)
 
     def get_countries_with_us_posture_by_governance(self):
