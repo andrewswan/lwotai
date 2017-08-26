@@ -1,4 +1,4 @@
-from lwotai.card import Card
+from lwotai.cards.card import Card
 
 
 class AbstractCard(Card):
@@ -9,6 +9,14 @@ class AbstractCard(Card):
 
     def playable(self, side, app, ignore_itjihad):
         """Whether this card's event is playable by the given side"""
+        if self.type == "US" and side == "Jihadist":
+            return False
+        elif self.type == "Jihadist" and side == "US":
+            return False
+        return self._really_playable(side, app, ignore_itjihad)
+
+    def _really_playable(self, _side, _app, _ignore_itjihad):
+        """Indicates whether this card is playable, assuming the side is valid"""
         return True  # Bypass huge method in superclass
 
     def puts_cell(self):
