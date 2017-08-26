@@ -6,6 +6,7 @@ from lwotai.cards.card4 import Card4
 from lwotai.cards.card5 import Card5
 from lwotai.cards.card6_7 import Card6and7
 from lwotai.cards.card8_9_10 import Card8and9and10
+from lwotai.cards.card11 import Card11
 
 CARDS = [
     Card1(),
@@ -18,7 +19,7 @@ CARDS = [
     Card8and9and10(8),
     Card8and9and10(9),
     Card8and9and10(10),
-    Card(11, "US", "Abbas", 2, True, True, False),
+    Card11(),
     Card(12, "US", "Al-Azhar", 2, False, False, False),
     Card(13, "US", "Anbar Awakening", 2, False, True, False),
     Card(14, "US", "Covert Action", 2, False, False, False),

@@ -37,7 +37,7 @@ class Card(object):
             elif self.number in [8, 9, 10]:  # Special Forces
                 raise Exception("Has subclass")
             elif self.number == 11:  # Abbas
-                return True
+                raise Exception("Has subclass")
             elif self.number == 12:  # Al-Azhar
                 return True
             elif self.number == 13:  # Anbar Awakening
@@ -501,13 +501,7 @@ class Card(object):
             elif self.number in [8, 9, 10]:  # Special Forces
                 raise Exception("Has subclass")
             elif self.number == 11:  # Abbas
-                islamist_rule_adjacent_to_israel =\
-                    app.contains_country(lambda c: app.is_adjacent(c.name, "Israel") and c.is_islamist_rule())
-                app.markers.append("Abbas")
-                app.output_to_history("Abbas in play.", False)
-                if app.troops >= 5 and not islamist_rule_adjacent_to_israel:
-                    app.change_prestige(1, False)
-                    app.change_funding(-2, True)
+                raise Exception("Has subclass")
             elif self.number == 12:  # Al-Azhar
                 app.test_country("Egypt")
                 numIR = app.num_islamist_rule()
