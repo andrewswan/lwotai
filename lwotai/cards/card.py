@@ -28,10 +28,8 @@ class Card(object):
                 raise Exception("Has subclass")
             elif self.number == 3:  # CTR
                 raise Exception("Has subclass")
-            elif self.number == 2:  # Biometrics
-                return True
             elif self.number == 4:  # Moro Talks
-                return True
+                raise Exception("Has subclass")
             elif self.number == 5:  # NEST
                 return True
             elif self.number in [6, 7]:  # Sanctions
@@ -501,11 +499,7 @@ class Card(object):
             elif self.number == 3:  # CTR
                 raise Exception("Has subclass")
             elif self.number == 4:  # Moro Talks
-                app.markers.append("Moro Talks")
-                app.markers.remove("Abu Sayyaf")
-                app.output_to_history("Moro Talks in play.", False)
-                app.test_country("Philippines")
-                app.change_funding(-1)
+                raise Exception("Has subclass")
             elif self.number == 5:  # NEST
                 app.markers.append("NEST")
                 app.output_to_history("NEST in play. If jihadists have WMD, all plots in the US placed face up.", True)

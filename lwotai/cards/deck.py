@@ -2,12 +2,13 @@ from lwotai.cards.card import Card
 from lwotai.cards.card1 import Card1
 from lwotai.cards.card2 import Card2
 from lwotai.cards.card3 import Card3
+from lwotai.cards.card4 import Card4
 
 CARDS = [
     Card1(),
     Card2(),
     Card3(),
-    Card(4, "US", "Moro Talks", 1, True, True, False),
+    Card4(),
     Card(5, "US", "NEST", 1, True, True, False),
     Card(6, "US", "Sanctions", 1, False, False, False),
     Card(7, "US", "Sanctions", 1, False, False, False),
