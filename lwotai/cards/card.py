@@ -25,7 +25,7 @@ class Card(object):
             if self.number == 1:  # Backlash
                 raise Exception("Has subclass")
             elif self.number == 2:  # Biometrics
-                return True
+                raise Exception("Has subclass")
             elif self.number == 3:  # CTR
                 return app.us().is_soft()
             elif self.number == 2:  # Biometrics
@@ -497,9 +497,7 @@ class Card(object):
             if self.number == 1:  # Backlash
                 raise Exception("Has subclass")
             elif self.number == 2:  # Biometrics
-                app.lapsing.append("Biometrics")
-                app.output_to_history("Biometrics in play. This turn, travel to adjacent Good countries must roll to"
-                                      " succeed and no non-adjacent travel.", True)
+                raise Exception("Has subclass")
             elif self.number == 3:  # CTR    20150616PS
                 app.get_country("Russia").markers.append("CTR")    # 20150616PS
                 app.output_to_history("CTR Marker added Russia", True)    # 20150616PS
