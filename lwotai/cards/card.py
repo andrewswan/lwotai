@@ -91,7 +91,7 @@ class Card(object):
             elif self.number == 39:  # Libyan WMD
                 raise Exception("Has subclass")
             elif self.number == 40:  # Mass Turnout
-                return app.num_regime_change() > 0
+                raise Exception("Has subclass")
             elif self.number == 41:  # NATO
                 return not app.gwot_penalty() and app.num_regime_change() > 0
             elif self.number == 42:  # Pakistani Offensive
@@ -526,30 +526,7 @@ class Card(object):
             elif self.number == 39:  # Libyan WMD
                 raise Exception("Has subclass")
             elif self.number == 40:  # Mass Turnout
-                target_country = None
-                num_regime_change = app.num_regime_change()
-                if num_regime_change <= 0:
-                    return False
-                elif num_regime_change == 1:
-                    target_country = app.find_countries(lambda c: c.is_regime_change())[0]
-                else:
-                    while True:
-                        country_name = app.get_country_from_user(
-                            "Choose a Regime Change Country to improve governance (? for list): ", "XXX",
-                            app.list_regime_change_countries)
-                        if country_name == "":
-                            print ""
-                            return
-                        else:
-                            target_country = app.get_country(country_name)
-                            if target_country.is_regime_change():
-                                break
-                            else:
-                                print "%s is not a Regime Change country." % country_name
-                                print ""
-                app.improve_governance(target_country.name)
-                app.output_to_history("%s Governance improved." % target_country.name, False)
-                app.output_to_history(target_country.summary())
+                raise Exception("Has subclass")
             elif self.number == 41:  # NATO
                 num_regime_change = app.num_regime_change()
                 if num_regime_change <= 0:
