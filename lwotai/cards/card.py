@@ -87,10 +87,7 @@ class Card(object):
             elif self.number == 37:  # Iraqi WMD
                 raise Exception("Has subclass")
             elif self.number == 38:  # Libyan Deal
-                if app.get_country("Libya").is_poor():
-                    if app.get_country("Iraq").is_ally() or app.get_country("Syria").is_ally():
-                        return True
-                return False
+                raise Exception("Has subclass")
             elif self.number == 39:  # Libyan WMD
                 return app.us().is_hard() and app.get_country("Libya").is_adversary() and\
                        "Libyan Deal" not in app.markers
@@ -526,31 +523,7 @@ class Card(object):
             elif self.number == 37:  # Iraqi WMD
                 raise Exception("Has subclass")
             elif self.number == 38:  # Libyan Deal
-                app.markers.append("Libyan Deal")
-                app.output_to_history("Libyan Deal in Play.", False)
-                app.get_country("Libya").make_ally()
-                app.output_to_history("Libya now Ally", False)
-                app.change_prestige(1)
-                print "Select the Posture of 2 Schengen countries."
-                for _ in range(2):
-                    target_country = None
-                    while not target_country:
-                        country_name = app.get_country_from_user(
-                            "Choose Schengen country (? for list)?: ", "XXX", app.list_schengen_countries)
-                        if country_name == "":
-                            print ""
-                        else:
-                            target_country = app.get_country(country_name)
-                            if not target_country.schengen:
-                                print "%s is not a Schengen country." % country_name
-                                print ""
-                                return
-                            else:
-                                posture = app.get_posture_from_user(
-                                    "Select %s's Posture (hard or soft): " % country_name)
-                                app.set_posture(country_name, posture)
-                                app.output_to_history(target_country.summary(), False)
-                app.output_to_history("", False)
+                raise Exception("Has subclass")
             elif self.number == 39:  # Libyan WMD
                 app.markers.append("Libyan WMD")
                 app.output_to_history("Libyan WMD in Play.", False)

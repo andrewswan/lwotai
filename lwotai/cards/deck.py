@@ -26,6 +26,7 @@ from lwotai.cards.card34 import Card34
 from lwotai.cards.card35 import Card35
 from lwotai.cards.card36 import Card36
 from lwotai.cards.card37 import Card37
+from lwotai.cards.card38 import Card38
 from lwotai.cards.card4 import Card4
 from lwotai.cards.card5 import Card5
 from lwotai.cards.card6_7 import Card6and7
@@ -69,7 +70,7 @@ CARDS = [
     Card35(),
     Card36(),
     Card37(),
-    Card(38, "US", "Libyan Deal", 3, True, True, False),
+    Card38(),
     Card(39, "US", "Libyan WMD", 3, True, True, False),
     Card(40, "US", "Mass Turnout", 3, False, False, False),
     Card(41, "US", "NATO", 3, False, True, False),
