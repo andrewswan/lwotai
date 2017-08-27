@@ -85,7 +85,7 @@ class Card(object):
             elif self.number == 36:  # Indo-Pakistani Talks
                 raise Exception("Has subclass")
             elif self.number == 37:  # Iraqi WMD
-                return app.us().is_hard() and app.get_country("Iraq").is_adversary()
+                raise Exception("Has subclass")
             elif self.number == 38:  # Libyan Deal
                 if app.get_country("Libya").is_poor():
                     if app.get_country("Iraq").is_ally() or app.get_country("Syria").is_ally():
@@ -524,9 +524,7 @@ class Card(object):
             elif self.number == 36:  # Indo-Pakistani Talks
                 raise Exception("Has subclass")
             elif self.number == 37:  # Iraqi WMD
-                app.markers.append("Iraqi WMD")
-                app.output_to_history("Iraqi WMD in Play.", False)
-                app.output_to_history("Use this or a later card for Regime Change in Iraq at any Governance.", True)
+                raise Exception("Has subclass")
             elif self.number == 38:  # Libyan Deal
                 app.markers.append("Libyan Deal")
                 app.output_to_history("Libyan Deal in Play.", False)
