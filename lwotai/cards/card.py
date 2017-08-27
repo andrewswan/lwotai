@@ -97,7 +97,7 @@ class Card(object):
             elif self.number == 42:  # Pakistani Offensive
                 raise Exception("Has subclass")
             elif self.number == 43:  # Patriot Act
-                return True
+                raise Exception("Has subclass")
             elif self.number == 44:  # Renditions
                 return app.us().is_hard() and "Leak-Renditions" not in app.markers
             elif self.number == 45:  # Safer Now
@@ -532,7 +532,7 @@ class Card(object):
             elif self.number == 42:  # Pakistani Offensive
                 raise Exception("Has subclass")
             elif self.number == 43:  # Patriot Act
-                app.markers.append("Patriot Act")
+                raise Exception("Has subclass")
             elif self.number == 44:  # Renditions
                 app.markers.append("Renditions")
                 app.output_to_history("Renditions in Play.", False)
