@@ -16,6 +16,7 @@ from lwotai.cards.card17 import Card17
 from lwotai.cards.card19 import Card19
 from lwotai.cards.card20 import Card20
 from lwotai.cards.card21 import Card21
+from lwotai.cards.card22 import Card22
 
 CARDS = [
     Card1(),
@@ -39,7 +40,7 @@ CARDS = [
     Card19(),
     Card20(),
     Card21(),
-    Card(22, "US", "Mossad and Shin Bet", 2, False, False, False),
+    Card22(),
     Card(23, "US", "Predator", 2, False, False, False),
     Card(24, "US", "Predator", 2, False, False, False),
     Card(25, "US", "Predator", 2, False, False, False),

@@ -59,10 +59,7 @@ class Card(object):
             elif self.number == 21:  # Let's Roll
                 raise Exception("Has subclass")
             elif self.number == 22:  # Mossad and Shin Bet
-                target_cells = app.get_country("Israel").total_cells()
-                target_cells += app.get_country("Jordan").total_cells()
-                target_cells += app.get_country("Lebanon").total_cells()
-                return target_cells > 0
+                raise Exception("Has subclass")
             elif self.number in [23, 24, 25]:  # Predator
                 return app.contains_country(lambda c: c.total_cells(True) > 0 and c.is_muslim())
             elif self.number == 26:  # Quartet
@@ -527,10 +524,7 @@ class Card(object):
             elif self.number == 21:  # Let's Roll
                 raise Exception("Has subclass")
             elif self.number == 22:  # Mossad and Shin Bet
-                app.remove_all_cells_from_country("Israel")
-                app.remove_all_cells_from_country("Jordan")
-                app.remove_all_cells_from_country("Lebanon")
-                app.output_to_history("", False)
+                raise Exception("Has subclass")
             elif self.number in [23, 24, 25]:  # Predator
                 while True:
                     country_name = app.get_country_from_user(
