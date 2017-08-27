@@ -53,7 +53,7 @@ class Card(object):
             elif self.number == 18:  # Intel Community
                 return True
             elif self.number == 19:  # Kemalist Republic
-                return True
+                raise Exception("Has subclass")
             elif self.number == 20:  # King Abdullah
                 return True
             elif self.number == 21:  # Let's Roll
@@ -521,10 +521,7 @@ class Card(object):
                 app.output_to_history(
                     "You may now interrupt this action phase to play another card (Use the u command).", True)
             elif self.number == 19:  # Kemalist Republic
-                app.output_to_history("Turkey now a Fair Ally.", False)
-                app.get_country("Turkey").make_fair()
-                app.get_country("Turkey").make_ally()
-                app.output_to_history(app.get_country("Turkey").summary(), True)
+                raise Exception("Has subclass")
             elif self.number == 20:  # King Abdullah
                 app.output_to_history("Jordan now a Fair Ally.", False)
                 app.get_country("Jordan").make_fair()
