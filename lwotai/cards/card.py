@@ -63,11 +63,7 @@ class Card(object):
             elif self.number in [23, 24, 25]:  # Predator
                 raise Exception("Has subclass")
             elif self.number == 26:  # Quartet
-                if "Abbas" not in app.markers:
-                    return False
-                if app.troops <= 4:
-                    return False
-                return not app.contains_country(lambda c: app.is_adjacent(c.name, "Israel") and c.is_islamist_rule())
+                raise Exception("Has subclass")
             elif self.number == 27:  # Saddam Captured
                 return app.get_country("Iraq").troops() > 0
             elif self.number == 28:  # Sharia
@@ -528,16 +524,7 @@ class Card(object):
             elif self.number in [23, 24, 25]:  # Predator
                 raise Exception("Has subclass")
             elif self.number == 26:  # Quartet
-                if "Abbas" not in app.markers:
-                    return False
-                if app.troops <= 4:
-                    return False
-                for country in app.get_countries():
-                    if app.is_adjacent(country.name, "Israel") and country.is_islamist_rule():
-                        return False
-                app.change_prestige(2)
-                app.change_funding(-3)
-                app.output_to_history("", False)
+                raise Exception("Has subclass")
             elif self.number == 27:  # Saddam Captured
                 if app.get_country("Iraq").troops() == 0:
                     return False

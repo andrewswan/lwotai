@@ -13,6 +13,7 @@ from lwotai.cards.card20 import Card20
 from lwotai.cards.card21 import Card21
 from lwotai.cards.card22 import Card22
 from lwotai.cards.card23_24_25 import Card23and24and25
+from lwotai.cards.card26 import Card26
 from lwotai.cards.card3 import Card3
 from lwotai.cards.card4 import Card4
 from lwotai.cards.card5 import Card5
@@ -45,7 +46,7 @@ CARDS = [
     Card23and24and25(23),
     Card23and24and25(24),
     Card23and24and25(25),
-    Card(26, "US", "Quartet", 2, False, False, False),
+    Card26(),
     Card(27, "US", "Saddam Captured", 2, True, True, False),
     Card(28, "US", "Sharia", 2, False, False, False),
     Card(29, "US", "Tony Blair", 2, True, False, False),
