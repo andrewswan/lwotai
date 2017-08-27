@@ -77,14 +77,7 @@ class Card(object):
             elif self.number == 32:  # Back Channel
                 raise Exception("Has subclass")
             elif self.number == 33:  # Benazir Bhutto
-                if "Bhutto Shot" in app.markers:
-                    return False
-                if app.get_country("Pakistan").is_islamist_rule():
-                    return False
-                for country in app.get_country("Pakistan").links:
-                    if country.is_islamist_rule():
-                        return False
-                return True
+                raise Exception("Has subclass")
             elif self.number == 34:  # Enhanced Measures
                 if "Leak-Enhanced Measures" in app.markers or app.us_posture() == SOFT:
                     return False
@@ -526,13 +519,7 @@ class Card(object):
             elif self.number == 32:  # Back Channel
                 raise Exception("Has subclass")
             elif self.number == 33:  # Benazir Bhutto
-                app.markers.append("Benazir Bhutto")
-                app.output_to_history("Benazir Bhutto in Play.", False)
-                if app.get_country("Pakistan").is_poor():
-                    app.get_country("Pakistan").make_fair()
-                    app.output_to_history("Pakistan now Fair governance.", False)
-                app.output_to_history("No Jihads in Pakistan.", False)
-                app.output_to_history(app.get_country("Pakistan").summary(), True)
+                raise Exception("Has subclass")
             elif self.number == 34:  # Enhanced Measures
                 app.markers.append("Enhanced Measures")
                 app.output_to_history("Enhanced Measures in Play.", False)
