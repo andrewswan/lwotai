@@ -41,7 +41,7 @@ class Card(object):
             elif self.number == 12:  # Al-Azhar
                 raise Exception("Has subclass")
             elif self.number == 13:  # Anbar Awakening
-                return (app.get_country("Iraq").troops() > 0) or (app.get_country("Syria").troops() > 0)
+                raise Exception("Has subclass")
             elif self.number == 14:  # Covert Action
                 return app.contains_country(lambda c: c.is_adversary())
             elif self.number == 15:  # Ethiopia Strikes
@@ -505,27 +505,7 @@ class Card(object):
             elif self.number == 12:  # Al-Azhar
                 raise Exception("Has subclass")
             elif self.number == 13:  # Anbar Awakening
-                if (app.get_country("Iraq").troops() > 0) or (app.get_country("Syria").troops() > 0):
-                    app.markers.append("Anbar Awakening")
-                    app.output_to_history("Anbar Awakening in play.", False)
-                    if app.get_country("Iraq").troops() == 0:
-                        app.get_country("Syria").add_aid(1)  # 20150131PS changed to add rather than set to 1
-                        app.output_to_history("Aid in Syria.", False)
-                    elif app.get_country("Syria").troops() == 0:
-                        app.get_country("Iraq").add_aid(1)  # 20150131PS changed to add rather than set to 1
-                        app.output_to_history("Aid in Iraq.", False)
-                    else:
-                        print "There are troops in both Iraq and Syria."
-                        if app.get_yes_no_from_user("Do you want to add the Aid to Iraq? (y/n): "):
-                            app.get_country("Iraq").add_aid(1)
-                            app.output_to_history("Aid in Iraq.", False)
-                        else:
-                            app.get_country("Syria").add_aid(1)
-                            app.output_to_history("Aid in Syria.", False)
-                    app.change_prestige(1, False)
-                    print ""
-                else:
-                    return False
+                raise Exception("Has subclass")
             elif self.number == 14:  # Covert Action
                 adversary_names = [country.name for country in app.map.values() if country.is_adversary()]
                 target_country = None
