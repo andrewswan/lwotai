@@ -83,8 +83,7 @@ class Card(object):
             elif self.number == 35:  # Hajib
                 raise Exception("Has subclass")
             elif self.number == 36:  # Indo-Pakistani Talks
-                pakistan = app.get_country('Pakistan')
-                return pakistan.is_good() or pakistan.is_fair()
+                raise Exception("Has subclass")
             elif self.number == 37:  # Iraqi WMD
                 return app.us().is_hard() and app.get_country("Iraq").is_adversary()
             elif self.number == 38:  # Libyan Deal
@@ -523,14 +522,7 @@ class Card(object):
             elif self.number == 35:  # Hajib
                 raise Exception("Has subclass")
             elif self.number == 36:  # Indo-Pakistani Talks
-                app.markers.append("Indo-Pakistani Talks")
-                app.output_to_history("Indo-Pakistani Talks in Play.", False)
-                app.get_country('Pakistan').make_ally()
-                app.output_to_history("Pakistan now Ally", False)
-                posture = app.get_posture_from_user("Select India's Posture (hard or soft): ")
-                app.set_posture("India", posture)
-                app.output_to_history(app.get_country("Pakistan").summary(), False)
-                app.output_to_history(app.get_country("India").summary(), True)
+                raise Exception("Has subclass")
             elif self.number == 37:  # Iraqi WMD
                 app.markers.append("Iraqi WMD")
                 app.output_to_history("Iraqi WMD in Play.", False)
