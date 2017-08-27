@@ -65,7 +65,7 @@ class Card(object):
             elif self.number == 26:  # Quartet
                 raise Exception("Has subclass")
             elif self.number == 27:  # Saddam Captured
-                return app.get_country("Iraq").troops() > 0
+                raise Exception("Has subclass")
             elif self.number == 28:  # Sharia
                 return app.num_besieged() > 0
             elif self.number == 29:  # Tony Blair
@@ -526,13 +526,7 @@ class Card(object):
             elif self.number == 26:  # Quartet
                 raise Exception("Has subclass")
             elif self.number == 27:  # Saddam Captured
-                if app.get_country("Iraq").troops() == 0:
-                    return False
-                app.markers.append("Saddam Captured")
-                app.get_country("Iraq").add_aid(1)
-                app.output_to_history("Aid added in Iraq", False)
-                app.change_prestige(1)
-                app.output_to_history(app.get_country("Iraq").summary(), True)
+                raise Exception("Has subclass")
             elif self.number == 28:  # Sharia
                 num_besieged = app.num_besieged()
                 if num_besieged <= 0:
