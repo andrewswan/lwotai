@@ -55,7 +55,7 @@ class Card(object):
             elif self.number == 19:  # Kemalist Republic
                 raise Exception("Has subclass")
             elif self.number == 20:  # King Abdullah
-                return True
+                raise Exception("Has subclass")
             elif self.number == 21:  # Let's Roll
                 return app.contains_country(lambda c: c.plots > 0 and (c.is_ally() or c.is_good()))
             elif self.number == 22:  # Mossad and Shin Bet
@@ -523,12 +523,7 @@ class Card(object):
             elif self.number == 19:  # Kemalist Republic
                 raise Exception("Has subclass")
             elif self.number == 20:  # King Abdullah
-                app.output_to_history("Jordan now a Fair Ally.", False)
-                app.get_country("Jordan").make_fair()
-                app.get_country("Jordan").make_ally()
-                app.output_to_history(app.get_country("Jordan").summary(), True)
-                app.change_prestige(1)
-                app.change_funding(-1)
+                raise Exception("Has subclass")
             elif self.number == 21:  # Let's Roll
                 while True:
                     plot_country_name = app.get_country_from_user(
