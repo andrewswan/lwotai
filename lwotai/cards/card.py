@@ -67,7 +67,7 @@ class Card(object):
             elif self.number == 27:  # Saddam Captured
                 raise Exception("Has subclass")
             elif self.number == 28:  # Sharia
-                return app.num_besieged() > 0
+                raise Exception("Has subclass")
             elif self.number == 29:  # Tony Blair
                 return True
             elif self.number == 30:  # UN Nation Building
@@ -528,29 +528,7 @@ class Card(object):
             elif self.number == 27:  # Saddam Captured
                 raise Exception("Has subclass")
             elif self.number == 28:  # Sharia
-                num_besieged = app.num_besieged()
-                if num_besieged <= 0:
-                    return False
-                elif num_besieged == 1:
-                    target_country = app.find_countries(lambda c: c.is_besieged())[0]
-                else:
-                    while True:
-                        country_name = app.get_country_from_user(
-                            "Choose a country with a Besieged Regime marker to remove (? for list): ", "XXX",
-                            app.list_besieged_countries)
-                        if country_name == "":
-                            print ""
-                            return
-                        else:
-                            target_country = app.get_country(country_name)
-                            if not target_country.is_besieged():
-                                print "%s is not a Besieged Regime." % country_name
-                                print ""
-                            else:
-                                break
-                target_country.remove_besieged()
-                app.output_to_history("%s is no longer a Besieged Regime." % target_country.name, False)
-                app.output_to_history(target_country.summary())
+                raise Exception("Has subclass")
             elif self.number == 29:  # Tony Blair
                 app.set_posture("United Kingdom", app.us_posture())
                 app.output_to_history("United Kingdom posture now %s" % app.get_posture("United Kingdom"), False)
