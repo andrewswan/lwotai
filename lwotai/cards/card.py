@@ -73,13 +73,7 @@ class Card(object):
             elif self.number == 30:  # UN Nation Building
                 raise Exception("Has subclass")
             elif self.number == 31:  # Wiretapping
-                if "Leak-Wiretapping" in app.markers:
-                    return False
-                for country_name in ["United States", "United Kingdom", "Canada"]:
-                    country = app.get_country(country_name)
-                    if country.total_cells() > 0 or country.cadre > 0 or country.plots > 0:
-                        return True
-                return False
+                raise Exception("Has subclass")
             elif self.number == 32:  # Back Channel
                 if app.us().is_hard():
                     return False
@@ -534,34 +528,7 @@ class Card(object):
             elif self.number == 30:  # UN Nation Building
                 raise Exception("Has subclass")
             elif self.number == 31:  # Wiretapping
-                if "Leak-Wiretapping" in app.markers:
-                    return False
-                for country in ["United States", "United Kingdom", "Canada"]:
-                    if app.get_country(country).activeCells > 0:
-                        num = app.get_country(country).activeCells
-                        if num > 0:
-                            app.get_country(country).activeCells -= num
-                            app.cells += num
-                            app.output_to_history("%d Active Cell(s) removed from %s." % (num, country), False)
-                    if app.get_country(country).sleeperCells > 0:
-                        num = app.get_country(country).sleeperCells
-                        if num > 0:
-                            app.get_country(country).sleeperCells -= num
-                            app.cells += num
-                            app.output_to_history("%d Sleeper Cell(s) removed from %s." % (num, country), False)
-                    if app.get_country(country).cadre > 0:
-                        num = app.get_country(country).cadre
-                        if num > 0:
-                            app.get_country(country).cadre = 0
-                            app.output_to_history("Cadre removed from %s." % country, False)
-                    if app.get_country(country).plots > 0:
-                        num = app.get_country(country).plots
-                        if num > 0:
-                            app.get_country(country).plots -= num
-                            app.output_to_history("%d Plots remove(d) from %s." % (num, country), False)
-                app.markers.append("Wiretapping")
-                app.output_to_history("Draw a card.")
-                app.output_to_history("Wiretapping in Play.")
+                raise Exception("Has subclass")
             elif self.number == 32:  # Back Channel
                 if app.us().is_hard():
                     return False
