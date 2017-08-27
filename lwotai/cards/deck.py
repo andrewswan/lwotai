@@ -12,6 +12,7 @@ from lwotai.cards.card13 import Card13
 from lwotai.cards.card14 import Card14
 from lwotai.cards.card15 import Card15
 from lwotai.cards.card16 import Card16
+from lwotai.cards.card17 import Card17
 
 CARDS = [
     Card1(),
@@ -30,7 +31,7 @@ CARDS = [
     Card14(),
     Card15(),
     Card16(),
-    Card(17, "US", "FSB", 2, False, False, False),
+    Card17(),
     Card(18, "US", "Intel Community", 2, False, False, False),
     Card(19, "US", "Kemalist Republic", 2, False, False, False),
     Card(20, "US", "King Abdullah", 2, True, False, False),
