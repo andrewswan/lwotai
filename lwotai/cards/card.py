@@ -81,7 +81,7 @@ class Card(object):
             elif self.number == 34:  # Enhanced Measures
                 raise Exception("Has subclass")
             elif self.number == 35:  # Hajib
-                return app.num_islamist_rule() == 0
+                raise Exception("Has subclass")
             elif self.number == 36:  # Indo-Pakistani Talks
                 pakistan = app.get_country('Pakistan')
                 return pakistan.is_good() or pakistan.is_fair()
@@ -521,14 +521,7 @@ class Card(object):
             elif self.number == 34:  # Enhanced Measures
                 raise Exception("Has subclass")
             elif self.number == 35:  # Hajib
-                app.test_country("Turkey")
-                app.get_country("Turkey").improve_governance()
-                app.output_to_history("Turkey Governance now %s." % app.get_country("Turkey").governance_str(), False)
-                app.change_funding(-2)
-                posture = app.get_posture_from_user("Select France's Posture (hard or soft): ")
-                app.set_posture("France", posture)
-                app.output_to_history(app.get_country("Turkey").summary(), False)
-                app.output_to_history(app.get_country("France").summary(), True)
+                raise Exception("Has subclass")
             elif self.number == 36:  # Indo-Pakistani Talks
                 app.markers.append("Indo-Pakistani Talks")
                 app.output_to_history("Indo-Pakistani Talks in Play.", False)
