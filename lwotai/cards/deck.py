@@ -30,6 +30,7 @@ from lwotai.cards.card38 import Card38
 from lwotai.cards.card39 import Card39
 from lwotai.cards.card4 import Card4
 from lwotai.cards.card40 import Card40
+from lwotai.cards.card41 import Card41
 from lwotai.cards.card5 import Card5
 from lwotai.cards.card6_7 import Card6and7
 from lwotai.cards.card8_9_10 import Card8and9and10
@@ -75,7 +76,7 @@ CARDS = [
     Card38(),
     Card39(),
     Card40(),
-    Card(41, "US", "NATO", 3, False, True, False),
+    Card41(),
     Card(42, "US", "Pakistani Offensive", 3, False, False, False),
     Card(43, "US", "Patriot Act", 3, True, True, False),
     Card(44, "US", "Renditions", 3, False, True, False),

@@ -93,7 +93,7 @@ class Card(object):
             elif self.number == 40:  # Mass Turnout
                 raise Exception("Has subclass")
             elif self.number == 41:  # NATO
-                return not app.gwot_penalty() and app.num_regime_change() > 0
+                raise Exception("Has subclass")
             elif self.number == 42:  # Pakistani Offensive
                 return (app.get_country("Pakistan").is_ally()) and ("FATA" in app.get_country("Pakistan").markers)
             elif self.number == 43:  # Patriot Act
@@ -528,31 +528,7 @@ class Card(object):
             elif self.number == 40:  # Mass Turnout
                 raise Exception("Has subclass")
             elif self.number == 41:  # NATO
-                num_regime_change = app.num_regime_change()
-                if num_regime_change <= 0:
-                    return False
-                elif num_regime_change == 1:
-                    target_country = app.find_countries(lambda c: c.is_regime_change())[0]
-                else:
-                    while True:
-                        country_name = app.get_country_from_user(
-                            "Choose a Regime Change Country to land NATO troops (? for list): ", "XXX",
-                            app.list_regime_change_countries)
-                        if country_name == "":
-                            print ""
-                            return
-                        else:
-                            target_country = app.get_country(country_name)
-                            if target_country.is_regime_change():
-                                break
-                            else:
-                                print "%s is not a Regime Change country." % country_name
-                                print ""
-                target_country.markers.append("NATO")
-                app.output_to_history("NATO added in %s" % target_country.name, False)
-                target_country.add_aid(1)
-                app.output_to_history("Aid added in %s" % target_country.name, False)
-                app.output_to_history(target_country.summary())
+                raise Exception("Has subclass")
             elif self.number == 42:  # Pakistani Offensive
                 if "FATA" in app.get_country("Pakistan").markers:
                     app.get_country("Pakistan").markers.remove("FATA")
