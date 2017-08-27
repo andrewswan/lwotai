@@ -99,7 +99,7 @@ class Card(object):
             elif self.number == 43:  # Patriot Act
                 raise Exception("Has subclass")
             elif self.number == 44:  # Renditions
-                return app.us().is_hard() and "Leak-Renditions" not in app.markers
+                raise Exception("Has subclass")
             elif self.number == 45:  # Safer Now
                 if app.num_islamist_rule() > 0:
                     return False
@@ -534,12 +534,7 @@ class Card(object):
             elif self.number == 43:  # Patriot Act
                 raise Exception("Has subclass")
             elif self.number == 44:  # Renditions
-                app.markers.append("Renditions")
-                app.output_to_history("Renditions in Play.", False)
-                app.output_to_history("Discard a random card from the Jihadist hand.", False)
-                if app.num_disruptable() > 0:
-                    app.disrupt_cells_or_cadre()
-                app.output_to_history("", False)
+                raise Exception("Has subclass")
             elif self.number == 45:  # Safer Now
                 app.change_prestige(3)
                 posture_roll = app.get_roll("US Posture")
