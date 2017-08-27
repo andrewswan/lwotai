@@ -69,7 +69,7 @@ class Card(object):
             elif self.number == 28:  # Sharia
                 raise Exception("Has subclass")
             elif self.number == 29:  # Tony Blair
-                return True
+                raise Exception("Has subclass")
             elif self.number == 30:  # UN Nation Building
                 return app.num_regime_change() > 0 and "Vieira de Mello Slain" not in app.markers
             elif self.number == 31:  # Wiretapping
@@ -530,34 +530,7 @@ class Card(object):
             elif self.number == 28:  # Sharia
                 raise Exception("Has subclass")
             elif self.number == 29:  # Tony Blair
-                app.set_posture("United Kingdom", app.us_posture())
-                app.output_to_history("United Kingdom posture now %s" % app.get_posture("United Kingdom"), False)
-                print "You may roll War of Ideas in up to 3 Schengen countries."
-                for i in range(3):
-                    target_name = ""
-                    finished_picking = False
-                    while not target_name:
-                        country_name = app.get_country_from_user(
-                            "Choose Schengen country to make a WoI roll (done to stop rolling) (? for list)?: ", "done",
-                            app.list_schengen_countries)
-                        if country_name == "":
-                            print ""
-                            return
-                        elif country_name == "done":
-                            finished_picking = True
-                            break
-                        else:
-                            if not app.get_country(country_name).schengen:
-                                print "%s is not a Schengen country." % country_name
-                                print ""
-                                return
-                            else:
-                                target_name = country_name
-                                posture_roll = app.get_roll("posture")
-                                app.execute_non_muslim_woi(target_name, posture_roll)
-                    if finished_picking:
-                        break
-                app.output_to_history("", False)
+                raise Exception("Has subclass")
             elif self.number == 30:  # UN Nation Building
                 num_regime_change = app.num_regime_change()
                 if num_regime_change <= 0 or "Vieira de Mello Slain" in app.markers:
