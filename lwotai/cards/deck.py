@@ -1,11 +1,5 @@
 from lwotai.cards.card import Card
 from lwotai.cards.card1 import Card1
-from lwotai.cards.card2 import Card2
-from lwotai.cards.card3 import Card3
-from lwotai.cards.card4 import Card4
-from lwotai.cards.card5 import Card5
-from lwotai.cards.card6_7 import Card6and7
-from lwotai.cards.card8_9_10 import Card8and9and10
 from lwotai.cards.card11 import Card11
 from lwotai.cards.card12 import Card12
 from lwotai.cards.card13 import Card13
@@ -14,9 +8,16 @@ from lwotai.cards.card15 import Card15
 from lwotai.cards.card16 import Card16
 from lwotai.cards.card17 import Card17
 from lwotai.cards.card19 import Card19
+from lwotai.cards.card2 import Card2
 from lwotai.cards.card20 import Card20
 from lwotai.cards.card21 import Card21
 from lwotai.cards.card22 import Card22
+from lwotai.cards.card23_24_25 import Card23and24and25
+from lwotai.cards.card3 import Card3
+from lwotai.cards.card4 import Card4
+from lwotai.cards.card5 import Card5
+from lwotai.cards.card6_7 import Card6and7
+from lwotai.cards.card8_9_10 import Card8and9and10
 
 CARDS = [
     Card1(),
@@ -41,9 +42,9 @@ CARDS = [
     Card20(),
     Card21(),
     Card22(),
-    Card(23, "US", "Predator", 2, False, False, False),
-    Card(24, "US", "Predator", 2, False, False, False),
-    Card(25, "US", "Predator", 2, False, False, False),
+    Card23and24and25(23),
+    Card23and24and25(24),
+    Card23and24and25(25),
     Card(26, "US", "Quartet", 2, False, False, False),
     Card(27, "US", "Saddam Captured", 2, True, True, False),
     Card(28, "US", "Sharia", 2, False, False, False),

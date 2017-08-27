@@ -61,7 +61,7 @@ class Card(object):
             elif self.number == 22:  # Mossad and Shin Bet
                 raise Exception("Has subclass")
             elif self.number in [23, 24, 25]:  # Predator
-                return app.contains_country(lambda c: c.total_cells(True) > 0 and c.is_muslim())
+                raise Exception("Has subclass")
             elif self.number == 26:  # Quartet
                 if "Abbas" not in app.markers:
                     return False
@@ -526,28 +526,7 @@ class Card(object):
             elif self.number == 22:  # Mossad and Shin Bet
                 raise Exception("Has subclass")
             elif self.number in [23, 24, 25]:  # Predator
-                while True:
-                    country_name = app.get_country_from_user(
-                        "Choose non-Iran Muslim Country to remove a cell from (? for list): ", "XXX",
-                        app.list_muslim_countries_with_cells)
-                    if country_name == "":
-                        print ""
-                        return
-                    else:
-                        country = app.get_country(country_name)
-                        if country.total_cells(True) == 0:
-                            print "%s has no cells." % country_name
-                            print ""
-                        elif country.is_iran():
-                            print "Iran is not allowed."
-                            print ""
-                        elif country.is_non_muslim():
-                            print "Choose a Muslim country."
-                            print ""
-                        else:
-                            app.remove_cell(country.name, side)    # 20150131PS added side
-                            app.output_to_history(country.summary())
-                            break
+                raise Exception("Has subclass")
             elif self.number == 26:  # Quartet
                 if "Abbas" not in app.markers:
                     return False
