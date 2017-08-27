@@ -71,7 +71,7 @@ class Card(object):
             elif self.number == 29:  # Tony Blair
                 raise Exception("Has subclass")
             elif self.number == 30:  # UN Nation Building
-                return app.num_regime_change() > 0 and "Vieira de Mello Slain" not in app.markers
+                raise Exception("Has subclass")
             elif self.number == 31:  # Wiretapping
                 if "Leak-Wiretapping" in app.markers:
                     return False
@@ -532,34 +532,7 @@ class Card(object):
             elif self.number == 29:  # Tony Blair
                 raise Exception("Has subclass")
             elif self.number == 30:  # UN Nation Building
-                num_regime_change = app.num_regime_change()
-                if num_regime_change <= 0 or "Vieira de Mello Slain" in app.markers:
-                    return False
-                target_country = None
-                if num_regime_change == 1:
-                    for country in app.get_countries():
-                        if country.is_regime_change():
-                            target_country = country
-                            break
-                else:
-                    while True:
-                        country_name = app.get_country_from_user(
-                            "Choose a Regime Change country (? for list): ", "XXX", app.list_regime_change_countries)
-                        if country_name == "":
-                            print ""
-                            return
-                        else:
-                            target_country = app.get_country(country_name)
-                            if target_country.is_regime_change():
-                                break
-                            else:
-                                print "%s is not a Regime Change country." % country_name
-                                print ""
-                target_country.add_aid(1)
-                app.output_to_history("Aid added to %s." % target_country.name, False)
-                woi_roll = app.get_roll("WoI")
-                modified_woi_roll = app.modified_woi_roll(woi_roll, target_country.name, False)
-                app.handle_muslim_woi(modified_woi_roll, target_country.name)
+                raise Exception("Has subclass")
             elif self.number == 31:  # Wiretapping
                 if "Leak-Wiretapping" in app.markers:
                     return False

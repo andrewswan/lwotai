@@ -18,6 +18,7 @@ from lwotai.cards.card27 import Card27
 from lwotai.cards.card28 import Card28
 from lwotai.cards.card29 import Card29
 from lwotai.cards.card3 import Card3
+from lwotai.cards.card30 import Card30
 from lwotai.cards.card4 import Card4
 from lwotai.cards.card5 import Card5
 from lwotai.cards.card6_7 import Card6and7
@@ -53,7 +54,7 @@ CARDS = [
     Card27(),
     Card28(),
     Card29(),
-    Card(30, "US", "UN Nation Building", 2, False, False, False),
+    Card30(),
     Card(31, "US", "Wiretapping", 2, False, True, False),
     Card(32, "US", "Back Channel", 3, False, False, False),
     Card(33, "US", "Benazir Bhutto", 3, True, True, False),
