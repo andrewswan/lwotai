@@ -95,7 +95,7 @@ class Card(object):
             elif self.number == 41:  # NATO
                 raise Exception("Has subclass")
             elif self.number == 42:  # Pakistani Offensive
-                return (app.get_country("Pakistan").is_ally()) and ("FATA" in app.get_country("Pakistan").markers)
+                raise Exception("Has subclass")
             elif self.number == 43:  # Patriot Act
                 return True
             elif self.number == 44:  # Renditions
@@ -530,9 +530,7 @@ class Card(object):
             elif self.number == 41:  # NATO
                 raise Exception("Has subclass")
             elif self.number == 42:  # Pakistani Offensive
-                if "FATA" in app.get_country("Pakistan").markers:
-                    app.get_country("Pakistan").markers.remove("FATA")
-                    app.output_to_history("FATA removed from Pakistan", True)
+                raise Exception("Has subclass")
             elif self.number == 43:  # Patriot Act
                 app.markers.append("Patriot Act")
             elif self.number == 44:  # Renditions
