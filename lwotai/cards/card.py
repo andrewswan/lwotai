@@ -45,7 +45,7 @@ class Card(object):
             elif self.number == 14:  # Covert Action
                 raise Exception("Has subclass")
             elif self.number == 15:  # Ethiopia Strikes
-                return (app.get_country("Somalia").is_islamist_rule()) or (app.get_country("Sudan").is_islamist_rule())
+                raise Exception("Has subclass")
             elif self.number == 16:  # Euro-Islam
                 return True
             elif self.number == 17:  # FSB
@@ -509,32 +509,7 @@ class Card(object):
             elif self.number == 14:  # Covert Action
                 raise Exception("Has subclass")
             elif self.number == 15:  # Ethiopia Strikes
-                if (app.get_country("Somalia").is_islamist_rule()) or (app.get_country("Sudan").is_islamist_rule()):
-                    if not app.get_country("Somalia").is_islamist_rule():
-                        app.get_country("Sudan").make_poor()
-                        app.get_country("Sudan").make_neutral()
-                        app.output_to_history("Sudan now Poor Neutral.", False)
-                        app.output_to_history(app.get_country("Sudan").summary(), True)
-                    elif not app.get_country("Sudan").is_islamist_rule():
-                        app.get_country("Somalia").make_poor()
-                        app.get_country("Somalia").make_neutral()
-                        app.output_to_history("Somalia now Poor Neutral.", False)
-                        app.output_to_history(app.get_country("Somalia").summary(), True)
-                    else:
-                        print "Both Somalia and Sudan are under Islamist Rule."
-                        if app.get_yes_no_from_user("Do you want Somalia to be set to Poor Neutral? (y/n): "):
-                            app.get_country("Somalia").make_poor()
-                            app.get_country("Somalia").make_neutral()
-                            app.output_to_history("Somalia now Poor Neutral.", False)
-                            app.output_to_history(app.get_country("Somalia").summary(), True)
-                        else:
-                            app.get_country("Sudan").make_poor()
-                            app.get_country("Sudan").make_neutral()
-                            app.output_to_history("Sudan now Poor Neutral.", False)
-                            app.output_to_history(app.get_country("Sudan").summary(), True)
-                    print ""
-                else:
-                    return False
+                raise Exception("Has subclass")
             elif self.number == 16:  # Euro-Islam
                 posture = app.get_posture_from_user("Select Benelux's Posture (hard or soft): ")
                 app.execute_card_euro_islam(posture)
