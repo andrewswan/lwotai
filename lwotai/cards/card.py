@@ -79,9 +79,7 @@ class Card(object):
             elif self.number == 33:  # Benazir Bhutto
                 raise Exception("Has subclass")
             elif self.number == 34:  # Enhanced Measures
-                if "Leak-Enhanced Measures" in app.markers or app.us_posture() == SOFT:
-                    return False
-                return app.num_disruptable() > 0
+                raise Exception("Has subclass")
             elif self.number == 35:  # Hajib
                 return app.num_islamist_rule() == 0
             elif self.number == 36:  # Indo-Pakistani Talks
@@ -521,11 +519,7 @@ class Card(object):
             elif self.number == 33:  # Benazir Bhutto
                 raise Exception("Has subclass")
             elif self.number == 34:  # Enhanced Measures
-                app.markers.append("Enhanced Measures")
-                app.output_to_history("Enhanced Measures in Play.", False)
-                app.output_to_history("Take a random card from the Jihadist hand.", False)
-                app.disrupt_cells_or_cadre()
-                app.output_to_history("", False)
+                raise Exception("Has subclass")
             elif self.number == 35:  # Hajib
                 app.test_country("Turkey")
                 app.get_country("Turkey").improve_governance()
