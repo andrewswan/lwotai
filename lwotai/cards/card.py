@@ -89,8 +89,7 @@ class Card(object):
             elif self.number == 38:  # Libyan Deal
                 raise Exception("Has subclass")
             elif self.number == 39:  # Libyan WMD
-                return app.us().is_hard() and app.get_country("Libya").is_adversary() and\
-                       "Libyan Deal" not in app.markers
+                raise Exception("Has subclass")
             elif self.number == 40:  # Mass Turnout
                 return app.num_regime_change() > 0
             elif self.number == 41:  # NATO
@@ -525,9 +524,7 @@ class Card(object):
             elif self.number == 38:  # Libyan Deal
                 raise Exception("Has subclass")
             elif self.number == 39:  # Libyan WMD
-                app.markers.append("Libyan WMD")
-                app.output_to_history("Libyan WMD in Play.", False)
-                app.output_to_history("Use this or a later card for Regime Change in Libya at any Governance.", True)
+                raise Exception("Has subclass")
             elif self.number == 40:  # Mass Turnout
                 target_country = None
                 num_regime_change = app.num_regime_change()
