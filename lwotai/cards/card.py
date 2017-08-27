@@ -47,7 +47,7 @@ class Card(object):
             elif self.number == 15:  # Ethiopia Strikes
                 raise Exception("Has subclass")
             elif self.number == 16:  # Euro-Islam
-                return True
+                raise Exception("Has subclass")
             elif self.number == 17:  # FSB
                 return True
             elif self.number == 18:  # Intel Community
@@ -511,8 +511,7 @@ class Card(object):
             elif self.number == 15:  # Ethiopia Strikes
                 raise Exception("Has subclass")
             elif self.number == 16:  # Euro-Islam
-                posture = app.get_posture_from_user("Select Benelux's Posture (hard or soft): ")
-                app.execute_card_euro_islam(posture)
+                raise Exception("Has subclass")
             elif self.number == 17:  # FSB
                 app.output_to_history("Examine Jihadist hand for Loose Nukes, HEU, or Kazakh Strain.", False)
                 has_wmd_card = app.get_yes_no_from_user(

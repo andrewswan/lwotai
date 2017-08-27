@@ -1867,15 +1867,6 @@ class Labyrinth(object):
             if self.us().is_soft():
                 self.change_prestige(1)
 
-    def execute_card_euro_islam(self, new_posture):
-        self.get_country("Benelux").set_posture(new_posture)
-        if self.num_islamist_rule() == 0:
-            self.funding -= 1
-            if self.funding < 1:
-                self.funding = 1
-            self.output_to_history("Jihadist Funding now %d" % self.funding, False)
-        self.output_to_history(self.map.get("Benelux").summary(), True)
-
     def execute_card_lets_roll(self, plot_country, posture_country, new_posture):
         self.map.get(plot_country).plots = max(0, self.map.get(plot_country).plots - 1)
         self.output_to_history("Plot removed from %s." % plot_country, False)

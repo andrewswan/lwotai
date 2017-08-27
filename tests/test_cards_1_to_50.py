@@ -415,21 +415,32 @@ class Card16(LabyrinthTestCase):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         self.assertTrue(app.card(16).playable("US", app, True))
 
-    def test_event(self):
-        app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        app.execute_card_euro_islam(HARD)
-        self.assertTrue(app.get_country("Benelux").is_hard())
-        self.assertTrue(app.funding == 4)
-        app.get_country("Iraq").make_islamist_rule()
-        app.execute_card_euro_islam(SOFT)
-        self.assertTrue(app.get_country("Benelux").is_soft())
-        self.assertTrue(app.funding == 4)
+    def test_event_reduces_funding_by_one_if_no_islamist_rule(self):
+        # Set up
+        app = Labyrinth(1, 1, self.set_up_blank_test_scenario, test_user_input=["hard"])
+        app.get_country("Benelux").make_soft()
+        funding_before = app.funding
 
-        app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        app.funding = 1
-        app.execute_card_euro_islam(HARD)
+        # Invoke
+        app.card(16).play_event("US", app)
+
+        # Check
         self.assertTrue(app.get_country("Benelux").is_hard())
-        self.assertTrue(app.funding == 1)
+        self.assertEqual(app.funding, funding_before - 1)
+
+    def test_event_does_not_reduce_funding_if_any_islamist_rule(self):
+        # Set up
+        app = Labyrinth(1, 1, self.set_up_blank_test_scenario, test_user_input=["soft"])
+        app.get_country("Benelux").make_hard()
+        app.get_country("Iraq").make_islamist_rule()
+        funding_before = app.funding
+
+        # Invoke
+        app.card(16).play_event("US", app)
+
+        # Check
+        self.assertTrue(app.get_country("Benelux").is_soft())
+        self.assertEqual(app.funding, funding_before)
 
 
 class Card17(LabyrinthTestCase):
