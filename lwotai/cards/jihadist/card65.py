@@ -16,13 +16,10 @@ class Card65(JihadistCard):
         return central_asia.total_cells() > 0 and "CTR" not in central_asia.markers
 
     def play_event(self, _side, app):
-        possibles = []
-        russia = app.get_country("Russia")
-        if russia.total_cells() > 0 and "CTR" not in russia.markers:
-            possibles.append("Russia")
         central_asia = app.get_country("Central Asia")
-        if central_asia.total_cells() > 0 and "CTR" not in central_asia.markers:
-            possibles.append("Central Asia")
+        russia = app.get_country("Russia")
+        possibles = [country.name for country in [central_asia, russia] if
+                     country.total_cells() > 0 and "CTR" not in country.markers]
         target_name = random.choice(possibles)
         roll = random.randint(1, 6)
         app.execute_card_heu(target_name, roll)
