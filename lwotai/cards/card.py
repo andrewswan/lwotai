@@ -50,7 +50,7 @@ class Card(object):
             elif self.number == 81:  # Foreign Fighters
                 raise Exception("Has subclass")
             elif self.number == 82:  # Jihadist Videos
-                return True
+                raise Exception("Has subclass")
             elif self.number == 83:  # Kashmir
                 return "Indo-Pakistani Talks" not in app.markers
             elif self.number in [84, 85]:  # Leak
@@ -178,7 +178,7 @@ class Card(object):
         elif self.number == 81:  # Foreign Fighters
             raise Exception("Has subclass")
         elif self.number == 82:  # Jihadist Videos
-            return True
+            raise Exception("Has subclass")
         elif self.number == 83:  # Kashmir
             return True
         elif self.number == 84 or self.number == 85:  # Leak
@@ -289,13 +289,7 @@ class Card(object):
             elif self.number == 81:  # Foreign Fighters
                 raise Exception("Has subclass")
             elif self.number == 82:  # Jihadist Videos
-                possibles = app.find_countries(lambda c: c.total_cells() == 0)
-                random.shuffle(possibles)
-                for i in range(3):
-                    app.test_country(possibles[i].name)
-                    # number of available cells does not matter for Jihadist Videos
-                    rolls = [random.randint(1, 6)]
-                    app.execute_recruit(possibles[i].name, 1, rolls, False, True)
+                raise Exception("Has subclass")
             elif self.number == 83:  # Kashmir
                 app.place_cells("Pakistan", 1)
                 pakistan = app.get_country("Pakistan")
