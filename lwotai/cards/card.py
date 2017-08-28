@@ -31,11 +31,8 @@ class Card(object):
         elif self.type == "Jihadist" and side == "Jihadist":
             if "The door of Itjihad was closed" in app.lapsing and not ignore_itjihad:
                 return False
-            elif self.number <= 68:  # Jemaah Islamiya
+            elif self.number <= 69:  # Kazakh Strain
                 raise Exception("Has subclass")
-            elif self.number == 69:  # Kazakh Strain
-                central_asia = app.get_country("Central Asia")
-                return central_asia.total_cells() > 0 and "CTR" not in central_asia.markers
             elif self.number == 70:  # Lashkar-e-Tayyiba
                 return "Indo-Pakistani Talks" not in app.markers
             elif self.number == 71:  # Loose Nuke
@@ -172,10 +169,8 @@ class Card(object):
         """Indicates whether this card places a cell"""
         if self.type == "US":
             return False
-        elif self.number <= 68:  # Jemaah Islamiya
+        elif self.number <= 69:  # Kazakh Strain
             raise Exception("Has subclass")
-        elif self.number == 69:  # Kazakh Strain
-            return False
         elif self.number == 70:  # Lashkar-e-Tayyiba
             return True
         elif self.number == 71:  # Loose Nuke
@@ -290,11 +285,8 @@ class Card(object):
             else:
                 raise Exception("Invalid US card %d", self.number)
         elif self.type == "Jihadist" and side == "Jihadist":
-            if self.number <= 68:  # Jemaah Islamiya
+            if self.number <= 69:  # Kazakh Strain
                 raise Exception("Has subclass")
-            elif self.number == 69:  # Kazakh Strain
-                roll = random.randint(1, 6)
-                app.execute_card_heu("Central Asia", roll)
             elif self.number == 70:  # Lashkar-e-Tayyiba
                 app.place_cells("Pakistan", 1)
                 if app.cells > 0:
