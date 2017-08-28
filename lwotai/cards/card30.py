@@ -1,10 +1,10 @@
-from lwotai.cards.abstract_card import AbstractCard
+from lwotai.cards.us_card import USCard
 
 
-class Card30(AbstractCard):
+class Card30(USCard):
 
     def __init__(self):
-        super(Card30, self).__init__(30, "US", "UN Nation Building", 2, False, False, False)
+        super(Card30, self).__init__(30, "UN Nation Building", 2, False, False, False)
 
     def _really_playable(self, _side, app, _ignore_itjihad):
         return app.num_regime_change() > 0 and "Vieira de Mello Slain" not in app.markers

@@ -1,10 +1,10 @@
-from lwotai.cards.abstract_card import AbstractCard
+from lwotai.cards.us_card import USCard
 
 
-class Card31(AbstractCard):
+class Card31(USCard):
 
     def __init__(self):
-        super(Card31, self).__init__(31, "US", "Wiretapping", 2, False, True, False)
+        super(Card31, self).__init__(31, "Wiretapping", 2, False, True, False)
 
     def _really_playable(self, _side, app, _ignore_itjihad):
         if "Leak-Wiretapping" in app.markers:

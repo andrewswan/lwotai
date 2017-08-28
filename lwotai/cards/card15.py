@@ -1,10 +1,10 @@
-from lwotai.cards.abstract_card import AbstractCard
+from lwotai.cards.us_card import USCard
 
 
-class Card15(AbstractCard):
+class Card15(USCard):
 
     def __init__(self):
-        super(Card15, self).__init__(15, "US", "Ethiopia Strikes", 2, True, False, False)
+        super(Card15, self).__init__(15, "Ethiopia Strikes", 2, True, False, False)
 
     def _really_playable(self, _side, app, _ignore_itjihad):
         return app.get_country("Somalia").is_islamist_rule() or app.get_country("Sudan").is_islamist_rule()

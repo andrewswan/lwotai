@@ -1,10 +1,10 @@
-from lwotai.cards.abstract_card import AbstractCard
+from lwotai.cards.us_card import USCard
 
 
-class Card37(AbstractCard):
+class Card37(USCard):
 
     def __init__(self):
-        super(Card37, self).__init__(37, "US", "Iraqi WMD", 3, True, True, False)
+        super(Card37, self).__init__(37, "Iraqi WMD", 3, True, True, False)
 
     def _really_playable(self, _side, app, _ignore_itjihad):
         return app.us().is_hard() and app.get_country("Iraq").is_adversary()

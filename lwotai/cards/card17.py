@@ -1,10 +1,10 @@
-from lwotai.cards.abstract_card import AbstractCard
+from lwotai.cards.us_card import USCard
 
 
-class Card17(AbstractCard):
+class Card17(USCard):
 
     def __init__(self):
-        super(Card17, self).__init__(17, "US", "FSB", 2, False, False, False)
+        super(Card17, self).__init__(17, "FSB", 2, False, False, False)
 
     def play_event(self, side, app):
         app.output_to_history("Examine Jihadist hand for Loose Nukes, HEU, or Kazakh Strain.", False)

@@ -1,10 +1,10 @@
-from lwotai.cards.abstract_card import AbstractCard
+from lwotai.cards.us_card import USCard
 
 
-class Card23and24and25(AbstractCard):
+class Card23and24and25(USCard):
 
     def __init__(self, number):
-        super(Card23and24and25, self).__init__(number, "US", "Predator", 2, False, False, False)
+        super(Card23and24and25, self).__init__(number, "Predator", 2, False, False, False)
 
     def _really_playable(self, _side, app, _ignore_itjihad):
         return app.contains_country(lambda c: c.total_cells(True) > 0 and c.is_muslim())

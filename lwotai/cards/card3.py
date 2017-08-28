@@ -1,10 +1,10 @@
-from lwotai.cards.abstract_card import AbstractCard
+from lwotai.cards.us_card import USCard
 
 
-class Card3(AbstractCard):
+class Card3(USCard):
 
     def __init__(self):
-        super(Card3, self).__init__(3, "US", "CTR", 1, False, True, False)
+        super(Card3, self).__init__(3, "CTR", 1, False, True, False)
 
     def _really_playable(self, side, app, ignore_itjihad):
         return app.us().is_soft()

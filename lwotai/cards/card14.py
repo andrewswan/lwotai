@@ -1,10 +1,10 @@
-from lwotai.cards.abstract_card import AbstractCard
+from lwotai.cards.us_card import USCard
 
 
-class Card14(AbstractCard):
+class Card14(USCard):
 
     def __init__(self):
-        super(Card14, self).__init__(14, "US", "Covert Action", 2, False, False, False)
+        super(Card14, self).__init__(14, "Covert Action", 2, False, False, False)
 
     def _really_playable(self, _side, app, _ignore_itjihad):
         return app.contains_country(lambda c: c.is_adversary())

@@ -1,10 +1,10 @@
-from lwotai.cards.abstract_card import AbstractCard
+from lwotai.cards.us_card import USCard
 
 
-class Card11(AbstractCard):
+class Card11(USCard):
 
     def __init__(self):
-        super(Card11, self).__init__(11, "US", "Abbas", 2, True, True, False)
+        super(Card11, self).__init__(11, "Abbas", 2, True, True, False)
 
     def play_event(self, side, app):
         islamist_rule_adjacent_to_israel = \

@@ -1,10 +1,10 @@
-from lwotai.cards.abstract_card import AbstractCard
+from lwotai.cards.us_card import USCard
 
 
-class Card47(AbstractCard):
+class Card47(USCard):
 
     def __init__(self):
-        super(Card47, self).__init__(47, "US", "The door of Itjihad was closed", 3, False, False, True)
+        super(Card47, self).__init__(47, "The door of Itjihad was closed", 3, False, False, True)
 
     def play_event(self, side, app):
         app.lapsing.append("The door of Itjihad was closed")

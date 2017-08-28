@@ -1,10 +1,10 @@
-from lwotai.cards.abstract_card import AbstractCard
+from lwotai.cards.us_card import USCard
 
 
-class Card45(AbstractCard):
+class Card45(USCard):
 
     def __init__(self):
-        super(Card45, self).__init__(45, "US", "Safer Now", 3, False, False, False)
+        super(Card45, self).__init__(45, "Safer Now", 3, False, False, False)
 
     def _really_playable(self, _side, app, _ignore_itjihad):
         if app.num_islamist_rule() > 0:

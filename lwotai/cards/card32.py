@@ -1,10 +1,10 @@
-from lwotai.cards.abstract_card import AbstractCard
+from lwotai.cards.us_card import USCard
 
 
-class Card32(AbstractCard):
+class Card32(USCard):
 
     def __init__(self):
-        super(Card32, self).__init__(32, "US", "Back Channel", 3, False, False, False)
+        super(Card32, self).__init__(32, "Back Channel", 3, False, False, False)
 
     def _really_playable(self, _side, app, _ignore_itjihad):
         if app.us().is_hard() or not app.num_adversary():

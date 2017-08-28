@@ -1,10 +1,10 @@
-from lwotai.cards.abstract_card import AbstractCard
+from lwotai.cards.us_card import USCard
 
 
-class Card33(AbstractCard):
+class Card33(USCard):
 
     def __init__(self):
-        super(Card33, self).__init__(33, "US", "Benazir Bhutto", 3, True, True, False)
+        super(Card33, self).__init__(33, "Benazir Bhutto", 3, True, True, False)
 
     def _really_playable(self, _side, app, _ignore_itjihad):
         if "Bhutto Shot" in app.markers or app.get_country("Pakistan").is_islamist_rule():

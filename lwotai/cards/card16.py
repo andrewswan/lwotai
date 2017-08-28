@@ -1,10 +1,10 @@
-from lwotai.cards.abstract_card import AbstractCard
+from lwotai.cards.us_card import USCard
 
 
-class Card16(AbstractCard):
+class Card16(USCard):
 
     def __init__(self):
-        super(Card16, self).__init__(16, "US", "Euro-Islam", 2, True, False, False)
+        super(Card16, self).__init__(16, "Euro-Islam", 2, True, False, False)
 
     def play_event(self, side, app):
         benelux = app.get_country("Benelux")

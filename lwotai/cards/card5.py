@@ -1,10 +1,10 @@
-from lwotai.cards.abstract_card import AbstractCard
+from lwotai.cards.us_card import USCard
 
 
-class Card5(AbstractCard):
+class Card5(USCard):
 
     def __init__(self):
-        super(Card5, self).__init__(5, "US", "NEST", 1, True, True, False)
+        super(Card5, self).__init__(5, "NEST", 1, True, True, False)
 
     def play_event(self, side, app):
         app.markers.append("NEST")

@@ -1,10 +1,10 @@
-from lwotai.cards.abstract_card import AbstractCard
+from lwotai.cards.us_card import USCard
 
 
-class Card44(AbstractCard):
+class Card44(USCard):
 
     def __init__(self):
-        super(Card44, self).__init__(44, "US", "Renditions", 3, False, True, False)
+        super(Card44, self).__init__(44, "Renditions", 3, False, True, False)
 
     def _really_playable(self, _side, app, _ignore_itjihad):
         return app.us().is_hard() and "Leak-Renditions" not in app.markers

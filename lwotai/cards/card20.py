@@ -1,10 +1,10 @@
-from lwotai.cards.abstract_card import AbstractCard
+from lwotai.cards.us_card import USCard
 
 
-class Card20(AbstractCard):
+class Card20(USCard):
 
     def __init__(self):
-        super(Card20, self).__init__(20, "US", "King Abdullah", 2, True, False, False)
+        super(Card20, self).__init__(20, "King Abdullah", 2, True, False, False)
 
     def play_event(self, side, app):
         app.output_to_history("Jordan now a Fair Ally.", False)

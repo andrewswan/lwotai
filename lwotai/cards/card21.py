@@ -1,10 +1,10 @@
-from lwotai.cards.abstract_card import AbstractCard
+from lwotai.cards.us_card import USCard
 
 
-class Card21(AbstractCard):
+class Card21(USCard):
 
     def __init__(self):
-        super(Card21, self).__init__(21, "US", "Let's Roll", 2, False, False, False)
+        super(Card21, self).__init__(21, "Let's Roll", 2, False, False, False)
 
     def _really_playable(self, _side, app, _ignore_itjihad):
         return app.contains_country(lambda c: c.plots > 0 and (c.is_ally() or c.is_good()))

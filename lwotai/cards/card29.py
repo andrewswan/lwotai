@@ -1,10 +1,10 @@
-from lwotai.cards.abstract_card import AbstractCard
+from lwotai.cards.us_card import USCard
 
 
-class Card29(AbstractCard):
+class Card29(USCard):
 
     def __init__(self):
-        super(Card29, self).__init__(29, "US", "Tony Blair", 2, True, False, False)
+        super(Card29, self).__init__(29, "Tony Blair", 2, True, False, False)
 
     def play_event(self, side, app):
         app.set_posture("United Kingdom", app.us_posture())

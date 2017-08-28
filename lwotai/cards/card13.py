@@ -1,10 +1,10 @@
-from lwotai.cards.abstract_card import AbstractCard
+from lwotai.cards.us_card import USCard
 
 
-class Card13(AbstractCard):
+class Card13(USCard):
 
     def __init__(self):
-        super(Card13, self).__init__(13, "US", "Anbar Awakening", 2, False, True, False)
+        super(Card13, self).__init__(13, "Anbar Awakening", 2, False, True, False)
 
     def _really_playable(self, _side, app, _ignore_itjihad):
         return app.get_country("Iraq").troops() > 0 or app.get_country("Syria").troops() > 0

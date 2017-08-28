@@ -1,10 +1,10 @@
-from lwotai.cards.abstract_card import AbstractCard
+from lwotai.cards.us_card import USCard
 
 
-class Card34(AbstractCard):
+class Card34(USCard):
 
     def __init__(self):
-        super(Card34, self).__init__(34, "US", "Enhanced Measures", 3, False, True, False)
+        super(Card34, self).__init__(34, "Enhanced Measures", 3, False, True, False)
 
     def _really_playable(self, _side, app, _ignore_itjihad):
         if "Leak-Enhanced Measures" in app.markers or app.us().is_soft():

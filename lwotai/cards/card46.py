@@ -1,10 +1,10 @@
-from lwotai.cards.abstract_card import AbstractCard
+from lwotai.cards.us_card import USCard
 
 
-class Card46(AbstractCard):
+class Card46(USCard):
 
     def __init__(self):
-        super(Card46, self).__init__(46, "US", "Sistani", 3, False, False, False)
+        super(Card46, self).__init__(46, "Sistani", 3, False, False, False)
 
     def _really_playable(self, _side, app, _ignore_itjihad):
         for country in app.get_countries():

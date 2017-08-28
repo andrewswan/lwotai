@@ -1,10 +1,10 @@
-from lwotai.cards.abstract_card import AbstractCard
+from lwotai.cards.us_card import USCard
 
 
-class Card40(AbstractCard):
+class Card40(USCard):
 
     def __init__(self):
-        super(Card40, self).__init__(40, "US", "Mass Turnout", 3, False, False, False)
+        super(Card40, self).__init__(40, "Mass Turnout", 3, False, False, False)
 
     def _really_playable(self, _side, app, _ignore_itjihad):
         return app.num_regime_change() > 0

@@ -1,10 +1,10 @@
-from lwotai.cards.abstract_card import AbstractCard
+from lwotai.cards.us_card import USCard
 
 
-class Card41(AbstractCard):
+class Card41(USCard):
 
     def __init__(self):
-        super(Card41, self).__init__(41, "US", "NATO", 3, False, True, False)
+        super(Card41, self).__init__(41, "NATO", 3, False, True, False)
 
     def _really_playable(self, _side, app, _ignore_itjihad):
         return app.num_regime_change() > 0 and not app.gwot_penalty()

@@ -1,10 +1,10 @@
-from lwotai.cards.abstract_card import AbstractCard
+from lwotai.cards.us_card import USCard
 
 
-class Card28(AbstractCard):
+class Card28(USCard):
 
     def __init__(self):
-        super(Card28, self).__init__(28, "US", "Sharia", 2, False, False, False)
+        super(Card28, self).__init__(28, "Sharia", 2, False, False, False)
 
     def _really_playable(self, _side, app, _ignore_itjihad):
         return app.num_besieged() > 0

@@ -1,10 +1,10 @@
-from lwotai.cards.abstract_card import AbstractCard
+from lwotai.cards.us_card import USCard
 
 
-class Card26(AbstractCard):
+class Card26(USCard):
 
     def __init__(self):
-        super(Card26, self).__init__(26, "US", "Quartet", 2, False, False, False)
+        super(Card26, self).__init__(26, "Quartet", 2, False, False, False)
 
     def _really_playable(self, _side, app, _ignore_itjihad):
         return "Abbas" in app.markers and app.troops >= 5 and\
