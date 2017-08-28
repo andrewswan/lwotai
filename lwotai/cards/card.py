@@ -31,10 +31,8 @@ class Card(object):
         elif self.type == "Jihadist" and side == "Jihadist":
             if "The door of Itjihad was closed" in app.lapsing and not ignore_itjihad:
                 return False
-            elif self.number <= 66:  # Homegrown
+            elif self.number <= 67:  # Islamic Jihad Union
                 raise Exception("Has subclass")
-            elif self.number == 67:  # Islamic Jihad Union
-                return True
             elif self.number == 68:  # Jemaah Islamiya
                 return True
             elif self.number == 69:  # Kazakh Strain
@@ -176,10 +174,8 @@ class Card(object):
         """Indicates whether this card places a cell"""
         if self.type == "US":
             return False
-        elif self.number <= 66:  # Homegrown
+        elif self.number <= 67:  # Islamic Jihad Union
             raise Exception("Has subclass")
-        elif self.number == 67:  # Islamic Jihad Union
-            return True
         elif self.number == 68:  # Jemaah Islamiya
             return True
         elif self.number == 69:  # Kazakh Strain
@@ -298,12 +294,8 @@ class Card(object):
             else:
                 raise Exception("Invalid US card %d", self.number)
         elif self.type == "Jihadist" and side == "Jihadist":
-            if self.number <= 66:  # Homegrown
+            if self.number <= 67:  # Islamic Jihad Union
                 raise Exception("Has subclass")
-            elif self.number == 67:  # Islamic Jihad Union
-                app.place_cells("Central Asia", 1)
-                if app.cells > 0:
-                    app.place_cells("Afghanistan", 1)
             elif self.number == 68:  # Jemaah Islamiya
                 app.place_cells("Indonesia/Malaysia", 2)
             elif self.number == 69:  # Kazakh Strain
