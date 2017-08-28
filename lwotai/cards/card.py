@@ -112,9 +112,7 @@ class Card(object):
             if "The door of Itjihad was closed" in app.lapsing and not ignore_itjihad:
                 return False
             if self.number == 48:  # Adam Gadahn
-                if app.num_cells_available() <= 0:
-                    return False
-                return app.get_yes_no_from_user("Is this the 1st card of the Jihadist Action Phase? (y/n): ")
+                raise Exception("Has subclass")
             elif self.number == 49:  # Al-Ittihad al-Islami
                 return True
             elif self.number == 50:  # Ansar al-Islam
@@ -537,14 +535,7 @@ class Card(object):
                 return False
         elif self.type == "Jihadist" and side == "Jihadist":
             if self.number == 48:  # Adam Gadahn
-                card_num = app.get_card_num_from_user(
-                    "Enter the number of the next Jihadist card or none if there are none left: ")
-                if card_num == "none":
-                    app.output_to_history("No cards left to recruit to US.", True)
-                    return
-                ops = app.deck.get(card_num).ops
-                rolls = app.randomizer.roll_d6(ops)
-                app.execute_recruit("United States", ops, rolls, 2)
+                raise Exception("Has subclass")
             elif self.number == 49:  # Al-Ittihad al-Islami
                 app.place_cells("Somalia", 1)
             elif self.number == 50:  # Ansar al-Islam
