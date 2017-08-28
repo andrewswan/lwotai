@@ -9,4 +9,6 @@ class JihadistCard(AbstractCard):
 
     def playable(self, side, app, ignore_itjihad):
         """Whether this card's event is playable by the given side"""
+        if side == "Jihadist" and "The door of Itjihad was closed" in app.lapsing and not ignore_itjihad:
+            return False
         return side != "US" and self._really_playable(side, app, ignore_itjihad)
