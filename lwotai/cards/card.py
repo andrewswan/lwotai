@@ -31,10 +31,8 @@ class Card(object):
         elif self.type == "Jihadist" and side == "Jihadist":
             if "The door of Itjihad was closed" in app.lapsing and not ignore_itjihad:
                 return False
-            elif self.number <= 63:  # Gaza War
+            elif self.number <= 64:  # Hariri Killed
                 raise Exception("Has subclass")
-            elif self.number == 64:  # Hariri Killed
-                return True
             elif self.number == 65:  # HEU
                 russia = app.get_country("Russia")
                 if russia.total_cells() > 0 and "CTR" not in russia.markers:
@@ -188,10 +186,8 @@ class Card(object):
         """Indicates whether this card places a cell"""
         if self.type == "US":
             return False
-        elif self.number <= 63:  # Gaza War
+        elif self.number <= 64:  # Hariri Killed
             raise Exception("Has subclass")
-        elif self.number == 64:  # Hariri Killed
-            return False
         elif self.number == 65:  # HEU
             return False
         elif self.number == 66:  # Homegrown
@@ -316,18 +312,8 @@ class Card(object):
             else:
                 raise Exception("Invalid US card %d", self.number)
         elif self.type == "Jihadist" and side == "Jihadist":
-            if self.number <= 63:  # Gaza War
+            if self.number <= 64:  # Hariri Killed
                 raise Exception("Has subclass")
-            elif self.number == 64:  # Hariri Killed
-                app.test_country("Lebanon")
-                app.test_country("Syria")
-                app.get_country("Syria").make_adversary()
-                app.output_to_history("Syria now Adversary.", False)
-                if app.get_country("Syria").governance_is_better_than(POOR):
-                    app.worsen_governance("Syria")
-                    app.output_to_history("Governance in Syria worsened.", False)
-                    app.output_to_history(app.get_country("Syria").summary(), True)
-                app.output_to_history(app.get_country("Lebanon").summary(), True)
             elif self.number == 65:  # HEU
                 possibles = []
                 if app.get_country("Russia").total_cells() > 0 and "CTR" not in app.get_country("Russia").markers:
