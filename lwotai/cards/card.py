@@ -46,7 +46,7 @@ class Card(object):
             elif self.number == 79:  # Clean Operatives
                 raise Exception("Has subclass")
             elif self.number == 80:  # FATA
-                return True
+                raise Exception("Has subclass")
             elif self.number == 81:  # Foreign Fighters
                 return app.num_regime_change() > 0
             elif self.number == 82:  # Jihadist Videos
@@ -174,7 +174,7 @@ class Card(object):
         elif self.number == 79:  # Clean Operatives
             raise Exception("Has subclass")
         elif self.number == 80:  # FATA
-            return True
+            raise Exception("Has subclass")
         elif self.number == 81:  # Foreign Fighters
             return True
         elif self.number == 82:  # Jihadist Videos
@@ -285,11 +285,7 @@ class Card(object):
             elif self.number == 79:  # Clean Operatives
                 raise Exception("Has subclass")
             elif self.number == 80:  # FATA
-                app.test_country("Pakistan")
-                if app.get_country("Pakistan").markers.count("FATA") == 0:
-                    app.get_country("Pakistan").markers.append("FATA")
-                    app.output_to_history("FATA marker added in Pakistan", True)
-                app.place_cells("Pakistan", 1)
+                raise Exception("Has subclass")
             elif self.number == 81:  # Foreign Fighters
                 possibles = app.find_countries(lambda c: c.is_regime_change())
                 if not possibles:
