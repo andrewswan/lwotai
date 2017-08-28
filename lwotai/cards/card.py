@@ -130,7 +130,7 @@ class Card(object):
             elif self.number == 56:  # Vieira de Mello Slain
                 raise Exception("Has subclass")
             elif self.number == 57:  # Abu Sayyaf
-                return "Moro Talks" not in app.markers
+                raise Exception("Has subclass")
             elif self.number == 58:  # Al-Anbar
                 return "Anbar Awakening" not in app.markers
             elif self.number == 59:  # Amerithrax
@@ -317,7 +317,7 @@ class Card(object):
         elif self.number == 56:  # Vieira de Mello Slain
             raise Exception("Has subclass")
         elif self.number == 57:  # Abu Sayyaf
-            return True
+            raise Exception("Has subclass")
         elif self.number == 58:  # Al-Anbar
             return True
         elif self.number == 59:  # Amerithrax
@@ -553,8 +553,7 @@ class Card(object):
             elif self.number == 56:  # Vieira de Mello Slain
                 raise Exception("Has subclass")
             elif self.number == 57:  # Abu Sayyaf
-                app.place_cells("Philippines", 1)
-                app.markers.append("Abu Sayyaf")
+                raise Exception("Has subclass")
             elif self.number == 58:  # Al-Anbar
                 app.markers.append("Al-Anbar")
                 app.output_to_history("Al-Anbar in play.", True)
