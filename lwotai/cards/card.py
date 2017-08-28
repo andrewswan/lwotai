@@ -40,9 +40,7 @@ class Card(object):
             elif self.number == 76:  # Abu Ghurayb
                 raise Exception("Has subclass")
             elif self.number == 77:  # Al Jazeera
-                if app.get_country("Saudi Arabia").troops() > 0:
-                    return True
-                return app.contains_country(lambda c: app.is_adjacent("Saudi Arabia", c.name) and c.troops() > 0)
+                raise Exception("Has subclass")
             elif self.number == 78:  # Axis of Evil
                 return True
             elif self.number == 79:  # Clean Operatives
@@ -170,7 +168,7 @@ class Card(object):
         elif self.number == 76:  # Abu Ghurayb
             raise Exception("Has subclass")
         elif self.number == 77:  # Al Jazeera
-            return False
+            raise Exception("Has subclass")
         elif self.number == 78:  # Axis of Evil
             return False
         elif self.number == 79:  # Clean Operatives
@@ -281,16 +279,7 @@ class Card(object):
             elif self.number == 76:  # Abu Ghurayb
                 raise Exception("Has subclass")
             elif self.number == 77:  # Al Jazeera
-                choices = app.minor_jihad_in_good_fair_choice(1, False, True)
-                if not choices:
-                    app.output_to_history("No countries to shift.", True)
-                else:
-                    target = app.get_country(choices[0][0])
-                    if target.is_ally():
-                        target.make_neutral()
-                    elif target.is_neutral():
-                        target.make_adversary()
-                    app.output_to_history("%s Alignment shifted to %s." % (target.name, target.alignment()))
+                raise Exception("Has subclass")
             elif self.number == 78:  # Axis of Evil
                 app.output_to_history("US discards any Iran, Hizballah, or Jaysh al-Mahdi cards from hand.", False)
                 if app.us().is_soft():
