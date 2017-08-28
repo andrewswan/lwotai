@@ -31,16 +31,8 @@ class Card(object):
         elif self.type == "Jihadist" and side == "Jihadist":
             if "The door of Itjihad was closed" in app.lapsing and not ignore_itjihad:
                 return False
-            elif self.number <= 64:  # Hariri Killed
+            elif self.number <= 65:  # HEU
                 raise Exception("Has subclass")
-            elif self.number == 65:  # HEU
-                russia = app.get_country("Russia")
-                if russia.total_cells() > 0 and "CTR" not in russia.markers:
-                    return True
-                central_asia = app.get_country("Central Asia")
-                if central_asia.total_cells() > 0 and "CTR" not in central_asia.markers:
-                    return True
-                return False
             elif self.number == 66:  # Homegrown
                 return True
             elif self.number == 67:  # Islamic Jihad Union
@@ -186,10 +178,8 @@ class Card(object):
         """Indicates whether this card places a cell"""
         if self.type == "US":
             return False
-        elif self.number <= 64:  # Hariri Killed
+        elif self.number <= 65:  # HEU
             raise Exception("Has subclass")
-        elif self.number == 65:  # HEU
-            return False
         elif self.number == 66:  # Homegrown
             return True
         elif self.number == 67:  # Islamic Jihad Union
@@ -312,18 +302,8 @@ class Card(object):
             else:
                 raise Exception("Invalid US card %d", self.number)
         elif self.type == "Jihadist" and side == "Jihadist":
-            if self.number <= 64:  # Hariri Killed
+            if self.number <= 65:  # HEU
                 raise Exception("Has subclass")
-            elif self.number == 65:  # HEU
-                possibles = []
-                if app.get_country("Russia").total_cells() > 0 and "CTR" not in app.get_country("Russia").markers:
-                    possibles.append("Russia")
-                central_asia = app.get_country("Central Asia")
-                if central_asia.total_cells() > 0 and "CTR" not in central_asia.markers:
-                    possibles.append("Central Asia")
-                target_name = random.choice(possibles)
-                roll = random.randint(1, 6)
-                app.execute_card_heu(target_name, roll)
             elif self.number == 66:  # Homegrown
                 app.place_cells("United Kingdom", 1)
             elif self.number == 67:  # Islamic Jihad Union
