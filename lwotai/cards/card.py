@@ -122,7 +122,7 @@ class Card(object):
             elif self.number == 52:  # IDEs
                 raise Exception("Has subclass")
             elif self.number == 53:  # Madrassas
-                return app.get_yes_no_from_user("Is this the 1st card of the Jihadist Action Phase? (y/n): ")
+                raise Exception("Has subclass")
             elif self.number == 54:  # Moqtada al-Sadr
                 return app.get_country("Iraq").troops() > 0
             elif self.number == 55:  # Uyghur Jihad
@@ -309,7 +309,7 @@ class Card(object):
         elif self.number == 52:  # IDEs
             raise Exception("Has subclass")
         elif self.number == 53:  # Madrassas
-            return True
+            raise Exception("Has subclass")
         elif self.number == 54:  # Moqtada al-Sadr
             return False
         elif self.number == 55:  # Uyghur Jihad
@@ -545,14 +545,7 @@ class Card(object):
             elif self.number == 52:  # IDEs
                 raise Exception("Has subclass")
             elif self.number == 53:  # Madrassas
-                app.handle_recruit(1, True)
-                card_num = app.get_card_num_from_user(
-                    "Enter the number of the next Jihadist card or none if there are none left: ")
-                if card_num == "none":
-                    app.output_to_history("No cards left to recruit.", True)
-                    return
-                ops = app.deck.get(card_num).ops
-                app.handle_recruit(ops, True)
+                raise Exception("Has subclass")
             elif self.number == 54:  # Moqtada al-Sadr
                 app.get_country("Iraq").markers.append("Sadr")
                 app.output_to_history("Sadr Marker added in Iraq", True)
