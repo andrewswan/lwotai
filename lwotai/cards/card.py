@@ -38,7 +38,7 @@ class Card(object):
             elif self.number == 75:  # Schroeder & Chirac
                 raise Exception("Has subclass")
             elif self.number == 76:  # Abu Ghurayb
-                return app.contains_country(lambda c: c.is_regime_change() and c.total_cells(True) > 0)
+                raise Exception("Has subclass")
             elif self.number == 77:  # Al Jazeera
                 if app.get_country("Saudi Arabia").troops() > 0:
                     return True
@@ -168,7 +168,7 @@ class Card(object):
         elif self.number == 75:  # Schroeder & Chirac
             raise Exception("Has subclass")
         elif self.number == 76:  # Abu Ghurayb
-            return False
+            raise Exception("Has subclass")
         elif self.number == 77:  # Al Jazeera
             return False
         elif self.number == 78:  # Axis of Evil
@@ -279,15 +279,7 @@ class Card(object):
             elif self.number == 75:  # Schroeder & Chirac
                 raise Exception("Has subclass")
             elif self.number == 76:  # Abu Ghurayb
-                app.output_to_history("Draw 2 cards.", False)
-                app.change_prestige(-2)
-                allies = app.minor_jihad_in_good_fair_choice(1, True)
-                if not allies:
-                    app.output_to_history("No Allies to shift.", True)
-                else:
-                    target_name = allies[0][0]
-                    app.get_country(target_name).make_neutral()
-                    app.output_to_history("%s Alignment shifted to Neutral." % target_name, True)
+                raise Exception("Has subclass")
             elif self.number == 77:  # Al Jazeera
                 choices = app.minor_jihad_in_good_fair_choice(1, False, True)
                 if not choices:

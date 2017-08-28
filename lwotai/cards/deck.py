@@ -26,6 +26,7 @@ from lwotai.cards.jihadist.card71 import Card71
 from lwotai.cards.jihadist.card72 import Card72
 from lwotai.cards.jihadist.card73 import Card73
 from lwotai.cards.jihadist.card75 import Card75
+from lwotai.cards.jihadist.card76 import Card76
 from lwotai.cards.us.card1 import Card1
 from lwotai.cards.us.card11 import Card11
 from lwotai.cards.us.card12 import Card12
@@ -144,7 +145,7 @@ CARDS = [
     Card73(),
     Card(74, "Jihadist", "Schengen Visas", 2, False, False, False),
     Card75(),
-    Card(76, "Jihadist", "Abu Ghurayb", 3, True, False, False),
+    Card76(),
     Card(77, "Jihadist", "Al Jazeera", 3, False, False, False),
     Card(78, "Jihadist", "Axis of Evil", 3, False, False, False),
     Card(79, "Jihadist", "Clean Operatives", 3, False, False, False),
