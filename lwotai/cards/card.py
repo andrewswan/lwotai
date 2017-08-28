@@ -31,10 +31,8 @@ class Card(object):
         elif self.type == "Jihadist" and side == "Jihadist":
             if "The door of Itjihad was closed" in app.lapsing and not ignore_itjihad:
                 return False
-            elif self.number <= 58:  # Al-Anbar
+            elif self.number <= 59:  # Amerithrax
                 raise Exception("Has subclass")
-            elif self.number == 59:  # Amerithrax
-                return True
             elif self.number == 60:  # Bhutto Shot
                 return app.get_country("Pakistan").total_cells() > 0
             elif self.number == 61:  # Detainee Release
@@ -200,10 +198,8 @@ class Card(object):
         """Indicates whether this card places a cell"""
         if self.type == "US":
             return False
-        elif self.number <= 58:  # Al-Anbar
+        elif self.number <= 59:  # Amerithrax
             raise Exception("Has subclass")
-        elif self.number == 59:  # Amerithrax
-            return False
         elif self.number == 60:  # Bhutto Shot
             return False
         elif self.number == 61:  # Detainee Release
@@ -338,10 +334,8 @@ class Card(object):
             else:
                 raise Exception("Invalid US card %d", self.number)
         elif self.type == "Jihadist" and side == "Jihadist":
-            if self.number <= 58:  # Al-Anbar
+            if self.number <= 59:  # Amerithrax
                 raise Exception("Has subclass")
-            elif self.number == 59:  # Amerithrax
-                app.output_to_history("US side discards its highest-value US-associated event card, if it has any.")
             elif self.number == 60:  # Bhutto Shot
                 app.markers.append("Bhutto Shot")
                 app.output_to_history("Bhutto Shot in play.", True)
