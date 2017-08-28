@@ -52,7 +52,7 @@ class Card(object):
             elif self.number == 82:  # Jihadist Videos
                 raise Exception("Has subclass")
             elif self.number == 83:  # Kashmir
-                return "Indo-Pakistani Talks" not in app.markers
+                raise Exception("Has subclass")
             elif self.number in [84, 85]:  # Leak
                 return ("Enhanced Measures" in app.markers) or ("Renditions" in app.markers) or ("Wiretapping" in
                                                                                                  app.markers)
@@ -180,7 +180,7 @@ class Card(object):
         elif self.number == 82:  # Jihadist Videos
             raise Exception("Has subclass")
         elif self.number == 83:  # Kashmir
-            return True
+            raise Exception("Has subclass")
         elif self.number == 84 or self.number == 85:  # Leak
             return False
         elif self.number == 86:  # Lebanon War
@@ -291,14 +291,7 @@ class Card(object):
             elif self.number == 82:  # Jihadist Videos
                 raise Exception("Has subclass")
             elif self.number == 83:  # Kashmir
-                app.place_cells("Pakistan", 1)
-                pakistan = app.get_country("Pakistan")
-                if pakistan.is_ally():
-                    pakistan.make_neutral()
-                elif pakistan.is_neutral():
-                    pakistan.make_adversary()
-                app.output_to_history("%s Alignment shifted to %s." % ("Pakistan", pakistan.alignment()), True)
-                app.output_to_history(pakistan.summary(), True)
+                raise Exception("Has subclass")
             elif self.number == 84 or self.number == 85:  # Leak
                 possibles = []
                 if "Enhanced Measures" in app.markers:
