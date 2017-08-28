@@ -132,7 +132,7 @@ class Card(object):
             elif self.number == 57:  # Abu Sayyaf
                 raise Exception("Has subclass")
             elif self.number == 58:  # Al-Anbar
-                return "Anbar Awakening" not in app.markers
+                raise Exception("Has subclass")
             elif self.number == 59:  # Amerithrax
                 return True
             elif self.number == 60:  # Bhutto Shot
@@ -319,7 +319,7 @@ class Card(object):
         elif self.number == 57:  # Abu Sayyaf
             raise Exception("Has subclass")
         elif self.number == 58:  # Al-Anbar
-            return True
+            raise Exception("Has subclass")
         elif self.number == 59:  # Amerithrax
             return False
         elif self.number == 60:  # Bhutto Shot
@@ -555,11 +555,7 @@ class Card(object):
             elif self.number == 57:  # Abu Sayyaf
                 raise Exception("Has subclass")
             elif self.number == 58:  # Al-Anbar
-                app.markers.append("Al-Anbar")
-                app.output_to_history("Al-Anbar in play.", True)
-                app.test_country("Iraq")
-                if app.cells > 0:
-                    app.place_cell("Iraq")
+                raise Exception("Has subclass")
             elif self.number == 59:  # Amerithrax
                 app.output_to_history("US side discards its highest-value US-associated event card, if it has any.")
             elif self.number == 60:  # Bhutto Shot
