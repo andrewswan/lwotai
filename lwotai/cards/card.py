@@ -31,12 +31,8 @@ class Card(object):
         elif self.type == "Jihadist" and side == "Jihadist":
             if "The door of Itjihad was closed" in app.lapsing and not ignore_itjihad:
                 return False
-            elif self.number <= 60:  # Bhutto Shot
+            elif self.number <= 61:  # Detainee Release
                 raise Exception("Has subclass")
-            elif self.number == 61:  # Detainee Release
-                if "GTMO" in app.lapsing or "Renditions" in app.markers:
-                    return False
-                return app.get_yes_no_from_user("Did the US Disrupt during this or the last Action Phase? (y/n): ")
             elif self.number == 62:  # Ex-KGB
                 return True
             elif self.number == 63:  # Gaza War
@@ -196,10 +192,8 @@ class Card(object):
         """Indicates whether this card places a cell"""
         if self.type == "US":
             return False
-        elif self.number <= 60:  # Bhutto Shot
+        elif self.number <= 61:  # Detainee Release
             raise Exception("Has subclass")
-        elif self.number == 61:  # Detainee Release
-            return True
         elif self.number == 62:  # Ex-KGB
             return False
         elif self.number == 63:  # Gaza War
@@ -330,22 +324,8 @@ class Card(object):
             else:
                 raise Exception("Invalid US card %d", self.number)
         elif self.type == "Jihadist" and side == "Jihadist":
-            if self.number <= 60:  # Bhutto Shot
+            if self.number <= 61:  # Detainee Release
                 raise Exception("Has subclass")
-            elif self.number == 61:  # Detainee Release
-                if app.cells > 0:
-                    target_name = None
-                    while not target_name:
-                        country_name = app.get_country_from_user(
-                            "Choose a country where Disrupt occured this or last Action Phase: ", "XXX", None)
-                        if country_name == "":
-                            print ""
-                            return
-                        else:
-                            target_name = country_name
-                            break
-                    app.place_cell(target_name)
-                app.output_to_history("Draw a card for the Jihadist and put it on the top of their hand.", True)
             elif self.number == 62:  # Ex-KGB
                 if "CTR" in app.get_country("Russia").markers:
                     app.get_country("Russia").markers.remove("CTR")
