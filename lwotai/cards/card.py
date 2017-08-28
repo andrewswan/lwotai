@@ -120,7 +120,7 @@ class Card(object):
             elif self.number == 51:  # FREs
                 raise Exception("Has subclass")
             elif self.number == 52:  # IDEs
-                return app.contains_country(lambda c: c.is_regime_change() and c.total_cells(True) > 0)
+                raise Exception("Has subclass")
             elif self.number == 53:  # Madrassas
                 return app.get_yes_no_from_user("Is this the 1st card of the Jihadist Action Phase? (y/n): ")
             elif self.number == 54:  # Moqtada al-Sadr
@@ -307,7 +307,7 @@ class Card(object):
         elif self.number == 51:  # FREs
             raise Exception("Has subclass")
         elif self.number == 52:  # IDEs
-            return False
+            raise Exception("Has subclass")
         elif self.number == 53:  # Madrassas
             return True
         elif self.number == 54:  # Moqtada al-Sadr
@@ -543,7 +543,7 @@ class Card(object):
             elif self.number == 51:  # FREs
                 raise Exception("Has subclass")
             elif self.number == 52:  # IDEs
-                app.output_to_history("US randomly discards one card.", True)
+                raise Exception("Has subclass")
             elif self.number == 53:  # Madrassas
                 app.handle_recruit(1, True)
                 card_num = app.get_card_num_from_user(
