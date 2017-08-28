@@ -42,7 +42,7 @@ class Card(object):
             elif self.number == 77:  # Al Jazeera
                 raise Exception("Has subclass")
             elif self.number == 78:  # Axis of Evil
-                return True
+                raise Exception("Has subclass")
             elif self.number == 79:  # Clean Operatives
                 return True
             elif self.number == 80:  # FATA
@@ -170,7 +170,7 @@ class Card(object):
         elif self.number == 77:  # Al Jazeera
             raise Exception("Has subclass")
         elif self.number == 78:  # Axis of Evil
-            return False
+            raise Exception("Has subclass")
         elif self.number == 79:  # Clean Operatives
             return False
         elif self.number == 80:  # FATA
@@ -281,17 +281,7 @@ class Card(object):
             elif self.number == 77:  # Al Jazeera
                 raise Exception("Has subclass")
             elif self.number == 78:  # Axis of Evil
-                app.output_to_history("US discards any Iran, Hizballah, or Jaysh al-Mahdi cards from hand.", False)
-                if app.us().is_soft():
-                    app.us().make_hard()
-                    app.output_to_history("US Posture now Hard.", False)
-                prestige_rolls = []
-                for i in range(3):
-                    prestige_rolls.append(random.randint(1, 6))
-                prestige_multiplier = 1
-                if prestige_rolls[0] <= 4:
-                    prestige_multiplier = -1
-                app.change_prestige(min(prestige_rolls[1], prestige_rolls[2]) * prestige_multiplier)
+                raise Exception("Has subclass")
             elif self.number == 79:  # Clean Operatives
                 app.handle_travel(2, False, False, True)
             elif self.number == 80:  # FATA
