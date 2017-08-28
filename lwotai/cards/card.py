@@ -31,10 +31,8 @@ class Card(object):
         elif self.type == "Jihadist" and side == "Jihadist":
             if "The door of Itjihad was closed" in app.lapsing and not ignore_itjihad:
                 return False
-            elif self.number <= 59:  # Amerithrax
+            elif self.number <= 60:  # Bhutto Shot
                 raise Exception("Has subclass")
-            elif self.number == 60:  # Bhutto Shot
-                return app.get_country("Pakistan").total_cells() > 0
             elif self.number == 61:  # Detainee Release
                 if "GTMO" in app.lapsing or "Renditions" in app.markers:
                     return False
@@ -198,10 +196,8 @@ class Card(object):
         """Indicates whether this card places a cell"""
         if self.type == "US":
             return False
-        elif self.number <= 59:  # Amerithrax
+        elif self.number <= 60:  # Bhutto Shot
             raise Exception("Has subclass")
-        elif self.number == 60:  # Bhutto Shot
-            return False
         elif self.number == 61:  # Detainee Release
             return True
         elif self.number == 62:  # Ex-KGB
@@ -334,11 +330,8 @@ class Card(object):
             else:
                 raise Exception("Invalid US card %d", self.number)
         elif self.type == "Jihadist" and side == "Jihadist":
-            if self.number <= 59:  # Amerithrax
+            if self.number <= 60:  # Bhutto Shot
                 raise Exception("Has subclass")
-            elif self.number == 60:  # Bhutto Shot
-                app.markers.append("Bhutto Shot")
-                app.output_to_history("Bhutto Shot in play.", True)
             elif self.number == 61:  # Detainee Release
                 if app.cells > 0:
                     target_name = None
