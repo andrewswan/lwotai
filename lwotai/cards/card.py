@@ -31,10 +31,8 @@ class Card(object):
         elif self.type == "Jihadist" and side == "Jihadist":
             if "The door of Itjihad was closed" in app.lapsing and not ignore_itjihad:
                 return False
-            elif self.number <= 72:  # Opium
+            elif self.number <= 73:  # Pirates
                 raise Exception("Has subclass")
-            elif self.number == 73:  # Pirates
-                return app.get_country("Somalia").is_islamist_rule() or app.get_country("Yemen").is_islamist_rule()
             elif self.number == 74:  # Schengen Visas
                 return True
             elif self.number == 75:  # Schroeder & Chirac
@@ -163,10 +161,8 @@ class Card(object):
         """Indicates whether this card places a cell"""
         if self.type == "US":
             return False
-        elif self.number <= 72:  # Opium
+        elif self.number <= 73:  # Pirates
             raise Exception("Has subclass")
-        elif self.number == 73:  # Pirates
-            return False
         elif self.number == 74:  # Schengen Visas
             return False
         elif self.number == 75:  # Schroeder & Chirac
@@ -273,11 +269,8 @@ class Card(object):
             else:
                 raise Exception("Invalid US card %d", self.number)
         elif self.type == "Jihadist" and side == "Jihadist":
-            if self.number <= 72:  # Opium
+            if self.number <= 73:  # Pirates
                 raise Exception("Has subclass")
-            elif self.number == 73:  # Pirates
-                app.markers.append("Pirates")
-                app.output_to_history("Pirates in play.", False)
             elif self.number == 74:  # Schengen Visas
                 if app.cells == 15:
                     app.output_to_history("No cells to travel.", False)
