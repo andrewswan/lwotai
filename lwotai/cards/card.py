@@ -36,7 +36,7 @@ class Card(object):
             elif self.number == 74:  # Schengen Visas
                 return True
             elif self.number == 75:  # Schroeder & Chirac
-                return app.us().is_hard()
+                raise Exception("Has subclass")
             elif self.number == 76:  # Abu Ghurayb
                 return app.contains_country(lambda c: c.is_regime_change() and c.total_cells(True) > 0)
             elif self.number == 77:  # Al Jazeera
@@ -166,7 +166,7 @@ class Card(object):
         elif self.number == 74:  # Schengen Visas
             return False
         elif self.number == 75:  # Schroeder & Chirac
-            return False
+            raise Exception("Has subclass")
         elif self.number == 76:  # Abu Ghurayb
             return False
         elif self.number == 77:  # Al Jazeera
@@ -277,11 +277,7 @@ class Card(object):
                     return
                 app.handle_travel(2, False, True)
             elif self.number == 75:  # Schroeder & Chirac
-                app.set_posture("Germany", SOFT)
-                app.output_to_history("%s Posture now %s" % ("Germany", app.get_posture("Germany")), True)
-                app.set_posture("France", SOFT)
-                app.output_to_history("%s Posture now %s" % ("France", app.get_posture("France")), True)
-                app.change_prestige(-1)
+                raise Exception("Has subclass")
             elif self.number == 76:  # Abu Ghurayb
                 app.output_to_history("Draw 2 cards.", False)
                 app.change_prestige(-2)
