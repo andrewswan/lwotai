@@ -116,7 +116,7 @@ class Card(object):
             elif self.number == 49:  # Al-Ittihad al-Islami
                 raise Exception("Has subclass")
             elif self.number == 50:  # Ansar al-Islam
-                return app.get_country("Iraq").governance_is_worse_than(GOOD)
+                raise Exception("Has subclass")
             elif self.number == 51:  # FREs
                 return app.get_country("Iraq").troops() > 0
             elif self.number == 52:  # IDEs
@@ -303,7 +303,7 @@ class Card(object):
         elif self.number == 49:  # Al-Ittihad al-Islami
             raise Exception("Has subclass")
         elif self.number == 50:  # Ansar al-Islam
-            return True
+            raise Exception("Has subclass")
         elif self.number == 51:  # FREs
             return True
         elif self.number == 52:  # IDEs
@@ -539,9 +539,7 @@ class Card(object):
             elif self.number == 49:  # Al-Ittihad al-Islami
                 raise Exception("Has subclass")
             elif self.number == 50:  # Ansar al-Islam
-                possible = ["Iraq", "Iran"]
-                target_name = random.choice(possible)
-                app.place_cells(target_name, 1)
+                raise Exception("Has subclass")
             elif self.number == 51:  # FREs
                 if "Saddam Captured" in app.markers:
                     cells_to_move = 2
