@@ -105,7 +105,7 @@ class Card(object):
             elif self.number == 46:  # Sistani
                 raise Exception("Has subclass")
             elif self.number == 47:  # The door of Itjihad was closed
-                return True
+                raise Exception("Has subclass")
             else:
                 return False
         elif self.type == "Jihadist" and side == "Jihadist":
@@ -532,7 +532,7 @@ class Card(object):
             elif self.number == 46:  # Sistani
                 raise Exception("Has subclass")
             elif self.number == 47:  # The door of Itjihad was closed
-                app.lapsing.append("The door of Itjihad was closed")
+                raise Exception("Has subclass")
             else:
                 return False
         elif self.type == "Jihadist" and side == "Jihadist":
