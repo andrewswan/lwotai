@@ -5,6 +5,7 @@ from lwotai.cards.jihadist.card50 import Card50
 from lwotai.cards.jihadist.card51 import Card51
 from lwotai.cards.jihadist.card52 import Card52
 from lwotai.cards.jihadist.card53 import Card53
+from lwotai.cards.jihadist.card54 import Card54
 from lwotai.cards.us.card1 import Card1
 from lwotai.cards.us.card11 import Card11
 from lwotai.cards.us.card12 import Card12
@@ -101,7 +102,7 @@ CARDS = [
     Card51(),
     Card52(),
     Card53(),
-    Card(54, "Jihadist", "Moqtada al-Sadr", 1, True, True, False),
+    Card54(),
     Card(55, "Jihadist", "Uyghur Jihad", 1, True, False, False),
     Card(56, "Jihadist", "Vieira de Mello Slain", 1, True, True, False),
     Card(57, "Jihadist", "Abu Sayyaf", 2, True, True, False),

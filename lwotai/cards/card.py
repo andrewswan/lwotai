@@ -124,7 +124,7 @@ class Card(object):
             elif self.number == 53:  # Madrassas
                 raise Exception("Has subclass")
             elif self.number == 54:  # Moqtada al-Sadr
-                return app.get_country("Iraq").troops() > 0
+                raise Exception("Has subclass")
             elif self.number == 55:  # Uyghur Jihad
                 return True
             elif self.number == 56:  # Vieira de Mello Slain
@@ -311,7 +311,7 @@ class Card(object):
         elif self.number == 53:  # Madrassas
             raise Exception("Has subclass")
         elif self.number == 54:  # Moqtada al-Sadr
-            return False
+            raise Exception("Has subclass")
         elif self.number == 55:  # Uyghur Jihad
             return True
         elif self.number == 56:  # Vieira de Mello Slain
@@ -547,8 +547,7 @@ class Card(object):
             elif self.number == 53:  # Madrassas
                 raise Exception("Has subclass")
             elif self.number == 54:  # Moqtada al-Sadr
-                app.get_country("Iraq").markers.append("Sadr")
-                app.output_to_history("Sadr Marker added in Iraq", True)
+                raise Exception("Has subclass")
             elif self.number == 55:  # Uyghur Jihad
                 app.test_country("China")
                 if app.cells > 0:
