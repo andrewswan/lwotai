@@ -6,3 +6,7 @@ class JihadistCard(AbstractCard):
 
     def __init__(self, number, name, ops, remove, mark, lapsing, puts_cell):
         super(JihadistCard, self).__init__(number, "Jihadist", name, ops, remove, mark, lapsing, puts_cell)
+
+    def playable(self, side, app, ignore_itjihad):
+        """Whether this card's event is playable by the given side"""
+        return side != "US" and self._really_playable(side, app, ignore_itjihad)
