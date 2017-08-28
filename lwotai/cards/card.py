@@ -54,8 +54,7 @@ class Card(object):
             elif self.number == 83:  # Kashmir
                 raise Exception("Has subclass")
             elif self.number in [84, 85]:  # Leak
-                return ("Enhanced Measures" in app.markers) or ("Renditions" in app.markers) or ("Wiretapping" in
-                                                                                                 app.markers)
+                raise Exception("Has subclass")
             elif self.number == 86:  # Lebanon War
                 return True
             elif self.number in [87, 88, 89]:  # Martyrdom Operation
@@ -182,7 +181,7 @@ class Card(object):
         elif self.number == 83:  # Kashmir
             raise Exception("Has subclass")
         elif self.number == 84 or self.number == 85:  # Leak
-            return False
+            raise Exception("Has subclass")
         elif self.number == 86:  # Lebanon War
             return True
         elif self.number == 87 or self.number == 88 or self.number == 89:  # Martyrdom Operation
@@ -293,37 +292,7 @@ class Card(object):
             elif self.number == 83:  # Kashmir
                 raise Exception("Has subclass")
             elif self.number == 84 or self.number == 85:  # Leak
-                possibles = []
-                if "Enhanced Measures" in app.markers:
-                    possibles.append("Enhanced Measures")
-                if "Renditions" in app.markers:
-                    possibles.append("Renditions")
-                if "Wiretapping" in app.markers:
-                    possibles.append("Wiretapping")
-                target_name = random.choice(possibles)
-                app.markers.remove(target_name)
-                app.markers.append("Leak-"+target_name)
-                app.output_to_history("%s removed and can no longer be played." % target_name, False)
-                us_prestige_rolls = []
-                for _ in range(3):
-                    us_prestige_rolls.append(random.randint(1, 6))
-                posture_roll = random.randint(1, 6)
-                prestige_multiplier = 1
-                if us_prestige_rolls[0] <= 4:
-                    prestige_multiplier = -1
-                app.change_prestige(min(us_prestige_rolls[1], us_prestige_rolls[2]) * prestige_multiplier, False)
-                if posture_roll <= 4:
-                    app.us().make_soft()
-                else:
-                    app.us().make_hard()
-                app.output_to_history("US Posture now %s" % app.us_posture(), True)
-                allies = app.minor_jihad_in_good_fair_choice(1, True)
-                if not allies:
-                    app.output_to_history("No Allies to shift.", True)
-                else:
-                    target_name = allies[0][0]
-                    app.get_country(target_name).make_neutral()
-                    app.output_to_history("%s Alignment shifted to Neutral." % target_name, True)
+                raise Exception("Has subclass")
             elif self.number == 86:  # Lebanon War
                 app.output_to_history("US discards a random card.", False)
                 app.change_prestige(-1, False)
