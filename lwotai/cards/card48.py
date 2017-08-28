@@ -4,7 +4,7 @@ from lwotai.cards.abstract_card import AbstractCard
 class Card48(AbstractCard):
 
     def __init__(self):
-        super(Card48, self).__init__(48, "Jihadist", "Adam Gadahn", 1, False, False, False)
+        super(Card48, self).__init__(48, "Jihadist", "Adam Gadahn", 1, False, False, False, puts_cell=True)
 
     def _really_playable(self, _side, app, _ignore_itjihad):
         if app.num_cells_available() <= 0:

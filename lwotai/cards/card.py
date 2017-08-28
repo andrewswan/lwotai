@@ -299,7 +299,7 @@ class Card(object):
     def puts_cell(self):
         """Indicates whether this card places a cell"""
         if self.number == 48:  # Adam Gadahn
-            return True
+            raise Exception("Has subclass")
         elif self.number == 49:  # Al-Ittihad al-Islami
             return True
         elif self.number == 50:  # Ansar al-Islam
