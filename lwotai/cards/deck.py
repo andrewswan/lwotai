@@ -35,6 +35,7 @@ from lwotai.cards.card42 import Card42
 from lwotai.cards.card43 import Card43
 from lwotai.cards.card44 import Card44
 from lwotai.cards.card45 import Card45
+from lwotai.cards.card46 import Card46
 from lwotai.cards.card5 import Card5
 from lwotai.cards.card6_7 import Card6and7
 from lwotai.cards.card8_9_10 import Card8and9and10
@@ -85,7 +86,7 @@ CARDS = [
     Card43(),
     Card44(),
     Card45(),
-    Card(46, "US", "Sistani", 3, False, False, False),
+    Card46(),
     Card(47, "US", "The door of Itjihad was closed", 3, False, False, True),
     Card(48, "Jihadist", "Adam Gadahn", 1, False, False, False),
     Card(49, "Jihadist", "Al-Ittihad al-Islami", 1, True, False, False),
