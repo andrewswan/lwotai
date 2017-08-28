@@ -126,7 +126,7 @@ class Card(object):
             elif self.number == 54:  # Moqtada al-Sadr
                 raise Exception("Has subclass")
             elif self.number == 55:  # Uyghur Jihad
-                return True
+                raise Exception("Has subclass")
             elif self.number == 56:  # Vieira de Mello Slain
                 return app.contains_country(lambda c: c.is_regime_change() and c.total_cells() > 0)
             elif self.number == 57:  # Abu Sayyaf
@@ -313,7 +313,7 @@ class Card(object):
         elif self.number == 54:  # Moqtada al-Sadr
             raise Exception("Has subclass")
         elif self.number == 55:  # Uyghur Jihad
-            return True
+            raise Exception("Has subclass")
         elif self.number == 56:  # Vieira de Mello Slain
             return False
         elif self.number == 57:  # Abu Sayyaf
@@ -549,14 +549,7 @@ class Card(object):
             elif self.number == 54:  # Moqtada al-Sadr
                 raise Exception("Has subclass")
             elif self.number == 55:  # Uyghur Jihad
-                app.test_country("China")
-                if app.cells > 0:
-                    if app.get_posture("China") == SOFT:
-                        app.place_cell("China")
-                    else:
-                        app.place_cell("Central Asia")
-                else:
-                    app.output_to_history("No cells to place.", True)
+                raise Exception("Has subclass")
             elif self.number == 56:  # Vieira de Mello Slain
                 app.markers.append("Vieira de Mello Slain")
                 app.output_to_history("Vieira de Mello Slain in play.", False)

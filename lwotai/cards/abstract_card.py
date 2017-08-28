@@ -10,6 +10,7 @@ class AbstractCard(Card):
 
     def playable(self, side, app, ignore_itjihad):
         """Whether this card's event is playable by the given side"""
+        # Bypasses huge method in superclass
         if self.type == "US" and side == "Jihadist":
             return False
         elif self.type == "Jihadist" and side == "US":
@@ -18,7 +19,6 @@ class AbstractCard(Card):
 
     def _really_playable(self, _side, _app, _ignore_itjihad):
         """Indicates whether this card is playable, assuming the side is valid"""
-        # Bypass huge method in superclass
         return True
 
     def puts_cell(self):
