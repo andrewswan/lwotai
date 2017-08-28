@@ -44,7 +44,7 @@ class Card(object):
             elif self.number == 78:  # Axis of Evil
                 raise Exception("Has subclass")
             elif self.number == 79:  # Clean Operatives
-                return True
+                raise Exception("Has subclass")
             elif self.number == 80:  # FATA
                 return True
             elif self.number == 81:  # Foreign Fighters
@@ -172,7 +172,7 @@ class Card(object):
         elif self.number == 78:  # Axis of Evil
             raise Exception("Has subclass")
         elif self.number == 79:  # Clean Operatives
-            return False
+            raise Exception("Has subclass")
         elif self.number == 80:  # FATA
             return True
         elif self.number == 81:  # Foreign Fighters
@@ -283,7 +283,7 @@ class Card(object):
             elif self.number == 78:  # Axis of Evil
                 raise Exception("Has subclass")
             elif self.number == 79:  # Clean Operatives
-                app.handle_travel(2, False, False, True)
+                raise Exception("Has subclass")
             elif self.number == 80:  # FATA
                 app.test_country("Pakistan")
                 if app.get_country("Pakistan").markers.count("FATA") == 0:
