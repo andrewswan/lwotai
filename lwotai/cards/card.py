@@ -31,10 +31,8 @@ class Card(object):
         elif self.type == "Jihadist" and side == "Jihadist":
             if "The door of Itjihad was closed" in app.lapsing and not ignore_itjihad:
                 return False
-            elif self.number <= 62:  # Ex-KGB
+            elif self.number <= 63:  # Gaza War
                 raise Exception("Has subclass")
-            elif self.number == 63:  # Gaza War
-                return True
             elif self.number == 64:  # Hariri Killed
                 return True
             elif self.number == 65:  # HEU
@@ -190,10 +188,8 @@ class Card(object):
         """Indicates whether this card places a cell"""
         if self.type == "US":
             return False
-        elif self.number <= 62:  # Ex-KGB
+        elif self.number <= 63:  # Gaza War
             raise Exception("Has subclass")
-        elif self.number == 63:  # Gaza War
-            return False
         elif self.number == 64:  # Hariri Killed
             return False
         elif self.number == 65:  # HEU
@@ -320,12 +316,8 @@ class Card(object):
             else:
                 raise Exception("Invalid US card %d", self.number)
         elif self.type == "Jihadist" and side == "Jihadist":
-            if self.number <= 62:  # Ex-KGB
+            if self.number <= 63:  # Gaza War
                 raise Exception("Has subclass")
-            elif self.number == 63:  # Gaza War
-                app.change_funding(1)
-                app.change_prestige(-1)
-                app.output_to_history("US discards a random card.", True)
             elif self.number == 64:  # Hariri Killed
                 app.test_country("Lebanon")
                 app.test_country("Syria")
