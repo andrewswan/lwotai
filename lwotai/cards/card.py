@@ -48,7 +48,7 @@ class Card(object):
             elif self.number == 80:  # FATA
                 raise Exception("Has subclass")
             elif self.number == 81:  # Foreign Fighters
-                return app.num_regime_change() > 0
+                raise Exception("Has subclass")
             elif self.number == 82:  # Jihadist Videos
                 return True
             elif self.number == 83:  # Kashmir
@@ -176,7 +176,7 @@ class Card(object):
         elif self.number == 80:  # FATA
             raise Exception("Has subclass")
         elif self.number == 81:  # Foreign Fighters
-            return True
+            raise Exception("Has subclass")
         elif self.number == 82:  # Jihadist Videos
             return True
         elif self.number == 83:  # Kashmir
@@ -287,18 +287,7 @@ class Card(object):
             elif self.number == 80:  # FATA
                 raise Exception("Has subclass")
             elif self.number == 81:  # Foreign Fighters
-                possibles = app.find_countries(lambda c: c.is_regime_change())
-                if not possibles:
-                    return False
-                target = random.choice(possibles)
-                app.place_cells(target.name, 5)
-                if target.get_aid() > 0:
-                    target.reduce_aid_by(1)
-                    app.output_to_history("One Aid removed from %s" % target.name, False)
-                else:
-                    target.make_besieged()
-                    app.output_to_history("%s to Besieged Regime" % target.name, False)
-                app.output_to_history(target.summary())
+                raise Exception("Has subclass")
             elif self.number == 82:  # Jihadist Videos
                 possibles = app.find_countries(lambda c: c.total_cells() == 0)
                 random.shuffle(possibles)
