@@ -1,10 +1,10 @@
-from lwotai.cards.abstract_card import AbstractCard
+from cards.jihadist.jihadist_card import JihadistCard
 
 
-class Card48(AbstractCard):
+class Card48(JihadistCard):
 
     def __init__(self):
-        super(Card48, self).__init__(48, "Jihadist", "Adam Gadahn", 1, False, False, False, puts_cell=True)
+        super(Card48, self).__init__(48, "Adam Gadahn", 1, False, False, False, True)
 
     def _really_playable(self, _side, app, _ignore_itjihad):
         if app.num_cells_available() <= 0:

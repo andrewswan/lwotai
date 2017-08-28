@@ -37,10 +37,10 @@ from lwotai.cards.card44 import Card44
 from lwotai.cards.card45 import Card45
 from lwotai.cards.card46 import Card46
 from lwotai.cards.card47 import Card47
-from lwotai.cards.card48 import Card48
 from lwotai.cards.card5 import Card5
 from lwotai.cards.card6_7 import Card6and7
 from lwotai.cards.card8_9_10 import Card8and9and10
+from lwotai.cards.jihadist.card48 import Card48
 
 CARDS = [
     Card1(),
