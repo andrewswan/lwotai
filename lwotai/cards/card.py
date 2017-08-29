@@ -58,7 +58,7 @@ class Card(object):
             elif self.number == 86:  # Lebanon War
                 raise Exception("Has subclass")
             elif self.number in [87, 88, 89]:  # Martyrdom Operation
-                return app.contains_country(lambda c: not c.is_islamist_rule() and c.total_cells(True) > 0)
+                raise Exception("Has subclass")
             elif self.number == 90:  # Quagmire
                 valid_target = app.contains_country(lambda c: c.is_regime_change() and c.total_cells(True) > 0)
                 return valid_target and app.prestige < 7
@@ -185,7 +185,7 @@ class Card(object):
         elif self.number == 86:  # Lebanon War
             raise Exception("Has subclass")
         elif self.number == 87 or self.number == 88 or self.number == 89:  # Martyrdom Operation
-            return False
+            raise Exception("Has subclass")
         elif self.number == 90:  # Quagmire
             return False
         elif self.number == 91:  # Regional al-Qaeda
@@ -296,9 +296,7 @@ class Card(object):
             elif self.number == 86:  # Lebanon War
                 raise Exception("Has subclass")
             elif self.number in [87, 88, 89]:  # Martyrdom Operation
-                if app.execute_plot(1, False, [1], True) == 1:
-                    app.output_to_history("No plots could be placed.")
-                    app.handle_radicalization(app.card(self.number).ops)
+                raise Exception("Has subclass")
             elif self.number == 90:  # Quagmire
                 app.set_posture("United States", SOFT)
                 app.output_to_history("US Posture now Soft.", False)
