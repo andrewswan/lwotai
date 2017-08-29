@@ -81,7 +81,7 @@ class Card(object):
             elif self.number in [117, 118]:  # Oil Price Spike
                 raise Exception("Has subclass")
             elif self.number == 119:  # Saleh
-                return True
+                raise Exception("Has subclass")
             elif self.number == 120:  # US Election
                 return True
             return False
@@ -139,7 +139,7 @@ class Card(object):
         elif self.number == 117 or self.number == 118:  # Oil Price Spike
             raise Exception("Has subclass")
         elif self.number == 119:  # Saleh
-            return False
+            raise Exception("Has subclass")
         elif self.number == 120:  # US Election
             return False
         return False
@@ -215,26 +215,7 @@ class Card(object):
             elif self.number == 117 or self.number == 118:  # Oil Price Spike
                 raise Exception("Has subclass")
             elif self.number == 119:  # Saleh
-                app.test_country("Yemen")
-                if side == "US":
-                    if not app.get_country("Yemen").is_islamist_rule():
-                        if app.get_country("Yemen").is_adversary():
-                            app.get_country("Yemen").make_neutral()
-                        elif app.get_country("Yemen").is_neutral():
-                            app.get_country("Yemen").make_ally()
-                        app.output_to_history(
-                            "Yemen Alignment improved to %s." % app.get_country("Yemen").alignment(), False)
-                        app.get_country("Yemen").add_aid(1)
-                        app.output_to_history("Aid added to Yemen.", True)
-                else:
-                    if app.get_country("Yemen").is_ally():
-                        app.get_country("Yemen").make_neutral()
-                    elif app.get_country("Yemen").is_neutral():
-                        app.get_country("Yemen").make_adversary()
-                    app.output_to_history(
-                        "Yemen Alignment worsened to %s." % app.get_country("Yemen").alignment(), False)
-                    app.get_country("Yemen").make_besieged()
-                    app.output_to_history("Yemen now Besieged Regime.", True)
+                raise Exception("Has subclass")
             elif self.number == 120:  # US Election
                 app.execute_card_us_election(random.randint(1, 6))
         if self.remove:

@@ -60,6 +60,7 @@ from lwotai.cards.unassociated.card114 import Card114
 from lwotai.cards.unassociated.card115 import Card115
 from lwotai.cards.unassociated.card116 import Card116
 from lwotai.cards.unassociated.card117_118 import Card117and118
+from lwotai.cards.unassociated.card119 import Card119
 from lwotai.cards.unassociated.card96 import Card96
 from lwotai.cards.unassociated.card97 import Card97
 from lwotai.cards.unassociated.card98 import Card98
@@ -225,7 +226,7 @@ CARDS = [
     Card116(),
     Card117and118(117),
     Card117and118(118),
-    Card(119, "Unassociated", "Saleh", 3, False, False, False),
+    Card119(),
     Card(120, "Unassociated", "US Election", 3, False, False, False)
 ]
 
