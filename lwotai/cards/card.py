@@ -43,7 +43,7 @@ class Card(object):
             elif self.number == 97:  # Fatwa
                 raise Exception("Has subclass")
             elif self.number == 98:  # Gaza Withdrawl
-                return True
+                raise Exception("Has subclass")
             elif self.number == 99:  # HAMAS Elected
                 return True
             elif self.number == 100:  # His Ut-Tahrir
@@ -129,7 +129,7 @@ class Card(object):
         elif self.number == 97:  # Fatwa
             raise Exception("Has subclass")
         elif self.number == 98:  # Gaza Withdrawl
-            return True
+            raise Exception("Has subclass")
         elif self.number == 99:  # HAMAS Elected
             return False
         elif self.number == 100:  # His Ut-Tahrir
@@ -205,10 +205,7 @@ class Card(object):
             elif self.number == 97:  # Fatwa
                 raise Exception("Has subclass")
             elif self.number == 98:  # Gaza Withdrawl
-                if side == "US":
-                    app.change_funding(-1)
-                else:
-                    app.place_cells("Israel", 1)
+                raise Exception("Has subclass")
             elif self.number == 99:  # HAMAS Elected
                 app.output_to_history("US selects and discards one card.", False)
                 app.change_prestige(-1)
