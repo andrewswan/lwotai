@@ -16,15 +16,10 @@ class Card(object):
         elif self.type == "Jihadist" and side == "US":
             return False
         elif self.type == "US" and side == "US":
-            if self.number <= 47:  # The door of Itjihad was closed
-                raise Exception("Has subclass")
-            else:
-                raise Exception("Invalid US card %d" % self.number)
+            raise Exception("Has subclass")
         elif self.type == "Jihadist" and side == "Jihadist":
             if "The door of Itjihad was closed" in app.lapsing and not ignore_itjihad:
                 return False
-            elif self.number == 74:  # Schengen Visas
-                return True
             else:
                 raise Exception("Has subclass")
         else:  # Unassociated Events
@@ -38,8 +33,6 @@ class Card(object):
         """Indicates whether this card places a cell"""
         if self.type == "US":
             return False
-        elif self.number == 74:  # Schengen Visas
-            return False
         else:
             raise Exception("Has subclass")
 
@@ -52,13 +45,7 @@ class Card(object):
         elif self.type == "US" and side == "US":
             raise Exception("Has subclass")
         elif self.type == "Jihadist" and side == "Jihadist":
-            if self.number == 74:  # Schengen Visas
-                if app.cells == 15:
-                    app.output_to_history("No cells to travel.", False)
-                    return
-                app.handle_travel(2, False, True)
-            else:
-                raise Exception("Has subclass")
+            raise Exception("Has subclass")
         else:
             if self.number >= 96:  # Danish Cartoons
                 raise Exception("Has subclass")
