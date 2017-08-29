@@ -49,7 +49,7 @@ class Card(object):
             elif self.number == 100:  # His Ut-Tahrir
                 raise Exception("Has subclass")
             elif self.number == 101:  # Kosovo
-                return True
+                raise Exception("Has subclass")
             elif self.number == 102:  # Former Soviet Union    #20150312PS
                 return True
             elif self.number == 103:  # Hizballah
@@ -135,7 +135,7 @@ class Card(object):
         elif self.number == 100:  # His Ut-Tahrir
             raise Exception("Has subclass")
         elif self.number == 101:  # Kosovo
-            return False
+            raise Exception("Has subclass")
         elif self.number == 102:  # Former Soviet Union
             return False
         elif self.number == 103:  # Hizballah
@@ -211,14 +211,7 @@ class Card(object):
             elif self.number == 100:  # His Ut-Tahrir
                 raise Exception("Has subclass")
             elif self.number == 101:  # Kosovo
-                app.change_prestige(1)
-                app.test_country("Serbia")
-                serbia = app.get_country("Serbia")
-                if app.us().is_soft():
-                    serbia.make_hard()
-                else:
-                    serbia.make_soft()
-                app.output_to_history("Serbia Posture now %s." % app.get_posture("Serbia"), True)
+                raise Exception("Has subclass")
             elif self.number == 102:  # Former Soviet Union
                 test_roll = random.randint(1, 6)
                 if test_roll <= 4:
