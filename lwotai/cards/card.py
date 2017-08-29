@@ -65,8 +65,7 @@ class Card(object):
             elif self.number == 109:  # Tora Bora
                 raise Exception("Has subclass")
             elif self.number == 110:  # Zarqawi
-                return app.get_country("Iraq").troops() > 0 or app.get_country("Syria").troops() > 0 or \
-                    app.get_country("Lebanon").troops() > 0 or app.get_country("Jordan").troops() > 0
+                raise Exception("Has subclass")
             elif self.number == 111:  # Zawahiri
                 if side == "US":
                     if "FATA" in app.get_country("Pakistan").markers:
@@ -151,7 +150,7 @@ class Card(object):
         elif self.number == 109:  # Tora Bora
             raise Exception("Has subclass")
         elif self.number == 110:  # Zarqawi
-            return True
+            raise Exception("Has subclass")
         elif self.number == 111:  # Zawahiri
             return False
         elif self.number == 112:  # Bin Ladin
@@ -227,19 +226,7 @@ class Card(object):
             elif self.number == 109:  # Tora Bora
                 raise Exception("Has subclass")
             elif self.number == 110:  # Zarqawi
-                if side == "US":
-                    app.change_prestige(3)
-                    app.output_to_history("Remove card from game.", False)
-                else:
-                    possibles = []
-                    for country in ["Iraq", "Syria", "Lebanon", "Jordan"]:
-                        if app.get_country(country).troops() > 0:
-                            possibles.append(country)
-                    target_name = random.choice(possibles)
-                    app.place_cells(target_name, 3)
-                    app.get_country(target_name).plots += 1
-                    app.output_to_history("Add a Plot 2 to %s." % target_name, False)
-                    app.output_to_history(app.get_country(target_name).summary(), True)
+                raise Exception("Has subclass")
             elif self.number == 111:  # Zawahiri
                 if side == "US":
                     app.change_funding(-2)
