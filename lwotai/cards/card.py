@@ -56,7 +56,7 @@ class Card(object):
             elif self.number in [84, 85]:  # Leak
                 raise Exception("Has subclass")
             elif self.number == 86:  # Lebanon War
-                return True
+                raise Exception("Has subclass")
             elif self.number in [87, 88, 89]:  # Martyrdom Operation
                 return app.contains_country(lambda c: not c.is_islamist_rule() and c.total_cells(True) > 0)
             elif self.number == 90:  # Quagmire
@@ -183,7 +183,7 @@ class Card(object):
         elif self.number == 84 or self.number == 85:  # Leak
             raise Exception("Has subclass")
         elif self.number == 86:  # Lebanon War
-            return True
+            raise Exception("Has subclass")
         elif self.number == 87 or self.number == 88 or self.number == 89:  # Martyrdom Operation
             return False
         elif self.number == 90:  # Quagmire
@@ -294,11 +294,7 @@ class Card(object):
             elif self.number == 84 or self.number == 85:  # Leak
                 raise Exception("Has subclass")
             elif self.number == 86:  # Lebanon War
-                app.output_to_history("US discards a random card.", False)
-                app.change_prestige(-1, False)
-                possibles = app.find_countries(lambda c: c.is_shia_mix())
-                target = random.choice(possibles)
-                app.place_cells(target.name, 1)
+                raise Exception("Has subclass")
             elif self.number in [87, 88, 89]:  # Martyrdom Operation
                 if app.execute_plot(1, False, [1], True) == 1:
                     app.output_to_history("No plots could be placed.")
