@@ -51,7 +51,7 @@ class Card(object):
             elif self.number == 101:  # Kosovo
                 raise Exception("Has subclass")
             elif self.number == 102:  # Former Soviet Union    #20150312PS
-                return True
+                raise Exception("Has subclass")
             elif self.number == 103:  # Hizballah
                 return True
             elif self.number == 104 or self.number == 105:  # Iran
@@ -137,7 +137,7 @@ class Card(object):
         elif self.number == 101:  # Kosovo
             raise Exception("Has subclass")
         elif self.number == 102:  # Former Soviet Union
-            return False
+            raise Exception("Has subclass")
         elif self.number == 103:  # Hizballah
             return False
         elif self.number == 104 or self.number == 105:  # Iran
@@ -213,14 +213,7 @@ class Card(object):
             elif self.number == 101:  # Kosovo
                 raise Exception("Has subclass")
             elif self.number == 102:  # Former Soviet Union
-                test_roll = random.randint(1, 6)
-                if test_roll <= 4:
-                    app.get_country("Central Asia").make_poor()
-                else:
-                    app.get_country("Central Asia").make_fair()
-                app.get_country("Central Asia").make_neutral()
-                app.output_to_history("%s tested, governance %s" %
-                                      ("Central Asia", app.get_country("Central Asia").governance_str()), False)
+                raise Exception("Has subclass")
             elif self.number == 103:  # Hizballah
                 if side == "US":
                     one_away = []
