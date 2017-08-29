@@ -6,7 +6,7 @@ class Card103(UnassociatedCard):
     def __init__(self):
         super(Card103, self).__init__(103, "Hizballah", 2, False, False, False, False)
 
-    def play_event(self, side, app):
+    def do_play_event(self, side, app):
         if side == "US":
             one_away = []
             two_away = []

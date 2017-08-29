@@ -9,7 +9,7 @@ class Card107(UnassociatedCard):
     def __init__(self):
         super(Card107, self).__init__(107, "Kurdistan", 2, False, False, False, False)
 
-    def play_event(self, side, app):
+    def do_play_event(self, side, app):
         if side == "US":
             app.test_country("Iraq")
             app.get_country("Iraq").add_aid(1)

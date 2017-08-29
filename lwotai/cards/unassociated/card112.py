@@ -16,7 +16,7 @@ class Card112(UnassociatedCard):
         else:
             return True
 
-    def play_event(self, side, app):
+    def do_play_event(self, side, app):
         if side == "US":
             app.change_funding(-4)
             app.change_prestige(1)

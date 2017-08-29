@@ -1,17 +1,14 @@
-from lwotai.cards.abstract_card import AbstractCard
+from lwotai.cards.card import Card
 
 
-class USCard(AbstractCard):
+class USCard(Card):
     """A card with a US event"""
 
     def __init__(self, number, name, ops, remove, mark, lapsing):
-        super(USCard, self).__init__(number, "US", name, ops, remove, mark, lapsing, False)
+        super(USCard, self).__init__(number, "US", name, ops, remove, mark, lapsing)
 
-    def playable(self, side, app, ignore_itjihad):
-        return side != "Jihadist" and self._really_playable(side, app, ignore_itjihad)
-
-    def play_event(self, side, app):
-        super(USCard, self).play_event(side, app)
+    def do_play_event(self, _side, app):
+        """The event on US cards can be played only by the US player"""
         self.play_as_us(app)
 
     def play_as_us(self, app):

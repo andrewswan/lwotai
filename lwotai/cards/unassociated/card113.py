@@ -6,7 +6,7 @@ class Card113(UnassociatedCard):
     def __init__(self):
         super(Card113, self).__init__(113, "Darfur", 3, False, False, False, False)
 
-    def play_event(self, side, app):
+    def do_play_event(self, side, app):
         app.test_country("Sudan")
         sudan = app.get_country("Sudan")
         if app.prestige >= 7:

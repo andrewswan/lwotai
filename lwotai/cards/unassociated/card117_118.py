@@ -6,7 +6,7 @@ class Card117and118(UnassociatedCard):
     def __init__(self, number):
         super(Card117and118, self).__init__(number, "Oil Price Spike", 3, False, False, True, False)
 
-    def play_event(self, side, app):
+    def do_play_event(self, side, app):
         app.lapsing.append("Oil Price Spike")
         app.output_to_history(
             "Oil Price Spike in play. Add +1 to the resources of each Oil Exporter country for the turn.",

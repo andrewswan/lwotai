@@ -8,7 +8,7 @@ class Card114(UnassociatedCard):
     def __init__(self):
         super(Card114, self).__init__(114, "GTMO", 3, False, False, True, False)
 
-    def play_event(self, side, app):
+    def do_play_event(self, side, app):
         app.lapsing.append("GTMO")
         app.output_to_history("GTMO in play. No recruit operations or Detainee Release the rest of this turn.", False)
         prestige_rolls = []

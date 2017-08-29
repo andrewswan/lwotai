@@ -8,7 +8,7 @@ class Card96(UnassociatedCard):
     def __init__(self):
         super(Card96, self).__init__(96, "Danish Cartoons", 1, True, False, False, False)
 
-    def play_event(self, _side, app):
+    def do_play_event(self, _side, app):
         posture = app.get_posture_from_user("Select Scandinavia's Posture (hard or soft): ")
         app.set_posture("Scandinavia", posture)
         app.output_to_history("Scandinavia posture now %s." % posture, False)

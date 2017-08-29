@@ -11,7 +11,7 @@ class Card109(UnassociatedCard):
     def _really_playable(self, _side, app, _ignore_itjihad):
         return app.contains_country(lambda c: c.is_regime_change() and c.total_cells() >= 2)
 
-    def play_event(self, side, app):
+    def do_play_event(self, side, app):
         possibles = [c.name for c in app.get_countries() if c.is_regime_change() and c.total_cells() >= 2]
         target_name = None
         if len(possibles) == 0:

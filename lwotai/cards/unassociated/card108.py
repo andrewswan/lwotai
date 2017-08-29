@@ -11,7 +11,7 @@ class Card108(UnassociatedCard):
     def _really_playable(self, _side, app, _ignore_itjihad):
         return "Benazir Bhutto" not in app.markers and app.get_country("Pakistan").total_cells() > 0
 
-    def play_event(self, side, app):
+    def do_play_event(self, side, app):
         app.remove_cell("Pakistan", side)    # 20150131PS added side
         app.get_country("Pakistan").make_poor()
         app.get_country("Pakistan").make_ally()

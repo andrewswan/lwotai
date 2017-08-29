@@ -12,7 +12,7 @@ class Card110(UnassociatedCard):
         return app.get_country("Iraq").troops() > 0 or app.get_country("Syria").troops() > 0 or \
                app.get_country("Lebanon").troops() > 0 or app.get_country("Jordan").troops() > 0
 
-    def play_event(self, side, app):
+    def do_play_event(self, side, app):
         if side == "US":
             app.change_prestige(3)
             app.output_to_history("Remove card from game.", False)

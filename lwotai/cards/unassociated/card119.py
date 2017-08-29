@@ -6,7 +6,7 @@ class Card119(UnassociatedCard):
     def __init__(self):
         super(Card119, self).__init__(119, "Saleh", 3, False, False, False, False)
 
-    def play_event(self, side, app):
+    def do_play_event(self, side, app):
         app.test_country("Yemen")
         yemen = app.get_country("Yemen")
         if side == "US":

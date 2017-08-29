@@ -10,7 +10,7 @@ class Card106(UnassociatedCard):
     def _really_playable(self, _side, app, _ignore_itjihad):
         return app.contains_country(lambda c: c.is_shia_mix() and c.troops() > 0 and c.total_cells() > 0)
 
-    def play_event(self, side, app):
+    def do_play_event(self, side, app):
         if side == "US":
             target_name = None
             possibles = [country.name for country in app.map.countries() if

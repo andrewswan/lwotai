@@ -12,7 +12,7 @@ class Card116(UnassociatedCard):
         else:
             return True
 
-    def play_event(self, side, app):
+    def do_play_event(self, side, app):
         if side == "US":
             for country in app.get_countries():
                 if country.plots > 0:

@@ -22,7 +22,7 @@ class Card115(UnassociatedCard):
                     if country.is_ally():
                         return True
 
-    def play_event(self, side, app):
+    def do_play_event(self, side, app):
         if side == "US":
             possibles = ["Indonesia/Malaysia"]
             targets = []

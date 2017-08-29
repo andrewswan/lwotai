@@ -11,7 +11,7 @@ class Card97(UnassociatedCard):
     def _really_playable(self, _side, app, _ignore_itjihad):
         return app.get_yes_no_from_user("Do both sides have cards remaining beyond this one? (y/n): ")
 
-    def play_event(self, side, app):
+    def do_play_event(self, side, app):
         app.output_to_history("Trade random cards.", False)
         if side == "US":
             app.output_to_history("Conduct a 1-value operation (Use commands: alert, deploy, disrupt,"

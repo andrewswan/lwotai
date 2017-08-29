@@ -10,7 +10,7 @@ class Card104and105(UnassociatedCard):
     def __init__(self, number):
         super(Card104and105, self).__init__(number, "Iran", 2, False, False, False, False)
 
-    def play_event(self, side, app):
+    def do_play_event(self, side, app):
         if side == "US":
             target_name = None
             while not target_name:
