@@ -69,14 +69,7 @@ class Card(object):
             elif self.number == 111:  # Zawahiri
                 raise Exception("Has subclass")
             elif self.number == 112:  # Bin Ladin
-                if side == "US":
-                    if "FATA" in app.get_country("Pakistan").markers:
-                        return False
-                    if "Al-Anbar" in app.markers:
-                        return False
-                    return app.num_islamist_rule() == 0
-                else:
-                    return True
+                raise Exception("Has subclass")
             elif self.number == 113:  # Darfur
                 return True
             elif self.number == 114:  # GTMO
@@ -147,7 +140,7 @@ class Card(object):
         elif self.number == 111:  # Zawahiri
             raise Exception("Has subclass")
         elif self.number == 112:  # Bin Ladin
-            return False
+            raise Exception("Has subclass")
         elif self.number == 113:  # Darfur
             return False
         elif self.number == 114:  # GTMO
@@ -223,15 +216,7 @@ class Card(object):
             elif self.number == 111:  # Zawahiri
                 raise Exception("Has subclass")
             elif self.number == 112:  # Bin Ladin
-                if side == "US":
-                    app.change_funding(-4)
-                    app.change_prestige(1)
-                    app.output_to_history("Remove card from game.", False)
-                else:
-                    if app.num_islamist_rule() > 0:
-                        app.change_prestige(-4)
-                    else:
-                        app.change_prestige(-2)
+                raise Exception("Has subclass")
             elif self.number == 113:  # Darfur
                 app.test_country("Sudan")
                 if app.prestige >= 7:
