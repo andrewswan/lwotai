@@ -47,6 +47,7 @@ from lwotai.cards.unassociated.card100 import Card100
 from lwotai.cards.unassociated.card101 import Card101
 from lwotai.cards.unassociated.card102 import Card102
 from lwotai.cards.unassociated.card103 import Card103
+from lwotai.cards.unassociated.card104_105 import Card104and105
 from lwotai.cards.unassociated.card96 import Card96
 from lwotai.cards.unassociated.card97 import Card97
 from lwotai.cards.unassociated.card98 import Card98
@@ -197,8 +198,8 @@ CARDS = [
     Card101(),
     Card102(),
     Card103(),
-    Card(104, "Unassociated", "Iran", 2, False, False, False),
-    Card(105, "Unassociated", "Iran", 2, False, False, False),
+    Card104and105(104),
+    Card104and105(105),
     Card(106, "Unassociated", "Jaysh al-Mahdi", 2, False, False, False),
     Card(107, "Unassociated", "Kurdistan", 2, False, False, False),
     Card(108, "Unassociated", "Musharraf", 2, False, False, False),
