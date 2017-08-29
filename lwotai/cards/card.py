@@ -75,17 +75,7 @@ class Card(object):
             elif self.number == 114:  # GTMO
                 raise Exception("Has subclass")
             elif self.number == 115:  # Hambali
-                possibles = ["Indonesia/Malaysia"]
-                for country in app.get_country("Indonesia/Malaysia").links:
-                    possibles.append(country.name)
-                for country in possibles:
-                    if app.get_country(country).total_cells(True) > 0:
-                        if app.get_country(country).is_non_muslim():
-                            if app.get_country(country).is_hard():
-                                return True
-                        else:
-                            if app.get_country(country).is_ally():
-                                return True
+                raise Exception("Has subclass")
             elif self.number == 116:  # KSM
                 if side == "US":
                     return app.contains_country(lambda c: c.plots > 0 and (c.is_non_muslim() or c.is_ally()))
@@ -146,7 +136,7 @@ class Card(object):
         elif self.number == 114:  # GTMO
             raise Exception("Has subclass")
         elif self.number == 115:  # Hambali
-            return False
+            raise Exception("Has subclass")
         elif self.number == 116:  # KSM
             return False
         elif self.number == 117 or self.number == 118:  # Oil Price Spike
@@ -222,54 +212,7 @@ class Card(object):
             elif self.number == 114:  # GTMO
                 raise Exception("Has subclass")
             elif self.number == 115:  # Hambali
-                if side == "US":
-                    possibles = ["Indonesia/Malaysia"]
-                    targets = []
-                    target_name = None
-                    for countryObj in app.get_country("Indonesia/Malaysia").links:
-                        possibles.append(countryObj.name)
-                    for country in possibles:
-                        if app.get_country(country).total_cells(True) > 0:
-                            if app.get_country(country).is_non_muslim():
-                                if app.get_country(country).is_hard():
-                                    targets.append(country)
-                            else:
-                                if app.get_country(country).is_ally():
-                                    targets.append(country)
-                    if len(targets) == 1:
-                        target_name = targets[0]
-                    else:
-                        while not target_name:
-                            country_name = app.get_country_from_user("Choose Indonesia or an adjacent country that "
-                                                                     "has a cell and is Ally or Hard. (? for list)?: ",
-                                                                     "XXX", app.list_hambali)
-                            if country_name == "":
-                                print ""
-                            else:
-                                if country_name not in targets:
-                                    print "%s is not Indonesia or an adjacent country that has a cell and is Ally or" \
-                                          " Hard." % country_name
-                                    print ""
-                                else:
-                                    target_name = country_name
-                    app.remove_cell(target_name, side)    # 20150131PS added side
-                    app.output_to_history("US draw 2 cards.", False)
-                else:
-                    possibles = ["Indonesia/Malaysia"]
-                    targets = []
-                    for countryObj in app.get_country("Indonesia/Malaysia").links:
-                        possibles.append(countryObj.name)
-                    for country in possibles:
-                        if app.get_country(country).total_cells(True) > 0:
-                            if app.get_country(country).is_non_muslim():
-                                if app.get_country(country).is_hard():
-                                    targets.append(country)
-                            else:
-                                if app.get_country(country).is_ally():
-                                    targets.append(country)
-                    target_name = random.choice(targets)
-                    app.get_country(target_name).plots += 1
-                    app.output_to_history("Place an plot in %s." % target_name, True)
+                raise Exception("Has subclass")
             elif self.number == 116:  # KSM
                 if side == "US":
                     for country in app.get_countries():
