@@ -3123,7 +3123,7 @@ class Labyrinth(object):
                 plot_type = self.get_plot_type_from_user("Enter Plot type from %s: " % country_name)
                 print ""
                 is_backlash = False
-                if self.backlashInPlay and (self.map.get(country_name).type != 'Non-Muslim'):
+                if self.backlashInPlay and not self.map.get(country_name).is_non_muslim():
                     is_backlash = self.get_yes_no_from_user("Was this plot selected with backlash (y/n): ")
                 posture_roll = 0
                 us_prestige_rolls = []
