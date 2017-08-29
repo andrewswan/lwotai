@@ -1,9 +1,3 @@
-import random
-
-from lwotai.governance import POOR, ISLAMIST_RULE
-from lwotai.postures.posture import SOFT
-
-
 class Card(object):
     """A card in the game"""
 
@@ -38,51 +32,7 @@ class Card(object):
         else:  # Unassociated Events
             if side == "Jihadist" and "The door of Itjihad was closed" in app.lapsing and not ignore_itjihad:
                 return False
-            if self.number == 96:  # Danish Cartoons
-                raise Exception("Has subclass")
-            elif self.number == 97:  # Fatwa
-                raise Exception("Has subclass")
-            elif self.number == 98:  # Gaza Withdrawl
-                raise Exception("Has subclass")
-            elif self.number == 99:  # HAMAS Elected
-                raise Exception("Has subclass")
-            elif self.number == 100:  # His Ut-Tahrir
-                raise Exception("Has subclass")
-            elif self.number == 101:  # Kosovo
-                raise Exception("Has subclass")
-            elif self.number == 102:  # Former Soviet Union    #20150312PS
-                raise Exception("Has subclass")
-            elif self.number == 103:  # Hizballah
-                raise Exception("Has subclass")
-            elif self.number == 104 or self.number == 105:  # Iran
-                raise Exception("Has subclass")
-            elif self.number == 106:  # Jaysh al-Mahdi
-                raise Exception("Has subclass")
-            elif self.number == 107:  # Kurdistan
-                raise Exception("Has subclass")
-            elif self.number == 108:  # Musharraf
-                raise Exception("Has subclass")
-            elif self.number == 109:  # Tora Bora
-                raise Exception("Has subclass")
-            elif self.number == 110:  # Zarqawi
-                raise Exception("Has subclass")
-            elif self.number == 111:  # Zawahiri
-                raise Exception("Has subclass")
-            elif self.number == 112:  # Bin Ladin
-                raise Exception("Has subclass")
-            elif self.number == 113:  # Darfur
-                raise Exception("Has subclass")
-            elif self.number == 114:  # GTMO
-                raise Exception("Has subclass")
-            elif self.number == 115:  # Hambali
-                raise Exception("Has subclass")
-            elif self.number == 116:  # KSM
-                raise Exception("Has subclass")
-            elif self.number in [117, 118]:  # Oil Price Spike
-                raise Exception("Has subclass")
-            elif self.number == 119:  # Saleh
-                raise Exception("Has subclass")
-            elif self.number == 120:  # US Election
+            if self.number >= 96:  # Danish Cartoons
                 raise Exception("Has subclass")
             return False
 
@@ -90,59 +40,10 @@ class Card(object):
         """Indicates whether this card places a cell"""
         if self.type == "US":
             return False
-        elif self.number <= 73:  # Pirates
-            raise Exception("Has subclass")
         elif self.number == 74:  # Schengen Visas
             return False
-        elif self.number <= 95:  # Wahhabism
+        else:
             raise Exception("Has subclass")
-        elif self.number == 96:  # Danish Cartoons
-            raise Exception("Has subclass")
-        elif self.number == 97:  # Fatwa
-            raise Exception("Has subclass")
-        elif self.number == 98:  # Gaza Withdrawl
-            raise Exception("Has subclass")
-        elif self.number == 99:  # HAMAS Elected
-            raise Exception("Has subclass")
-        elif self.number == 100:  # His Ut-Tahrir
-            raise Exception("Has subclass")
-        elif self.number == 101:  # Kosovo
-            raise Exception("Has subclass")
-        elif self.number == 102:  # Former Soviet Union
-            raise Exception("Has subclass")
-        elif self.number == 103:  # Hizballah
-            raise Exception("Has subclass")
-        elif self.number == 104 or self.number == 105:  # Iran
-            raise Exception("Has subclass")
-        elif self.number == 106:  # Jaysh al-Mahdi
-            raise Exception("Has subclass")
-        elif self.number == 107:  # Kurdistan
-            raise Exception("Has subclass")
-        elif self.number == 108:  # Musharraf
-            raise Exception("Has subclass")
-        elif self.number == 109:  # Tora Bora
-            raise Exception("Has subclass")
-        elif self.number == 110:  # Zarqawi
-            raise Exception("Has subclass")
-        elif self.number == 111:  # Zawahiri
-            raise Exception("Has subclass")
-        elif self.number == 112:  # Bin Ladin
-            raise Exception("Has subclass")
-        elif self.number == 113:  # Darfur
-            raise Exception("Has subclass")
-        elif self.number == 114:  # GTMO
-            raise Exception("Has subclass")
-        elif self.number == 115:  # Hambali
-            raise Exception("Has subclass")
-        elif self.number == 116:  # KSM
-            raise Exception("Has subclass")
-        elif self.number == 117 or self.number == 118:  # Oil Price Spike
-            raise Exception("Has subclass")
-        elif self.number == 119:  # Saleh
-            raise Exception("Has subclass")
-        elif self.number == 120:  # US Election
-            raise Exception("Has subclass")
-        return False
 
     def play_event(self, side, app):
         app.output_to_history("Card played for Event.")
@@ -172,51 +73,7 @@ class Card(object):
             else:
                 raise Exception("Has subclass")
         else:
-            if self.number == 96:  # Danish Cartoons
-                raise Exception("Has subclass")
-            elif self.number == 97:  # Fatwa
-                raise Exception("Has subclass")
-            elif self.number == 98:  # Gaza Withdrawl
-                raise Exception("Has subclass")
-            elif self.number == 99:  # HAMAS Elected
-                raise Exception("Has subclass")
-            elif self.number == 100:  # His Ut-Tahrir
-                raise Exception("Has subclass")
-            elif self.number == 101:  # Kosovo
-                raise Exception("Has subclass")
-            elif self.number == 102:  # Former Soviet Union
-                raise Exception("Has subclass")
-            elif self.number == 103:  # Hizballah
-                raise Exception("Has subclass")
-            elif self.number == 104 or self.number == 105:  # Iran
-                raise Exception("Has subclass")
-            elif self.number == 106:  # Jaysh al-Mahdi
-                raise Exception("Has subclass")
-            elif self.number == 107:  # Kurdistan
-                raise Exception("Has subclass")
-            elif self.number == 108:  # Musharraf
-                raise Exception("Has subclass")
-            elif self.number == 109:  # Tora Bora
-                raise Exception("Has subclass")
-            elif self.number == 110:  # Zarqawi
-                raise Exception("Has subclass")
-            elif self.number == 111:  # Zawahiri
-                raise Exception("Has subclass")
-            elif self.number == 112:  # Bin Ladin
-                raise Exception("Has subclass")
-            elif self.number == 113:  # Darfur
-                raise Exception("Has subclass")
-            elif self.number == 114:  # GTMO
-                raise Exception("Has subclass")
-            elif self.number == 115:  # Hambali
-                raise Exception("Has subclass")
-            elif self.number == 116:  # KSM
-                raise Exception("Has subclass")
-            elif self.number == 117 or self.number == 118:  # Oil Price Spike
-                raise Exception("Has subclass")
-            elif self.number == 119:  # Saleh
-                raise Exception("Has subclass")
-            elif self.number == 120:  # US Election
+            if self.number >= 96:  # Danish Cartoons
                 raise Exception("Has subclass")
         if self.remove:
             app.output_to_history("Remove card from game.", True)
