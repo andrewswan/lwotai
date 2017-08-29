@@ -43,6 +43,7 @@ from lwotai.cards.jihadist.card92 import Card92
 from lwotai.cards.jihadist.card93 import Card93
 from lwotai.cards.jihadist.card94 import Card94
 from lwotai.cards.jihadist.card95 import Card95
+from lwotai.cards.unassociated.card100 import Card100
 from lwotai.cards.unassociated.card96 import Card96
 from lwotai.cards.unassociated.card97 import Card97
 from lwotai.cards.unassociated.card98 import Card98
@@ -189,7 +190,7 @@ CARDS = [
     Card97(),
     Card98(),
     Card99(),
-    Card(100, "Unassociated", "Hizb Ut-Tahrir", 1, False, False, False),
+    Card100(),
     Card(101, "Unassociated", "Kosovo", 1, False, False, False),
     Card(102, "Unassociated", "Former Soviet Union", 2, False, False, False),
     Card(103, "Unassociated", "Hizballah", 2, False, False, False),

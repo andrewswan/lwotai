@@ -47,7 +47,7 @@ class Card(object):
             elif self.number == 99:  # HAMAS Elected
                 raise Exception("Has subclass")
             elif self.number == 100:  # His Ut-Tahrir
-                return True
+                raise Exception("Has subclass")
             elif self.number == 101:  # Kosovo
                 return True
             elif self.number == 102:  # Former Soviet Union    #20150312PS
@@ -133,7 +133,7 @@ class Card(object):
         elif self.number == 99:  # HAMAS Elected
             raise Exception("Has subclass")
         elif self.number == 100:  # His Ut-Tahrir
-            return False
+            raise Exception("Has subclass")
         elif self.number == 101:  # Kosovo
             return False
         elif self.number == 102:  # Former Soviet Union
@@ -209,10 +209,7 @@ class Card(object):
             elif self.number == 99:  # HAMAS Elected
                 raise Exception("Has subclass")
             elif self.number == 100:  # His Ut-Tahrir
-                if app.troops >= 10:
-                    app.change_funding(-2)
-                elif app.troops < 5:
-                    app.change_funding(2)
+                raise Exception("Has subclass")
             elif self.number == 101:  # Kosovo
                 app.change_prestige(1)
                 app.test_country("Serbia")
