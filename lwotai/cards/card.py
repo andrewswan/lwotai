@@ -45,7 +45,7 @@ class Card(object):
             elif self.number == 98:  # Gaza Withdrawl
                 raise Exception("Has subclass")
             elif self.number == 99:  # HAMAS Elected
-                return True
+                raise Exception("Has subclass")
             elif self.number == 100:  # His Ut-Tahrir
                 return True
             elif self.number == 101:  # Kosovo
@@ -131,7 +131,7 @@ class Card(object):
         elif self.number == 98:  # Gaza Withdrawl
             raise Exception("Has subclass")
         elif self.number == 99:  # HAMAS Elected
-            return False
+            raise Exception("Has subclass")
         elif self.number == 100:  # His Ut-Tahrir
             return False
         elif self.number == 101:  # Kosovo
@@ -207,9 +207,7 @@ class Card(object):
             elif self.number == 98:  # Gaza Withdrawl
                 raise Exception("Has subclass")
             elif self.number == 99:  # HAMAS Elected
-                app.output_to_history("US selects and discards one card.", False)
-                app.change_prestige(-1)
-                app.change_funding(-1)
+                raise Exception("Has subclass")
             elif self.number == 100:  # His Ut-Tahrir
                 if app.troops >= 10:
                     app.change_funding(-2)
