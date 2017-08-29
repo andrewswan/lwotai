@@ -74,6 +74,7 @@ from lwotai.cards.us.card14 import Card14
 from lwotai.cards.us.card15 import Card15
 from lwotai.cards.us.card16 import Card16
 from lwotai.cards.us.card17 import Card17
+from lwotai.cards.us.card18 import Card18
 from lwotai.cards.us.card19 import Card19
 from lwotai.cards.us.card2 import Card2
 from lwotai.cards.us.card20 import Card20
@@ -126,7 +127,7 @@ CARDS = [
     Card15(),
     Card16(),
     Card17(),
-    Card(18, "US", "Intel Community", 2, False, False, False),
+    Card18(),
     Card19(),
     Card20(),
     Card21(),

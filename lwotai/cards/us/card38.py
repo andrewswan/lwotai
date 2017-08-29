@@ -10,7 +10,7 @@ class Card38(USCard):
         return app.get_country("Libya").is_poor() and\
             (app.get_country("Iraq").is_ally() or app.get_country("Syria").is_ally())
 
-    def play_event(self, side, app):
+    def play_as_us(self, app):
         app.markers.append("Libyan Deal")
         app.output_to_history("Libyan Deal in Play.", False)
         app.get_country("Libya").make_ally()

@@ -9,7 +9,7 @@ class Card28(USCard):
     def _really_playable(self, _side, app, _ignore_itjihad):
         return app.num_besieged() > 0
 
-    def play_event(self, side, app):
+    def play_as_us(self, app):
         num_besieged = app.num_besieged()
         if num_besieged <= 0:
             return False

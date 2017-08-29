@@ -11,7 +11,7 @@ class Card34(USCard):
             return False
         return app.num_disruptable() > 0
 
-    def play_event(self, side, app):
+    def play_as_us(self, app):
         app.markers.append("Enhanced Measures")
         app.output_to_history("Enhanced Measures in Play.", False)
         app.output_to_history("Take a random card from the Jihadist hand.", False)

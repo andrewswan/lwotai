@@ -6,7 +6,7 @@ class Card11(USCard):
     def __init__(self):
         super(Card11, self).__init__(11, "Abbas", 2, True, True, False)
 
-    def play_event(self, side, app):
+    def play_as_us(self, app):
         islamist_rule_adjacent_to_israel = \
             app.contains_country(lambda c: app.is_adjacent(c.name, "Israel") and c.is_islamist_rule())
         app.markers.append("Abbas")

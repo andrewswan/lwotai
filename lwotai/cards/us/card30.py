@@ -9,7 +9,7 @@ class Card30(USCard):
     def _really_playable(self, _side, app, _ignore_itjihad):
         return app.num_regime_change() > 0 and "Vieira de Mello Slain" not in app.markers
 
-    def play_event(self, side, app):
+    def play_as_us(self, app):
         num_regime_change = app.num_regime_change()
         if num_regime_change <= 0 or "Vieira de Mello Slain" in app.markers:
             return False

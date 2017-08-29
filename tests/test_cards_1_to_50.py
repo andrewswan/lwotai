@@ -3,10 +3,10 @@ import unittest
 from mockito import when, mock
 
 from labyrinth_test_case import LabyrinthTestCase
+from lwotai.governance import POOR
 from lwotai.labyrinth import Labyrinth
 from lwotai.randomizer import Randomizer
-from lwotai.governance import POOR
-from postures.posture import SOFT, HARD
+from postures.posture import HARD
 
 
 class Card01(LabyrinthTestCase):

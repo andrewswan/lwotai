@@ -14,7 +14,7 @@ class Card45(USCard):
                 return False
         return True
 
-    def play_event(self, side, app):
+    def play_as_us(self, app):
         app.change_prestige(3)
         posture_roll = app.get_roll("US Posture")
         if posture_roll <= 4:

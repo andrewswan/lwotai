@@ -13,7 +13,7 @@ class Card32(USCard):
         return app.get_yes_no_from_user(
             "Do you have a card with a value that exactly matches an Adversary's Resources? (y/n): ")
 
-    def play_event(self, side, app):
+    def play_as_us(self, app):
         if app.us().is_hard():
             return False
         num_adversaries = app.num_adversary()

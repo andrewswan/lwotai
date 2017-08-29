@@ -12,7 +12,7 @@ class Card46(USCard):
                 return True
         return False
 
-    def play_event(self, side, app):
+    def play_as_us(self, app):
         target_countries = [c.name for c in app.get_countries() if
                             c.is_shia_mix() and c.is_regime_change() and c.total_cells(True) > 0]
         target_name = None

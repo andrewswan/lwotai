@@ -9,7 +9,7 @@ class Card15(USCard):
     def _really_playable(self, _side, app, _ignore_itjihad):
         return app.get_country("Somalia").is_islamist_rule() or app.get_country("Sudan").is_islamist_rule()
 
-    def play_event(self, side, app):
+    def play_as_us(self, app):
         if app.get_country("Somalia").is_islamist_rule() or app.get_country("Sudan").is_islamist_rule():
             if not app.get_country("Somalia").is_islamist_rule():
                 target_country = "Sudan"

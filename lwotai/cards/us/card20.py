@@ -6,7 +6,7 @@ class Card20(USCard):
     def __init__(self):
         super(Card20, self).__init__(20, "King Abdullah", 2, True, False, False)
 
-    def play_event(self, side, app):
+    def play_as_us(self, app):
         app.output_to_history("Jordan now a Fair Ally.", False)
         app.get_country("Jordan").make_fair()
         app.get_country("Jordan").make_ally()

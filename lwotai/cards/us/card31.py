@@ -15,7 +15,7 @@ class Card31(USCard):
                 return True
         return False
 
-    def play_event(self, side, app):
+    def play_as_us(self, app):
         if "Leak-Wiretapping" in app.markers:
             return False
         for country in ["United States", "United Kingdom", "Canada"]:

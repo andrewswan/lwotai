@@ -6,7 +6,7 @@ class Card2(USCard):
     def __init__(self):
         super(Card2, self).__init__(2, "Biometrics", 1, False, False, True)
 
-    def play_event(self, side, app):
+    def play_as_us(self, app):
         app.lapsing.append("Biometrics")
         app.output_to_history("Biometrics in play. This turn, travel to adjacent Good countries must roll to"
                               " succeed and no non-adjacent travel.", True)

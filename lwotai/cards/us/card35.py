@@ -9,7 +9,7 @@ class Card35(USCard):
     def _really_playable(self, _side, app, _ignore_itjihad):
         return app.num_islamist_rule() == 0
 
-    def play_event(self, side, app):
+    def play_as_us(self, app):
         app.test_country("Turkey")
         app.get_country("Turkey").improve_governance()
         app.output_to_history("Turkey Governance now %s." % app.get_country("Turkey").governance_str(), False)

@@ -15,7 +15,7 @@ class Card8and9and10(USCard):
                             return True
         return False
 
-    def play_event(self, side, app):
+    def play_as_us(self, app):
         while True:
             target_country_name = app.get_country_from_user(
                 "Remove a cell from which country that has troops or is adjacent to a country with troops"
@@ -37,7 +37,7 @@ class Card8and9and10(USCard):
                                 found_troops = True
                                 break
                     if found_troops:
-                        app.remove_cell(target_country_name, side)    # 20150131PS added side
+                        app.remove_cell(target_country_name, "US")    # 20150131PS added side
                         app.output_to_history(target_country.summary(), True)
                         break
                     else:

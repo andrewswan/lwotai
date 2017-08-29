@@ -6,7 +6,7 @@ class Card17(USCard):
     def __init__(self):
         super(Card17, self).__init__(17, "FSB", 2, False, False, False)
 
-    def play_event(self, side, app):
+    def play_as_us(self, app):
         app.output_to_history("Examine Jihadist hand for Loose Nukes, HEU, or Kazakh Strain.", False)
         has_wmd_card = app.get_yes_no_from_user(
             "Does the Jihadist hand have Loose Nukes, HEU, or Kazakh Strain? (y/n): ")

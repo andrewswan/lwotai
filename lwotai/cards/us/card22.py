@@ -12,7 +12,7 @@ class Card22(USCard):
                 return True
         return False
 
-    def play_event(self, side, app):
+    def play_as_us(self, app):
         for country_name in ["Israel", "Jordan", "Lebanon"]:
             app.remove_all_cells_from_country(country_name)
         app.output_to_history("", False)

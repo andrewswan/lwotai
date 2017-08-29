@@ -9,7 +9,7 @@ class Card3(USCard):
     def _really_playable(self, side, app, ignore_itjihad):
         return app.us().is_soft()
 
-    def play_event(self, side, app):
+    def play_as_us(self, app):
         app.get_country("Russia").markers.append("CTR")    # 20150616PS
         app.output_to_history("CTR Marker added Russia", True)    # 20150616PS
         central_asia = app.get_country("Central Asia")

@@ -9,7 +9,7 @@ class Card1(USCard):
     def _really_playable(self, _side, app, _ignore_itjihad):
         return app.contains_country(lambda c: c.plots > 0 and not c.is_non_muslim())
 
-    def play_event(self, _side, app):
+    def play_as_us(self, app):
         for country in app.get_countries():
             if country.plots > 0 and not country.is_non_muslim():
                 app.output_to_history(

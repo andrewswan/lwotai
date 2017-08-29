@@ -9,7 +9,7 @@ class Card23and24and25(USCard):
     def _really_playable(self, _side, app, _ignore_itjihad):
         return app.contains_country(lambda c: c.total_cells(True) > 0 and c.is_muslim())
 
-    def play_event(self, side, app):
+    def play_as_us(self, app):
         while True:
             country_name = app.get_country_from_user(
                 "Choose non-Iran Muslim Country to remove a cell from (? for list): ", "XXX",
@@ -29,6 +29,6 @@ class Card23and24and25(USCard):
                     print "Choose a Muslim country."
                     print ""
                 else:
-                    app.remove_cell(country.name, side)    # 20150131PS added side
+                    app.remove_cell(country.name, "US")    # 20150131PS added side
                     app.output_to_history(country.summary())
                     break

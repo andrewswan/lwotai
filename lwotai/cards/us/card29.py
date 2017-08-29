@@ -6,7 +6,7 @@ class Card29(USCard):
     def __init__(self):
         super(Card29, self).__init__(29, "Tony Blair", 2, True, False, False)
 
-    def play_event(self, side, app):
+    def play_as_us(self, app):
         app.set_posture("United Kingdom", app.us_posture())
         app.output_to_history("United Kingdom posture now %s" % app.get_posture("United Kingdom"), False)
         print "You may roll War of Ideas in up to 3 Schengen countries."

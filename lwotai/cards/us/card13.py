@@ -9,7 +9,7 @@ class Card13(USCard):
     def _really_playable(self, _side, app, _ignore_itjihad):
         return app.get_country("Iraq").troops() > 0 or app.get_country("Syria").troops() > 0
 
-    def play_event(self, side, app):
+    def play_as_us(self, app):
         if (app.get_country("Iraq").troops() > 0) or (app.get_country("Syria").troops() > 0):
             app.markers.append("Anbar Awakening")
             app.output_to_history("Anbar Awakening in play.", False)

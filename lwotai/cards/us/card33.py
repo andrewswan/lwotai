@@ -14,7 +14,7 @@ class Card33(USCard):
                 return False
         return True
 
-    def play_event(self, side, app):
+    def play_as_us(self, app):
         app.markers.append("Benazir Bhutto")
         app.output_to_history("Benazir Bhutto in Play.", False)
         pakistan = app.get_country("Pakistan")

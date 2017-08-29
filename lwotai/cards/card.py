@@ -16,9 +16,7 @@ class Card(object):
         elif self.type == "Jihadist" and side == "US":
             return False
         elif self.type == "US" and side == "US":
-            if self.number == 18:  # Intel Community
-                return True
-            elif self.number <= 47:  # The door of Itjihad was closed
+            if self.number <= 47:  # The door of Itjihad was closed
                 raise Exception("Has subclass")
             else:
                 raise Exception("Invalid US card %d" % self.number)
@@ -52,18 +50,7 @@ class Card(object):
         elif self.type == "Jihadist" and side == "US":
             return False
         elif self.type == "US" and side == "US":
-            if self.number <= 17:  # FSB
-                raise Exception("Has subclass")
-            elif self.number == 18:  # Intel Community
-                app.output_to_history("Examine Jihadist hand. Do not change order of cards.", False)
-                app.output_to_history("Conduct a 1-value operation (Use commands: alert, deploy, disrupt, reassessment,"
-                                      " regime_change, withdraw, or war_of_ideas).", False)
-                app.output_to_history(
-                    "You may now interrupt this action phase to play another card (Use the u command).", True)
-            elif self.number <= 47:  # The door of Itjihad was closed
-                raise Exception("Has subclass")
-            else:
-                raise Exception("Invalid US card %d", self.number)
+            raise Exception("Has subclass")
         elif self.type == "Jihadist" and side == "Jihadist":
             if self.number == 74:  # Schengen Visas
                 if app.cells == 15:

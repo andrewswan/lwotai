@@ -9,7 +9,7 @@ class Card21(USCard):
     def _really_playable(self, _side, app, _ignore_itjihad):
         return app.contains_country(lambda c: c.plots > 0 and (c.is_ally() or c.is_good()))
 
-    def play_event(self, side, app):
+    def play_as_us(self, app):
         while True:
             plot_country_name = app.get_country_from_user(
                 "Draw a card. Choose an Ally or Good country to remove a plot from (? for list): ", "XXX",

@@ -10,7 +10,7 @@ class Card42(USCard):
         pakistan = app.get_country("Pakistan")
         return pakistan.is_ally() and "FATA" in pakistan.markers
 
-    def play_event(self, side, app):
+    def play_as_us(self, app):
         if "FATA" in app.get_country("Pakistan").markers:
             app.get_country("Pakistan").markers.remove("FATA")
             app.output_to_history("FATA removed from Pakistan", True)

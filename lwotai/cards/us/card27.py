@@ -9,7 +9,7 @@ class Card27(USCard):
     def _really_playable(self, _side, app, _ignore_itjihad):
         return app.get_country("Iraq").troops() > 0
 
-    def play_event(self, side, app):
+    def play_as_us(self, app):
         if not app.get_country("Iraq").troops():
             return False
         app.markers.append("Saddam Captured")

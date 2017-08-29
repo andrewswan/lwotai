@@ -28,4 +28,4 @@ class AbstractCard(Card):
 
     def play_event(self, side, app):
         """Executes this card's event as the given side (US or Jihadist)"""
-        pass  # Bypass huge method in superclass
+        app.output_to_history("Card played for Event.")

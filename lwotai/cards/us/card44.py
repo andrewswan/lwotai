@@ -9,7 +9,7 @@ class Card44(USCard):
     def _really_playable(self, _side, app, _ignore_itjihad):
         return app.us().is_hard() and "Leak-Renditions" not in app.markers
 
-    def play_event(self, side, app):
+    def play_as_us(self, app):
         app.markers.append("Renditions")
         app.output_to_history("Renditions in Play.", False)
         app.output_to_history("Discard a random card from the Jihadist hand.", False)

@@ -10,7 +10,7 @@ class Card36(USCard):
         pakistan = app.get_country('Pakistan')
         return pakistan.is_good() or pakistan.is_fair()
 
-    def play_event(self, side, app):
+    def play_as_us(self, app):
         app.markers.append("Indo-Pakistani Talks")
         app.output_to_history("Indo-Pakistani Talks in Play.", False)
         app.get_country('Pakistan').make_ally()

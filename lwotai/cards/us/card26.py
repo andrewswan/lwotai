@@ -10,7 +10,7 @@ class Card26(USCard):
         return "Abbas" in app.markers and app.troops >= 5 and\
             not app.contains_country(lambda c: c.is_islamist_rule() and app.is_adjacent(c.name, "Israel"))
 
-    def play_event(self, side, app):
+    def play_as_us(self, app):
         if "Abbas" not in app.markers or app.troops < 5:
             return False
         for country in app.get_countries():

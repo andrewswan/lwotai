@@ -6,7 +6,7 @@ class Card16(USCard):
     def __init__(self):
         super(Card16, self).__init__(16, "Euro-Islam", 2, True, False, False)
 
-    def play_event(self, side, app):
+    def play_as_us(self, app):
         benelux = app.get_country("Benelux")
         new_posture = app.get_posture_from_user("Select Benelux's Posture (hard or soft): ")
         benelux.set_posture(new_posture)
