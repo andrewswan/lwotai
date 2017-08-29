@@ -41,7 +41,7 @@ class Card(object):
             if self.number == 96:  # Danish Cartoons
                 raise Exception("Has subclass")
             elif self.number == 97:  # Fatwa
-                return app.get_yes_no_from_user("Do both sides have cards remaining beyond this one? (y/n): ")
+                raise Exception("Has subclass")
             elif self.number == 98:  # Gaza Withdrawl
                 return True
             elif self.number == 99:  # HAMAS Elected
@@ -127,7 +127,7 @@ class Card(object):
         elif self.number == 96:  # Danish Cartoons
             raise Exception("Has subclass")
         elif self.number == 97:  # Fatwa
-            return False
+            raise Exception("Has subclass")
         elif self.number == 98:  # Gaza Withdrawl
             return True
         elif self.number == 99:  # HAMAS Elected
@@ -203,12 +203,7 @@ class Card(object):
             if self.number == 96:  # Danish Cartoons
                 raise Exception("Has subclass")
             elif self.number == 97:  # Fatwa
-                app.output_to_history("Trade random cards.", False)
-                if side == "US":
-                    app.output_to_history("Conduct a 1-value operation (Use commands: alert, deploy, disrupt,"
-                                          " reassessment, regime, withdraw, or woi).", False)
-                else:
-                    app.ai_flow_chart_major_jihad(97)
+                raise Exception("Has subclass")
             elif self.number == 98:  # Gaza Withdrawl
                 if side == "US":
                     app.change_funding(-1)
