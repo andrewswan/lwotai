@@ -77,10 +77,7 @@ class Card(object):
             elif self.number == 115:  # Hambali
                 raise Exception("Has subclass")
             elif self.number == 116:  # KSM
-                if side == "US":
-                    return app.contains_country(lambda c: c.plots > 0 and (c.is_non_muslim() or c.is_ally()))
-                else:
-                    return True
+                raise Exception("Has subclass")
             elif self.number in [117, 118]:  # Oil Price Spike
                 return True
             elif self.number == 119:  # Saleh
@@ -138,7 +135,7 @@ class Card(object):
         elif self.number == 115:  # Hambali
             raise Exception("Has subclass")
         elif self.number == 116:  # KSM
-            return False
+            raise Exception("Has subclass")
         elif self.number == 117 or self.number == 118:  # Oil Price Spike
             return False
         elif self.number == 119:  # Saleh
@@ -214,17 +211,7 @@ class Card(object):
             elif self.number == 115:  # Hambali
                 raise Exception("Has subclass")
             elif self.number == 116:  # KSM
-                if side == "US":
-                    for country in app.get_countries():
-                        if country.plots > 0:
-                            if country.is_ally() or country.is_non_muslim():
-                                num_plots = country.plots
-                                country.plots = 0
-                                app.output_to_history("%d Plots removed from %s." % (num_plots, country.name), False)
-                    app.output_to_history("US draws 2 cards.", True)
-                else:
-                    if app.execute_plot(1, False, [1], False, False, True) == 1:
-                        app.output_to_history("No plots could be placed.", True)
+                raise Exception("Has subclass")
             elif self.number == 117 or self.number == 118:  # Oil Price Spike
                 app.lapsing.append("Oil Price Spike")
                 app.output_to_history(
