@@ -39,7 +39,7 @@ class Card(object):
             if side == "Jihadist" and "The door of Itjihad was closed" in app.lapsing and not ignore_itjihad:
                 return False
             if self.number == 96:  # Danish Cartoons
-                return True
+                raise Exception("Has subclass")
             elif self.number == 97:  # Fatwa
                 return app.get_yes_no_from_user("Do both sides have cards remaining beyond this one? (y/n): ")
             elif self.number == 98:  # Gaza Withdrawl
@@ -125,7 +125,7 @@ class Card(object):
         elif self.number <= 95:  # Wahhabism
             raise Exception("Has subclass")
         elif self.number == 96:  # Danish Cartoons
-            return False
+            raise Exception("Has subclass")
         elif self.number == 97:  # Fatwa
             return False
         elif self.number == 98:  # Gaza Withdrawl
@@ -201,17 +201,7 @@ class Card(object):
                 raise Exception("Has subclass")
         else:
             if self.number == 96:  # Danish Cartoons
-                posture = app.get_posture_from_user("Select Scandinavia's Posture (hard or soft): ")
-                app.set_posture("Scandinavia", posture)
-                app.output_to_history("Scandinavia posture now %s." % posture, False)
-                possibles = app.find_countries(lambda c: c.is_muslim() and not c.is_islamist_rule())
-                target = random.choice(possibles)
-                app.test_country(target.name)
-                if app.num_islamist_rule() > 0:
-                    app.output_to_history("Place any available plot in %s." % target.name, False)
-                else:
-                    app.output_to_history("Place a Plot 1 in %s." % target.name, False)
-                target.plots += 1
+                raise Exception("Has subclass")
             elif self.number == 97:  # Fatwa
                 app.output_to_history("Trade random cards.", False)
                 if side == "US":
