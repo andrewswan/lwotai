@@ -70,7 +70,7 @@ class Card(object):
             elif self.number == 94:  # The door of Itjihad was closed
                 raise Exception("Has subclass")
             elif self.number == 95:  # Wahhabism
-                return True
+                raise Exception("Has subclass")
         else:  # Unassociated Events
             if side == "Jihadist" and "The door of Itjihad was closed" in app.lapsing and not ignore_itjihad:
                 return False
@@ -193,7 +193,7 @@ class Card(object):
         elif self.number == 94:  # The door of Itjihad was closed
             raise Exception("Has subclass")
         elif self.number == 95:  # Wahhabism
-            return False
+            raise Exception("Has subclass")
         elif self.number == 96:  # Danish Cartoons
             return False
         elif self.number == 97:  # Fatwa
@@ -304,10 +304,7 @@ class Card(object):
             elif self.number == 94:  # The door of Itjihad was closed
                 raise Exception("Has subclass")
             elif self.number == 95:  # Wahhabism
-                if app.get_country("Saudi Arabia").is_islamist_rule():
-                    app.change_funding(9)
-                else:
-                    app.change_funding(app.get_country("Saudi Arabia").governance_as_funding())
+                raise Exception("Has subclass")
         else:
             if self.number == 96:  # Danish Cartoons
                 posture = app.get_posture_from_user("Select Scandinavia's Posture (hard or soft): ")
