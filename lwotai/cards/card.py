@@ -83,7 +83,7 @@ class Card(object):
             elif self.number == 119:  # Saleh
                 raise Exception("Has subclass")
             elif self.number == 120:  # US Election
-                return True
+                raise Exception("Has subclass")
             return False
 
     def puts_cell(self):
@@ -141,7 +141,7 @@ class Card(object):
         elif self.number == 119:  # Saleh
             raise Exception("Has subclass")
         elif self.number == 120:  # US Election
-            return False
+            raise Exception("Has subclass")
         return False
 
     def play_event(self, side, app):
@@ -217,7 +217,7 @@ class Card(object):
             elif self.number == 119:  # Saleh
                 raise Exception("Has subclass")
             elif self.number == 120:  # US Election
-                app.execute_card_us_election(random.randint(1, 6))
+                raise Exception("Has subclass")
         if self.remove:
             app.output_to_history("Remove card from game.", True)
         if self.mark:
