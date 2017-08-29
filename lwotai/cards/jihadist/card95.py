@@ -1,5 +1,3 @@
-import random
-
 from lwotai.cards.jihadist.jihadist_card import JihadistCard
 
 
