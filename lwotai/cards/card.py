@@ -64,10 +64,9 @@ class Card(object):
             elif self.number == 91:  # Regional al-Qaeda
                 raise Exception("Has subclass")
             elif self.number == 92:  # Saddam
-                iraq = app.get_country("Iraq")
-                return "Saddam Captured" not in app.markers and iraq.is_poor() and iraq.is_adversary()
+                raise Exception("Has subclass")
             elif self.number == 93:  # Taliban
-                return True
+                raise Exception("Has subclass")
             elif self.number == 94:  # The door of Itjihad was closed
                 return app.get_yes_no_from_user(
                     "Was a country tested or improved to Fair or Good this or last Action Phase.? (y/n): ")
@@ -189,9 +188,9 @@ class Card(object):
         elif self.number == 91:  # Regional al-Qaeda
             raise Exception("Has subclass")
         elif self.number == 92:  # Saddam
-            return False
+            raise Exception("Has subclass")
         elif self.number == 93:  # Taliban
-            return True
+            raise Exception("Has subclass")
         elif self.number == 94:  # The door of Itjihad was closed
             return False
         elif self.number == 95:  # Wahhabism
@@ -300,18 +299,9 @@ class Card(object):
             elif self.number == 91:  # Regional al-Qaeda
                 raise Exception("Has subclass")
             elif self.number == 92:  # Saddam
-                app.funding = 9
-                app.output_to_history("Jihadist Funding now 9.")
+                raise Exception("Has subclass")
             elif self.number == 93:  # Taliban
-                app.test_country("Afghanistan")
-                app.get_country("Afghanistan").make_besieged()
-                app.output_to_history("Afghanistan is now a Besieged Regime.", False)
-                app.place_cells("Afghanistan", 1)
-                app.place_cells("Pakistan", 1)
-                if app.get_country("Afghanistan").is_islamist_rule() or app.get_country("Pakistan").is_islamist_rule():
-                    app.change_prestige(-3)
-                else:
-                    app.change_prestige(-1)
+                raise Exception("Has subclass")
             elif self.number == 94:  # The door of Itjihad was closed
                 target_country = None
                 while not target_country:
