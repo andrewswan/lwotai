@@ -62,8 +62,7 @@ class Card(object):
             elif self.number == 90:  # Quagmire
                 raise Exception("Has subclass")
             elif self.number == 91:  # Regional al-Qaeda
-                targets = app.find_countries(lambda c: c.is_muslim() and c.is_ungoverned())
-                return len(targets) >= 2
+                raise Exception("Has subclass")
             elif self.number == 92:  # Saddam
                 iraq = app.get_country("Iraq")
                 return "Saddam Captured" not in app.markers and iraq.is_poor() and iraq.is_adversary()
@@ -188,7 +187,7 @@ class Card(object):
         elif self.number == 90:  # Quagmire
             raise Exception("Has subclass")
         elif self.number == 91:  # Regional al-Qaeda
-            return True
+            raise Exception("Has subclass")
         elif self.number == 92:  # Saddam
             return False
         elif self.number == 93:  # Taliban
@@ -299,14 +298,7 @@ class Card(object):
             elif self.number == 90:  # Quagmire
                 raise Exception("Has subclass")
             elif self.number == 91:  # Regional al-Qaeda
-                possibles = app.find_countries(lambda c: c.is_muslim() and c.is_ungoverned())
-                random.shuffle(possibles)
-                if app.num_islamist_rule() > 0:
-                    app.place_cells(possibles[0].name, 2)
-                    app.place_cells(possibles[1].name, 2)
-                else:
-                    app.place_cells(possibles[0].name, 1)
-                    app.place_cells(possibles[1].name, 1)
+                raise Exception("Has subclass")
             elif self.number == 92:  # Saddam
                 app.funding = 9
                 app.output_to_history("Jihadist Funding now 9.")
