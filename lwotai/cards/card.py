@@ -73,7 +73,7 @@ class Card(object):
             elif self.number == 113:  # Darfur
                 raise Exception("Has subclass")
             elif self.number == 114:  # GTMO
-                return True
+                raise Exception("Has subclass")
             elif self.number == 115:  # Hambali
                 possibles = ["Indonesia/Malaysia"]
                 for country in app.get_country("Indonesia/Malaysia").links:
@@ -144,7 +144,7 @@ class Card(object):
         elif self.number == 113:  # Darfur
             raise Exception("Has subclass")
         elif self.number == 114:  # GTMO
-            return False
+            raise Exception("Has subclass")
         elif self.number == 115:  # Hambali
             return False
         elif self.number == 116:  # KSM
@@ -220,16 +220,7 @@ class Card(object):
             elif self.number == 113:  # Darfur
                 raise Exception("Has subclass")
             elif self.number == 114:  # GTMO
-                app.lapsing.append("GTMO")
-                app.output_to_history(
-                    "GTMO in play. No recruit operations or Detainee Release the rest of this turn.", False)
-                prestige_rolls = []
-                for i in range(3):
-                    prestige_rolls.append(random.randint(1, 6))
-                prestige_multiplier = 1
-                if prestige_rolls[0] <= 4:
-                    prestige_multiplier = -1
-                app.change_prestige(min(prestige_rolls[1], prestige_rolls[2]) * prestige_multiplier)
+                raise Exception("Has subclass")
             elif self.number == 115:  # Hambali
                 if side == "US":
                     possibles = ["Indonesia/Malaysia"]
