@@ -60,8 +60,7 @@ class Card(object):
             elif self.number in [87, 88, 89]:  # Martyrdom Operation
                 raise Exception("Has subclass")
             elif self.number == 90:  # Quagmire
-                valid_target = app.contains_country(lambda c: c.is_regime_change() and c.total_cells(True) > 0)
-                return valid_target and app.prestige < 7
+                raise Exception("Has subclass")
             elif self.number == 91:  # Regional al-Qaeda
                 targets = app.find_countries(lambda c: c.is_muslim() and c.is_ungoverned())
                 return len(targets) >= 2
@@ -187,7 +186,7 @@ class Card(object):
         elif self.number == 87 or self.number == 88 or self.number == 89:  # Martyrdom Operation
             raise Exception("Has subclass")
         elif self.number == 90:  # Quagmire
-            return False
+            raise Exception("Has subclass")
         elif self.number == 91:  # Regional al-Qaeda
             return True
         elif self.number == 92:  # Saddam
@@ -298,10 +297,7 @@ class Card(object):
             elif self.number in [87, 88, 89]:  # Martyrdom Operation
                 raise Exception("Has subclass")
             elif self.number == 90:  # Quagmire
-                app.set_posture("United States", SOFT)
-                app.output_to_history("US Posture now Soft.", False)
-                app.output_to_history("US randomly discards two cards and Jihadist plays them.", False)
-                app.output_to_history("Do this using the 'jihadist_card' command for each card.", True)
+                raise Exception("Has subclass")
             elif self.number == 91:  # Regional al-Qaeda
                 possibles = app.find_countries(lambda c: c.is_muslim() and c.is_ungoverned())
                 random.shuffle(possibles)
