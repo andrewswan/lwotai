@@ -12,7 +12,7 @@ class Card94(JihadistCard):
         return app.get_yes_no_from_user(
             "Was a country tested or improved to Fair or Good this or last Action Phase.? (y/n): ")
 
-    def play_event(self, _side, app):
+    def play_as_jihadist(self, app):
         target_country = None
         while not target_country:
             country_name = app.get_country_from_user(

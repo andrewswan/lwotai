@@ -12,3 +12,11 @@ class JihadistCard(AbstractCard):
         if side == "Jihadist" and "The door of Itjihad was closed" in app.lapsing and not ignore_itjihad:
             return False
         return side != "US" and self._really_playable(side, app, ignore_itjihad)
+
+    def play_event(self, side, app):
+        super(JihadistCard, self).play_event(side, app)
+        self.play_as_jihadist(app)
+
+    def play_as_jihadist(self, app):
+        """Subclasses to override"""
+        pass

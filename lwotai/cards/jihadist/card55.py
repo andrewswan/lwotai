@@ -7,7 +7,7 @@ class Card55(JihadistCard):
     def __init__(self):
         super(Card55, self).__init__(55, "Uyghur Jihad", 1, True, False, False, True)
 
-    def play_event(self, side, app):
+    def play_as_jihadist(self, app):
         app.test_country("China")
         if app.cells > 0:
             if app.get_posture("China") == SOFT:

@@ -9,7 +9,7 @@ class Card56(JihadistCard):
     def _really_playable(self, _side, app, _ignore_itjihad):
         return app.contains_country(lambda c: c.is_regime_change() and c.total_cells() > 0)
 
-    def play_event(self, side, app):
+    def play_as_jihadist(self, app):
         app.markers.append("Vieira de Mello Slain")
         app.output_to_history("Vieira de Mello Slain in play.", False)
         app.change_prestige(-1)

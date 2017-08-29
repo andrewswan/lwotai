@@ -9,7 +9,7 @@ class Card72(JihadistCard):
     def _really_playable(self, _side, app, _ignore_itjihad):
         return app.get_country("Afghanistan").total_cells() > 0
 
-    def play_event(self, _side, app):
+    def play_as_jihadist(self, app):
         cells_to_place = min(app.cells, 3)
         if app.get_country("Afghanistan").is_islamist_rule():
             cells_to_place = app.cells

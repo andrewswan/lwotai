@@ -6,7 +6,7 @@ class Card62(JihadistCard):
     def __init__(self):
         super(Card62, self).__init__(62, "Ex-KGB", 2, False, False, False, False)
 
-    def play_event(self, _side, app):
+    def play_as_jihadist(self, app):
         if "CTR" in app.get_country("Russia").markers:
             app.get_country("Russia").markers.remove("CTR")
             app.output_to_history("CTR removed from Russia.", True)

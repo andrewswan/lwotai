@@ -8,7 +8,7 @@ class Card93(JihadistCard):
     def __init__(self):
         super(Card93, self).__init__(93, "Taliban", 3, False, False, False, True)
 
-    def play_event(self, _side, app):
+    def play_as_jihadist(self, app):
         app.test_country("Afghanistan")
         app.get_country("Afghanistan").make_besieged()
         app.output_to_history("Afghanistan is now a Besieged Regime.", False)

@@ -9,7 +9,7 @@ class Card70(JihadistCard):
     def _really_playable(self, _side, app, _ignore_itjihad):
         return "Indo-Pakistani Talks" not in app.markers
 
-    def play_event(self, _side, app):
+    def play_as_jihadist(self, app):
         app.place_cells("Pakistan", 1)
         if app.cells > 0:
             app.place_cells("India", 1)

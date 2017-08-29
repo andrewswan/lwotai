@@ -8,7 +8,7 @@ class Card78(JihadistCard):
     def __init__(self):
         super(Card78, self).__init__(78, "Axis of Evil", 3, False, False, False, False)
 
-    def play_event(self, _side, app):
+    def play_as_jihadist(self, app):
         app.output_to_history("US discards any Iran, Hizballah, or Jaysh al-Mahdi cards from hand.", False)
         if app.us().is_soft():
             app.us().make_hard()

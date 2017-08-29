@@ -11,7 +11,7 @@ class Card77(JihadistCard):
             return True
         return app.contains_country(lambda c: app.is_adjacent("Saudi Arabia", c.name) and c.troops() > 0)
 
-    def play_event(self, _side, app):
+    def play_as_jihadist(self, app):
         choices = app.minor_jihad_in_good_fair_choice(1, False, True)
         if choices:
             target = app.get_country(choices[0][0])

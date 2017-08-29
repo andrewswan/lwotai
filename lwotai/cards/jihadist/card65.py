@@ -15,7 +15,7 @@ class Card65(JihadistCard):
         central_asia = app.get_country("Central Asia")
         return central_asia.total_cells() > 0 and "CTR" not in central_asia.markers
 
-    def play_event(self, _side, app):
+    def play_as_jihadist(self, app):
         central_asia = app.get_country("Central Asia")
         russia = app.get_country("Russia")
         possibles = [country.name for country in [central_asia, russia] if

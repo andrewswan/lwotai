@@ -12,6 +12,6 @@ class Card92(JihadistCard):
         iraq = app.get_country("Iraq")
         return "Saddam Captured" not in app.markers and iraq.is_poor() and iraq.is_adversary()
 
-    def play_event(self, _side, app):
+    def play_as_jihadist(self, app):
         app.funding = 9
         app.output_to_history("Jihadist Funding now 9.")

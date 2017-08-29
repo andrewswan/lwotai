@@ -12,7 +12,7 @@ class Card91(JihadistCard):
         targets = app.find_countries(lambda c: c.is_muslim() and c.is_ungoverned())
         return len(targets) >= 2
 
-    def play_event(self, _side, app):
+    def play_as_jihadist(self, app):
         possibles = app.find_countries(lambda c: c.is_muslim() and c.is_ungoverned())
         random.shuffle(possibles)
         cells_to_place = 2 if app.num_islamist_rule() > 0 else 1

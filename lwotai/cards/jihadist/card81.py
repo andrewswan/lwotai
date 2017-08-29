@@ -11,7 +11,7 @@ class Card81(JihadistCard):
     def _really_playable(self, _side, app, _ignore_itjihad):
         return app.num_regime_change() > 0
 
-    def play_event(self, _side, app):
+    def play_as_jihadist(self, app):
         possibles = app.find_countries(lambda c: c.is_regime_change())
         if not possibles:
             return False

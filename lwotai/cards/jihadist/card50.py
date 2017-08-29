@@ -12,7 +12,7 @@ class Card50(JihadistCard):
     def _really_playable(self, _side, app, _ignore_itjihad):
         return app.get_country("Iraq").governance_is_worse_than(GOOD)
 
-    def play_event(self, side, app):
+    def play_as_jihadist(self, app):
         possible = ["Iraq", "Iran"]
         target_name = random.choice(possible)
         app.place_cells(target_name, 1)

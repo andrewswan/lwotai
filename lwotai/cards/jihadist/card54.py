@@ -9,6 +9,6 @@ class Card54(JihadistCard):
     def _really_playable(self, _side, app, _ignore_itjihad):
         return app.get_country("Iraq").troops() > 0
 
-    def play_event(self, side, app):
+    def play_as_jihadist(self, app):
         app.get_country("Iraq").markers.append("Sadr")
         app.output_to_history("Sadr Marker added in Iraq", True)

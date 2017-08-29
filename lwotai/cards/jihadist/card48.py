@@ -11,7 +11,7 @@ class Card48(JihadistCard):
             return False
         return app.get_yes_no_from_user("Is this the 1st card of the Jihadist Action Phase? (y/n): ")
 
-    def play_event(self, side, app):
+    def play_as_jihadist(self, app):
         card_num = app.get_card_num_from_user(
             "Enter the number of the next Jihadist card or none if there are none left: ")
         if card_num == "none":

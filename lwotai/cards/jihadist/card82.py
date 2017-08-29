@@ -8,7 +8,7 @@ class Card82(JihadistCard):
     def __init__(self):
         super(Card82, self).__init__(82, "Jihadist Videos", 3, False, False, False, True)
 
-    def play_event(self, _side, app):
+    def play_as_jihadist(self, app):
         possibles = app.find_countries(lambda c: c.total_cells() == 0)
         random.shuffle(possibles)
         for i in range(3):

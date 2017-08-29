@@ -12,6 +12,6 @@ class Card69(JihadistCard):
         central_asia = app.get_country("Central Asia")
         return central_asia.total_cells() > 0 and "CTR" not in central_asia.markers
 
-    def play_event(self, _side, app):
+    def play_as_jihadist(self, app):
         roll = random.randint(1, 6)
         app.execute_card_heu("Central Asia", roll)

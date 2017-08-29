@@ -7,7 +7,7 @@ class Card64(JihadistCard):
     def __init__(self):
         super(Card64, self).__init__(64, "Hariri Killed", 2, True, False, False, False)
 
-    def play_event(self, _side, app):
+    def play_as_jihadist(self, app):
         app.test_country("Lebanon")
         app.test_country("Syria")
         syria = app.get_country("Syria")

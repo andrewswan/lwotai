@@ -9,7 +9,7 @@ class Card76(JihadistCard):
     def _really_playable(self, _side, app, _ignore_itjihad):
         return app.contains_country(lambda c: c.is_regime_change() and c.total_cells(True) > 0)
 
-    def play_event(self, _side, app):
+    def play_as_jihadist(self, app):
         app.output_to_history("Draw 2 cards.", False)
         app.change_prestige(-2)
         allies = app.minor_jihad_in_good_fair_choice(1, True)

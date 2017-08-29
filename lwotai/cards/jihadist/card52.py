@@ -9,5 +9,5 @@ class Card52(JihadistCard):
     def _really_playable(self, _side, app, _ignore_itjihad):
         return app.contains_country(lambda c: c.is_regime_change() and c.total_cells(True) > 0)
 
-    def play_event(self, side, app):
+    def play_as_jihadist(self, app):
         app.output_to_history("US randomly discards one card.")

@@ -11,7 +11,7 @@ class Card84and85(JihadistCard):
     def _really_playable(self, _side, app, _ignore_itjihad):
         return ("Enhanced Measures" in app.markers) or ("Renditions" in app.markers) or ("Wiretapping" in app.markers)
 
-    def play_event(self, _side, app):
+    def play_as_jihadist(self, app):
         possibles = []
         if "Enhanced Measures" in app.markers:
             possibles.append("Enhanced Measures")

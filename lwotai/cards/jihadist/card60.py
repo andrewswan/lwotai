@@ -9,6 +9,6 @@ class Card60(JihadistCard):
     def _really_playable(self, _side, app, _ignore_itjihad):
         return app.get_country("Pakistan").total_cells() > 0
 
-    def play_event(self, _side, app):
+    def play_as_jihadist(self, app):
         app.markers.append("Bhutto Shot")
         app.output_to_history("Bhutto Shot in play.")

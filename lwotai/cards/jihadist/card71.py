@@ -12,6 +12,6 @@ class Card71(JihadistCard):
         russia = app.get_country("Russia")
         return russia.total_cells() > 0 and "CTR" not in russia.markers
 
-    def play_event(self, _side, app):
+    def play_as_jihadist(self, app):
         roll = random.randint(1, 6)
         app.execute_card_heu("Russia", roll)  # TODO rename method to get_wmd or similar

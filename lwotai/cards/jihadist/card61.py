@@ -11,7 +11,7 @@ class Card61(JihadistCard):
             return False
         return app.get_yes_no_from_user("Did the US Disrupt during this or the last Action Phase? (y/n): ")
 
-    def play_event(self, _side, app):
+    def play_as_jihadist(self, app):
         if app.cells > 0:
             target_name = None
             while not target_name:

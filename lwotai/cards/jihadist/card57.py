@@ -9,6 +9,6 @@ class Card57(JihadistCard):
     def _really_playable(self, _side, app, _ignore_itjihad):
         return "Moro Talks" not in app.markers
 
-    def play_event(self, _side, app):
+    def play_as_jihadist(self, app):
         app.place_cells("Philippines", 1)
         app.markers.append("Abu Sayyaf")

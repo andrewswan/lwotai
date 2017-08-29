@@ -9,7 +9,7 @@ class Card58(JihadistCard):
     def _really_playable(self, _side, app, _ignore_itjihad):
         return "Anbar Awakening" not in app.markers
 
-    def play_event(self, _side, app):
+    def play_as_jihadist(self, app):
         app.markers.append("Al-Anbar")
         app.output_to_history("Al-Anbar in play.", True)
         app.test_country("Iraq")

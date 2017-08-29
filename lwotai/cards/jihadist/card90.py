@@ -12,7 +12,7 @@ class Card90(JihadistCard):
         valid_target = app.contains_country(lambda c: c.is_regime_change() and c.total_cells(True) > 0)
         return valid_target and app.prestige < 7
 
-    def play_event(self, _side, app):
+    def play_as_jihadist(self, app):
         app.set_posture("United States", SOFT)
         app.output_to_history("US Posture now Soft.", False)
         app.output_to_history("US randomly discards two cards and Jihadist plays them.", False)
