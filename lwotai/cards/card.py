@@ -67,14 +67,7 @@ class Card(object):
             elif self.number == 110:  # Zarqawi
                 raise Exception("Has subclass")
             elif self.number == 111:  # Zawahiri
-                if side == "US":
-                    if "FATA" in app.get_country("Pakistan").markers:
-                        return False
-                    if "Al-Anbar" in app.markers:
-                        return False
-                    return app.num_islamist_rule() == 0
-                else:
-                    return True
+                raise Exception("Has subclass")
             elif self.number == 112:  # Bin Ladin
                 if side == "US":
                     if "FATA" in app.get_country("Pakistan").markers:
@@ -152,7 +145,7 @@ class Card(object):
         elif self.number == 110:  # Zarqawi
             raise Exception("Has subclass")
         elif self.number == 111:  # Zawahiri
-            return False
+            raise Exception("Has subclass")
         elif self.number == 112:  # Bin Ladin
             return False
         elif self.number == 113:  # Darfur
@@ -228,13 +221,7 @@ class Card(object):
             elif self.number == 110:  # Zarqawi
                 raise Exception("Has subclass")
             elif self.number == 111:  # Zawahiri
-                if side == "US":
-                    app.change_funding(-2)
-                else:
-                    if app.num_islamist_rule() > 0:
-                        app.change_prestige(-3)
-                    else:
-                        app.change_prestige(-1)
+                raise Exception("Has subclass")
             elif self.number == 112:  # Bin Ladin
                 if side == "US":
                     app.change_funding(-4)
