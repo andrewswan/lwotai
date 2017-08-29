@@ -68,8 +68,7 @@ class Card(object):
             elif self.number == 93:  # Taliban
                 raise Exception("Has subclass")
             elif self.number == 94:  # The door of Itjihad was closed
-                return app.get_yes_no_from_user(
-                    "Was a country tested or improved to Fair or Good this or last Action Phase.? (y/n): ")
+                raise Exception("Has subclass")
             elif self.number == 95:  # Wahhabism
                 return True
         else:  # Unassociated Events
@@ -192,7 +191,7 @@ class Card(object):
         elif self.number == 93:  # Taliban
             raise Exception("Has subclass")
         elif self.number == 94:  # The door of Itjihad was closed
-            return False
+            raise Exception("Has subclass")
         elif self.number == 95:  # Wahhabism
             return False
         elif self.number == 96:  # Danish Cartoons
@@ -303,19 +302,7 @@ class Card(object):
             elif self.number == 93:  # Taliban
                 raise Exception("Has subclass")
             elif self.number == 94:  # The door of Itjihad was closed
-                target_country = None
-                while not target_country:
-                    country_name = app.get_country_from_user(
-                        "Choose a country tested or improved to Fair or Good this or last Action Phase: ", "XXX", None)
-                    if country_name == "":
-                        print ""
-                    elif app.get_country(country_name).is_fair() or app.get_country(country_name).is_good():
-                        target_country = app.get_country(country_name)
-                    else:
-                        print "%s is neither Fair nor Good."
-                app.worsen_governance(target_country.name)
-                app.output_to_history("%s Governance worsened." % target_country.name, False)
-                app.output_to_history(target_country.summary())
+                raise Exception("Has subclass")
             elif self.number == 95:  # Wahhabism
                 if app.get_country("Saudi Arabia").is_islamist_rule():
                     app.change_funding(9)
