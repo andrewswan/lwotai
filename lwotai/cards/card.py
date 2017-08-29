@@ -79,7 +79,7 @@ class Card(object):
             elif self.number == 116:  # KSM
                 raise Exception("Has subclass")
             elif self.number in [117, 118]:  # Oil Price Spike
-                return True
+                raise Exception("Has subclass")
             elif self.number == 119:  # Saleh
                 return True
             elif self.number == 120:  # US Election
@@ -137,7 +137,7 @@ class Card(object):
         elif self.number == 116:  # KSM
             raise Exception("Has subclass")
         elif self.number == 117 or self.number == 118:  # Oil Price Spike
-            return False
+            raise Exception("Has subclass")
         elif self.number == 119:  # Saleh
             return False
         elif self.number == 120:  # US Election
@@ -213,18 +213,7 @@ class Card(object):
             elif self.number == 116:  # KSM
                 raise Exception("Has subclass")
             elif self.number == 117 or self.number == 118:  # Oil Price Spike
-                app.lapsing.append("Oil Price Spike")
-                app.output_to_history(
-                    "Oil Price Spike in play. Add +1 to the resources of each Oil Exporter country for the turn.",
-                    False)
-                if side == "US":
-                    app.output_to_history(
-                        "Select, reveal, and draw a card other than Oil Price Spike from the discard pile or a box.")
-                else:
-                    if app.get_yes_no_from_user("Are there any Jihadist event cards in the discard pile? "):
-                        app.output_to_history("Draw from the Discard Pile randomly among the highest-value"
-                                              " Jihadist-associated event cards. Put the card on top of the Jihadist"
-                                              " hand.")
+                raise Exception("Has subclass")
             elif self.number == 119:  # Saleh
                 app.test_country("Yemen")
                 if side == "US":
