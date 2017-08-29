@@ -71,7 +71,7 @@ class Card(object):
             elif self.number == 112:  # Bin Ladin
                 raise Exception("Has subclass")
             elif self.number == 113:  # Darfur
-                return True
+                raise Exception("Has subclass")
             elif self.number == 114:  # GTMO
                 return True
             elif self.number == 115:  # Hambali
@@ -142,7 +142,7 @@ class Card(object):
         elif self.number == 112:  # Bin Ladin
             raise Exception("Has subclass")
         elif self.number == 113:  # Darfur
-            return False
+            raise Exception("Has subclass")
         elif self.number == 114:  # GTMO
             return False
         elif self.number == 115:  # Hambali
@@ -218,26 +218,7 @@ class Card(object):
             elif self.number == 112:  # Bin Ladin
                 raise Exception("Has subclass")
             elif self.number == 113:  # Darfur
-                app.test_country("Sudan")
-                if app.prestige >= 7:
-                    app.get_country("Sudan").add_aid(1)
-                    app.output_to_history("Aid added to Sudan.", False)
-                    if app.get_country("Sudan").is_adversary():
-                        app.get_country("Sudan").make_neutral()
-                        app.output_to_history("Sudan alignment improved.", False)
-                    elif app.get_country("Sudan").is_neutral():
-                        app.get_country("Sudan").make_ally()
-                        app.output_to_history("Sudan alignment improved.", False)
-                else:
-                    app.get_country("Sudan").make_besieged()
-                    app.output_to_history("Sudan now Besieged Regime.", False)
-                    if app.get_country("Sudan").is_ally():
-                        app.get_country("Sudan").make_neutral()
-                        app.output_to_history("Sudan alignment worsened.", False)
-                    elif app.get_country("Sudan").is_neutral():
-                        app.get_country("Sudan").make_adversary()
-                        app.output_to_history("Sudan alignment worsened.", False)
-                app.output_to_history(app.get_country("Sudan").summary(), True)
+                raise Exception("Has subclass")
             elif self.number == 114:  # GTMO
                 app.lapsing.append("GTMO")
                 app.output_to_history(
