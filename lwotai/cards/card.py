@@ -61,7 +61,7 @@ class Card(object):
             elif self.number == 107:  # Kurdistan
                 raise Exception("Has subclass")
             elif self.number == 108:  # Musharraf
-                return "Benazir Bhutto" not in app.markers and app.get_country("Pakistan").total_cells() > 0
+                raise Exception("Has subclass")
             elif self.number == 109:  # Tora Bora
                 return app.contains_country(lambda c: c.is_regime_change() and c.total_cells() >= 2)
             elif self.number == 110:  # Zarqawi
@@ -147,7 +147,7 @@ class Card(object):
         elif self.number == 107:  # Kurdistan
             raise Exception("Has subclass")
         elif self.number == 108:  # Musharraf
-            return False
+            raise Exception("Has subclass")
         elif self.number == 109:  # Tora Bora
             return False
         elif self.number == 110:  # Zarqawi
@@ -223,11 +223,7 @@ class Card(object):
             elif self.number == 107:  # Kurdistan
                 raise Exception("Has subclass")
             elif self.number == 108:  # Musharraf
-                app.remove_cell("Pakistan", side)    # 20150131PS added side
-                app.get_country("Pakistan").make_poor()
-                app.get_country("Pakistan").make_ally()
-                app.output_to_history("Pakistan now Poor Ally.", False)
-                app.output_to_history(app.get_country("Pakistan").summary(), True)
+                raise Exception("Has subclass")
             elif self.number == 109:  # Tora Bora
                 possibles = [c.name for c in app.get_countries() if c.is_regime_change() and c.total_cells() >= 2]
                 target_name = None
