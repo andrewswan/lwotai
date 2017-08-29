@@ -51,6 +51,7 @@ from lwotai.cards.unassociated.card104_105 import Card104and105
 from lwotai.cards.unassociated.card106 import Card106
 from lwotai.cards.unassociated.card107 import Card107
 from lwotai.cards.unassociated.card108 import Card108
+from lwotai.cards.unassociated.card109 import Card109
 from lwotai.cards.unassociated.card96 import Card96
 from lwotai.cards.unassociated.card97 import Card97
 from lwotai.cards.unassociated.card98 import Card98
@@ -206,7 +207,7 @@ CARDS = [
     Card106(),
     Card107(),
     Card108(),
-    Card(109, "Unassociated", "Tora Bora", 2, True, False, False),
+    Card109(),
     Card(110, "Unassociated", "Zarqawi", 2, False, False, False),
     Card(111, "Unassociated", "Zawahiri", 2, False, False, False),
     Card(112, "Unassociated", "Bin Ladin", 3, False, False, False),
