@@ -1867,14 +1867,6 @@ class Labyrinth(object):
             if self.us().is_soft():
                 self.change_prestige(1)
 
-    def execute_card_lets_roll(self, plot_country, posture_country, new_posture):
-        self.map.get(plot_country).plots = max(0, self.map.get(plot_country).plots - 1)
-        self.output_to_history("Plot removed from %s." % plot_country, False)
-        self.get_country(posture_country).set_posture(new_posture)
-        self.output_to_history("%s Posture now %s." % (posture_country, new_posture), False)
-        self.output_to_history(self.map.get(plot_country).summary(), False)
-        self.output_to_history(self.map.get(posture_country).summary(), True)
-
     def execute_card_heu(self, country, roll):
         if self.map.get(country).is_non_recruit_success(roll):
             self.output_to_history("Add a WMD to available Plots.", True)

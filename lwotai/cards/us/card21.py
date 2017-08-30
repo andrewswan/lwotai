@@ -16,7 +16,6 @@ class Card21(USCard):
                 app.list_good_ally_plot_countries)
             if plot_country_name == "":
                 print ""
-                return
             else:
                 plot_country = app.get_country(plot_country_name)
                 if not plot_country.is_good() and not plot_country.is_ally():
@@ -39,5 +38,16 @@ class Card21(USCard):
                             else:
                                 new_posture = app.get_posture_from_user(
                                     "What Posture should %s have (h or s)? " % posture_country)
-                                app.execute_card_lets_roll(plot_country_name, posture_country, new_posture)
+                                self._execute_card_lets_roll(plot_country_name, posture_country, new_posture, app)
                                 return
+
+    @staticmethod
+    def _execute_card_lets_roll(plot_country_name, posture_country_name, new_posture, app):
+        plot_country = app.get_country(plot_country_name)
+        posture_country = app.get_country(posture_country_name)
+        plot_country.plots = max(0, plot_country.plots - 1)
+        app.output_to_history("Plot removed from %s." % plot_country.name, False)
+        posture_country.set_posture(new_posture)
+        app.output_to_history("%s Posture now %s." % (posture_country.name, new_posture), False)
+        app.output_to_history(plot_country.summary(), False)
+        app.output_to_history(posture_country.summary())

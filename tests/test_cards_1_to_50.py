@@ -6,7 +6,6 @@ from labyrinth_test_case import LabyrinthTestCase
 from lwotai.governance import POOR
 from lwotai.labyrinth import Labyrinth
 from lwotai.randomizer import Randomizer
-from postures.posture import HARD
 
 
 class Card01(LabyrinthTestCase):
@@ -553,19 +552,30 @@ class Card21(LabyrinthTestCase):
         playable = app.card(21).playable(self.event_owner, app, True)
         self.assertEqual(playable, expected_value)
 
-    def test_event(self):
-        app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
+    def test_removes_plot_from_non_muslim_country(self):
+        # Set up
+        app = Labyrinth(1, 1, self.set_up_blank_test_scenario, test_user_input=["Canada", "Spain", "hard"])
         app.get_country("Canada").plots = 1
         app.get_country("Spain").make_soft()
-        app.execute_card_lets_roll("Canada", "Spain", HARD)
+
+        # Invoke
+        app.card(21).play_event(self.event_owner, app)
+
+        # Check
         self.assertTrue(app.get_country("Canada").plots == 0)
         self.assertTrue(app.get_country("Spain").is_hard())
 
-        app = Labyrinth(1, 1, self.set_up_blank_test_scenario, ["Saudi Arabi", "Spain", "h"])
+    def test_removes_plot_from_muslim_country(self):
+        # Set up
+        app = Labyrinth(1, 1, self.set_up_blank_test_scenario, test_user_input=["Saudi Arabi", "Spain", "h"])
         app.get_country("Spain").make_soft()
         app.get_country("Saudi Arabia").make_good()
         app.get_country("Saudi Arabia").plots = 1
+
+        # Invoke
         app.card(21).play_event(self.event_owner, app)
+
+        # Check
         self.assertTrue(app.get_country("Spain").is_hard())
         self.assertTrue(app.get_country("Saudi Arabia").plots == 0)
 
