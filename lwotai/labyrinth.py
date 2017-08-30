@@ -1762,11 +1762,11 @@ class Labyrinth(object):
 
     def playable_non_us_event(self, card_number):
         card = self.card(card_number)
-        return card.type != "US" and card.playable("Jihadist", self, False)
+        return card.is_playable_non_us_event(self)
 
     def playable_us_event(self, card_number):
         card = self.card(card_number)
-        return card.type == "US" and card.playable("US", self, False)
+        return card.is_playable_us_event(self)
 
     def ai_flow_chart_top(self, card_number):
         self.debug_print("DEBUG: START")
@@ -1809,7 +1809,7 @@ class Labyrinth(object):
         self.debug_print("Play Event [6]")
         self.card(card_number).play_event("Jihadist", self)
         self.debug_print("Unassociated Event? [8]")
-        if self.card(card_number).type == "Unassociated":
+        if self.card(card_number).is_unassociated():
             self.debug_print("DEBUG: YES")
             self.output_to_history("Unassociated event now being used for Ops.", False)
             self.ai_flow_chart_major_jihad(card_number)
@@ -3060,7 +3060,7 @@ class Labyrinth(object):
         self.output_to_history("== US plays %s - %d Ops ==" % (card.name, card.ops))
 
         if card.playable("US", self, True):
-            self.output_to_history("Playable %s Event" % card.type, False)
+            self.output_to_history("Playable %s Event" % card.get_type(), False)
             if card_num == 120:
                 choice = self.get_event_or_ops_from_user(
                     "This event must be played, do you want the Event or Ops to happen first (enter e or o): ")
@@ -3077,19 +3077,18 @@ class Labyrinth(object):
                     print "When finished with Ops, enter 'us_card 120' again to play the event."
                 print self.get_us_prompt_to_spend_ops(card_num)
         else:
-            if card.type == "Jihadist":
-                if card.playable("Jihadist", self, True):
-                    self.output_to_history("Jihadist Event is playable.", False)
-                    play_event_first = self.get_yes_no_from_user(
-                        "Do you want to play the Jihadist event before using the Ops? (y/n): ")
-                    if play_event_first:
-                        card.play_event("Jihadist", self)
-                    else:
-                        print "Use the Ops now then enter u <card #> again to play the event"
-                    print self.get_us_prompt_to_spend_ops(card_num)
-                    return
-            # Here if it's unplayable by either side.
-            self.output_to_history("Unplayable %s Event" % card.type, False)
+            if card.get_type() == "Jihadist" and card.playable("Jihadist", self, True):
+                self.output_to_history("Jihadist Event is playable.", False)
+                play_event_first = self.get_yes_no_from_user(
+                    "Do you want to play the Jihadist event before using the Ops? (y/n): ")
+                if play_event_first:
+                    card.play_event("Jihadist", self)
+                else:
+                    print "Use the Ops now then enter u <card #> again to play the event"
+                print self.get_us_prompt_to_spend_ops(card_num)
+                return
+            # It's unplayable by either side.
+            self.output_to_history("Unplayable %s Event" % card.get_type(), False)
             print self.get_us_prompt_to_spend_ops(card_num)
 
     def get_us_prompt_to_spend_ops(self, card_number):
