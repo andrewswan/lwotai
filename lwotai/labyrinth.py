@@ -1867,12 +1867,6 @@ class Labyrinth(object):
             if self.us().is_soft():
                 self.change_prestige(1)
 
-    def execute_card_heu(self, country, roll):  # TODO rename
-        if self.map.get(country).is_non_recruit_success(roll):
-            self.output_to_history("Add a WMD to available Plots.", True)
-        else:
-            self.remove_cell(country, "Jihadist")
-
     def roll_d6(self):
         """Rolls a d6 and returns the result"""
         return self.randomizer.roll_d6(1)[0]
