@@ -1,5 +1,9 @@
 import unittest
 
+from mockito import mock, when
+
+from lwotai.randomizer import Randomizer
+
 from labyrinth_test_case import LabyrinthTestCase
 from lwotai.labyrinth import Labyrinth
 from postures.posture import HARD
@@ -453,34 +457,65 @@ class Card65(LabyrinthTestCase):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         self.assertFalse(app.deck.get(65).puts_cell())
 
-    def test_event(self):
-        app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
+    def test_success_roll_in_russia(self):
+        # Set up
+        randomizer = mock(Randomizer)
+        when(randomizer).roll_d6(1).thenReturn([1])
+        app = Labyrinth(1, 1, self.set_up_blank_test_scenario, randomizer=randomizer)
         app.test_country("Russia")
-        app.get_country("Russia").sleeperCells = 1
-        app.execute_card_heu("Russia", 1)
-        self.assertTrue(app.get_country("Russia").sleeperCells == 1)
+        russia = app.get_country("Russia")
+        russia.sleeperCells = 1
 
-        app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
+        # Invoke
+        app.card(65).play_event("Jihadist", app)
+
+        # Check
+        self.assertTrue(russia.sleeperCells == 1)
+
+    def test_failed_roll_in_russia(self):
+        # Set up
+        randomizer = mock(Randomizer)
+        when(randomizer).roll_d6(1).thenReturn([3])
+        app = Labyrinth(1, 1, self.set_up_blank_test_scenario, randomizer=randomizer)
         app.test_country("Russia")
-        app.get_country("Russia").sleeperCells = 1
-        app.execute_card_heu("Russia", 3)
-        self.assertTrue(app.get_country("Russia").sleeperCells == 0)
+        russia = app.get_country("Russia")
+        russia.sleeperCells = 1
 
-        app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
+        # Invoke
+        app.card(65).play_event("Jihadist", app)
+
+        # Check
+        self.assertTrue(russia.sleeperCells == 0)
+
+    def test_success_roll_in_central_asia(self):
+        # Set up
+        randomizer = mock(Randomizer)
+        when(randomizer).roll_d6(1).thenReturn([1])
+        app = Labyrinth(1, 1, self.set_up_blank_test_scenario, randomizer=randomizer)
         app.test_country("Central Asia")
-        app.get_country("Central Asia").sleeperCells = 1
-        app.execute_card_heu("Central Asia", 1)
-        self.assertTrue(app.get_country("Central Asia").sleeperCells == 1)
+        central_asia = app.get_country("Central Asia")
+        central_asia.sleeperCells = 1
 
-        app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
+        # Invoke
+        app.card(65).play_event("Jihadist", app)
+
+        # Check
+        self.assertTrue(central_asia.sleeperCells == 1)
+
+    def test_failed_roll_in_central_asia(self):
+        # Set up
+        randomizer = mock(Randomizer)
+        when(randomizer).roll_d6(1).thenReturn([4])
+        app = Labyrinth(1, 1, self.set_up_blank_test_scenario, randomizer=randomizer)
         app.test_country("Central Asia")
-        app.get_country("Central Asia").sleeperCells = 1
-        app.execute_card_heu("Central Asia", 4)
-        self.assertTrue(app.get_country("Central Asia").sleeperCells == 0)
+        central_asia = app.get_country("Central Asia")
+        central_asia.sleeperCells = 1
 
-        app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        app.get_country("Russia").sleeperCells = 1
-        app.deck.get(65).play_event("Jihadist", app)
+        # Invoke
+        app.card(65).play_event("Jihadist", app)
+
+        # Check
+        self.assertTrue(central_asia.sleeperCells == 0)
 
 
 class Card66(LabyrinthTestCase):
@@ -621,26 +656,30 @@ class Card71(LabyrinthTestCase):
 
     def test_success_roll_leaves_sleeper_cell_intact(self):
         # Set up
-        app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
+        randomizer = mock(Randomizer)
+        when(randomizer).roll_d6(1).thenReturn([1])
+        app = Labyrinth(1, 1, self.set_up_blank_test_scenario, randomizer=randomizer)
         app.test_country("Russia")
         russia = app.get_country("Russia")
         russia.sleeperCells = 1
 
         # Invoke
-        app.execute_card_heu("Russia", 1)
+        app.card(71).play_event("Jihadist", app)
 
         # Check
         self.assertTrue(russia.sleeperCells == 1)
 
     def test_failed_roll_removes_sleeper_cell(self):
         # Set up
-        app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
+        randomizer = mock(Randomizer)
+        when(randomizer).roll_d6(1).thenReturn([4])
+        app = Labyrinth(1, 1, self.set_up_blank_test_scenario, randomizer=randomizer)
         app.test_country("Russia")
         russia = app.get_country("Russia")
         russia.sleeperCells = 1
 
         # Invoke
-        app.execute_card_heu("Russia", 4)
+        app.card(71).play_event("Jihadist", app)
 
         # Check
         self.assertTrue(russia.sleeperCells == 0)
@@ -736,8 +775,7 @@ class Card74(LabyrinthTestCase):
         app.cells = 15
         messages_before = len(app.history)
         app.deck.get(74).play_event("Jihadist", app)
-        self.assert_new_messages(app, messages_before,
-                ['Card played for Event.', 'No cells to travel.'])
+        self.assert_new_messages(app, messages_before, ['Card played for Event.', 'No cells to travel.'])
 
 
 class Card75(LabyrinthTestCase):
@@ -934,7 +972,7 @@ class Card81(LabyrinthTestCase):
         iraq.set_aid(1)
         app.deck.get(81).play_event("Jihadist", app)
         self.assertTrue(iraq.sleeperCells == 5)
-        self.assertTrue(iraq.is_besieged() == False)
+        self.assertFalse(iraq.is_besieged())
         self.assertTrue(iraq.get_aid() == 0)
 
 

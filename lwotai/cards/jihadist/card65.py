@@ -21,5 +21,5 @@ class Card65(JihadistCard):
         possibles = [country.name for country in [central_asia, russia] if
                      country.total_cells() > 0 and "CTR" not in country.markers]
         target_name = random.choice(possibles)
-        roll = random.randint(1, 6)
+        roll = app.roll_d6()
         app.execute_card_heu(target_name, roll)
