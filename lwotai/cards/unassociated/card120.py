@@ -1,5 +1,3 @@
-import random
-
 from lwotai.cards.unassociated.unassociated_card import UnassociatedCard
 
 
@@ -9,4 +7,4 @@ class Card120(UnassociatedCard):
         super(Card120, self).__init__(120, "US Election", 3, False, False, False, False)
 
     def do_play_event(self, side, app):
-        app.execute_card_us_election(random.randint(1, 6))
+        app.execute_card_us_election()

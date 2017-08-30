@@ -1873,7 +1873,8 @@ class Labyrinth(object):
         else:
             self.remove_cell(country, "Jihadist")
 
-    def execute_card_us_election(self, posture_roll):
+    def execute_card_us_election(self):
+        posture_roll = self.randomizer.roll_d6(1)[0]
         if posture_roll <= 4:
             self.us().make_soft()
             self.output_to_history("United States Posture now Soft.", False)
