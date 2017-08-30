@@ -1867,21 +1867,15 @@ class Labyrinth(object):
             if self.us().is_soft():
                 self.change_prestige(1)
 
-    def execute_card_heu(self, country, roll):
+    def execute_card_heu(self, country, roll):  # TODO rename
         if self.map.get(country).is_non_recruit_success(roll):
             self.output_to_history("Add a WMD to available Plots.", True)
         else:
             self.remove_cell(country, "Jihadist")
 
-    def execute_card_us_election(self):
-        posture_roll = self.randomizer.roll_d6(1)[0]
-        if posture_roll <= 4:
-            self.us().make_soft()
-            self.output_to_history("United States Posture now Soft.", False)
-        else:
-            self.us().make_hard()
-            self.output_to_history("United States Posture now Hard.", False)
-        self.change_prestige(-1 if self.gwot_penalty() else 1)
+    def roll_d6(self):
+        """Rolls a d6 and returns the result"""
+        return self.randomizer.roll_d6(1)[0]
 
     def list_countries_in_param(self, needed=None):
         print ""
