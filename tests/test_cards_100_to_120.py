@@ -1083,19 +1083,19 @@ class Card120(LabyrinthTestCase):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         self.assertFalse(app.card(120).puts_cell())
 
-    def test_event(self):
+    def test_event_when_posture_roll_is_five_or_more(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.execute_card_us_election(5)
         self.assertEqual(app.prestige, 8)
+        self.assertTrue(app.us().is_hard())
 
+    def test_event_when_posture_roll_is_four_or_less(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.execute_card_us_election(4)
         self.assertEqual(app.prestige, 6)
+        self.assertTrue(app.us().is_soft())
 
-        app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        app.card(120).play_event("US", app)
-        self.assertTrue(app.prestige != 7)
-
+    def test_event_changes_prestige(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.card(120).play_event("US", app)
         self.assertTrue(app.prestige != 7)
