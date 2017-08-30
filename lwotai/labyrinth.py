@@ -1757,9 +1757,6 @@ class Labyrinth(object):
                 self.us().make_hard()
             self.output_to_history("US Posture now %s" % self.us_posture(), True)
 
-    def event_puts_cell(self, card_number):
-        return self.card(card_number).puts_cell()
-
     def playable_non_us_event(self, card_number):
         card = self.card(card_number)
         return card.is_playable_non_us_event(self)
@@ -1775,7 +1772,7 @@ class Labyrinth(object):
             self.debug_print("DEBUG: YES")
             self.output_to_history("Playable Non-US Event.", False)
             self.debug_print("Event Recruits or places cell? [2]")
-            if self.event_puts_cell(card_number):
+            if self.card(card_number).puts_cell():
                 self.debug_print("DEBUG: YES")
                 self.debug_print("Track has cell? [3]")
                 if self.cells > 0:
