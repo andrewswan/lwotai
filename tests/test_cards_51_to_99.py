@@ -605,7 +605,7 @@ class Card70(LabyrinthTestCase):
 
 
 class Card71(LabyrinthTestCase):
-    """Kazakh Strain"""
+    """Loose Nuke"""
 
     def test_playable(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
@@ -619,20 +619,31 @@ class Card71(LabyrinthTestCase):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         self.assertFalse(app.deck.get(71).puts_cell())
 
-    def test_event(self):
+    def test_success_roll_leaves_sleeper_cell_intact(self):
+        # Set up
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.test_country("Russia")
-        app.get_country("Russia").sleeperCells = 1
+        russia = app.get_country("Russia")
+        russia.sleeperCells = 1
+
+        # Invoke
         app.execute_card_heu("Russia", 1)
-        self.assertTrue(app.get_country("Russia").sleeperCells == 1)
 
+        # Check
+        self.assertTrue(russia.sleeperCells == 1)
+
+    def test_failed_roll_removes_sleeper_cell(self):
+        # Set up
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         app.test_country("Russia")
-        app.get_country("Russia").sleeperCells = 1
-        app.execute_card_heu("Russia", 4)
-        self.assertTrue(app.get_country("Russia").sleeperCells == 0)
+        russia = app.get_country("Russia")
+        russia.sleeperCells = 1
 
-        app.deck.get(71).play_event("Jihadist", app)
+        # Invoke
+        app.execute_card_heu("Russia", 4)
+
+        # Check
+        self.assertTrue(russia.sleeperCells == 0)
 
 
 class Card72(LabyrinthTestCase):

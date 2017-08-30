@@ -110,6 +110,7 @@ class Country(object):
         return False
 
     def is_non_recruit_success(self, roll):
+        """Indicates whether the given die roll is a success for the Jihadist (for non-recruiting actions)"""
         return self.is_governed() and self.__governance.is_success(roll)
 
     def is_recruit_success(self, roll, recruit_override=None):
