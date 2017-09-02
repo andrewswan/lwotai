@@ -276,14 +276,17 @@ class Labyrinth(object):
                 print ""
 
     def get_event_or_ops_from_user(self, prompt):
+        """Asks the user to choose between "event" or "ops" (or None)"""
         while True:
-            choice = self.my_raw_input(prompt)
-            if self._matches(choice, "event"):
+            choice = self.my_raw_input("%s (enter e or o): " % prompt)
+            if choice == "":
+                return None
+            elif self._matches(choice, "event"):
                 return "event"
             elif self._matches(choice, "ops"):
                 return "ops"
             else:
-                print "Enter e or o."
+                print "Enter e or o, or press <Enter> to cancel."
                 print ""
 
     def modified_woi_roll(self, base_roll, country_name, use_gwot_penalty=True):
@@ -2821,22 +2824,7 @@ class Labyrinth(object):
         self.output_to_history("== US plays %s - %d Ops ==" % (card.name, card.ops))
 
         if card.playable("US", self, True):
-            self.output_to_history("Playable %s Event" % card.get_type(), False)
-            if card_num == 120:
-                choice = self.get_event_or_ops_from_user(
-                    "This event must be played, do you want the Event or Ops to happen first (enter e or o): ")
-            else:
-                choice = self.get_event_or_ops_from_user("Play card for Event or Ops (enter e or o): ")
-            if choice == "event":
-                self.output_to_history("Played for Event.", False)
-                card.play_event("US", self)
-                if card_num == 120:
-                    print self.get_us_prompt_to_spend_ops(card_num)
-            elif choice == "ops":
-                self.output_to_history("Played for Ops.", False)
-                if card_num == 120:
-                    print "When finished with Ops, enter 'us_card 120' again to play the event."
-                print self.get_us_prompt_to_spend_ops(card_num)
+            self.play_playable_event_card_as_us(card)
         else:
             if card.get_type() == "Jihadist" and card.playable("Jihadist", self, True):
                 self.output_to_history("Jihadist Event is playable.", False)
@@ -2851,6 +2839,24 @@ class Labyrinth(object):
             # It's unplayable by either side.
             self.output_to_history("Unplayable %s Event" % card.get_type(), False)
             print self.get_us_prompt_to_spend_ops(card_num)
+
+    def play_playable_event_card_as_us(self, card):
+        self.output_to_history("Playable %s Event" % card.get_type(), False)
+        if card.number == 120:
+            prompt = "This event must be played, do you want the Event or Ops to happen first"
+        else:
+            prompt = "Play card for Event or Ops"
+        choice = self.get_event_or_ops_from_user(prompt)
+        if choice == "event":
+            self.output_to_history("Played for Event.", False)
+            card.play_event("US", self)
+            if card.number == 120:
+                print self.get_us_prompt_to_spend_ops(card.number)
+        elif choice == "ops":
+            self.output_to_history("Played for Ops.", False)
+            if card.number == 120:
+                print "When finished with Ops, enter 'us_card 120' again to play the event."
+            print self.get_us_prompt_to_spend_ops(card.number)
 
     def get_us_prompt_to_spend_ops(self, card_number):
         """Prompts the US player to spend the given card's Ops value"""
