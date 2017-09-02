@@ -8,7 +8,7 @@ class Card4(USCard):
 
     def play_as_us(self, app):
         app.markers.append("Moro Talks")
-        app.markers.remove("Abu Sayyaf")
+        app.remove_marker("Abu Sayyaf")
         app.output_to_history("Moro Talks in play.", False)
         app.test_country("Philippines")
         app.change_funding(-1)

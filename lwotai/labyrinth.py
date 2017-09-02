@@ -430,6 +430,11 @@ class Labyrinth(object):
             self.output_to_history("Cadre added in %s." % country_name, False)
             self.map.get(country_name).cadre = 1
 
+    def remove_marker(self, marker_name):
+        """Removes the given marker"""
+        if marker_name in self.markers:
+            self.markers.remove(marker_name)
+
     def improve_governance(self, country_name):
         """Improves governance in the named country"""
         self.get_country(country_name).improve_governance()

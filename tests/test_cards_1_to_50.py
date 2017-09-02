@@ -145,12 +145,13 @@ class Card04(LabyrinthTestCase):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         self.assertTrue(app.card(4).playable("US", app, True))
 
-    def _assertEvent(self, funding_before, expected_funding_after):
+    def _assertEvent(self, funding_before, expected_funding_after, abu_sayyaf_active=True):
         # Set up
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         self.assertEqual(app.get_country("Philippines").get_posture(), None)
         app.funding = funding_before
-        app.markers.append("Abu Sayyaf")
+        if abu_sayyaf_active:
+            app.markers.append("Abu Sayyaf")
 
         # Invoke
         app.card(4).play_event("US", app)
@@ -166,6 +167,9 @@ class Card04(LabyrinthTestCase):
 
     def test_event_does_not_lower_funding_if_already_at_1(self):
         self._assertEvent(1, 1)
+
+    def test_event_is_playable_if_abi_sayyaf_not_in_play(self):
+        self._assertEvent(1, 1, False)
 
 
 class Card05(LabyrinthTestCase):
