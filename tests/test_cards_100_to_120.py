@@ -350,7 +350,7 @@ class Card106(LabyrinthTestCase):
         # Set up
         mock_randomizer = mock(Randomizer())
         when(mock_randomizer).roll_d6(3).thenReturn([6, 6, 2])  # Pakistan
-        when(mock_randomizer).roll_d6(1).thenReturn(6)  # Pakistan tests to Fair
+        when(mock_randomizer).roll_d6(1).thenReturn([6])  # Pakistan tests to Fair
         app = Labyrinth(1, 1, randomizer=mock_randomizer)
         # Make Iraq the only "good" target
         iraq = app.get_country("Iraq")
@@ -375,7 +375,7 @@ class Card106(LabyrinthTestCase):
         # Set up
         mock_randomizer = mock(Randomizer())
         when(mock_randomizer).roll_d6(3).thenReturn([6, 6, 2])  # Pakistan
-        when(mock_randomizer).roll_d6(1).thenReturn(6)  # Pakistan tests to Fair
+        when(mock_randomizer).roll_d6(1).thenReturn([6])  # Pakistan tests to Fair
         app = Labyrinth(1, 1, randomizer=mock_randomizer)
         # Make Iraq a "good" target
         iraq = app.get_country("Iraq")
@@ -401,7 +401,7 @@ class Card106(LabyrinthTestCase):
         # Set up
         mock_randomizer = mock(Randomizer())
         when(mock_randomizer).roll_d6(3).thenReturn([6, 6, 2])  # Pakistan
-        when(mock_randomizer).roll_d6(1).thenReturn(6)  # Pakistan tests to Fair
+        when(mock_randomizer).roll_d6(1).thenReturn([6])  # Pakistan tests to Fair
         app = Labyrinth(1, 1, randomizer=mock_randomizer)
         # Make Iraq the only valid target
         iraq = app.get_country("Iraq")

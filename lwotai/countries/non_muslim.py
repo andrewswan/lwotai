@@ -93,6 +93,7 @@ class NonMuslimCountry(Country):
 
     def test(self, test_roll):
         """Tests this country's posture, if not already set, using the given roll"""
+        assert type(test_roll) == int
         if not self.get_posture():
             if test_roll <= 4:
                 self.make_soft()

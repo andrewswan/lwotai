@@ -1193,7 +1193,7 @@ class Labyrinth(object):
     def test_country(self, country_name):
         # Tests the named country, if untested
         country = self.map.get(country_name)
-        test_roll = self.randomizer.roll_d6(1)
+        test_roll = self.roll_d6()
         country.test(test_roll)
 
     def get_countries_with_us_posture_by_governance(self):
