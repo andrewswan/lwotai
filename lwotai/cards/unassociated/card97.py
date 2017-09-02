@@ -17,4 +17,4 @@ class Card97(UnassociatedCard):
             app.output_to_history("Conduct a 1-value operation (Use commands: alert, deploy, disrupt,"
                                   " reassessment, regime, withdraw, or woi).", False)
         else:
-            app.ai_flow_chart_major_jihad(97)
+            app.ai_major_jihad(97)

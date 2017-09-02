@@ -1,5 +1,6 @@
 import random
 
+from lwotai.ai import AIPlayer
 from lwotai.cards.deck import Deck
 from lwotai.governance import GOOD, FAIR, POOR
 from lwotai.governance import governance_with_level
@@ -28,6 +29,7 @@ class Labyrinth(object):
         self.funding = 0
         self.gameOver = False
         self.history = []
+        self.__ai_player = AIPlayer(self)
         self.lapsing = []
         self.map = Map(self)
         self.markers = []
@@ -697,94 +699,26 @@ class Labyrinth(object):
             if cell_type.lower() in ["a", "s"]:
                 return cell_type.lower()
 
-    def execute_jihad(self, country_name, roll_list):
-        successes = 0
-        failures = 0
-        target_country = self.map.get(country_name)
-        original_besieged = target_country.is_besieged()
-        for roll in roll_list:
-            if target_country.is_non_recruit_success(roll):
-                successes += 1
-            else:
-                failures += 1
-        aid_removed = target_country.reduce_aid_by(successes)
-        self.output_to_history("Jihad operation. %d Successes rolled, %d Failures rolled, %d Aid removed." %
-                               (successes, failures, aid_removed), False)
-        is_major_jihad = country_name in self.major_jihad_possible(len(roll_list))
-        if is_major_jihad:  # all cells go active
-            self.output_to_history("* Major Jihad attempt in %s" % country_name, False)
-            sleepers = target_country.sleeperCells
-            target_country.sleeperCells = 0
-            target_country.activeCells += sleepers
-            self.output_to_history("All cells go Active", False)
-            if ((failures >= 2 and not target_country.is_besieged()) or
-                    (failures == 3 and target_country.is_besieged())) and\
-                    len(roll_list) == 3 and target_country.is_poor():
-                self.output_to_history("Major Jihad Failure", False)
-                target_country.make_besieged()
-                self.output_to_history("Besieged Regime", False)
-                if target_country.is_adversary():
-                    target_country.make_neutral()
-                elif target_country.is_neutral():
-                    target_country.make_ally()
-                self.output_to_history("Alignment %s" % target_country.alignment(), False)
-        else:  # a cell is active for each roll
-            self.output_to_history("* Minor Jihad attempt in %s" % country_name, False)
-            for _ in range(len(roll_list) - target_country.num_active_cells()):
-                self.output_to_history("Cell goes Active", False)
-                target_country.sleeperCells -= 1
-                target_country.activeCells += 1
-        while successes > 0 and target_country.governance_is_better_than(POOR):
-            target_country.worsen_governance()
-            successes -= 1
-            self.output_to_history("Governance to %s" % target_country.governance_str(), False)
-        if is_major_jihad and ((successes >= 2) or (original_besieged and successes >= 1)):  # Major Jihad
-            self.output_to_history("Islamist Revolution in %s" % country_name, False)
-            target_country.make_islamist_rule()
-            self.output_to_history("Governance to Islamist Rule", False)
-            target_country.make_adversary()
-            self.output_to_history("Alignment to Adversary", False)
-            target_country.remove_regime_change()
-            if target_country.is_besieged():
-                self.output_to_history("Besieged Regime marker removed.", False)
-            target_country.remove_besieged()
-            target_country.set_aid(0)
-            self.output_to_history("All Aid removed.", False)
-            self.funding = min(9, self.funding + self.country_resources_by_name(country_name))
-            self.output_to_history("Funding now %d" % self.funding, False)
-            if target_country.troops() > 0:
-                self.prestige = 1
-                self.output_to_history("Troops present so US Prestige now 1", False)
-        if self.ideology.failed_jihad_rolls_remove_cells():
-            for _ in range(failures):
-                if target_country.num_active_cells() > 0:
-                    target_country.remove_active_cell()
-                else:
-                    target_country.sleeperCells -= 1
-                    self.output_to_history("Sleeper cell Removed to Funding Track", False)
-                    self.cells += 1
-        self.output_to_history(target_country.summary(), False)
-        print ""
-
-    def handle_jihad(self, country_name, ops):
-        """Returns number of unused Ops"""
-        cells = self.map.get(country_name).total_cells(True)
-        roll_list = [random.randint(1, 6) for _ in range(min(cells, ops))]
-        self.execute_jihad(country_name, roll_list)
-        return ops - len(roll_list)
-
-    def handle_minor_jihad(self, country_list, ops):
-        ops_remaining = ops
-        for countryData in country_list:
-            self.handle_jihad(countryData[0], countryData[1])
-            ops_remaining -= countryData[1]
-        return ops_remaining
+    def ai_major_jihad(self, card_number):
+        self.__ai_player.ai_flow_chart_major_jihad(card_number)
 
     def excess_cells_needed_for_major_jihad(self):
         return self.ideology.excess_cells_for_major_jihad()
 
+    def execute_jihad(self, country_name, rolls):
+        self.__ai_player.execute_jihad(country_name, rolls)
+
     def bhutto_in_play(self):
         return "Benazir Bhutto" in self.markers
+
+    def handle_jihad(self, country_name, ops):
+        return self.__ai_player.handle_jihad(country_name, ops)
+
+    def handle_radicalization(self, ops):
+        self.__ai_player.handle_radicalization(ops)
+
+    def major_jihad_choice(self, ops):
+        return self.__ai_player.major_jihad_choice(ops)
 
     def major_jihad_possible(self, ops):
         """Return list of countries where major jihad is possible."""
@@ -792,25 +726,6 @@ class Labyrinth(object):
         bhutto = self.bhutto_in_play()
         return [country.name for country in self.map.countries() if
                 country.is_major_jihad_possible(ops, excess_cells_needed, bhutto)]
-
-    def major_jihad_choice(self, ops):
-        """Return AI choice country."""
-        possible = self.major_jihad_possible(ops)
-        if not possible:
-            return False
-        else:
-            if "Pakistan" in possible:
-                return "Pakistan"
-            else:
-                max_resources = 0
-                for country_name in possible:
-                    if self.country_resources_by_name(country_name) > max_resources:
-                        max_resources = self.country_resources_by_name(country_name)
-                new_possible = []
-                for country_name in possible:
-                    if self.country_resources_by_name(country_name) == max_resources:
-                        new_possible.append(country_name)
-                return random.choice(new_possible)
 
     def minor_jihad_in_good_fair_choice(self, ops, is_abu_ghurayb=False, is_al_jazeera=False):
         possible = []
@@ -1581,10 +1496,6 @@ class Labyrinth(object):
                 return 0
         return len(plot_rolls) - roll_position
 
-    def handle_ai_plot_action(self, ops, is_ops):
-        plot_rolls = [random.randint(1, 6) for _ in range(ops)]
-        return self.execute_plot(ops, is_ops, plot_rolls)
-
     def place_cell(self, country_name):
         """Places a cell from the funding track into the given country"""
         country = self.map.get(country_name)
@@ -1596,52 +1507,6 @@ class Labyrinth(object):
             country.cadre = 0
             self.output_to_history("--> Cadre removed from %s." % country_name)
         self.output_to_history(self.map.get(country_name).summary(), True)
-
-    def handle_radicalization(self, ops):
-        self.output_to_history("* Radicalization with %d ops." % ops, False)
-        ops_remaining = ops
-        # First box
-        if ops_remaining > 0:
-            if self.cells > 0:
-                country_name = self.randomizer.pick_one(self.map.country_names())
-                self.place_cell(country_name)
-                ops_remaining -= 1
-                # Second box
-        if ops_remaining > 0:
-            if self.cells < 15:
-                self.handle_travel(1, True)
-                ops_remaining -= 1
-                # Third box
-        if ops_remaining > 0:
-            if self.funding < 9:
-                possibles = []
-                for country in self.map.country_names():
-                    if not self.map.get(country).is_islamist_rule():
-                        if (self.map.get(country).total_cells(True)) > 0:
-                            possibles.append(country)
-                if len(possibles) > 0:
-                    location_name = random.choice(possibles)
-                    self.test_country(location_name)
-                    self.map.get(location_name).plots += 1
-                    self.output_to_history("--> Plot placed in %s." % location_name, True)
-                    ops_remaining -= 1
-                    # Fourth box
-        while ops_remaining > 0:
-            possibles = []
-            for country in self.map.country_names():
-                if self.map.get(country).is_muslim() and\
-                        (self.map.get(country).is_good() or self.map.get(country).is_fair()):
-                    possibles.append(country)
-            if len(possibles) == 0:
-                self.output_to_history("--> No remaining Good or Fair countries.", True)
-                break
-            else:
-                location = self.map.get(random.choice(possibles))
-                location.worsen_governance()
-                self.output_to_history(
-                    "--> Governance in %s worsens to %s." % (location.name, location.governance_str()))
-                self.output_to_history(location.summary(), True)
-                ops_remaining -= 1
 
     def resolve_plot(self, country, plot_type, posture_roll, us_prestige_rolls, schengen_countries,
                      schengen_posture_rolls, governance_olls, is_backlash=False):
@@ -1764,93 +1629,6 @@ class Labyrinth(object):
     def playable_us_event(self, card_number):
         card = self.card(card_number)
         return card.is_playable_us_event(self)
-
-    def ai_flow_chart_top(self, card_number):
-        self.debug_print("DEBUG: START")
-        self.debug_print("DEBUG: Playable Non-US event? [1]")
-        if self.playable_non_us_event(card_number):
-            self.debug_print("DEBUG: YES")
-            self.output_to_history("Playable Non-US Event.", False)
-            self.debug_print("Event Recruits or places cell? [2]")
-            if self.card(card_number).puts_cell():
-                self.debug_print("DEBUG: YES")
-                self.debug_print("Track has cell? [3]")
-                if self.cells > 0:
-                    self.debug_print("DEBUG: YES")
-                    self.ai_flow_chart_play_event(card_number)
-                else:
-                    self.debug_print("DEBUG: NO")
-                    self.debug_print("DEBUG: Radicalization [4]")
-                    self.handle_radicalization(self.card(card_number).ops)
-            else:
-                self.debug_print("DEBUG: NO")
-                self.ai_flow_chart_play_event(card_number)
-        else:
-            self.debug_print("DEBUG: NO")
-            self.debug_print("DEBUG: Playble US event? [7]")
-            if self.playable_us_event(card_number):
-                self.debug_print("DEBUG: YES")
-                self.debug_print("DEBUG: Plot Here [5]")
-                self.output_to_history("Playable US Event.", False)
-                unused_ops = self.handle_ai_plot_action(self.card(card_number).ops, True)
-                if unused_ops > 0:
-                    self.debug_print("DEBUG: Radicalization with remaining %d ops" % unused_ops)
-                    self.handle_radicalization(unused_ops)
-                self.debug_print("DEBUG: END")
-            else:
-                self.debug_print("DEBUG: NO")
-                self.output_to_history("Unplayable Event. Using Ops for Operations.", False)
-                self.ai_flow_chart_major_jihad(card_number)
-
-    def ai_flow_chart_play_event(self, card_number):
-        self.debug_print("Play Event [6]")
-        self.card(card_number).play_event("Jihadist", self)
-        self.debug_print("Unassociated Event? [8]")
-        if self.card(card_number).is_unassociated():
-            self.debug_print("DEBUG: YES")
-            self.output_to_history("Unassociated event now being used for Ops.", False)
-            self.ai_flow_chart_major_jihad(card_number)
-        else:
-            self.debug_print("DEBUG: NO")
-            self.debug_print("end [9]")
-
-    def ai_flow_chart_major_jihad(self, card_number):
-        self.debug_print("DEBUG: Major Jihad success possible? [10]")
-        country = self.major_jihad_choice(self.card(card_number).ops)
-        if country:
-            self.debug_print("DEBUG: YES")
-            self.debug_print("DEBUG: Major Jihad [11]")
-            unused_ops = self.handle_jihad(country, self.card(card_number).ops)
-            if unused_ops > 0:
-                self.debug_print("DEBUG: Radicalization with remaining %d ops" % unused_ops)
-                self.handle_radicalization(unused_ops)
-        else:
-            self.debug_print("DEBUG: NO")
-            self.debug_print("DEBUG: Jihad possible in Fair/Good? [12]")
-            country_list = self.minor_jihad_in_good_fair_choice(self.card(card_number).ops)
-            if country_list:
-                self.debug_print("DEBUG: YES")
-                unused_ops = self.handle_minor_jihad(country_list, self.card(card_number).ops)
-                if unused_ops > 0:
-                    self.debug_print("DEBUG: Radicalization with remaining %d ops" % unused_ops)
-                    self.handle_radicalization(unused_ops)
-            else:
-                self.debug_print("DEBUG: NO")
-                self.debug_print("DEBUG: Cells Available? [14]")
-                if self.num_cells_available() > 0:
-                    self.debug_print("DEBUG: YES")
-                    self.debug_print("DEBUG: Recruit [15]")
-                    unused_ops = self.handle_recruit(self.card(card_number).ops)
-                    if unused_ops > 0:
-                        self.debug_print("DEBUG: Radicalization with remaining %d ops" % unused_ops)
-                        self.handle_radicalization(unused_ops)
-                else:
-                    self.debug_print("DEBUG: NO")
-                    self.debug_print("DEBUG: Travel [16]")
-                    unused_ops = self.handle_travel(self.card(card_number).ops)
-                    if unused_ops > 0:
-                        self.debug_print("DEBUG: Radicalization with remaining %d ops" % unused_ops)
-                        self.handle_radicalization(unused_ops)
 
     def execute_non_muslim_woi(self, country, posture_roll):
         if posture_roll > 4:
@@ -3029,7 +2807,7 @@ class Labyrinth(object):
         self.output_to_history("", False)
         card = self.card(card_number)
         self.output_to_history("== Jihadist plays %s - %d Ops ==" % (card.name, card.ops))
-        self.ai_flow_chart_top(card_number)
+        self.__ai_player.ai_flow_chart_top(card_number)
 
     def play_us_card(self, card_num):
         """Plays the given card as the US when it's the US action phase."""
