@@ -708,7 +708,8 @@ class Labyrinth(object):
                 return cell_type.lower()
 
     def ai_major_jihad(self, card_number):
-        self.__ai_player.ai_flow_chart_major_jihad(card_number)
+        card = self.card(card_number)
+        self.__ai_player.ai_flow_chart_major_jihad(card)
 
     def excess_cells_needed_for_major_jihad(self):
         return self.ideology.excess_cells_for_major_jihad()
@@ -2815,7 +2816,7 @@ class Labyrinth(object):
         self.output_to_history("", False)
         card = self.card(card_number)
         self.output_to_history("== Jihadist plays %s - %d Ops ==" % (card.name, card.ops))
-        self.__ai_player.ai_flow_chart_top(card_number)
+        self.__ai_player.ai_flow_chart_top(card)
 
     def play_us_card(self, card_num):
         """Plays the given card as the US when it's the US action phase."""

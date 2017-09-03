@@ -4,38 +4,36 @@ from lwotai.governance import POOR
 
 
 class AIPlayer(object):
-    """The AI that uses the flowchart to play as the Jihadist player"""
+    """The AI that acts as the Jihadist player"""
 
     def __init__(self, app):
         self.__app = app
 
-    def ai_flow_chart_top(self, card_number):
-        card = self.__app.card(card_number)
-        if self.__app.playable_non_us_event(card_number):
+    def ai_flow_chart_top(self, card):
+        """Plays the given card as the Jihadist, following the AI flowchart"""
+        if self.__app.playable_non_us_event(card.number):
             self.__app.output_to_history("Playable Non-US Event.", False)
             if card.puts_cell() and self.__app.cells == 0:
                 self.handle_radicalization(card.ops)
             else:
-                self._ai_flow_chart_play_event(card_number)
+                self._ai_flow_chart_play_event(card)
         else:
-            if self.__app.playable_us_event(card_number):
+            if self.__app.playable_us_event(card.number):
                 self.__app.output_to_history("Playable US Event.", False)
                 unused_ops = self._handle_ai_plot_action(card.ops, True)
                 if unused_ops > 0:
                     self.handle_radicalization(unused_ops)
             else:
                 self.__app.output_to_history("Unplayable Event. Using Ops for Operations.", False)
-                self.ai_flow_chart_major_jihad(card_number)
+                self.ai_flow_chart_major_jihad(card)
 
-    def _ai_flow_chart_play_event(self, card_number):  # TODO pass the Card
-        card = self.__app.card(card_number)
+    def _ai_flow_chart_play_event(self, card):
         card.play_event("Jihadist", self.__app)
         if card.is_unassociated():
             self.__app.output_to_history("Unassociated event now being used for Ops.", False)
-            self.ai_flow_chart_major_jihad(card_number)
+            self.ai_flow_chart_major_jihad(card)
 
-    def ai_flow_chart_major_jihad(self, card_number):  # TODO pass the Card
-        card = self.__app.card(card_number)
+    def ai_flow_chart_major_jihad(self, card):
         country = self.major_jihad_choice(card.ops)
         if country:
             unused_ops = self.handle_jihad(country, card.ops)

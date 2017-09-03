@@ -136,13 +136,16 @@ class Command(Cmd):
 
     def _play_card(self, card_num_str, handler):
         """Plays the given card using the given handler function"""
-        if card_num_str:
-            card_number = Utils.parse_card_number(card_num_str)
-        else:
-            card_number = Utils.prompt_for_card_number()
+        card_number = self._get_card_number(card_num_str)
         if card_number:
             self.saver.save_undo_file(self.app)
             handler(card_number)
+
+    @staticmethod
+    def _get_card_number(card_number_str):
+        if card_number_str:
+            return Utils.parse_card_number(card_number_str)
+        return Utils.prompt_for_card_number()
 
     def do_war_of_ideas(self, _):
         """Carries out a "War of Ideas" action in a selected country."""
