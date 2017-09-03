@@ -681,8 +681,8 @@ class Labyrinth(object):
                 target.activeCells = 0
             if self.cells > 15:
                 self.cells = 15
-        if target.total_cells(False) <= 0:
-            self.output_to_history("Cadre added in %s." % target.name, False)
+        if target.total_cells(False) <= 0 and not target.has_cadre():
+            self.output_to_history("Cadre added to %s." % target.name, False)
             target.cadre = 1
 
     def _get_number_of_cells_to_disrupt(self, target):
@@ -1511,7 +1511,7 @@ class Labyrinth(object):
         self.cells -= 1
         self.test_country(country_name)
         self.output_to_history("--> Sleeper Cell placed in %s." % country_name)
-        if country.cadre:
+        if country.has_cadre():
             country.cadre = 0
             self.output_to_history("--> Cadre removed from %s." % country_name)
         self.output_to_history(self.map.get(country_name).summary(), True)

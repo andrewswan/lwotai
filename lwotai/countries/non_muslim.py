@@ -76,7 +76,7 @@ class NonMuslimCountry(Country):
             item_strings.append("Active: %d" % self.activeCells)
         if self.sleeperCells:
             item_strings.append("Sleeper: %d" % self.sleeperCells)
-        if self.cadre:
+        if self.has_cadre():
             item_strings.append("Cadre: %d" % self.cadre)
         if self.plots:
             item_strings.append("Plots: %d" % self.plots)
