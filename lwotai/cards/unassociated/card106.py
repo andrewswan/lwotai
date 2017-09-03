@@ -13,7 +13,7 @@ class Card106(UnassociatedCard):
     def do_play_event(self, side, app):
         if side == "US":
             target_name = None
-            possibles = [country.name for country in app.map.countries() if
+            possibles = [country.name for country in app.get_countries() if
                          country.is_shia_mix() and country.troops() > 0 and country.total_cells() > 0]
             if len(possibles) == 1:
                 target_name = possibles[0]

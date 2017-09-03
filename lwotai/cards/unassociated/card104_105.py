@@ -49,7 +49,7 @@ class Card104and105(UnassociatedCard):
             target_name = random.choice(possibles)
             app.test_country(target_name)
             tested = target_name
-            good_countries = [country.name for country in app.map.countries() if
+            good_countries = [country.name for country in app.get_countries() if
                               country.is_muslim() and country.is_good()]
             if len(good_countries) > 1:
                 distances = []
@@ -60,7 +60,7 @@ class Card104and105(UnassociatedCard):
             elif len(good_countries) == 1:
                 target_name = good_countries[0]
             else:
-                fair_countries = [country.name for country in app.map.countries() if
+                fair_countries = [country.name for country in app.get_countries() if
                                   country.is_muslim() and country.is_fair()]
                 if len(fair_countries) > 1:
                     distances = []
