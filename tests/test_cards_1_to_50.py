@@ -1,5 +1,8 @@
 import unittest
 
+from lwotai.cards.us.card14 import Card14
+
+from lwotai.countries.country import Country
 from mockito import when, mock
 
 from labyrinth_test_case import LabyrinthTestCase
@@ -366,7 +369,7 @@ class Card13(LabyrinthTestCase):
         self.assertTrue("Anbar Awakening" in app.markers)
 
 
-class Card14(LabyrinthTestCase):
+class Card14Test(LabyrinthTestCase):
     """Covert Action"""
 
     def test_playable(self):
@@ -375,11 +378,19 @@ class Card14(LabyrinthTestCase):
         app.get_country("Iraq").make_adversary()
         self.assertTrue(app.card(14).playable("US", app, True))
 
-    def test_event(self):
-        app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        app.list_adversary_countries()
-        app.get_country("Iraq").make_adversary()
-        app.list_adversary_countries()
+    def test_event_does_nothing_if_no_adversaries(self):
+        # Set up
+        app = mock(Labyrinth)
+        country = mock(Country)
+        when(country).is_adversary().thenReturn(False)
+        when(app).get_countries().thenReturn([country])
+        card14 = Card14()
+
+        # Invoke
+        result = card14.play_as_us(app)
+
+        # Check
+        self.assertFalse(result)
 
 
 class Card15(LabyrinthTestCase):

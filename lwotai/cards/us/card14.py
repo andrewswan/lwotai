@@ -10,7 +10,7 @@ class Card14(USCard):
         return app.contains_country(lambda c: c.is_adversary())
 
     def play_as_us(self, app):
-        adversary_names = [country.name for country in app.map.values() if country.is_adversary()]
+        adversary_names = [country.name for country in app.get_countries() if country.is_adversary()]
         target_country = None
         if not adversary_names:
             return False
