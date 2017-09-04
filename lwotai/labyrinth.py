@@ -1572,13 +1572,7 @@ class Labyrinth(object):
 
     def _resolve_plot_in_muslim_country(self, country_name, governance_rolls, is_backlash, plot_type):
         country = self.map.get(country_name)
-        if not is_backlash:
-            if country.is_good():
-                self.change_funding(2)
-            else:
-                self.change_funding(1)
-            self.output_to_history("Jihadist Funding now %d" % self.funding, False)
-        else:
+        if is_backlash:
             if plot_type == "WMD":
                 self.funding = 1
             else:
@@ -1587,14 +1581,20 @@ class Labyrinth(object):
                     self.funding -= 1
                 if self.funding < 1:
                     self.funding = 1
-            self.output_to_history("BACKLASH: Jihadist Funding now %d" % self.funding, False)
-        if country.troops() > 0:
+            self.output_to_history("BACKLASH: Jihadist Funding reduced to %d" % self.funding, False)
+        elif self.funding < 9:
+            if country.is_good():
+                self.change_funding(2)
+            else:
+                self.change_funding(1)
+            self.output_to_history("Jihadist Funding raised to %d" % self.funding, False)
+        if country.troops() > 0 and self.prestige > 1:
             if plot_type == "WMD":
                 self.prestige = 1
             else:
                 self._reduce_prestige(1)
-            self.output_to_history("Troops present so US Prestige now %d" % self.prestige, False)
-        if country.name != "Iran":
+            self.output_to_history("Troops present so US Prestige reduced to %d" % self.prestige, False)
+        if country.name != "Iran" and (country.governance_is_better_than(POOR) or country.get_aid() > 0):
             successes = 0
             failures = 0
             for roll in governance_rolls:
