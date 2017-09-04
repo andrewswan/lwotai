@@ -18,6 +18,8 @@ Thanks to Dave Horn for implementing the Save and Undo system.
 import os
 import sys
 
+import errno
+
 from lwotai.labyrinth import Labyrinth
 from lwotai.utils import Utils
 
@@ -58,8 +60,14 @@ class Saver(object):
     def load_turn_file(self, turn_number):
         """Returns the saved game as it was at the given turn number"""
         turn_file_name = self.ROLLBACK_FILE + str(turn_number) + '.lwot'
-        with open(turn_file_name, 'rb') as turn_file:
-            app = pickle.load(turn_file)
+        try:
+            with open(turn_file_name, 'rb') as turn_file:
+                app = pickle.load(turn_file)
+        except IOError as io_error:
+            if io_error.errno == errno.ENOENT:
+                print "No such file '%s'" % turn_file_name
+                return None
+            raise io_error
         app.stdout = sys.stdout
         # rollback invalidates undo save, so delete it
         self._delete_undo_file_if_exists()

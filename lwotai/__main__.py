@@ -70,6 +70,8 @@ def main():
         elif app.roll_turn >= 0:
             print "Rolling back to turn " + str(app.roll_turn)
             app = saver.load_turn_file(app.roll_turn)
+            if not app:
+                break
         else:
             break
 
