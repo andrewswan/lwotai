@@ -361,7 +361,8 @@ class Labyrinth(object):
             country = self.map.get(country_name)
             cell_count += country.activeCells + country.sleeperCells
         cell_count += self.cells
-        assert cell_count == 15, "Expected 15 cells but have %d" % cell_count
+        if cell_count != 15:
+            print "WARNING: Expected 15 cells in total but have %d (%d on the track)" % (cell_count, self.cells)
         # Check troops
         troop_count = 0
         for country_name in self.map.country_names():
