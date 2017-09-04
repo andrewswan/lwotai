@@ -2064,20 +2064,15 @@ class Labyrinth(object):
         return self.map.find(predicate)
 
     def get_adjust_from_user(self):
+        """Returns the quantity or country to adjust"""
         while True:
-            input_str = self.my_raw_input("Enter 'ideology', 'prestige', 'funding', 'lapsing', 'marker' or a country: ")
+            input_str = self.my_raw_input(
+                "Enter 'ideology', 'prestige', 'funding', 'lapsing', 'marker', 'cells', or a country: ")
             if input_str == "":
                 return ""
-            if self._matches(input_str, "ideology"):
-                return "ideology"
-            if self._matches(input_str, "prestige"):
-                return "prestige"
-            if self._matches(input_str, "funding"):
-                return "funding"
-            if self._matches(input_str, "lapsing"):
-                return "lapsing"
-            if self._matches(input_str, "marker"):
-                return "marker"
+            for param in ["ideology", "prestige", "funding", "lapsing", "marker", "cells"]:
+                if self._matches(input_str, param):
+                    return param
             possible = []
             for country_name in self.map.country_names():
                 if input_str.lower() == country_name.lower():
@@ -2125,6 +2120,21 @@ class Labyrinth(object):
         else:
             print "Prestige unchanged"
 
+    def get_adjust_cells(self):
+        """Asks the user for a new cell count on the funding track and returns it (or None if the user quitted)"""
+        while True:
+            cells_str = self.my_raw_input("Enter new cell count for the funding track (1-15): ")
+            if cells_str == "":
+                return None
+            try:
+                cells = int(cells_str)
+                if cells < 0 or cells > 15:
+                    print "Invalid cell count %d" % cells
+                else:
+                    return cells
+            except ValueError:
+                print "Invalid number '%s'" % cells_str
+
     def get_adjust_funding(self):
         """Asks the user for a new funding level and returns it (or None if the user quitted)"""
         while True:
@@ -2139,6 +2149,14 @@ class Labyrinth(object):
                     return funding
             except ValueError:
                 print "Invalid funding value -", funding_str
+
+    def adjust_cells(self):
+        print "Adjusting cells"
+        new_cell_count = self.get_adjust_cells()
+        if new_cell_count:
+            self.cells = new_cell_count
+        else:
+            print "Cells unchanged"
 
     def adjust_funding(self):
         print "Adjusting funding"
@@ -2513,6 +2531,8 @@ class Labyrinth(object):
             self.adjust_lapsing()
         elif adjust_type == "marker":
             self.adjust_marker()
+        elif adjust_type == "cells":
+            self.adjust_cells()
         else:
             self.adjust_country(adjust_type)
         print ""
