@@ -977,6 +977,10 @@ class Labyrinth(object):
         """Returns the countries on the map"""
         return self.map.countries()
 
+    def get_country_names(self):
+        """Returns the names of countries in the game"""
+        return [country.name for country in self.get_countries()]
+
     def get_posture(self, country_name):
         """Returns the given country's posture"""
         return self.get_country(country_name).get_posture()
