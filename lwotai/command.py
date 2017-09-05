@@ -10,6 +10,8 @@ class Command(Cmd):
 
     def __init__(self, app, saver=Saver(), complete_key='tab', std_in=None, std_out=None):
         Cmd.__init__(self, complete_key, std_in, std_out)
+        self.__country_names = app.get_country_names()
+        self.__game_attributes = ["cells", "funding", "ideology", "lapsing", "marker", "prestige"]
         self.app = Utils.require_type(app, Labyrinth)
         self.saver = Utils.require_type(saver, Saver)
         self.prompt = "Enter command (? for help, Tab to complete): "
@@ -33,18 +35,52 @@ class Command(Cmd):
     # The superclass expects these methods to be named "do_<command_name>" and take an argument.
     # The docstring for each command is what the user sees when they type "help <command_name>".
 
-    # The complete_<command_name> methods take four arguments:
-    #
-    # 1. 'text' is the string we are matching against, all returned matches must begin with it
-    # 2. 'line' is the current input line
-    # 3. 'begidx' is the beginning index in the line of the text being matched
-    # 4. 'endidx' is the end index in the line of the text being matched
-    #
-    # e.g. for the "alert" command: alert text = '', line = 'alert ', begidx = 6, endidx = 6
+    def do_adjust(self, remaining_line):
+        """
+        Adjusts the game state - no validation is done, so be careful.
+        Examples:
+            adjust funding
+            adjust Morocco sleepers
+        """
+        args = remaining_line.split()
+        if not args:
+            print "Please specify the country (if applicable) and the attribute to change"
+        elif len(args) == 1:
+            # Should be a game (not country) attribute
+            game_attribute = args[0]
+            if game_attribute not in self.__game_attributes:
+                print "Invalid option '%s'" % game_attribute
+            else:
+                self.app.adjust_game_attribute(game_attribute)
+        elif len(args) == 2:
+            # Should be a country name and a valid attribute for that country
+            country_name = args[0]
+            country_attribute = args[1]
+            self.app.adjust_country(country_name, country_attribute)
+        else:
+            print "Invalid input (hint: use Tab key to complete or find valid options)"
 
-    def do_adjust(self, _):
-        """Adjusts the game state - no validation is done, so be careful."""
-        self.app.adjust_state()
+    def complete_adjust(self, text, line, begin_index, _end_index):
+        """
+        :param text: the string we are matching against
+        :param line: the current input line (lstripped)
+        :param begin_index: the beginning index of the text being matched, which could be used to provide
+            different completion depending upon which position the argument is in.
+        :param _end_index: the end index of the text being matched
+        :return: a list of adjustable things
+        """
+        # print "text = '%s', line = '%s', begin_index = %d, end_index = %d" % (text, line, begin_index, _end_index)
+        options = []
+        if begin_index == len("adjust "):
+            # Picking a game attribute or country
+            options.extend(self.__country_names)
+            options.extend(self.__game_attributes)
+        else:
+            # Picking a country attribute
+            country_name = line.split()[1]
+            country = self.app.get_country(country_name)
+            options.extend(country.get_adjustable_attributes())
+        return [option for option in options if option.lower().startswith(text.lower())]
 
     def do_alert(self, _):
         """Alerts a country to an active plot."""

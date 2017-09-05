@@ -2068,32 +2068,6 @@ class Labyrinth(object):
         """Returns a list of countries matching the given predicate"""
         return self.map.find(predicate)
 
-    def get_adjust_from_user(self):
-        """Returns the quantity or country to adjust"""
-        while True:
-            input_str = self.my_raw_input(
-                "Enter 'ideology', 'prestige', 'funding', 'lapsing', 'marker', 'cells', or a country: ")
-            if input_str == "":
-                return ""
-            for param in ["ideology", "prestige", "funding", "lapsing", "marker", "cells"]:
-                if self._matches(input_str, param):
-                    return param
-            possible = []
-            for country_name in self.map.country_names():
-                if input_str.lower() == country_name.lower():
-                    possible = [country_name]
-                    break
-                elif input_str.lower() in country_name.lower():
-                    possible.append(country_name)
-            if len(possible) == 0:
-                print "Unrecognized response."
-                print ""
-            elif len(possible) > 1:
-                print "Be more specific", possible
-                print ""
-            else:
-                return possible[0]
-
     def adjust_ideology(self):
         print "Adjusting ideology"
         new_ideology_number = choose_ideology()
@@ -2468,78 +2442,64 @@ class Labyrinth(object):
         print ""
         return True
 
-    def adjust_country(self, country_name):
-        print "Adjusting country - ", country_name
+    def adjust_country(self, country_name, attribute):
+        """Adjusts the given attribute of the given country"""
+        assert country_name
+        assert attribute
         country = self.map.get(country_name)
+        print "Adjusting the %s of %s" % (attribute, country.name)
         country.print_country()
-        if country.is_muslim():
-            attributes = "governance", "alignment", "troops", "active", "sleeper", "cadre", "aid", "besieged",\
-                             "regime", "plots", "marker"
-        elif country.name == "Philippines":
-            attributes = "posture", "troops", "active", "sleeper", "cadre", "plots", "marker"
-        elif country.is_non_muslim():
-            attributes = "posture", "active", "sleeper", "cadre", "plots", "marker"
-        elif country.is_iran():
-            attributes = "active", "sleeper", "cadre", "plots", "marker"
-        while True:
-            print "Changeable attributes are: %s" % ", ".join(attributes)
-            attribute = self.my_raw_input("Enter attribute to be changed (press Enter to quit): ")
-            if attribute == "":
-                return ""
-            if attribute in attributes:
-                adjust_success = False
-                if attribute == "governance":
-                    adjust_success = self.adjust_country_governance(country_name)
-                elif attribute == "alignment":
-                    adjust_success = self.adjust_country_alignment(country_name)
-                elif attribute == "posture":
-                    adjust_success = self.adjust_country_posture(country_name)
-                elif attribute == "troops":
-                    adjust_success = self.adjust_country_troops(country_name)
-                elif attribute == "active":
-                    adjust_success = self.adjust_country_active(country_name)
-                elif attribute == "sleeper":
-                    adjust_success = self.adjust_country_sleeper(country_name)
-                elif attribute == "cadre":
-                    adjust_success = self.adjust_country_cadre(country_name)
-                elif attribute == "aid":
-                    adjust_success = self.adjust_country_aid(country_name)
-                elif attribute == "besieged":
-                    adjust_success = self.adjust_country_besieged(country_name)
-                elif attribute == "regime":
-                    adjust_success = self.adjust_country_regime(country_name)
-                elif attribute == "plots":
-                    adjust_success = self.adjust_country_plots(country_name)
-                elif attribute == "marker":
-                    adjust_success = self.adjust_country_marker(country_name)
-                if adjust_success:
-                    country.print_country()
-                else:
-                    print country_name, "unchanged"
-            else:
-                print "Invalid attribute - ", attribute
+        attributes = country.get_adjustable_attributes()
+        if attribute not in attributes:
+            print "Invalid country attribute '%s'" % attribute
+            return
+        adjust_success = False
+        if attribute == "governance":
+            adjust_success = self.adjust_country_governance(country.name)
+        elif attribute == "alignment":
+            adjust_success = self.adjust_country_alignment(country.name)
+        elif attribute == "posture":
+            adjust_success = self.adjust_country_posture(country.name)
+        elif attribute == "troops":
+            adjust_success = self.adjust_country_troops(country.name)
+        elif attribute == "active":
+            adjust_success = self.adjust_country_active(country.name)
+        elif attribute == "sleeper":
+            adjust_success = self.adjust_country_sleeper(country.name)
+        elif attribute == "cadre":
+            adjust_success = self.adjust_country_cadre(country.name)
+        elif attribute == "aid":
+            adjust_success = self.adjust_country_aid(country.name)
+        elif attribute == "besieged":
+            adjust_success = self.adjust_country_besieged(country.name)
+        elif attribute == "regime":
+            adjust_success = self.adjust_country_regime(country.name)
+        elif attribute == "plots":
+            adjust_success = self.adjust_country_plots(country.name)
+        elif attribute == "marker":
+            adjust_success = self.adjust_country_marker(country.name)
+        if adjust_success:
+            country.print_country()
+        else:
+            print "%s is unchanged" % country.name
 
-    def adjust_state(self):
+    def adjust_game_attribute(self, attribute):
         print "Warning: your changes will not be checked for correctness!"
         print "Start adjusting"
-        adjust_type = self.get_adjust_from_user()
-        if adjust_type == "":
-            print ""
-            return
-        elif adjust_type == "ideology":
-            self.adjust_ideology()
-        elif adjust_type == "prestige":
-            self.adjust_prestige()
-        elif adjust_type == "funding":
-            self.adjust_funding()
-        elif adjust_type == "lapsing":
-            self.adjust_lapsing()
-        elif adjust_type == "marker":
-            self.adjust_marker()
-        elif adjust_type == "cells":
+        if attribute == "cells":
             self.adjust_cells()
+        elif attribute == "funding":
+            self.adjust_funding()
+        elif attribute == "ideology":
+            self.adjust_ideology()
+        elif attribute == "lapsing":
+            self.adjust_lapsing()
+        elif attribute == "marker":
+            self.adjust_marker()
+        elif attribute == "prestige":
+            self.adjust_prestige()
         else:
-            self.adjust_country(adjust_type)
+            print "Invalid attribute '%s'" % attribute
         print ""
 
     def show_history(self, argument):
