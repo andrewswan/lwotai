@@ -20,6 +20,13 @@ class NonMuslimCountry(Country):
             assert self.is_governed(), "Ungoverned country: %s" % self.print_country()
             assert self.__posture, "%s has no posture" % self.name
 
+    def get_adjustable_attributes(self):
+        """Returns a list of this country's adjustable attributes"""
+        attributes = ["active", "cadre", "marker", "plots", "posture", "sleeper"]
+        if self.name == "Philippines":
+            attributes.append("troops")
+        return attributes
+
     def get_disrupt_summary(self):
         return "%s - %d Active Cells, %d Sleeper Cells, %d Cadre, Ops Reqd %d, Posture %s" %\
                (self.name, self.activeCells, self.sleeperCells, self.cadre, self.get_governance().min_us_ops(),

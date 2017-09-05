@@ -32,6 +32,12 @@ class MuslimCountry(Country):
             assert self.is_governed(), "Ungoverned country: %s" % self.print_country()
             assert self.is_aligned(), "%s is unaligned" % self.name
 
+    @staticmethod
+    def get_adjustable_attributes():
+        """Returns a list of this country's adjustable attributes"""
+        return ["active", "aid", "alignment", "besieged", "cadre", "governance", "marker", "plots", "regime", "sleeper",
+                "troops"]
+
     def get_aid(self):
         """Returns the number of Aid markers in this country (0 or more)"""
         return self.__aid

@@ -8,6 +8,11 @@ class Iran(Country):
     def __init__(self, app):
         super(Iran, self).__init__(app, "Iran", FAIR, False, 0, False, 0)
 
+    @staticmethod
+    def get_adjustable_attributes():
+        """Returns a list of this country's adjustable attributes"""
+        return ["active", "cadre", "marker", "plots", "sleeper"]
+
     def is_muslim(self):
         return False  # Rule 4.4
 
