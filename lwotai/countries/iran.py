@@ -66,6 +66,10 @@ class Iran(Country):
     def is_poor(self):
         return
 
+    def is_untested(self):
+        """Indicates whether this country needs to be tested, based on its state"""
+        return False
+
     @staticmethod
     def test(roll):
         """Tests this country using the given roll"""

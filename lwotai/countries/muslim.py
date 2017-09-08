@@ -124,6 +124,10 @@ class MuslimCountry(Country):
     def make_ungoverned(self):
         self.set_governance(None)
 
+    def is_untested(self):
+        """Indicates whether this country needs to be tested, based on its state"""
+        return not self.is_governed()
+
     def reduce_aid_by(self, aid_to_lose):
         """Reduces the level of aid by the given amount, if possible; returns the amount actually removed"""
         assert aid_to_lose >= 0, "%d must not be negative" % aid_to_lose

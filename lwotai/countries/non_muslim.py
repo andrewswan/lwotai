@@ -17,7 +17,6 @@ class NonMuslimCountry(Country):
     def check_is_tested(self):
         """Asserts that this country has been tested (throws if not)"""
         if self._ought_to_have_been_tested():
-            assert self.is_governed(), "Ungoverned country: %s" % self.print_country()
             assert self.__posture, "%s has no posture" % self.name
 
     def get_adjustable_attributes(self):
@@ -33,6 +32,7 @@ class NonMuslimCountry(Country):
                 self.__posture)
 
     def get_posture(self):
+        """Returns this country's posture (None if not set)"""
         return self.__posture
 
     def is_hard(self):
@@ -49,6 +49,10 @@ class NonMuslimCountry(Country):
 
     def is_soft(self):
         return self.__posture == SOFT
+
+    def is_untested(self):
+        """Indicates whether this country needs to be tested, based on its state"""
+        return not self.get_posture()
 
     def make_hard(self):
         """Sets this country to Hard posture"""
