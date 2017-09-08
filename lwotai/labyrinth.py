@@ -2319,7 +2319,11 @@ class Labyrinth(object):
                 print "Invalid active cell value -", cell_str
 
     def adjust_country_sleeper(self, country_name):
-        print "Adjusting sleeper cells for - ", country_name
+        country = self.map.get(country_name)
+        if country.is_untested():
+            print "Cannot adjust sleeper cells in an untested country; set governance or posture first."
+            return
+        print "Adjusting sleeper cells in %s" % country.name
         while True:
             cell_str = self.my_raw_input("Enter new sleeper cell count (0-15): ")
             if cell_str == "":
@@ -2330,9 +2334,9 @@ class Labyrinth(object):
                     print "Invalid sleeper cell value -", cells
                 else:
                     print "Changing sleeper cells to", cells
-                    sleeper_change = cells - self.map.get(country_name).sleeperCells
+                    sleeper_change = cells - country.sleeperCells
                     self.cells -= sleeper_change
-                    self.map.get(country_name).sleeperCells = cells
+                    country.sleeperCells = cells
                     if self.cells < 0 or self.cells > 15:
                         print "WARNING! Cell count on funding track is now ", self.cells
                     else:
