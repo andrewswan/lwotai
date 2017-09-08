@@ -23,6 +23,7 @@ class Labyrinth(object):
         self.randomizer = kwargs.get('randomizer', Randomizer())
         self.ai_rolls = kwargs.get('ai_rolls', False)
         # Defaults
+        self.__us_reserves_card = None
         self.backlashInPlay = False
         self.cells = 0
         self.deck = Deck()
@@ -1865,10 +1866,14 @@ class Labyrinth(object):
                     if self.map.get(country).is_ally():
                         self.map.get(country).print_country()
 
-    def deploy_reserves(self, ops):
-        """Allows the US player to add the given number of ops to the US Reserves track (6.3.3)."""
-        assert 1 <= ops <= 3
-        self.us_reserves = min(self.us_reserves + ops, 2)
+    def deploy_reserves(self):
+        """Allows the US player to add the last played card's ops to the US Reserves track (6.3.3)."""
+        if self.__us_reserves_card:
+            self.us_reserves = min(self.us_reserves + self.__us_reserves_card.ops, 2)
+            print "US reserves now %d; discard the '%s' card" % (self.us_reserves, self.__us_reserves_card.name)
+            self.__us_reserves_card = None
+        else:
+            print "No US card was chosen; use the 'us_card' command"
 
     def show_status(self, country_name=None):
         """Shows the status of the given country, if any, otherwise the whole game."""
@@ -2807,6 +2812,7 @@ class Labyrinth(object):
         """Plays the given card as the US when it's the US action phase."""
         self.output_to_history("", False)
         card = self.card(card_num)
+        self.__us_reserves_card = card
         self.output_to_history("== US plays %s - %d Ops ==" % (card.name, card.ops))
 
         if card.playable("US", self, True):

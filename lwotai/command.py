@@ -129,21 +129,9 @@ class Command(Cmd):
         """Performs a Regime Change in a selected Islamist Rule country."""
         self.app.change_regime()
 
-    def do_reserves(self, ops_str):
+    def do_reserves(self, _):
         """Allows the US player to add the given Ops value to the US Reserves track. (6.3.3)"""
-        ops = None
-        if ops_str:
-            try:
-                ops = int(ops_str)
-            except ValueError:
-                print "Invalid ops value '%s'" % ops_str
-        if not ops:
-            card_number = Utils.prompt_for_card_number()
-            if not card_number:
-                return
-            ops = self.app.card(card_number).ops
-        self.app.deploy_reserves(ops)
-        print "Discard this card and set the US Reserves track to %d" % self.app.us_reserves
+        self.app.deploy_reserves()
 
     def do_roll_back(self, _):
         """Rolls the game back to a chosen turn in the game."""
