@@ -47,11 +47,13 @@ class Command(Cmd):
             print "Please specify the country (if applicable) and the attribute to change"
         elif len(args) == 1:
             # Should be a game (not country) attribute
-            game_attribute = args[0]
-            if game_attribute not in self.__game_attributes:
-                print "Invalid option '%s'" % game_attribute
+            arg_1 = args[0]
+            if arg_1 in self.__game_attributes:
+                self.app.adjust_game_attribute(arg_1)
+            elif arg_1 in self.__country_names:
+                print "Please specify the thing to adjust in %s (press Tab to see options)" % arg_1
             else:
-                self.app.adjust_game_attribute(game_attribute)
+                print "Invalid option '%s'" % arg_1
         elif len(args) == 2:
             # Should be a country name and a valid attribute for that country
             country_name = args[0]
