@@ -2829,7 +2829,7 @@ class Labyrinth(object):
                 if play_event_first:
                     card.play_event("Jihadist", self)
                 else:
-                    print "Use the Ops now then enter u <card #> again to play the event"
+                    print "Use the Ops now, then enter us_card <card #> again, to play the event"
                 print self.get_us_prompt_to_spend_ops(card_num)
                 return
             # It's unplayable by either side.
