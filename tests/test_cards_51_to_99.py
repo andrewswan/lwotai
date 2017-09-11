@@ -336,21 +336,23 @@ class Card62(LabyrinthTestCase):
     def test_event_shifts_central_asia_from_neutral_to_adversary_if_caucasus_would_not_affect_world_posture(self):
         # Set up
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        app.get_country("Caucasus").make_hard()
+        caucasus = app.get_country("Caucasus")
+        caucasus.make_hard()
         app.get_country("France").make_hard()
         app.get_country("Germany").make_hard()
         app.get_country("Italy").make_hard()
         app.us().make_hard()
-        app.get_country("Central Asia").make_ungoverned()  # app should test it to Neutral
+        central_asia = app.get_country("Central Asia")
+        central_asia.untest()
 
         # Invoke
         app.deck.get(62).play_event("Jihadist", app)
 
         # Check
         self.assertFalse("CTR" in app.get_country("Russia").markers)
-        self.assertEqual(app.get_country("Caucasus").get_posture(), HARD)
-        self.assertTrue(app.get_country("Central Asia").is_governed())
-        self.assertTrue(app.get_country("Central Asia").is_adversary())
+        self.assertEqual(caucasus.get_posture(), HARD)
+        self.assertTrue(central_asia.is_governed())
+        self.assertTrue(central_asia.is_adversary())
 
     def test_event_shifts_central_asia_from_ally_to_neutral_if_caucasus_would_not_affect_world_posture(self):
         # Set up extreme hard world posture
@@ -1343,12 +1345,10 @@ class Card91(LabyrinthTestCase):
         for country in app.find_countries(lambda c: c.is_muslim()):
             app.test_country(country.name)
         self.assertFalse(al_qaeda.playable("Jihadist", app, False))
-        iraq.make_ungoverned()
-        iraq.alignment = ""
+        iraq.untest()
         self.assertFalse(al_qaeda.playable("Jihadist", app, False))
         lebanon = app.get_country("Lebanon")
-        lebanon.make_ungoverned()
-        lebanon.alignment = ""
+        lebanon.untest()
         self.assertTrue(al_qaeda.playable("Jihadist", app, False))
 
     def test_puts_cell(self):
@@ -1357,20 +1357,19 @@ class Card91(LabyrinthTestCase):
 
     def test_event(self):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
-        iraq = app.get_country("Iraq")
         for country in app.find_countries(lambda c: c.is_muslim()):
             app.test_country(country.name)
-        iraq.make_ungoverned()
-        iraq.alignment = ""
-        app.get_country("Lebanon").make_ungoverned()
-        app.get_country("Lebanon").alignment = ""
+        iraq = app.get_country("Iraq")
+        iraq.untest()
+        lebanon = app.get_country("Lebanon")
+        lebanon.untest()
         app.deck.get(91).play_event("Jihadist", app)
         self.assertTrue(iraq.is_governed())
         self.assertTrue(iraq.is_aligned())
         self.assertTrue(iraq.sleeperCells == 1)
-        self.assertTrue(app.get_country("Lebanon").is_governed())
-        self.assertTrue(app.get_country("Lebanon").is_aligned())
-        self.assertTrue(app.get_country("Lebanon").sleeperCells == 1)
+        self.assertTrue(lebanon.is_governed())
+        self.assertTrue(lebanon.is_aligned())
+        self.assertTrue(lebanon.sleeperCells == 1)
 
 
 class Card92(LabyrinthTestCase):
