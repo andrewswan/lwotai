@@ -375,8 +375,8 @@ class Labyrinth(object):
         troop_count += self.troops
         assert troop_count == 15, "Expected 15 troops but have %d" % troop_count
         # Check tested countries
-        for country_name in self.map.country_names():
-            self.map.get(country_name).check_is_tested()
+        for country in self.get_countries():
+            country.check_is_tested()
 
     def place_cells(self, country_name, cells_requested):
         if self.cells == 0:
