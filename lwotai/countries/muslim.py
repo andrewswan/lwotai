@@ -1,7 +1,7 @@
 from lwotai.alignment import ADVERSARY, ALLY, NEUTRAL
 from lwotai.countries.country import Country
 from lwotai.countries.types import SUNNI, SHIA_MIX
-from lwotai.governance import ISLAMIST_RULE, GOOD, FAIR, POOR
+from lwotai.governance import ISLAMIST_RULE, GOOD, FAIR, POOR, Governance
 from lwotai.utils import Utils
 
 
@@ -144,6 +144,13 @@ class MuslimCountry(Country):
     def set_aid(self, aid):
         """Sets the number of Aid markers in this country (to 0 or more)"""
         self.__aid = max(0, aid)
+
+    def set_governance(self, new_governance):
+        """Sets this country to have the given level of Governance (can be None)"""
+        Utils.require_type_or_none(new_governance, Governance)
+        if not self.is_aligned():
+            self.make_neutral()
+        self.__governance = new_governance
 
     def summary(self):
         """Returns a textual summary of this Country"""

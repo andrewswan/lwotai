@@ -151,7 +151,8 @@ class Country(object):
         return self.__governance
 
     def set_governance(self, new_governance):
-        self.__governance = Utils.require_type_or_none(new_governance, Governance)
+        """Sets this country to have the given level of Governance (can be None)"""
+        raise Exception("Cannot set the governance of %s" % self.name)
 
     def max_recruit_roll(self, recruit_override=None):
         if recruit_override:
