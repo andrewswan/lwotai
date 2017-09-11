@@ -519,11 +519,6 @@ class Labyrinth(object):
                                        (country_name, self.map.get(country_name).governance_str()), False)
                 self.output_to_history(self.map.get(country_name).summary(), True)
 
-    def handle_alert(self, country_name):
-        country = self.map.get(country_name)
-        if country.remove_plot_marker():
-            self.output_to_history("* Alert in %s - %d plot(s) remain." % (country.name, country.plots))
-
     def toggle_us_posture(self):
         """Switches the US posture between Hard and Soft"""
         self.us().toggle_posture()
@@ -2225,8 +2220,13 @@ class Labyrinth(object):
             try:
                 gov_num = int(gov_str)
                 new_governance = governance_with_level(gov_num)
-                self.map.get(country_name).set_governance(new_governance)
                 print "Changing governance to %s" % new_governance
+                country = self.map.get(country_name)
+                if new_governance:
+                    country.test(self.roll_d6())
+                    country.set_governance(new_governance)
+                else:
+                    country.untest()
                 return True
             except ValueError:
                 print "Invalid governance value '%s'" % gov_str
@@ -2408,18 +2408,21 @@ class Labyrinth(object):
         return True
 
     def adjust_country_plots(self, country_name):
-        print "Adjusting plots for - ", country_name
+        country = self.map.get(country_name)
+        if country.is_untested():
+            print "%s is untested; set its governance or posture first." % country_name
+            return False
         while True:
-            plots_str = self.my_raw_input("Enter new plot count (0-9): ")
+            plots_str = self.my_raw_input("Enter new plot count (0-12, or Enter to abort): ")
             if plots_str == "":
                 return False
             try:
                 plots = int(plots_str)
-                if plots < 0 or plots > 9:
+                if plots < 0 or plots > 12:
                     print "Invalid plot value - ", plots
                 else:
-                    print "Changing plot count to", plots
-                    self.map.get(country_name).plots = plots
+                    country.plots = plots
+                    print "Plot count is now %d" % plots
                     return True
             except ValueError:
                 print "Invalid plot value - ", plots_str
@@ -2678,24 +2681,12 @@ class Labyrinth(object):
             self.output_to_history("Modified Roll: %d" % modified_roll)
             self.handle_muslim_woi(modified_roll, where)
 
-    def alert_plot(self):
-        if not self.find_countries(lambda c: c.plots > 0):
-            print "No countries contain plots."
-            return
-        where = None
-        alert_prompt = "Alert in what country?  (? for list, Enter to abort): "
-        while not where:
-            country_name = self.get_country_from_user(alert_prompt, "XXX", self.list_plot_countries)
-            if country_name == "":
-                print ""
-                return
-            else:
-                if self.map.get(country_name).plots < 1:
-                    print "Country has no plots."
-                    print ""
-                else:
-                    where = country_name
-        self.handle_alert(where)
+    def alert_plot(self, country_name):
+        """Alerts one plot in the named country"""
+        country = self.get_country(country_name)
+        assert country.plots
+        if country.remove_plot_marker():
+            self.output_to_history("* Alert in %s - %d plot(s) remain." % (country.name, country.plots))
 
     def change_regime(self):
         if self.us().is_soft():

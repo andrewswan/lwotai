@@ -84,9 +84,26 @@ class Command(Cmd):
             options.extend(country.get_adjustable_attributes())
         return [option for option in options if option.lower().startswith(text.lower())]
 
-    def do_alert(self, _):
+    def _get_plot_country_names(self):
+        return [c.name for c in self.app.get_plot_countries()]
+
+    def do_alert(self, country_name):
         """Alerts a country to an active plot."""
-        self.app.alert_plot()
+        plot_country_names = self._get_plot_country_names()
+        if not plot_country_names:
+            print "There are no plots to alert. Choose a different operation."
+        elif len(plot_country_names) == 1:
+            self.app.alert_plot(plot_country_names[0])
+        elif country_name not in plot_country_names:
+            plot_country_names.sort()
+            print "Please choose one of %s, e.g. 'alert %s'" % (", ".join(plot_country_names), plot_country_names[0])
+        else:
+            self.app.alert_plot(country_name)
+
+    def complete_alert(self, text, _line, _begin_index, _end_index):
+        """Provides country name completion for the 'alert' command"""
+        return [country_name for country_name in self._get_plot_country_names()
+                if country_name.lower().startswith(text.lower())]
 
     def do_clear_reserves(self, _):
         """Manually resets the US Reserves track to 0 Ops after use."""
