@@ -1,7 +1,7 @@
 from lwotai.alignment import ADVERSARY, ALLY, NEUTRAL
 from lwotai.countries.country import Country
 from lwotai.countries.types import SUNNI, SHIA_MIX
-from lwotai.governance import ISLAMIST_RULE, GOOD, FAIR, POOR, Governance
+from lwotai.governance import ISLAMIST_RULE, GOOD, FAIR, POOR
 from lwotai.utils import Utils
 
 
@@ -121,9 +121,6 @@ class MuslimCountry(Country):
     def make_regime_change(self):
         self.__regime_change = True
 
-    def make_ungoverned(self):
-        self.set_governance(None)
-
     def is_untested(self):
         """Indicates whether this country needs to be tested, based on its state"""
         return not self.is_governed()
@@ -146,11 +143,8 @@ class MuslimCountry(Country):
         self.__aid = max(0, aid)
 
     def set_governance(self, new_governance):
-        """Sets this country to have the given level of Governance (can be None)"""
-        Utils.require_type_or_none(new_governance, Governance)
-        if not self.is_aligned():
-            self.make_neutral()
-        self.__governance = new_governance
+        """Sets this country to have the given level of Governance (must not be None)"""
+        self._do_set_governance(new_governance)
 
     def summary(self):
         """Returns a textual summary of this Country"""
@@ -191,6 +185,12 @@ class MuslimCountry(Country):
                 self.make_fair()
             self.make_neutral()
             self.app.output_to_history("%s tested, governance %s" % (self.name, self.governance_str()), False)
+
+    def untest(self):
+        """Clears this country's alignment and governance"""
+        assert not self._ought_to_have_been_tested(), "Cannot untest: %s" % self.summary()
+        self.__alignment = None
+        self._do_set_governance(None)
 
     def worsen_governance(self):
         self.set_governance(self.get_governance().worsen())

@@ -150,10 +150,6 @@ class Country(object):
     def get_governance(self):
         return self.__governance
 
-    def set_governance(self, new_governance):
-        """Sets this country to have the given level of Governance (can be None)"""
-        raise Exception("Cannot set the governance of %s" % self.name)
-
     def max_recruit_roll(self, recruit_override=None):
         if recruit_override:
             return recruit_override
@@ -242,6 +238,13 @@ class Country(object):
     def print_country(self):
         """Prints a textual summary of this Country"""
         print self.summary()
+
+    def set_governance(self, _):
+        """Sets this country to have the given level of Governance (must not be None)"""
+        raise Exception("Can't set the governance of %s" % self.name)
+
+    def _do_set_governance(self, new_governance):
+        self.__governance = Utils.require_type_or_none(new_governance, Governance)
 
     def summary(self):
         pass
