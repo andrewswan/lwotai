@@ -214,6 +214,10 @@ class Labyrinth(object):
                 print "Enter a card number."
                 print ""
 
+    def get_plot_countries(self):
+        """Returns the countries that contain plots"""
+        return [country for country in self.get_countries() if country.plots > 0]
+
     def get_plot_type_from_user(self, prompt):
         while True:
             try:
