@@ -2224,11 +2224,12 @@ class Labyrinth(object):
                 return False
             try:
                 gov_num = int(gov_str)
-                self.map.get(country_name).make_governance(governance_with_level(gov_num))
-                print "Changing governance to", gov_num
+                new_governance = governance_with_level(gov_num)
+                self.map.get(country_name).set_governance(new_governance)
+                print "Changing governance to %s" % new_governance
                 return True
             except ValueError:
-                print "Invalid governance value -", gov_str
+                print "Invalid governance value '%s'" % gov_str
 
     def adjust_country_alignment(self, country_name):
         print "Adjusting alignment for -", country_name
