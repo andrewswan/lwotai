@@ -9,9 +9,10 @@ class ReservesTest(LabyrinthTestCase):
         # Set up
         app = Labyrinth(1, 1, LabyrinthTestCase.set_up_blank_test_scenario)
         assert app.us_reserves == 0
+        app.play_us_card(116)  # 3 ops
 
         # Invoke
-        app.deploy_reserves(3)
+        app.deploy_reserves()
 
         # Check
         self.assertEqual(2, app.us_reserves)

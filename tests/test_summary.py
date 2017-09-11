@@ -8,7 +8,8 @@ class SummaryTest(LabyrinthTestCase):
     def test_summary(self):
         # Set up
         app = Labyrinth(1, 1, self.set_up_test_scenario)
-        app.deploy_reserves(3)
+        app.play_us_card(116)  # 3 ops
+        app.deploy_reserves()
 
         # Invoke
         summary = app.get_summary()
