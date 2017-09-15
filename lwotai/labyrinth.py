@@ -2277,26 +2277,28 @@ class Labyrinth(object):
 
     def adjust_country_troops(self, country_name):
         print "Adjusting troops for - ", country_name
-        if 'NATO' in self.map.get(country_name).markers:
-            print "NATO contributes 2 troops to count, actual troop cubes are ", self.map.get(country_name).troopcubes
+        country = self.map.get(country_name)
+        if 'NATO' in country.markers:
+            print "NATO contributes 2 troops to count, actual troop cubes are %d" % country.troopCubes
         while True:
-            troop_str = self.my_raw_input("Enter new troop count (0-15): ")
+            troop_str = self.my_raw_input("Enter new troop count (0-15, or <Enter> to abort): ")
             if troop_str == "":
                 return False
             try:
-                troops = int(troop_str)
-                if troops < 0 or troops > 15:
-                    print "Invalid troop cube value -", troops
+                new_country_troops = int(troop_str)
+                if new_country_troops < 0 or new_country_troops > 15:
+                    print "Invalid troop cube count %d" % new_country_troops
                 else:
-                    print "Changing troop cubes to", troops
-                    troop_change = troops - self.map.get(country_name).troopCubes
-                    self.troops -= troop_change
-                    self.map.get(country_name).troopCubes = troops
-                    if self.troops < 0 or self.troops > 15:
-                        print "WARNING! Troop track count is now ", self.troops
+                    troop_change = new_country_troops - country.troopCubes
+                    if troop_change > self.troops:
+                        # Trying to add more than are on troop track
+                        print "There are not %d more troops on the troop track." % troop_change
                     else:
-                        print "Troop track count is now ", self.troops
-                    return True
+                        print "Changing troop cubes in %s to %d" % (country_name, new_country_troops)
+                        self.troops -= troop_change
+                        country.troopCubes = new_country_troops
+                        print "Troop track now has %d cubes" % self.troops
+                        return True
             except ValueError:
                 print "Invalid troop cube value -", troop_str
 
