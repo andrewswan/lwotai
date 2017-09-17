@@ -1,11 +1,12 @@
 import unittest
 
-from mockito import mock, when
-
-from lwotai.randomizer import Randomizer
+from mockito import mock, when, verify, ANY
 
 from labyrinth_test_case import LabyrinthTestCase
+from lwotai.cards.card import Card
+from lwotai.cards.jihadist.card53 import Card53
 from lwotai.labyrinth import Labyrinth
+from lwotai.randomizer import Randomizer
 from postures.posture import HARD
 
 
@@ -69,7 +70,7 @@ class Card52(LabyrinthTestCase):
         app.deck.get(52).play_event("Jihadist", app)
 
 
-class Card53(LabyrinthTestCase):
+class Card53Test(LabyrinthTestCase):
     """Madrassas"""
 
     def test_playable(self):
@@ -83,9 +84,40 @@ class Card53(LabyrinthTestCase):
         app = Labyrinth(1, 1, self.set_up_blank_test_scenario)
         self.assertTrue(app.deck.get(53).puts_cell())
 
-    def test_event(self):
-        app = Labyrinth(1, 1, self.set_up_test_scenario, ["1"])
-        app.deck.get(53).play_event("Jihadist", app)
+    @staticmethod
+    def test_recruits_with_one_op_if_no_next_card():
+        # Set up
+        card = Card53()
+        app = mock(Labyrinth)
+        when(app).get_card_num_from_user(ANY(str)).thenReturn("n")
+        when(app).handle_recruit(1, True).thenReturn(0)
+        when(app).output_to_history(ANY(str), ANY(bool))
+
+        # Invoke
+        card.play_as_jihadist(app)
+
+        # Check
+        verify(app).handle_recruit(1, True)
+        verify(app).output_to_history("No cards left to recruit.", True)
+
+    @staticmethod
+    def test_recruits_twice_if_there_is_a_next_card():
+        # Set up
+        card = Card53()
+        app = mock(Labyrinth)
+        when(app).get_card_num_from_user(ANY(str)).thenReturn(20)
+        when(app).handle_recruit(ANY(int), ANY(bool)).thenReturn(0)
+        when(app).output_to_history(ANY(str), ANY(bool))
+        next_card = mock(Card)
+        next_card.ops = 3
+        when(app).get_card(20).thenReturn(next_card)
+
+        # Invoke
+        card.play_as_jihadist(app)
+
+        # Check
+        verify(app).handle_recruit(1, True)
+        verify(app).handle_recruit(3, True)
 
 
 class Card54(LabyrinthTestCase):
