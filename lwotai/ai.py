@@ -187,6 +187,27 @@ class AIPlayer(object):
                 self.__app.output_to_history(location.summary(), True)
                 ops_remaining -= 1
 
+    def handle_recruit(self, ops, is_madrassas=False):
+        """Performs a Recruit operation as the Jihadist AI (returns the unused Ops)"""
+        country_name = self._recruit_choice(ops, is_madrassas)
+        if not country_name:
+            self.__app.output_to_history("* No countries qualify to Recruit.", True)
+            return ops
+        else:
+            if is_madrassas:
+                cells = self.__app.cells
+            else:
+                if "GTMO" in self.__app.lapsing:
+                    self.__app.output_to_history("* Cannot Recruit due to GTMO.", True)
+                    return ops
+                cells = self.__app.num_cells_available()
+            if cells <= 0:
+                self.__app.output_to_history("* No cells available to Recruit.", True)
+                return ops
+            else:
+                rolls = [random.randint(1, 6) for _ in range(ops)]
+                return self.__app.execute_recruit(country_name, ops, rolls, None, False, is_madrassas)
+
     def major_jihad_choice(self, ops):
         """Return AI choice country."""
         possible = self.__app.major_jihad_possible(ops)
@@ -205,3 +226,32 @@ class AIPlayer(object):
                     if self.__app.country_resources_by_name(country_name) == max_resources:
                         new_possible.append(country_name)
                 return random.choice(new_possible)
+
+    def _recruit_choice(self, ops, is_madrassas=False):
+        """Returns the name of the country in which the Jihadist AI will recruit (could be None)"""
+        country_scores = {}
+        for country in self.__app.get_countries():
+            if country.can_recruit(is_madrassas):
+                country_recruit_score = country.get_recruit_score(ops)
+                if country_recruit_score is not None:
+                    country_scores[country.name] = country_recruit_score
+        for country_name in country_scores:
+            country = self.__app.get_country(country_name)
+            if country.is_besieged():
+                country_scores[country_name] += 100000
+            country_scores[country_name] += (1000 * (country.troops() + country.total_cells(True)))
+            country_scores[country_name] += 100 * self.__app.country_resources_by_name(country_name)
+            country_scores[country_name] += random.randint(1, 99)
+        country_order = []
+        for country_name in country_scores:
+            if country_scores[country_name] > 0:
+                country_order.append((
+                    country_scores[country_name],
+                    self.__app.get_country(country_name).total_cells(True),
+                    country_name
+                ))
+        if country_order:
+            country_order.sort()
+            country_order.reverse()
+            return country_order[0][2]
+        return None

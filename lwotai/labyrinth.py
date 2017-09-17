@@ -803,38 +803,6 @@ class Labyrinth(object):
         if self.prestige < 1:
             self.prestige = 1
 
-    def recruit_choice(self, ops, is_madrassas=False):
-        self.debug_print("DEBUG: recruit with remaining %d ops" % ops)
-        self.debug_print("DEBUG: recruit with remaining %d ops" % (2 * ops))
-        country_scores = {}
-        for country in self.map.countries():
-            if country.can_recruit(is_madrassas):
-                country_recruit_score = country.get_recruit_score(ops)
-                if country_recruit_score is not None:
-                    country_scores[country.name] = country_recruit_score
-        for country_name in country_scores:
-            country = self.map.get(country_name)
-            self.debug_print("c")
-            if country.is_besieged():
-                country_scores[country_name] += 100000
-            country_scores[country_name] += (1000 * (country.troops() + country.total_cells(True)))
-            country_scores[country_name] += 100 * self.country_resources_by_name(country_name)
-            country_scores[country_name] += random.randint(1, 99)
-        country_order = []
-        for country_name in country_scores:
-            self.debug_print("here: %d " % country_scores[country_name])
-            if country_scores[country_name] > 0:
-                country_order.append(
-                    (country_scores[country_name], (self.map.get(country_name).total_cells(True)), country_name))
-        country_order.sort()
-        country_order.reverse()
-        if not country_order:
-            self.debug_print("d")
-            return False
-        else:
-            self.debug_print("e")
-            return country_order[0][2]
-
     def execute_recruit(
             self, country_name, ops, rolls, recruit_override=None, is_jihadist_videos=False, is_madrassas=False):
         self.output_to_history("* Recruit to %s" % country_name)
@@ -888,26 +856,8 @@ class Labyrinth(object):
                 return ops_remaining
 
     def handle_recruit(self, ops, is_madrassas=False):
-        self.debug_print("recruit ops: ")
-        self.debug_print("DEBUG: recruit with remaining %d ops" % ops)
-        country_name = self.recruit_choice(ops, is_madrassas)
-        if not country_name:
-            self.output_to_history("* No countries qualify to Recruit.", True)
-            return ops
-        else:
-            if is_madrassas:
-                cells = self.cells
-            else:
-                if "GTMO" in self.lapsing:
-                    self.output_to_history("* Cannot Recruit due to GTMO.", True)
-                    return ops
-                cells = self.num_cells_available()
-            if cells <= 0:
-                self.output_to_history("* No cells available to Recruit.", True)
-                return ops
-            else:
-                rolls = [random.randint(1, 6) for _ in range(ops)]
-                return self.execute_recruit(country_name, ops, rolls, None, False, is_madrassas)
+        """Performs a Recruit operation as the Jihadist AI"""
+        return self.__ai_player.handle_recruit(ops, is_madrassas)
 
     def is_adjacent(self, here, there):
         if "Patriot Act" in self.markers:
