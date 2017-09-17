@@ -198,7 +198,12 @@ class Labyrinth(object):
                 print "Invalid number '%s'" % troops_str
                 print ""
 
+    def get_card(self, card_number):
+        """Returns the card with the given number"""
+        return self.deck.get(card_number)
+
     def get_card_num_from_user(self, prompt):
+        """Prompts the user to enter a card number; returns that number or the string 'none'"""
         while True:
             try:
                 card_num_str = self.my_raw_input(prompt)
